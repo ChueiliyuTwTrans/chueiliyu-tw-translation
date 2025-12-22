@@ -1,54 +1,51 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<title>IDOL RADIO BEHIND EP#173</title>
+    <meta charset="UTF-8">
+    <title>IDOL RADIO BEHIND EP#173</title>
 
-<style>
-body {
-    font-family: Arial, "Noto Sans TC", sans-serif;
-    background-color: #111;
-    color: #fff;
-    text-align: center;
-}
+    <style>
+        body {
+            font-family: Arial, "Noto Sans TC", sans-serif;
+            background-color: #111;
+            color: #fff;
+            text-align: center;
+        }
 
-#player {
-    margin: 20px auto;
-}
+        #player {
+            margin: 20px auto;
+        }
 
-#subtitle {
-    font-size: 22px;
-    margin-top: 15px;
-    padding: 10px;
-    background: rgba(0,0,0,0.6);
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 8px;
-    min-height: 2em;
-}
-</style>
+        #subtitle {
+            font-size: 22px;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.6);
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 8px;
+            min-height: 2em;
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>IDOL RADIO BEHIND EP#173</h2>
+    <h2>IDOL RADIO BEHIND EP#173</h2>
 
-<iframe
-    id="player"
-    width="800"
-    height="450"
-    src="https://www.youtube.com/embed/_oV9Tz2eSHw?enablejsapi=1&start=1&origin=https://chueiliyutwtrans.github.io"
-    frameborder="0"
-    allow="autoplay; encrypted-media"
-    allowfullscreen>
-</iframe>
+    <!-- YouTube Player 容器 -->
+    <div id="player"></div>
 
-<div id="subtitle">字幕載入中...</div>
+    <!-- 字幕 -->
+    <div id="subtitle">字幕載入中...</div>
 
-<script>
+    <!-- YouTube Iframe API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+let player;
 let subtitles = [];
-let currentTime = 0;
 
 /* 讀取 SRT */
 fetch("1123idol_radio_behind_ep173.srt")
@@ -76,37 +73,38 @@ function toSeconds(time) {
     return (+h) * 3600 + (+m) * 60 + parseFloat(s);
 }
 
-/* 接收 YouTube 回傳時間 */
-window.addEventListener("message", e => {
-    if (!e.data || typeof e.data !== "string") return;
-
-    try {
-        const data = JSON.parse(e.data);
-        if (data.event === "infoDelivery" && data.info.currentTime != null) {
-            currentTime = data.info.currentTime;
+/* YouTube API Ready */
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+        width: 800,
+        height: 450,
+        videoId: "_oV9Tz2eSHw",
+        playerVars: {
+            start: 1,
+            rel: 0,
+            modestbranding: 1
+        },
+        events: {
+            onReady: startSubtitleSync
         }
-    } catch {}
-});
+    });
+}
 
-/* 更新字幕 */
-setInterval(() => {
-    const sub = subtitles.find(
-        s => currentTime >= s.start && currentTime <= s.end
-    );
-    document.getElementById("subtitle").innerHTML = sub ? sub.text : "";
-}, 200);
+/* 同步字幕 */
+function startSubtitleSync() {
+    setInterval(() => {
+        if (!player || typeof player.getCurrentTime !== "function") return;
 
-/* 要求目前播放時間 */
-setInterval(() => {
-    document.getElementById("player").contentWindow.postMessage(
-        JSON.stringify({
-            event: "command",
-            func: "getCurrentTime"
-        }),
-        "*"
-    );
-}, 200);
-</script>
+        const currentTime = player.getCurrentTime();
+
+        const sub = subtitles.find(
+            s => currentTime >= s.start && currentTime <= s.end
+        );
+
+        document.getElementById("subtitle").innerHTML = sub ? sub.text : "";
+    }, 200);
+}
+    </script>
 
 </body>
 </html>
