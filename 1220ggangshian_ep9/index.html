@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>硬撐詩安 EP#9</title>
+
+<style>
+body {
+    font-family: Arial, "Noto Sans TC", sans-serif;
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+}
+
+#player {
+    margin: 20px auto;
+}
+
+#subtitle {
+    font-size: 22px;
+    padding: 12px;
+    background: rgba(0,0,0,0.6);
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    min-height: 2.5em;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<h2>硬撐詩安 EP#9</h2>
+
+<div id="player"></div>
+
+<div id="subtitle">字幕載入中...</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+let player;
+let subtitles = [];
+
+/* 載入 SRT */
+fetch("1220ggangshian_ep9.srt")
+    .then(res => res.text())
+    .then(text => {
+        subtitles = parseSRT(text);
+        document.getElementById("subtitle").innerText = "";
+        console.log("字幕載入完成：", subtitles.length);
+    });
+
+function parseSRT(data) {
+    data = data.replace(/\r/g, "");
+    const blocks = data.trim().split("\n\n");
+
+    return blocks.map(block => {
+        const lines = block.split("\n");
+        if (lines.length < 3) return null;
+
+        const [start, end] = lines[1].split(" --> ");
+        return {
+            start: toSeconds(start),
+            end: toSeconds(end),
+            text: lines.slice(2).join("<br>")
+        };
+    }).filter(Boolean);
+}
+
+function toSeconds(time) {
+    const [h, m, s] = time.replace(",", ".").split(":");
+    return Number(h) * 3600 + Number(m) * 60 + parseFloat(s);
+}
+
+/* YouTube API Ready */
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+        width: 800,
+        height: 450,
+        videoId: "_oV9Tz2eSHw",
+        playerVars: {
+            start: 1,
+            rel: 0,
+            modestbranding: 1
+        },
+        events: {
+            onReady: startSubtitleTracking
+        }
+    });
+}
+
+/* 同步字幕（支援多行） */
+function startSubtitleTracking() {
+    setInterval(() => {
+        if (!player || !subtitles.length) return;
+
+        const currentTime = player.getCurrentTime();
+
+        const matched = subtitles.filter(
+            s => currentTime >= s.start && currentTime <= s.end
+        );
+
+        document.getElementById("subtitle").innerHTML =
+            matched.length ? matched.map(s => s.text).join("<br>") : "";
+    }, 200);
+}
+</script>
+
+</body>
+</html>
+
