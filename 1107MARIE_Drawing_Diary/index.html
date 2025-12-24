@@ -45,11 +45,18 @@ let subtitles = [];
 
 /* 載入 SRT */
 fetch("1107MARIE_Drawing_Diary.srt")
-    .then(res => res.text())
+    .then(res => {
+        if (!res.ok) throw new Error("字幕讀取失敗");
+        return res.text();
+    })
     .then(text => {
         subtitles = parseSRT(text);
-        document.getElementById("subtitle").innerText = "";
         console.log("字幕載入完成：", subtitles.length);
+        document.getElementById("subtitle").innerText = "";
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("subtitle").innerText = "字幕載入失敗";
     });
 
 function parseSRT(data) {
