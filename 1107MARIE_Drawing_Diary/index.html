@@ -44,7 +44,7 @@ let player;
 let subtitles = [];
 
 /* 載入 SRT */
-fetch("1107MARIE_Drawing_Diary.txt?v=" + Date.now())
+fetch("1107MARIE_Drawing_Diary.src)
     .then(res => {
         console.log("字幕 HTTP 狀態碼：", res.status);
         if (!res.ok) throw new Error("字幕讀取失敗");
@@ -63,18 +63,31 @@ fetch("1107MARIE_Drawing_Diary.txt?v=" + Date.now())
 
 
 function parseSRT(data) {
-    data = data.replace(/\r/g, "");
-    const blocks = data.trim().split("\n\n");
+    data = data.replace(/\r/g, "").trim();
+
+    const blocks = data.split(/\n{2,}/);
 
     return blocks.map(block => {
-        const lines = block.split("\n");
-        if (lines.length < 3) return null;
+        const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
 
-        const [start, end] = lines[1].split(" --> ");
+        if (lines.length < 2) return null;
+
+        // 找時間行（不假設一定在第 2 行）
+        const timeLine = lines.find(line => line.includes("-->"));
+        if (!timeLine) return null;
+
+        const times = timeLine.split("-->").map(t => t.trim());
+        if (times.length !== 2) return null;
+
+        const [start, end] = times;
+
+        const textLines = lines.slice(lines.indexOf(timeLine) + 1);
+        if (!textLines.length) return null;
+
         return {
             start: toSeconds(start),
             end: toSeconds(end),
-            text: lines.slice(2).join("<br>")
+            text: textLines.join("<br>")
         };
     }).filter(Boolean);
 }
