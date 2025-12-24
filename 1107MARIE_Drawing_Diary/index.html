@@ -44,7 +44,7 @@ let player;
 let subtitles = [];
 
 /* 載入 SRT */
-fetch("1107MARIE_Drawing_Diary.src)
+fetch("1107MARIE_Drawing_Diary.src")
     .then(res => {
         console.log("字幕 HTTP 狀態碼：", res.status);
         if (!res.ok) throw new Error("字幕讀取失敗");
@@ -60,7 +60,6 @@ fetch("1107MARIE_Drawing_Diary.src)
         console.error("字幕錯誤：", err);
         document.getElementById("subtitle").innerText = "字幕載入失敗";
     });
-
 
 function toSeconds(time) {
     const parts = time.replace(",", ".").split(":");
