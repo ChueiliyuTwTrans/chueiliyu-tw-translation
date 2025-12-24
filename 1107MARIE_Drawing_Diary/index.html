@@ -62,21 +62,36 @@ fetch("1107MARIE_Drawing_Diary.src)
     });
 
 
+function toSeconds(time) {
+    const parts = time.replace(",", ".").split(":");
+    if (parts.length !== 3) return 0;
+
+    const h = parseFloat(parts[0]);
+    const m = parseFloat(parts[1]);
+    const s = parseFloat(parts[2]);
+
+    return h * 3600 + m * 60 + s;
+}
+
 function parseSRT(data) {
     data = data.replace(/\r/g, "").trim();
+
     const blocks = data.split(/\n{2,}/);
 
     return blocks.map(block => {
         const lines = block
             .split("\n")
             .map(l => l.trim())
-            .filter(l => l && !/^\d+$/.test(l)); // 移除純數字序號
+            .filter(l => l && !/^\d+$/.test(l));
 
         const timeLine = lines.find(l => l.includes("-->"));
         if (!timeLine) return null;
 
-        const [start, end] = timeLine.split("-->").map(t => t.trim());
-        if (!start || !end) return null;
+        const times = timeLine.split("-->").map(t => t.trim());
+        if (times.length !== 2) return null;
+
+        const start = times[0];
+        const end = times[1];
 
         const textLines = lines.slice(lines.indexOf(timeLine) + 1);
         if (!textLines.length) return null;
@@ -89,10 +104,6 @@ function parseSRT(data) {
     }).filter(Boolean);
 }
 
-function toSeconds(time) {
-    const [h, m, s] = time.replace(",", ".").split(":");
-    return Number(h) * 3600 + Number(m) * 60 + parseFloat(s);
-}
 
 /* YouTube API Ready */
 function onYouTubeIframeAPIReady() {
