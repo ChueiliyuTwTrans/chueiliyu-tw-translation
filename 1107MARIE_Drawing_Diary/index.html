@@ -64,22 +64,19 @@ fetch("1107MARIE_Drawing_Diary.src)
 
 function parseSRT(data) {
     data = data.replace(/\r/g, "").trim();
-
     const blocks = data.split(/\n{2,}/);
 
     return blocks.map(block => {
-        const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
+        const lines = block
+            .split("\n")
+            .map(l => l.trim())
+            .filter(l => l && !/^\d+$/.test(l)); // 移除純數字序號
 
-        if (lines.length < 2) return null;
-
-        // 找時間行（不假設一定在第 2 行）
-        const timeLine = lines.find(line => line.includes("-->"));
+        const timeLine = lines.find(l => l.includes("-->"));
         if (!timeLine) return null;
 
-        const times = timeLine.split("-->").map(t => t.trim());
-        if (times.length !== 2) return null;
-
-        const [start, end] = times;
+        const [start, end] = timeLine.split("-->").map(t => t.trim());
+        if (!start || !end) return null;
 
         const textLines = lines.slice(lines.indexOf(timeLine) + 1);
         if (!textLines.length) return null;
