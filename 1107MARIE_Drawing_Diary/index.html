@@ -44,20 +44,23 @@ let player;
 let subtitles = [];
 
 /* 載入 SRT */
-fetch("1107MARIE_Drawing_Diary.txt?v=2")
+fetch("1107MARIE_Drawing_Diary.txt?v=" + Date.now())
     .then(res => {
+        console.log("字幕 HTTP 狀態碼：", res.status);
         if (!res.ok) throw new Error("字幕讀取失敗");
         return res.text();
     })
     .then(text => {
+        console.log("字幕原始內容前 100 字：", text.slice(0, 100));
         subtitles = parseSRT(text);
         console.log("字幕載入完成：", subtitles.length);
         document.getElementById("subtitle").innerText = "";
     })
     .catch(err => {
-        console.error(err);
+        console.error("字幕錯誤：", err);
         document.getElementById("subtitle").innerText = "字幕載入失敗";
     });
+
 
 function parseSRT(data) {
     data = data.replace(/\r/g, "");
