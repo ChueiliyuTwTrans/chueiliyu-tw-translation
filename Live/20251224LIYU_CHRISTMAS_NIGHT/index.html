@@ -44,7 +44,7 @@ let player;
 let subtitles = [];
 
 /* 載入 SRT */
-fetch("1224Liyu_CHRISTMAS_NIGHT.srt")
+fetch("Live/1224Liyu_CHRISTMAS_NIGHT.srt")
     .then(res => {
         console.log("字幕 HTTP 狀態碼：", res.status);
         if (!res.ok) throw new Error("字幕讀取失敗");
