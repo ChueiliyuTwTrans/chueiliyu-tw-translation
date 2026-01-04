@@ -190,23 +190,25 @@ footer {
     /* Layout 改為直向 */
     .container {
         flex-direction: column;
+        width: 100%;       /* 確保 container 滿寬 */
     }
 
-    /* Sidebar 橫排且可換行 */
+    /* Sidebar 直向且與 container 對齊 */
     .sidebar {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: wrap;          /* 可換行 */
         gap: 8px;
         padding: 12px;
-        border-right: none;   /* 直向時不需要右邊線 */
+        border-right: none;       /* 直向時不需要右邊線 */
         border-bottom: 2px solid #ffffff; /* 改為下方白線 */
+        box-sizing: border-box;   /* 包含 padding 不超出視窗 */
     }
 
+    /* Sidebar 按鈕自適應寬度 */
     .sidebar button {
-        flex: 1 1 auto;
-        min-width: 90px;
-        max-width: calc(33.333% - 8px);
+        flex: 1 1 calc(33.333% - 8px); /* 三個平均分，保留 gap */
+        min-width: 0;                  /* 避免超出 */
         padding: 10px 8px;
         font-size: 14px;
         box-sizing: border-box;
@@ -221,8 +223,14 @@ footer {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-}
 
+    /* Content 滿寬對齊 */
+    .content {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 16px; /* 可調整 */
+    }
+}
 
 </style>
 </head>
