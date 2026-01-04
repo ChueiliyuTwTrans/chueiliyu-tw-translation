@@ -163,6 +163,13 @@ footer {
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
+
+    /* Header 文字改為偏下 */
+    header {
+        align-items: flex-end;
+        padding-bottom: 32px;
+    }
+
     header h1 {
         font-size: 22px;
     }
@@ -175,18 +182,25 @@ footer {
         padding: 16px 20px;
     }
 
+    /* Layout 改為直向 */
     .container {
         flex-direction: column;
     }
 
+    /* Sidebar 橫排但可換行 */
     .sidebar {
         width: 100%;
         display: flex;
-        gap: 10px;
+        flex-wrap: wrap;          /* ⭐ 關鍵 */
+        gap: 8px;
+        padding: 12px;
     }
 
     .sidebar button {
-        flex: 1;
+        flex: 1 1 calc(33.333% - 8px); /* 三顆平均 */
+        min-width: 90px;               /* 防止被切 */
+        padding: 10px 8px;
+        font-size: 14px;
     }
 }
 
