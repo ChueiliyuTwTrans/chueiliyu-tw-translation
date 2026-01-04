@@ -31,7 +31,7 @@ header {
 .header-text {
     position: relative;
     z-index: 1;
-    padding: 16px 20px;  /* 寬度縮小 */
+    padding: 14px 18px;  /* 更窄一些 */
     background: rgba(0, 0, 0, 0.35);
     border-radius: 12px;
     backdrop-filter: blur(4px);
@@ -62,18 +62,19 @@ header p {
 .container {
     display: flex;
     min-height: calc(100vh - 16px);
-    background: linear-gradient(180deg, #9370DB 0%, #9370DB 100%);
 }
 
 /* ===== Sidebar ===== */
 .sidebar {
-    width: 180px;
+    width: 250px; /* 調大寬度可容納圖片 */
     padding: 20px;
-    background: linear-gradient(180deg, #9370DB 0%, #9370DB 100%);
-    border-right: 10px solid #ffffff; /* 白色分隔線 */
+    background-image: url("../images/content2.jpg");
+    background-size: cover;
+    background-position: center;
+    border-right: 5px solid #ffffff; /* 白色分隔線 */
     box-sizing: border-box;
-    z-index: 2; /* 確保在 container 上層 */
     position: relative;
+    z-index: 2;
 }
 
 .sidebar button {
@@ -81,7 +82,7 @@ header p {
     padding: 12px;
     margin-bottom: 10px;
     border: none;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.85);
     cursor: pointer;
     font-size: 15px;
     border-radius: 6px;
@@ -102,7 +103,9 @@ header p {
 .content {
     flex: 1;
     padding: 24px;
-    background: linear-gradient(180deg, #9370DB 0%, #9370DB 100%);
+    background-image: url("../images/content.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 /* ===== Section ===== */
@@ -186,31 +189,33 @@ footer {
     }
 
     .header-text {
-        padding: 14px 16px; /* 再小一點 */
+        padding: 12px 14px;
     }
 
     /* Layout 改為直向 */
     .container {
         flex-direction: column;
-        width: 100%;       /* 確保 container 滿寬 */
+        width: 100%;
     }
 
     /* Sidebar 直向且與 container 對齊 */
     .sidebar {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;          /* 可換行 */
+        flex-wrap: wrap;
         gap: 8px;
         padding: 12px;
-        border-right: none;       /* 直向時不需要右邊線 */
-        border-bottom: 2px solid #ffffff; /* 改為下方白線 */
-        box-sizing: border-box;   /* 包含 padding 不超出視窗 */
+        border-right: none;
+        border-bottom: 2px solid #ffffff;
+        background-image: url("../images/content.jpg"); /* 保留圖片 */
+        background-size: cover;
+        background-position: center;
     }
 
     /* Sidebar 按鈕自適應寬度 */
     .sidebar button {
-        flex: 1 1 calc(33.333% - 8px); /* 三個平均分，保留 gap */
-        min-width: 0;                  /* 避免超出 */
+        flex: 1 1 calc(33.333% - 8px);
+        min-width: 0;
         padding: 10px 8px;
         font-size: 14px;
         box-sizing: border-box;
@@ -230,9 +235,13 @@ footer {
     .content {
         width: 100%;
         box-sizing: border-box;
-        padding: 16px; /* 可調整 */
+        padding: 16px;
+        background-image: url("../images/content2.jpg");
+        background-size: cover;
+        background-position: center;
     }
 }
+
 
 </style>
 </head>
