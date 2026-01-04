@@ -10,7 +10,7 @@ body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                  "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-    background: #ffffff; /* body 背景改白，sidebar 背景會獨立 */
+    background: #ffffff;
     color: #333;
 }
 
@@ -31,8 +31,8 @@ header {
 .header-text {
     position: relative;
     z-index: 1;
-    padding: 20px 28px;
-    background: rgba(0, 0, 0, 0.35); /* 文字獨立層 */
+    padding: 16px 20px;  /* 寬度縮小 */
+    background: rgba(0, 0, 0, 0.35);
     border-radius: 12px;
     backdrop-filter: blur(4px);
 }
@@ -69,8 +69,8 @@ header p {
 .sidebar {
     width: 220px;
     padding: 20px;
-    background: #f5f5f5; /* 交換後背景色 */
-    border-right: 1px solid rgba(0,0,0,0.08);
+    background: linear-gradient(180deg, rgb(149,193,222) 0%, rgb(125,175,210) 100%);
+    border-right: 2px solid #ffffff; /* 白色分隔線 */
 }
 
 .sidebar button {
@@ -82,19 +82,24 @@ header p {
     cursor: pointer;
     font-size: 15px;
     border-radius: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* 按鈕 hover / active 效果 */
 .sidebar button.active,
 .sidebar button:hover {
     background: #ffffff;
     font-weight: 600;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 /* ===== Content ===== */
 .content {
     flex: 1;
     padding: 24px;
-    background: #95c1de; /* 交換後背景色（漸層可選單色） */
+    background: linear-gradient(180deg, rgb(149,193,222) 0%, rgb(125,175,210) 100%);
 }
 
 /* ===== Section ===== */
@@ -178,7 +183,7 @@ footer {
     }
 
     .header-text {
-        padding: 16px 20px;
+        padding: 14px 16px; /* 再小一點 */
     }
 
     /* Layout 改為直向 */
@@ -190,20 +195,33 @@ footer {
     .sidebar {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;          /* 可換行 */
+        flex-wrap: wrap;
         gap: 8px;
         padding: 12px;
+        border-right: none;   /* 直向時不需要右邊線 */
+        border-bottom: 2px solid #ffffff; /* 改為下方白線 */
     }
 
     .sidebar button {
-        flex: 1 1 auto;           /* 自適應寬度 */
-        min-width: 90px;          /* 防止被切掉 */
-        max-width: calc(33.333% - 8px); /* 三顆平均，保留 gap */
+        flex: 1 1 auto;
+        min-width: 90px;
+        max-width: calc(33.333% - 8px);
         padding: 10px 8px;
         font-size: 14px;
-        box-sizing: border-box;   /* 確保 padding 不破版 */
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .sidebar button.active,
+    .sidebar button:hover {
+        background: #ffffff;
+        font-weight: 600;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 }
+
 
 </style>
 </head>
