@@ -67,11 +67,13 @@ header p {
 
 /* ===== Sidebar ===== */
 .sidebar {
-    width: 180px; /* 桌面版更窄 */
+    width: 180px;
     padding: 20px;
     background: linear-gradient(180deg, #9370DB 0%, #9370DB 100%);
     border-right: 10px solid #ffffff; /* 白色分隔線 */
-    box-sizing: border-box; /* 確保 padding 不影響總寬 */
+    box-sizing: border-box;
+    z-index: 2; /* 確保在 container 上層 */
+    position: relative;
 }
 
 .sidebar button {
