@@ -1,329 +1,386 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <title>崔立于台灣翻譯站</title>
+<meta charset="UTF-8">
+<title>崔立于台灣翻譯站</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: #ffffff;
+    color: #333;
+}
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                         "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
-                         sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-        }
+/* ===== Header ===== */
+header {
+    position: relative;
+    height: 220px; /* 可自行調整高度 */
+    background-image: url("images/content33.png");
+    background-size: cover;
+    background-position: 30% 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 5px solid #ffffff; /* 白色分隔線 */
+}
 
-        header {
-            background-color: #ffffff;
-            padding: 24px 16px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
+/* ===== Header 文字容器 ===== */
+.header-text {
+    position: relative;
+    z-index: 1;
+    padding: 14px 18px;  /* 透明框內距 */
+    background: rgba(0, 0, 0, 0.35); /* 半透明背景 */
+    border-radius: 12px;
+    backdrop-filter: blur(4px); /* 模糊效果 */
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 600;
-        }
+/* 標題 */
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    line-height: 1.3;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* 文字立體感 */
+}
 
-        header p {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #666;
-        }
+/* 副標 */
+header p {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    color: #eaeaea;
+}
 
-        main {
-            max-width: 900px;
-            margin: 24px auto;
-            padding: 0 16px;
-        }
+/* ===== Layout ===== */
+.container {
+    display: flex;
+    min-height: calc(100vh - 16px);
+}
 
-        .section {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 250px; /* 調大寬度可容納圖片 */
+    padding: 20px;
+    background-image: url("images/content5.jpg");
+    background-size: cover;
+    background-position: center;
+    border-right: 5px solid #ffffff; /* 白色分隔線 */
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
 
-        .section h2 {
-            margin-top: 0;
-            margin-bottom: 16px;
-            font-size: 18px;
-            border-left: 4px solid #999;
-            padding-left: 8px;
-        }
+.sidebar button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    background: rgba(255,255,255,0.85);
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-        .link-button {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            background-color: #eeeeee;
-            color: #333;
-            padding: 14px 16px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            transition: background-color 0.2s;
-            gap: 16px;
-        }
+/* 按鈕 hover / active 效果 */
+.sidebar button.active,
+.sidebar button:hover {
+    background: #ffffff;
+    font-weight: 600;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
-        .link-button:hover {
-            background-color: #dddddd;
-        }
+/* ===== Content ===== */
+.content {
+    flex: 1;
+    padding: 24px;
+    background-image: url("images/content6.jpg");
+    background-size: cover;
+    background-position: center;
+}
 
-        .link-left {
-            flex: 1;
-        }
+/* ===== Section ===== */
+.section {
+    display: none;
+}
 
-        .link-title {
-            font-weight: 500;
-            font-size: 15px;
-        }
+.section.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
 
-        .link-desc {
-            font-size: 13px;
-            color: #666;
-            margin-top: 4px;
-        }
+/* ===== Card ===== */
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+}
 
-        .link-credit {
-            font-size: 13px;
-            color: #555;
-            text-align: right;
-            white-space: nowrap;
-            line-height: 1.6;
-        }
+.card:hover {
+    transform: translateY(-4px);
+}
 
-        /* 行動裝置 */
-        @media (max-width: 600px) {
-            .link-button {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: #ddd;
+}
 
-            .link-credit {
-                text-align: left;
-            }
-        }
+.card-body {
+    padding: 12px;
+}
 
-        /* 網站製作署名 */
-        .site-credit {
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-            margin: 8px 0 0 0;
-        }
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+}
 
-        footer {
-            text-align: center;
-            font-size: 12px;
-            color: #999;
-            padding: 16px;
-        }
-    </style>
+.card-desc {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.card-credit {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.5;
+}
+
+/* ===== Footer ===== */
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    padding: 16px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+
+    header {
+        height: 180px; /* 手機版更小 */
+        align-items: flex-end;
+        padding-bottom: 10px;
+    }
+
+    .header-text {
+        padding: 10px 12px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    header p {
+        font-size: 12px;
+    }
+
+    /* Layout 改為直向 */
+    .container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Sidebar 直向且與 container 對齊 */
+    .sidebar {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px;
+        border-right: none;
+        border-bottom: 2px solid #ffffff;
+        background-image: url("images/content5.jpg"); /* 保留圖片 */
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Sidebar 按鈕自適應寬度 */
+    .sidebar button {
+        flex: 1 1 calc(33.333% - 8px);
+        min-width: 0;
+        padding: 10px 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .sidebar button.active,
+    .sidebar button:hover {
+        background: #ffffff;
+        font-weight: 600;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Content 滿寬對齊 */
+    .content {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 16px;
+        background-image: url("images/content6.jpg");
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>崔立于台灣翻譯站</h1>
-    <p>非官方｜粉絲翻譯整理｜僅作學習與推廣使用</p>
+    <div class="header-text">
+        <h1>崔立于台灣翻譯站</h1>
+        <p>非官方｜粉絲翻譯整理｜僅作學習與推廣使用</p>
+    </div>
 </header>
 
-<main>
+<div class="container">
 
-    <!-- 直播 -->
-    <section class="section">
-        <h2>直播</h2>
+    <nav class="sidebar">
+        <button class="active" onclick="showSection('live')">直播</button>
+        <button onclick="showSection('program')">節目</button>
+        <button onclick="showSection('radio')">電台</button>
+    </nav>
 
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/"
-           target="_blank">
+    <main class="content">
 
-            <div class="link-left">
-                <div class="link-title">
-                    립우와 CHRISTMAS NIGHT(和立于一起度過聖誕夜)
+        <div id="live" class="section active">
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/" target="_blank">
+                <img src="../images/20251224_CHRISTMAS_NIGHT_with_LIYU.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">립우와 CHRISTMAS NIGHT<br>(和立于一起度過聖誕夜)</div>
+                    <div class="card-desc">完整直播｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-                <div class="link-desc">
-                    完整直播｜中文翻譯
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BRITHDAY_LIVE/" target="_blank">
+                <img src="../images/20260103_Liyu_Birthday_Live.jpg" alt="">
+                <div class="card-body">
+                    <div class="card-title">여러분과 함께하는 첫 생일♥<br>(和大家一起度過的第一個生日♥)</div>
+                    <div class="card-desc">完整直播｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-            </div>
+            </a>
+        </div>
 
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-        </a>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BRITHDAY_LIVE/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    여러분과 함께하는 첫 생일♥(和大家一起度過的第一個生日♥)
+        <div id="program" class="section">
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/1107MARIE_Drawing_Diary/" target="_blank">
+                <img src="../images/20251107_MARIE_Drawing_Diary.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">MARIE Drawing Diary<br>(MARIE畫畫日記)</div>
+                    <div class="card-desc">完整節目｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-                <div class="link-desc">
-                    完整直播｜中文翻譯
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/kkang-sian_ep9/" target="_blank">
+                <img src="../images/20251220_kkang-sian_ep9.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">깡시안(硬撐詩安) EP#9</div>
+                    <div class="card-desc">完整節目｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-        </a>
-    </section>
-    
-    <!-- 節目 -->
-    <section class="section">
-        <h2>節目</h2>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/kkang-sian_ep9/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    깡시안(硬撐詩安) EP#9
-                </div>
-                <div class="link-desc">
-                    完整節目｜中文翻譯
-                </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-        </a>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/1107MARIE_Drawing_Diary/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    MARIE Drawing Diary(MARIE畫畫日記)
-                </div>
-                <div class="link-desc">
-                    完整節目｜中文翻譯
-                </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-        </a>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon's_Jewel_Box/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    홍석천의 보석함 시즌4 EP.23(洪錫天的寶石盒第四季 EP.23)
-                </div>
-                <div class="link-desc">
-                    完整節目｜中文翻譯
-                </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡、Yuli<br>
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon's_Jewel_Box/" target="_blank">
+                <img src="../images/20251125HongSeokCheon's_Jewel_Box_ep.23.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">홍석천의 보석함 시즌4 EP.23<br>(洪錫天的寶石盒第四季 EP.23)</div>
+                    <div class="card-desc">完整節目｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡、Yuli<br>
                 校對：西卡<br>
                 字幕製作：C
-            </div>
-        </a>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)
+                    </div>
                 </div>
-                <div class="link-desc">
-                    完整節目｜中文翻譯
-                </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：Lepus<br>
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/" target="_blank">
+                <img src="../images/20251218_BadaLee_ep41.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">Ep.41 최립우 | 연습실 바다쌤<br>(練習室的Bada老師 ep.41)</div>
+                    <div class="card-desc">完整節目｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：Lepus<br>
                 校對：西卡<br>
                 字幕製作：西卡
-            </div>
-        </a>
-    </section>
-
-    <!-- 電台 -->
-    <section class="section">
-        <h2>電台</h2>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/idol-radio-ep173-behind/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    IDOL RADIO BEHIND EP#173
+                    </div>
                 </div>
-                <div class="link-desc">
-                    Behind 片段｜中文翻譯
+            </a>
+        </div>
+
+        <div id="radio" class="section">
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/idol-radio-ep173-behind/" target="_blank">
+                <img src="../images/20251123_idol_radio_behind_ep173.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">IDOL RADIO BEHIND EP.173</div>
+                    <div class="card-desc">Behind 片段｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-
-        </a>
-
-        <a class="link-button"
-           href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/1221lovegame/"
-           target="_blank">
-
-            <div class="link-left">
-                <div class="link-title">
-                    박소현의 러브게임(朴素賢的 Love Game) | 251221
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/1221lovegame/" target="_blank">
+                <img src="../images/20251221_love_game.jpg" alt="">
+                <div class="card-body">
+                    <div class="card-title">박소현의 러브게임<br>(朴素賢的 Love Game) | 251221</div>
+                    <div class="card-desc">完整電台｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：西卡<br>
+                        字幕製作：西卡
+                    </div>
                 </div>
-                <div class="link-desc">
-                    完整電台｜中文翻譯
-                </div>
-            </div>
-
-            <div class="link-credit">
-                翻譯：西卡<br>
-                字幕製作：西卡
-            </div>
-
-        </a>
-    </section>
-
-</main>
-
-<p class="site-credit">架設網站&網站設計：西卡</p>
+            </a>
+        </div>
+        
+    </main>
+</div>
 
 <footer>
-    © 崔立于台灣翻譯站 ｜ 本站不持有影片版權
+© 崔立于台灣翻譯站 ｜ 網站架設與設計：西卡
 </footer>
+
+<script>
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+</script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
