@@ -49,12 +49,7 @@ body {
 }
 
 /* 假全螢幕 */
-:fullscreen #video-wrapper {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-}
+:fullscreen #video-wrapper,
 :-webkit-full-screen #video-wrapper {
     width: 100vw;
     height: 100vh;
@@ -75,12 +70,11 @@ body {
     font-size: 26px;
 }
 
-/* 全螢幕按鈕 */
+/* 按鈕 */
 #fs-btn {
     margin: 10px;
     padding: 10px 16px;
     font-size: 16px;
-    cursor: pointer;
 }
 </style>
 </head>
@@ -100,76 +94,81 @@ body {
 <script>
 let player;
 let subtitles = [];
+let userActivated = false;
 
 /* 載入 SRT */
 fetch("1123idol_radio_behind_ep173.srt")
-    .then(res => res.text())
-    .then(text => {
-        subtitles = parseSRT(text);
+    .then(r => r.text())
+    .then(t => {
+        subtitles = parseSRT(t);
         document.getElementById("subtitle").innerText = "";
     });
 
 function parseSRT(data) {
-    data = data.replace(/\r/g, "");
-    return data.trim().split("\n\n").map(block => {
-        const lines = block.split("\n");
-        const [start, end] = lines[1].split(" --> ");
-        return {
-            start: toSec(start),
-            end: toSec(end),
-            text: lines.slice(2).join("<br>")
-        };
+    return data.replace(/\r/g, "").trim().split("\n\n").map(b => {
+        const l = b.split("\n");
+        const [s,e] = l[1].split(" --> ");
+        return { start: sec(s), end: sec(e), text: l.slice(2).join("<br>") };
     });
 }
 
-function toSec(t) {
+function sec(t) {
     const [h,m,s] = t.replace(",", ".").split(":");
-    return +h*3600 + +m*60 + parseFloat(s);
+    return h*3600 + m*60 + parseFloat(s);
 }
 
-/* YouTube API */
+/* YouTube */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         videoId: "_oV9Tz2eSHw",
-        playerVars: {
-            start: 1,
-            rel: 0,
-            playsinline: 1
-        },
-        events: {
-            onReady: onPlayerReady
-        }
+        playerVars: { start: 1, rel: 0, playsinline: 1 },
+        events: { onReady: onReady }
     });
 }
 
-function onPlayerReady(event) {
-    const iframe = event.target.getIframe();
+function onReady(e) {
+    const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
     iframe.setAttribute("webkitallowfullscreen", "");
-    startSubtitleSync();
+    syncSubtitle();
 }
 
-/* 同步字幕 */
-function startSubtitleSync() {
+/* 字幕同步 */
+function syncSubtitle() {
     setInterval(() => {
         const t = player.getCurrentTime();
         const s = subtitles.find(x => t >= x.start && t <= x.end);
-        document.getElementById("subtitle").innerHTML = s ? s.text : "";
+        subtitle.innerHTML = s ? s.text : "";
     }, 200);
 }
 
-/* ✅ 平板相容的全螢幕 */
-document.getElementById("fs-btn").addEventListener("click", () => {
-    const el = document.getElementById("video-wrapper");
+/* 全螢幕按鈕（iPad OK） */
+fs-btn.onclick = () => {
+    const el = video-wrapper;
+    userActivated = true;
 
     if (document.fullscreenElement || document.webkitFullscreenElement) {
         document.exitFullscreen?.();
         document.webkitExitFullscreen?.();
-        return;
+    } else {
+        el.requestFullscreen?.();
+        el.webkitRequestFullscreen?.();
     }
+};
 
-    el.requestFullscreen?.();
-    el.webkitRequestFullscreen?.();
+/* 🔥 旋轉支援（iPad 專用策略） */
+window.addEventListener("orientationchange", () => {
+    if (!userActivated) return;
+
+    const landscape = Math.abs(window.orientation) === 90;
+
+    if (landscape) {
+        video-wrapper.requestFullscreen?.();
+        video-wrapper.webkitRequestFullscreen?.();
+    } else {
+        document.exitFullscreen?.();
+        document.webkitExitFullscreen?.();
+    }
 });
 </script>
 
