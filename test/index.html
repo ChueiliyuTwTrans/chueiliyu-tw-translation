@@ -14,7 +14,7 @@ body {
     text-align: center;
 }
 
-/* 影片容器（用來判斷全螢幕） */
+/* 影片容器（全螢幕時會被放大） */
 #video-wrapper {
     position: relative;
     max-width: 960px;
@@ -25,35 +25,37 @@ body {
 #player {
     width: 100%;
     aspect-ratio: 16 / 9;
+    z-index: 1;
 }
 
-/* 字幕 */
+/* 🔥 字幕：永遠疊在影片上 */
 #subtitle {
-    font-size: 22px;
-    padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.65);
-    border-radius: 8px;
-    line-height: 1.6;
-    min-height: 2.5em;
-    margin: 12px auto;
-    width: 90%;
-    box-sizing: border-box;
-}
-
-/* 🔥 全螢幕時：字幕疊加在影片底部 */
-:fullscreen #subtitle,
-:-webkit-full-screen #subtitle {
     position: absolute;
-    bottom: 5%;
+    bottom: 6%;
     left: 50%;
     transform: translateX(-50%);
     width: 92%;
-    margin: 0;
-    z-index: 10;
+    padding: 12px 16px;
+
+    font-size: 22px;
+    line-height: 1.6;
+    text-align: center;
+
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 8px;
+    min-height: 2.5em;
+
+    z-index: 9999;
+    pointer-events: none; /* 不擋 YouTube 操作 */
+}
+
+/* 全螢幕時微調字級 */
+:fullscreen #subtitle,
+:-webkit-full-screen #subtitle {
     font-size: 24px;
 }
 
-/* 行動裝置橫向優化 */
+/* 手機橫向 */
 @media (orientation: landscape) and (max-width: 900px) {
     #subtitle {
         font-size: 18px;
