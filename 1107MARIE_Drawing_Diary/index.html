@@ -119,16 +119,47 @@ fetch("1107MARIE_Drawing_Diary.srt")
     });
 
 function parseSRT(data) {
-    return data.replace(/\r/g, "").trim().split("\n\n").map(b => {
-        const l = b.split("\n");
-        const [s, e] = l[1].split(" --> ");
-        return { start: sec(s), end: sec(e), text: l.slice(2).join("<br>") };
-    });
+    const blocks = data
+        .replace(/\r/g, "")
+        .trim()
+        .split(/\n\s*\n/);
+
+    const result = [];
+
+    for (const block of blocks) {
+        const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
+
+        // 至少要有「時間碼 + 字幕」
+        if (lines.length < 2) continue;
+
+        // 找出時間碼那一行（有 -->）
+        const timeLine = lines.find(l => l.includes("-->"));
+        if (!timeLine) continue;
+
+        const [startStr, endStr] = timeLine.split("-->").map(s => s.trim());
+        if (!startStr || !endStr) continue;
+
+        const textLines = lines.slice(lines.indexOf(timeLine) + 1);
+        if (!textLines.length) continue;
+
+        result.push({
+            start: sec(startStr),
+            end: sec(endStr),
+            text: textLines.join("<br>")
+        });
+    }
+
+    return result;
 }
 
 function sec(t) {
-    const [h, m, s] = t.replace(",", ".").split(":");
-    return h * 3600 + m * 60 + parseFloat(s);
+    if (!t) return 0;
+
+    const time = t.replace(",", ".").split(":");
+    if (time.length !== 3) return 0;
+
+    const [h, m, s] = time;
+    return Number(h) * 3600 + Number(m) * 60 + Number(s);
 }
 
 /* YouTube */
