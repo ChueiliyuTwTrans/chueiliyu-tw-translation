@@ -192,9 +192,20 @@ function onStateChange(e) {
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
         if (!player || !subtitles.length) return;
+
         const t = player.getCurrentTime();
-        const s = subtitles.find(x => t >= x.start && t <= x.end);
-        subtitleEl.innerHTML = s ? s.text : "";
+
+        const activeSubs = subtitles.filter(
+            x => t >= x.start && t <= x.end
+        );
+
+        if (activeSubs.length) {
+            subtitleEl.innerHTML = activeSubs
+                .map(s => s.text)
+                .join("<br>");
+        } else {
+            subtitleEl.innerHTML = "";
+        }
     }, 200);
 }
 
