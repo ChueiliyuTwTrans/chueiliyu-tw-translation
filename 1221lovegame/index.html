@@ -2,30 +2,47 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>박소현의 러브게임(朴素賢的Love Game) | 251221</title>
 
 <style>
 body {
-    font-family: Arial, "Noto Sans TC", sans-serif;
-    background-color: #111;
+    margin: 0;
+    background: #111;
     color: #fff;
+    font-family: Arial, "Noto Sans TC", sans-serif;
     text-align: center;
 }
 
-#player {
+#video-wrapper {
+    position: relative;
+    max-width: 960px;
     margin: 20px auto;
+    background: black;
+}
+
+#player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
 }
 
 #subtitle {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 94%;
     font-size: 22px;
-    padding: 12px;
-    background: rgba(0,0,0,0.6);
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 8px;
-    min-height: 2.5em;
     line-height: 1.6;
+    color: white;
+    text-align: center;
+    text-shadow:
+        2px 2px 4px black,
+       -2px 2px 4px black,
+        2px -2px 4px black,
+       -2px -2px 4px black;
+    z-index: 10;
+    pointer-events: none;
 }
 </style>
 </head>
@@ -34,76 +51,74 @@ body {
 
 <h2>박소현의 러브게임(朴素賢的Love Game) | 251221</h2>
 
-<div id="player"></div>
-
-<div id="subtitle">字幕載入中...</div>
+<div id="video-wrapper">
+    <div id="player"></div>
+    <div id="subtitle">字幕載入中...</div>
+</div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 let player;
 let subtitles = [];
+let subtitleTimer = null;
+
+const subtitleEl = document.getElementById("subtitle");
 
 /* 載入 SRT */
 fetch("1221love_game.srt")
-    .then(res => res.text())
-    .then(text => {
-        subtitles = parseSRT(text);
-        document.getElementById("subtitle").innerText = "";
-        console.log("字幕載入完成：", subtitles.length);
+    .then(r => r.text())
+    .then(t => {
+        subtitles = parseSRT(t);
+        subtitleEl.innerHTML = "";
+    })
+    .catch(() => {
+        subtitleEl.innerText = "字幕載入失敗";
     });
 
 function parseSRT(data) {
-    data = data.replace(/\r/g, "");
-    const blocks = data.trim().split("\n\n");
-
-    return blocks.map(block => {
-        const lines = block.split("\n");
-        if (lines.length < 3) return null;
-
-        const [start, end] = lines[1].split(" --> ");
-        return {
-            start: toSeconds(start),
-            end: toSeconds(end),
-            text: lines.slice(2).join("<br>")
-        };
-    }).filter(Boolean);
+    return data.replace(/\r/g, "").trim().split("\n\n").map(b => {
+        const l = b.split("\n");
+        const [s, e] = l[1].split(" --> ");
+        return { start: sec(s), end: sec(e), text: l.slice(2).join("<br>") };
+    });
 }
 
-function toSeconds(time) {
-    const [h, m, s] = time.replace(",", ".").split(":");
-    return Number(h) * 3600 + Number(m) * 60 + parseFloat(s);
+function sec(t) {
+    const [h, m, s] = t.replace(",", ".").split(":");
+    return h * 3600 + m * 60 + parseFloat(s);
 }
 
-/* YouTube API Ready */
+/* YouTube */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
-        width: 800,
-        height: 450,
         videoId: "RQqKjbt7j9g",
-        playerVars: {
-            start: 1,
-            rel: 0,
-            modestbranding: 1
-        },
+        playerVars: { start: 1, rel: 0, playsinline: 1 },
         events: {
-            onReady: startSubtitleTracking
+            onReady,
+            onStateChange
         }
     });
 }
 
-/* 同步字幕（支援多行） */
-function startSubtitleTracking() {
-    setInterval(() => {
+function onReady(e) {
+    const iframe = e.target.getIframe();
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("webkitallowfullscreen", "");
+}
+
+/* 關鍵：只在播放中才同步字幕 */
+function onStateChange(e) {
+    if (e.data === YT.PlayerState.PLAYING && !subtitleTimer) {
+        startSubtitleSync();
+    }
+}
+
+function startSubtitleSync() {
+    subtitleTimer = setInterval(() => {
         if (!player || !subtitles.length) return;
-
-        const currentTime = player.getCurrentTime();
-
-        const matched = subtitles.filter(
-            s => currentTime >= s.start && currentTime <= s.end
-        );
-
-        document.getElementById("subtitle").innerHTML =
-            matched.length ? matched.map(s => s.text).join("<br>") : "";
+        const t = player.getCurrentTime();
+        const s = subtitles.find(x => t >= x.start && t <= x.end);
+        subtitleEl.innerHTML = s ? s.text : "";
     }, 200);
 }
 </script>
