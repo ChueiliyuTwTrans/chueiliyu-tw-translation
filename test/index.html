@@ -8,51 +8,53 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, "Noto Sans TC", sans-serif;
-    background-color: #111;
+    background: #111;
     color: #fff;
+    font-family: Arial, "Noto Sans TC", sans-serif;
     text-align: center;
 }
 
-/* 影片容器（全螢幕時會被放大） */
+/* 影片容器 */
 #video-wrapper {
     position: relative;
     max-width: 960px;
     margin: 20px auto;
+    background: black;
 }
 
-/* YouTube iframe */
+/* YouTube */
 #player {
     width: 100%;
     aspect-ratio: 16 / 9;
-    z-index: 1;
 }
 
-/* 🔥 字幕：永遠疊在影片上 */
+/* 🔥 字幕（無背景） */
 #subtitle {
     position: absolute;
     bottom: 6%;
     left: 50%;
     transform: translateX(-50%);
-    width: 92%;
-    padding: 12px 16px;
+    width: 94%;
 
     font-size: 22px;
     line-height: 1.6;
     text-align: center;
+    color: white;
 
-    background: rgba(0, 0, 0, 0.65);
-    border-radius: 8px;
-    min-height: 2.5em;
+    /* 黑邊白字，不遮畫面 */
+    text-shadow:
+        2px 2px 4px black,
+       -2px 2px 4px black,
+        2px -2px 4px black,
+       -2px -2px 4px black;
 
-    z-index: 9999;
-    pointer-events: none; /* 不擋 YouTube 操作 */
+    z-index: 999;
+    pointer-events: none;
 }
 
-/* 全螢幕時微調字級 */
-:fullscreen #subtitle,
-:-webkit-full-screen #subtitle {
-    font-size: 24px;
+/* 假全螢幕時 */
+:fullscreen #subtitle {
+    font-size: 26px;
 }
 
 /* 手機橫向 */
@@ -61,8 +63,16 @@ body {
         font-size: 18px;
     }
     :fullscreen #subtitle {
-        font-size: 20px;
+        font-size: 22px;
     }
+}
+
+/* 全螢幕按鈕 */
+#fs-btn {
+    margin: 10px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -70,6 +80,8 @@ body {
 <body>
 
 <h2>IDOL RADIO BEHIND EP#173</h2>
+
+<button id="fs-btn">字幕全螢幕</button>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -87,61 +99,50 @@ fetch("1123idol_radio_behind_ep173.srt")
     .then(text => {
         subtitles = parseSRT(text);
         document.getElementById("subtitle").innerText = "";
-        console.log("字幕載入完成：", subtitles.length);
     });
 
 function parseSRT(data) {
     data = data.replace(/\r/g, "");
-    const blocks = data.trim().split("\n\n");
-
-    return blocks.map(block => {
+    return data.trim().split("\n\n").map(block => {
         const lines = block.split("\n");
-        if (lines.length < 3) return null;
-
         const [start, end] = lines[1].split(" --> ");
         return {
-            start: toSeconds(start),
-            end: toSeconds(end),
+            start: toSec(start),
+            end: toSec(end),
             text: lines.slice(2).join("<br>")
         };
-    }).filter(Boolean);
+    });
 }
 
-function toSeconds(time) {
-    const [h, m, s] = time.replace(",", ".").split(":");
-    return Number(h) * 3600 + Number(m) * 60 + parseFloat(s);
+function toSec(t) {
+    const [h,m,s] = t.replace(",", ".").split(":");
+    return +h*3600 + +m*60 + parseFloat(s);
 }
 
-/* YouTube API */
+/* YouTube */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         videoId: "_oV9Tz2eSHw",
-        playerVars: {
-            start: 1,
-            rel: 0,
-            modestbranding: 1,
-            playsinline: 1
-        },
-        events: {
-            onReady: startSubtitleTracking
-        }
+        playerVars: { start: 1, rel: 0, playsinline: 1 },
+        events: { onReady: syncSubtitle }
     });
 }
 
 /* 同步字幕 */
-function startSubtitleTracking() {
+function syncSubtitle() {
     setInterval(() => {
-        if (!player || !subtitles.length) return;
-
-        const currentTime = player.getCurrentTime();
-        const matched = subtitles.filter(
-            s => currentTime >= s.start && currentTime <= s.end
-        );
-
-        document.getElementById("subtitle").innerHTML =
-            matched.length ? matched.map(s => s.text).join("<br>") : "";
+        const t = player.getCurrentTime();
+        const s = subtitles.find(x => t >= x.start && t <= x.end);
+        document.getElementById("subtitle").innerHTML = s ? s.text : "";
     }, 200);
 }
+
+/* 假全螢幕 */
+document.getElementById("fs-btn").onclick = () => {
+    const el = document.getElementById("video-wrapper");
+    if (!document.fullscreenElement) el.requestFullscreen();
+    else document.exitFullscreen();
+};
 </script>
 
 </body>
