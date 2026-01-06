@@ -101,7 +101,7 @@ const wrapper = document.getElementById("video-wrapper");
 const fsBtn = document.getElementById("fs-btn");
 
 /* 載入 SRT */
-fetch("1107MARIE_Drawing_Diary.src")
+fetch("1107MARIE_Drawing_Diary.srt")
     .then(r => r.text())
     .then(t => {
         subtitles = parseSRT(t);
