@@ -102,66 +102,64 @@ const fsBtn = document.getElementById("fs-btn");
 
 /* 載入 SRT */
 fetch("1107MARIE_Drawing_Diary.srt")
-    .then(r => {
-        if (!r.ok) {
-            throw new Error("HTTP error " + r.status);
-        }
-        return r.text();
+    .then(res => {
+        console.log("字幕 HTTP 狀態碼：", res.status);
+        if (!res.ok) throw new Error("字幕讀取失敗");
+        return res.text();
     })
-    .then(t => {
-        console.log("SRT 內容：", t.slice(0, 200));
-        subtitles = parseSRT(t);
-        subtitleEl.innerHTML = "";
+    .then(text => {
+        console.log("字幕原始內容前 100 字：", text.slice(0, 100));
+        subtitles = parseSRT(text);
+        console.log("字幕載入完成：", subtitles.length);
+        document.getElementById("subtitle").innerText = "";
     })
     .catch(err => {
-        console.error("字幕載入錯誤：", err);
-        subtitleEl.innerText = "字幕載入失敗（請查看 Console）";
+        console.error("字幕錯誤：", err);
+        document.getElementById("subtitle").innerText = "字幕載入失敗";
     });
 
+function toSeconds(time) {
+    const parts = time.replace(",", ".").split(":");
+    if (parts.length !== 3) return 0;
+
+    const h = parseFloat(parts[0]);
+    const m = parseFloat(parts[1]);
+    const s = parseFloat(parts[2]);
+
+    return h * 3600 + m * 60 + s;
+}
+
 function parseSRT(data) {
-    const blocks = data
-        .replace(/\r/g, "")
-        .trim()
-        .split(/\n\s*\n/);
+    data = data.replace(/\r/g, "").trim();
 
-    const result = [];
+    const blocks = data.split(/\n{2,}/);
 
-    for (const block of blocks) {
-        const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
+    return blocks.map(block => {
+        const lines = block
+            .split("\n")
+            .map(l => l.trim())
+            .filter(l => l && !/^\d+$/.test(l));
 
-        // 至少要有「時間碼 + 字幕」
-        if (lines.length < 2) continue;
-
-        // 找出時間碼那一行（有 -->）
         const timeLine = lines.find(l => l.includes("-->"));
-        if (!timeLine) continue;
+        if (!timeLine) return null;
 
-        const [startStr, endStr] = timeLine.split("-->").map(s => s.trim());
-        if (!startStr || !endStr) continue;
+        const times = timeLine.split("-->").map(t => t.trim());
+        if (times.length !== 2) return null;
+
+        const start = times[0];
+        const end = times[1];
 
         const textLines = lines.slice(lines.indexOf(timeLine) + 1);
-        if (!textLines.length) continue;
+        if (!textLines.length) return null;
 
-        result.push({
-            start: sec(startStr),
-            end: sec(endStr),
+        return {
+            start: toSeconds(start),
+            end: toSeconds(end),
             text: textLines.join("<br>")
-        });
-    }
-
-    return result;
+        };
+    }).filter(Boolean);
 }
-
-function sec(t) {
-    if (!t) return 0;
-
-    const time = t.replace(",", ".").split(":");
-    if (time.length !== 3) return 0;
-
-    const [h, m, s] = time;
-    return Number(h) * 3600 + Number(m) * 60 + Number(s);
-}
-
+    
 /* YouTube */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
