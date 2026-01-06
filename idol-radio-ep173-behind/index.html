@@ -67,7 +67,8 @@ body {
 
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle {
-    font-size: 26px;
+    font-size: 30px;
+    line-height: 1.8;
 }
 
 /* 全螢幕按鈕 */
@@ -77,6 +78,15 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+
+/* 桌機字幕放大（不影響手機） */
+@media (min-width: 1024px) {
+    #subtitle {
+        font-size: 26px;
+        line-height: 1.7;
+    }
+}
+
 </style>
 </head>
 
@@ -187,4 +197,5 @@ fsBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
 
