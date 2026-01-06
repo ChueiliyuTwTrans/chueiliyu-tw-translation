@@ -102,13 +102,20 @@ const fsBtn = document.getElementById("fs-btn");
 
 /* 載入 SRT */
 fetch("1107MARIE_Drawing_Diary.srt")
-    .then(r => r.text())
+    .then(r => {
+        if (!r.ok) {
+            throw new Error("HTTP error " + r.status);
+        }
+        return r.text();
+    })
     .then(t => {
+        console.log("SRT 內容：", t.slice(0, 200));
         subtitles = parseSRT(t);
         subtitleEl.innerHTML = "";
     })
-    .catch(() => {
-        subtitleEl.innerText = "字幕載入失敗";
+    .catch(err => {
+        console.error("字幕載入錯誤：", err);
+        subtitleEl.innerText = "字幕載入失敗（請查看 Console）";
     });
 
 function parseSRT(data) {
