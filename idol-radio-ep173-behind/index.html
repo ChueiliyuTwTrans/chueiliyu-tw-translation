@@ -44,40 +44,12 @@ body {
     z-index: 10;
     pointer-events: none;
 }
-
-:fullscreen #video-wrapper,
-:-webkit-full-screen #video-wrapper {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-}
-
-:fullscreen #player,
-:-webkit-full-screen #player {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-}
-
-:fullscreen #subtitle,
-:-webkit-full-screen #subtitle {
-    font-size: 26px;
-}
-
-#fs-btn {
-    margin: 10px;
-    padding: 10px 16px;
-    font-size: 16px;
-}
 </style>
 </head>
 
 <body>
 
 <h2>IDOL RADIO BEHIND EP#173</h2>
-<button id="fs-btn">字幕全螢幕</button>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -88,10 +60,8 @@ body {
 <script>
 let player;
 let subtitles = [];
-let userActivated = false;
+let subtitleTimer = null;
 
-const fsBtn = document.getElementById("fs-btn");
-const wrapper = document.getElementById("video-wrapper");
 const subtitleEl = document.getElementById("subtitle");
 
 /* 載入 SRT */
@@ -100,6 +70,9 @@ fetch("1123idol_radio_behind_ep173.srt")
     .then(t => {
         subtitles = parseSRT(t);
         subtitleEl.innerHTML = "";
+    })
+    .catch(() => {
+        subtitleEl.innerText = "字幕載入失敗";
     });
 
 function parseSRT(data) {
@@ -120,7 +93,10 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         videoId: "_oV9Tz2eSHw",
         playerVars: { start: 1, rel: 0, playsinline: 1 },
-        events: { onReady }
+        events: {
+            onReady,
+            onStateChange
+        }
     });
 }
 
@@ -128,45 +104,23 @@ function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
     iframe.setAttribute("webkitallowfullscreen", "");
-    syncSubtitle();
 }
 
-/* 字幕同步 */
-function syncSubtitle() {
-    setInterval(() => {
+/* 關鍵：只在播放中才同步字幕 */
+function onStateChange(e) {
+    if (e.data === YT.PlayerState.PLAYING && !subtitleTimer) {
+        startSubtitleSync();
+    }
+}
+
+function startSubtitleSync() {
+    subtitleTimer = setInterval(() => {
         if (!player || !subtitles.length) return;
         const t = player.getCurrentTime();
         const s = subtitles.find(x => t >= x.start && t <= x.end);
         subtitleEl.innerHTML = s ? s.text : "";
     }, 200);
 }
-
-/* 全螢幕 */
-fsBtn.addEventListener("click", () => {
-    userActivated = true;
-
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-        document.exitFullscreen?.();
-        document.webkitExitFullscreen?.();
-    } else {
-        wrapper.requestFullscreen?.();
-        wrapper.webkitRequestFullscreen?.();
-    }
-});
-
-/* iPad 旋轉支援 */
-window.addEventListener("orientationchange", () => {
-    if (!userActivated) return;
-
-    const landscape = Math.abs(window.orientation) === 90;
-    if (landscape) {
-        wrapper.requestFullscreen?.();
-        wrapper.webkitRequestFullscreen?.();
-    } else {
-        document.exitFullscreen?.();
-        document.webkitExitFullscreen?.();
-    }
-});
 </script>
 
 </body>
