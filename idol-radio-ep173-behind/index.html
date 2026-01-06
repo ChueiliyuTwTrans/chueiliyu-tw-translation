@@ -22,13 +22,13 @@ body {
     background: black;
 }
 
-/* YouTube */
+/* YouTube 播放器 */
 #player {
     width: 100%;
     aspect-ratio: 16 / 9;
 }
 
-/* 字幕 */
+/* 字幕（一般狀態） */
 #subtitle {
     position: absolute;
     bottom: 6%;
@@ -37,18 +37,22 @@ body {
     width: 94%;
     font-size: 22px;
     line-height: 1.6;
-    color: white;
+    color: #fff;
     text-align: center;
+    white-space: normal;
+    word-break: break-word;
+    max-height: 40%;
     text-shadow:
-        2px 2px 4px black,
-       -2px 2px 4px black,
-        2px -2px 4px black,
-       -2px -2px 4px black;
+        2px 2px 4px #000,
+       -2px 2px 4px #000,
+        2px -2px 4px #000,
+       -2px -2px 4px #000;
     z-index: 10;
     pointer-events: none;
 }
 
-/* 全螢幕樣式 */
+/* ========= 全螢幕共用結構 ========= */
+
 :fullscreen #video-wrapper,
 :-webkit-full-screen #video-wrapper {
     width: 100vw;
@@ -65,10 +69,24 @@ body {
     height: 100vh;
 }
 
-:fullscreen #subtitle,
-:-webkit-full-screen #subtitle {
-    font-size: 30px;
-    line-height: 1.8;
+/* ========= 全螢幕字幕：裝置分流 ========= */
+
+/* 桌機全螢幕 */
+@media (min-width: 1024px) {
+    :fullscreen #subtitle,
+    :-webkit-full-screen #subtitle {
+        font-size: 30px;
+        line-height: 1.8;
+    }
+}
+
+/* 手機 / 平板全螢幕 */
+@media (max-width: 1023px) {
+    :fullscreen #subtitle,
+    :-webkit-full-screen #subtitle {
+        font-size: 24px;
+        line-height: 1.6;
+    }
 }
 
 /* 全螢幕按鈕 */
@@ -78,16 +96,8 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
-
-/* 桌機字幕放大（不影響手機） */
-@media (min-width: 1024px) {
-    #subtitle {
-        font-size: 26px;
-        line-height: 1.7;
-    }
-}
-
 </style>
+
 </head>
 
 <body>
@@ -197,5 +207,6 @@ fsBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
