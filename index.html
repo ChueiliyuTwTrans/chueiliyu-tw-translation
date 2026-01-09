@@ -59,6 +59,30 @@ header p {
     color: #eaeaea;
 }
 
+/* ===== Header Search ===== */
+.header-search {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    z-index: 2;
+}
+
+.header-search input {
+    width: 180px;
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 14px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+body.theme-dark .header-search input {
+    background: rgba(30,30,30,0.95);
+    color: #e5e7eb;
+}
+
 /* ===== Header 主題切換（右上角） ===== */
 .header-theme {
     position: absolute;
@@ -417,6 +441,11 @@ body.theme-dark .card:hover {
 <body>
 
 <header>
+    <!-- 🔍 關鍵字搜尋 -->
+<div class="header-search">
+    <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" />
+</div>
+
     <!-- 主題切換（右上角） -->
     <div class="header-theme">
         <button onclick="setTheme('theme-fancy')">🌸 花俏</button>
@@ -575,6 +604,20 @@ function showSection(id) {
     event.target.classList.add('active');
 }
 
+/* ===== 搜尋功能 ===== */
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', function () {
+    const keyword = this.value.toLowerCase();
+    const activeSection = document.querySelector('.section.active');
+    const cards = activeSection.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(keyword) ? '' : 'none';
+    });
+});
+
 /* ===== 主題切換 ===== */
 const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
 
@@ -591,3 +634,4 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
