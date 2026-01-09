@@ -190,6 +190,19 @@ header p {
     transform: translateY(-1px);
 }
 
+/* =========================
+   花俏版面：版面按鈕半透明
+========================= */
+.theme-fancy .header-theme button {
+    background: rgba(255, 255, 255, 0.55); /* 半透明白 */
+    color: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+
 /* ===== Layout ===== */
 .container {
     display: flex;
@@ -985,6 +998,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
