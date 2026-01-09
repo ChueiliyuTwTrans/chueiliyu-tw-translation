@@ -28,7 +28,7 @@ body {
     aspect-ratio: 16 / 9;
 }
 
-/* 字幕（一般狀態） */
+/* 字幕（手機 / 預設） */
 #subtitle {
     position: absolute;
     bottom: 6%;
@@ -49,6 +49,16 @@ body {
        -2px -2px 4px #000;
     z-index: 10;
     pointer-events: none;
+}
+
+/* =========================
+   桌機「非全螢幕」字幕加大
+========================= */
+@media (min-width: 1024px) {
+    #subtitle {
+        font-size: 28px;   /* 🖥 桌機比手機大 */
+        line-height: 1.7;
+    }
 }
 
 /* ========= 全螢幕共用結構 ========= */
@@ -75,7 +85,7 @@ body {
 @media (min-width: 1024px) {
     :fullscreen #subtitle,
     :-webkit-full-screen #subtitle {
-        font-size: 30px;
+        font-size: 32px;
         line-height: 1.8;
     }
 }
