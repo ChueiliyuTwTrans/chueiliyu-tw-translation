@@ -357,6 +357,25 @@ footer {
         padding-right: 32px;    /* ⭐ 留空間給 ✕ */
     }
 
+    /*花俏版本的搜尋框*/
+    .theme-fancy {
+        --header-box-width: min(92vw, 320px); /* ⭐ 同一個寬度來源 */
+    }
+
+    .theme-fancy .header-text {
+        width: var(--header-box-width);
+        box-sizing: border-box;
+    }
+
+    .theme-fancy .search-input-wrap {
+        width: var(--header-box-width);
+        max-width: 100%;
+    }
+
+    .theme-fancy .search-input-wrap input {
+        width: 100%;
+    }
+
     /* 清除按鈕：貼在 input 右邊框內 */
     #clearSearch {
         position: absolute;
@@ -557,6 +576,26 @@ body.theme-dark header p {
     font-size: 14px;
     color: #94a3b8;
     letter-spacing: 0.5px;
+}
+
+/* ===== 深色模式：版面按鈕 ===== */
+.theme-dark .header-theme button {
+    background: rgba(255, 255, 255, 0.12);  /* ⭐ 深色但看得見 */
+    color: #f1f5f9;                         /* 亮字 */
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Hover 狀態：稍微亮一點 */
+.theme-dark .header-theme button:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-1px);
+}
+
+/* 可選：目前選中狀態（如果你有 active） */
+.theme-dark .header-theme button.active {
+    background: rgba(255, 255, 255, 0.28);
+    font-weight: 600;
 }
 
 /* ===== 搜尋框（深色主題） ===== */
@@ -939,6 +978,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
