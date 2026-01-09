@@ -417,6 +417,33 @@ body.theme-dark header p {
     letter-spacing: 0.5px;
 }
 
+/* ===== 搜尋框（深色主題） ===== */
+body.theme-dark .search-box input {
+    background: #020617;          /* 與 header-text 一致 */
+    color: #e5e7eb;
+    border: 1px solid #1f2937;
+}
+
+body.theme-dark .search-box input::placeholder {
+    color: #64748b;
+}
+
+body.theme-dark .search-box input:focus {
+    outline: none;
+    border-color: #38bdf8;         /* 淡藍聚焦色 */
+    box-shadow: 0 0 0 2px rgba(56,189,248,0.25);
+}
+
+/* 搜尋結果分類按鈕 */
+body.theme-dark .search-results button {
+    background: #1f2937;
+    color: #e5e7eb;
+}
+
+body.theme-dark .search-results button:hover {
+    background: #334155;
+}
+
 /* Sidebar */
 body.theme-dark .sidebar {
     background: #111827;
@@ -668,24 +695,35 @@ function handleSearch(keyword) {
         if (matched.length > 0) {
             const btn = document.createElement('button');
             btn.innerText = `${labelMap[sectionId]}（${matched.length}）`;
-            btn.onclick = () => jumpToResult(sectionId, matched[0]);
+            btn.onclick = () => jumpToResults(sectionId, matched);
             resultsBox.appendChild(btn);
         }
     });
 }
 
-function jumpToResult(sectionId, cardEl) {
+function jumpToResults(sectionId, cards) {
     // 切換分類
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
+    const section = document.getElementById(sectionId);
+    section.classList.add('active');
 
     document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
     document.querySelector(`.sidebar button[onclick*="${sectionId}"]`)?.classList.add('active');
 
-    // 捲動到卡片
+    // 移除舊高亮
+    document.querySelectorAll('.search-highlight').forEach(el =>
+        el.classList.remove('search-highlight')
+    );
+
+    // 所有命中卡片都高亮
+    cards.forEach(card => card.classList.add('search-highlight'));
+
+    // 捲動到第一個
     setTimeout(() => {
-        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        cardEl.classList.add('search-highlight');
+        cards[0].scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
     }, 100);
 }
     
@@ -705,6 +743,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
