@@ -279,20 +279,32 @@ footer {
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
     
-    /* header 改成直向排版 */
+    /* ===== Header 直向排列 ===== */
     header {
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        justify-content: flex-start;
-        height: auto;              /* ⭐ 解除固定高度 */
+        gap: 10px;
+        height: auto;
         padding: 10px 12px 14px;
-        gap: 10px;                 /* 各區塊之間的距離 */
+    }
+
+    /* ===== 排序控制 ===== */
+    .header-theme {
+        order: 1;               /* ⭐ 第一排 */
+    }
+
+    .search-box {
+        order: 2;               /* ⭐ 第二排 */
+    }
+
+    .header-text {
+        order: 3;               /* 第三排（Logo） */
     }
 
     /* ===== 第一排：版面按鈕 ===== */
     .header-theme {
-        position: static;          /* ⭐ 不再 absolute */
+        position: static;
         display: flex;
         gap: 8px;
     }
@@ -304,31 +316,42 @@ footer {
 
     /* ===== 第二排：搜尋框 ===== */
     .search-box {
-        position: static;          /* ⭐ 關鍵 */
+        position: static;
         width: 100%;
     }
 
     .search-input-wrap {
-        width: 100%;
-        max-width: 240px;          /* ⭐ 控制搜尋框長度 */
         position: relative;
+        width: 100%;
+        max-width: 200px;       /* ⭐ 搜尋框變短（可再調） */
     }
 
     .search-input-wrap input {
         width: 100%;
+        padding-right: 32px;    /* ⭐ 留空間給 ✕ */
     }
 
-    /* 搜尋結果不影響 header 寬度 */
+    /* 清除按鈕：貼在 input 右邊框內 */
+    #clearSearch {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        padding: 0;
+        line-height: 1;
+    }
+
+    /* 搜尋結果不撐爆 header */
     .search-results {
         width: 100%;
         max-width: 100%;
     }
 
-    /* ===== 第三排：Logo 文字 ===== */
+    /* ===== 第三排：Logo ===== */
     .header-text {
-        align-self: center;        /* ⭐ 保證置中 */
+        align-self: center;
         text-align: center;
-        max-width: 100%;
         padding: 10px 12px;
     }
 
@@ -864,6 +887,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
