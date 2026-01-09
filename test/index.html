@@ -282,6 +282,10 @@ body.theme-light {
     color: #222;
 }
 
+body.theme-light header h1 {
+    text-shadow: none;
+}
+
 body.theme-light header,
 body.theme-light .sidebar,
 body.theme-light .content {
@@ -289,7 +293,11 @@ body.theme-light .content {
 }
 
 body.theme-light header {
-    background: #f7f8fa;
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f3f4f6 100%
+    );
     border-bottom: 1px solid #d6d8db;
 }
 
@@ -330,13 +338,22 @@ body.theme-dark .content {
 }
 
 body.theme-dark header {
-    background: #1a1a1a;
+    background: #202124; /* Google 深色系風格 */
     border-bottom: 1px solid #2a2a2a;
 }
 
-body.theme-light .header-text {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid #d0d3d8;
+body.theme-dark .header-text {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e0e0e0;
+}
+
+body.theme-dark header h1 {
+    color: #111;
+    text-shadow: none;
+}
+
+body.theme-dark header p {
+    color: #444;
 }
 
 body.theme-dark .sidebar {
