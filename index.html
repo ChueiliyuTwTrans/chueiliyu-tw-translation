@@ -268,7 +268,33 @@ footer {
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
+    /*可以換行*/
+    .top-controls {
+        flex-wrap: wrap;
+    }
 
+    /*讓版面按鈕在第一排*/
+    .theme-switch {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .theme-switch button {
+        flex: 1;
+    }
+    
+    /*讓搜尋框在第二排*/
+    .search-box {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+    
     header {
         height: 180px; /* 手機版更小 */
         align-items: flex-end;
@@ -396,7 +422,6 @@ body.theme-light .sidebar button:hover {
 
 /* Content */
 body.theme-light .content {
-    /*background: #ffffff;*/
     background: #f9fafb;
 }
 
@@ -803,6 +828,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
