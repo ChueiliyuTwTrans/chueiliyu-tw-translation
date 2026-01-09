@@ -203,6 +203,13 @@ header p {
     transition: all 0.2s ease;
 }
 
+.theme-fancy .header-theme button:hover,
+.theme-fancy .header-theme button.active {
+    background: rgba(255, 255, 255, 0.8); /* hover 更清楚 */
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-1px);
+}
+
 /* ===== Layout ===== */
 .container {
     display: flex;
@@ -998,6 +1005,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
