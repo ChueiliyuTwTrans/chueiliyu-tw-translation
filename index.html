@@ -554,19 +554,24 @@ body.theme-light .sidebar {
     box-shadow: inset -1px 0 0 rgba(255,255,255,0.6);
 }
 
-/* Sidebar buttons */
+/* ===== 白色主題：分類按鈕 ===== */
 body.theme-light .sidebar button {
-    background: transparent;
-    box-shadow: none;
-    border-radius: 6px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #e5e7eb;
     color: #374151;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
-body.theme-light .sidebar button.active,
 body.theme-light .sidebar button:hover {
-    background: #e5e7eb;
+    background: #ffffff;
+    border-color: #cbd5f5;
+}
+
+body.theme-light .sidebar button.active {
+    background: #ffffff;
+    border-color: #94a3b8;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     font-weight: 600;
-    transform: none;
 }
 
 /* Content */
@@ -586,11 +591,19 @@ body.theme-light .card:hover {
     transform: translateY(-2px);
 }
 
-/* 不要圖片 */
+/* 背景 */
 body.theme-light header,
 body.theme-light .sidebar,
 body.theme-light .content {
-    background-image: none !important;
+    background-color: #f9fafb;
+    background-image:
+        repeating-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.015),
+            rgba(0, 0, 0, 0.015) 1px,
+            transparent 1px,
+            transparent 6px
+        );
 }
 
 /* =========================
@@ -678,17 +691,22 @@ body.theme-dark .sidebar {
     box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
 }
 
-/* Sidebar buttons */
+/* ===== 深色主題：分類按鈕 ===== */
 body.theme-dark .sidebar button {
-    background: transparent;
-    color: #d1d5db;
-    box-shadow: none;
+    background: rgba(15,23,42,0.8);
+    border: 1px solid #334155;
+    color: #e5e7eb;
 }
 
-body.theme-dark .sidebar button.active,
 body.theme-dark .sidebar button:hover {
-    background: #1f2937;
-    transform: none;
+    background: rgba(30,41,59,0.9);
+    border-color: #475569;
+}
+
+body.theme-dark .sidebar button.active {
+    background: rgba(30,41,59,1);
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 1px rgba(96,165,250,0.4);
     font-weight: 600;
 }
 
@@ -728,11 +746,17 @@ body.theme-dark .card:hover {
     z-index: 3;
 }
 
-/* 不要圖片 */
+/* 背景 */
 body.theme-dark header,
 body.theme-dark .sidebar,
 body.theme-dark .content {
-    background-image: none !important;
+    background-color: #0f172a;
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,0.03) 1px,
+            transparent 1px
+        );
+    background-size: 4px 4px;
 }
 
 </style>
@@ -1033,6 +1057,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
