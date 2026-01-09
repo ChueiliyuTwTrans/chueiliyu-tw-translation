@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root {
+    --header-box-width: 320px; /* ⭐ 標題框 & 搜尋框共用寬度 */
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -77,16 +81,17 @@ header p {
 
 .search-input-wrap {
     position: relative;
-    display: inline-block;
-    width: fit-content;
+    width: var(--header-box-width);
+    max-width: 100%;
 }
 
 .search-input-wrap input {
-    width: 200px;
-    padding: 6px 28px 6px 10px; /* ⭐ 右邊留空給 X */
+    width: 100%;
+    padding: 6px 32px 6px 12px; /* 右側留給 ✕ */
     font-size: 14px;
     border-radius: 999px;
     border: 1px solid #d1d5db;
+    box-sizing: border-box;
 }
 
 .search-results {
@@ -116,7 +121,7 @@ header p {
 
 #clearSearch {
     position: absolute;
-    right: 8px;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -128,11 +133,6 @@ header p {
 
 #clearSearch:hover {
     color: #e5e7eb;
-}
-
-/* 有輸入文字時才顯示 */
-#clearSearch.hidden {
-    display: none;
 }
 
 /* ===== Header 主題切換（右上角） ===== */
@@ -904,6 +904,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
