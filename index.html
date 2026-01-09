@@ -61,7 +61,7 @@ header p {
 
 /* ===== Header Search ===== */
 .search-box {
-    position: absolute;
+    position: relative;
     top: 14px;
     left: 16px;
     z-index: 3;
@@ -98,6 +98,31 @@ header p {
 .search-highlight {
     outline: 3px solid #60a5fa;
     outline-offset: 4px;
+}
+
+#clearSearch {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background: transparent;
+    border: none;
+    color: #64748b;
+
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+#clearSearch:hover {
+    color: #e5e7eb;
+}
+
+/* 有輸入文字時才顯示 */
+#clearSearch.hidden {
+    display: none;
 }
 
 /* ===== Header 主題切換（右上角） ===== */
@@ -508,6 +533,7 @@ body.theme-dark .card:hover {
     <!-- 🔍 關鍵字搜尋 -->
 <div class="search-box">
     <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
+    <button id="clearSearch" title="清除搜尋">✕</button>
     <div id="searchResults" class="search-results"></div>
 </div>
 
@@ -701,6 +727,39 @@ function handleSearch(keyword) {
     });
 }
 
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearSearch');
+const resultsBox = document.getElementById('searchResults');
+
+clearBtn.addEventListener('click', () => {
+    // 1. 清空輸入框
+    searchInput.value = '';
+    searchInput.placeholder = '搜尋影片關鍵字…';
+
+    // 2. 清空搜尋結果區
+    resultsBox.innerHTML = '';
+
+    // 3. 移除所有高亮
+    document.querySelectorAll('.search-highlight').forEach(el => {
+        el.classList.remove('search-highlight');
+    });
+
+    // 4. 隱藏清除按鈕
+    clearBtn.classList.add('hidden');
+
+    // 5. 游標回到輸入框（體驗加分）
+    searchInput.focus();
+});
+
+searchInput.addEventListener('input', e => {
+    const keyword = e.target.value;
+
+    handleSearch(keyword);
+
+    // 有內容才顯示清除按鈕
+    clearBtn.classList.toggle('hidden', !keyword.trim());
+});
+
 function jumpToResults(sectionId, cards) {
     // 切換分類
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -743,6 +802,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
