@@ -271,10 +271,12 @@ footer {
     /*可以換行*/
     .top-controls {
         flex-wrap: wrap;
+        row-gap: 10px;   /* 明確拉開上下距離 */
     }
 
-    /*讓版面按鈕在第一排*/
+    /* 第一排：版面按鈕 */
     .theme-switch {
+        flex-basis: 100%;
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -284,15 +286,18 @@ footer {
     .theme-switch button {
         flex: 1;
     }
-    
-    /*讓搜尋框在第二排*/
+
+    /* 第二排：搜尋框 */
     .search-box {
+        flex-basis: 100%;
         width: 100%;
-        margin-top: 10px;
+        display: flex;
+        justify-content: center; /* 置中 */
     }
 
     .search-box input {
         width: 100%;
+        max-width: 260px;   /* ⭐ 重點：限制長度 */
     }
     
     header {
@@ -828,6 +833,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
