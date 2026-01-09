@@ -305,10 +305,14 @@ footer {
 
     /* 第二排：搜尋框 */
     .search-box {
-        flex-basis: 100%;
+        position: relative;
+        top: auto;
+        left: auto;
         width: 100%;
+        padding: 6px 0;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
+        z-index: 5;
     }
 
     .search-box input {
@@ -390,6 +394,12 @@ footer {
         background-image: url("images/content6.jpg");
         background-size: cover;
         background-position: center;
+    }
+
+    .card img {
+        display: block;
+        height: 140px;
+        max-width: 100%;
     }
 }
 
@@ -590,7 +600,7 @@ body.theme-dark .card:hover {
 <div class="search-box">
     <div class="search-input-wrap">
         <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
-        <button id="clearSearch" class="hidden">✕</button>
+        <button id="clearSearch">✕</button>
     </div>
     
     <div id="searchResults" class="search-results"></div>
@@ -861,6 +871,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
