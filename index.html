@@ -278,65 +278,57 @@ footer {
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
-    /*可以換行*/
-    .top-controls {
-        position: static !important;   /* ⭐ 強制回到正常流 */
+    
+    /* header 改成直向排版 */
+    header {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        row-gap: 10px;
-        width: 100%;
-        padding: 8px 12px;
-        box-sizing: border-box;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        height: auto;              /* ⭐ 解除固定高度 */
+        padding: 10px 12px 14px;
+        gap: 10px;                 /* 各區塊之間的距離 */
     }
 
-    /* 第一排：版面按鈕 */
-    .theme-switch {
-        flex-basis: 100%;
-        width: 100%;
+    /* ===== 第一排：版面按鈕 ===== */
+    .header-theme {
+        position: static;          /* ⭐ 不再 absolute */
         display: flex;
-        justify-content: space-between;
         gap: 8px;
     }
 
-    .theme-switch button {
+    .header-theme button {
         flex: 1;
+        font-size: 12px;
     }
 
-    /* 第二排：搜尋框 */
+    /* ===== 第二排：搜尋框 ===== */
     .search-box {
-        position: relative;
-        top: auto;
-        left: auto;
+        position: static;          /* ⭐ 關鍵 */
         width: 100%;
-        padding: 6px 0;
-        display: flex;
-        justify-content: flex-start;
-        z-index: 5;
     }
 
-    .search-box input {
+    .search-input-wrap {
         width: 100%;
-        max-width: 100px;   /* ⭐ 重點：限制長度 */
+        max-width: 240px;          /* ⭐ 控制搜尋框長度 */
+        position: relative;
     }
 
     .search-input-wrap input {
         width: 100%;
-        max-width: 180px;
     }
 
+    /* 搜尋結果不影響 header 寬度 */
     .search-results {
         width: 100%;
         max-width: 100%;
     }
-    
-    header {
-        height: 180px; /* 手機版更小 */
-        align-items: flex-end;
-        padding-bottom: 10px;
-    }
 
+    /* ===== 第三排：Logo 文字 ===== */
     .header-text {
+        align-self: center;        /* ⭐ 保證置中 */
+        text-align: center;
+        max-width: 100%;
         padding: 10px 12px;
     }
 
@@ -872,6 +864,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
