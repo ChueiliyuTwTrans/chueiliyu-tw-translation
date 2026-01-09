@@ -270,8 +270,14 @@ footer {
 @media (max-width: 768px) {
     /*可以換行*/
     .top-controls {
+        position: static !important;   /* ⭐ 強制回到正常流 */
+        display: flex;
         flex-wrap: wrap;
-        row-gap: 10px;   /* 明確拉開上下距離 */
+        align-items: center;
+        row-gap: 10px;
+        width: 100%;
+        padding: 8px 12px;
+        box-sizing: border-box;
     }
 
     /* 第一排：版面按鈕 */
@@ -292,12 +298,12 @@ footer {
         flex-basis: 100%;
         width: 100%;
         display: flex;
-        justify-content: center; /* 置中 */
+        justify-content: center;
     }
 
     .search-box input {
         width: 100%;
-        max-width: 260px;   /* ⭐ 重點：限制長度 */
+        max-width: 100px;   /* ⭐ 重點：限制長度 */
     }
     
     header {
@@ -833,6 +839,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
