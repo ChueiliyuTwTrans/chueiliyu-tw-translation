@@ -275,102 +275,138 @@ footer {
 ========================= */
 
 /* =========================
-   白色主題（灰白層次）
+   專業白色主題
 ========================= */
 body.theme-light {
-    background: #f2f3f5;
-    color: #222;
+    background: #ffffff;
+    color: #1f2933;
 }
 
-body.theme-light header h1 {
-    text-shadow: none;
-}
-
-body.theme-light header,
-body.theme-light .sidebar,
-body.theme-light .content {
-    background-image: none !important;
-}
-
+/* Header */
 body.theme-light header {
-    background: linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #f3f4f6 100%
-    );
-    border-bottom: 1px solid #d6d8db;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 body.theme-light .header-text {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid #d0d3d8;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
-body.theme-light header h1 { color: #222; }
-body.theme-light header p { color: #555; }
+body.theme-light header h1 {
+    color: #111827;
+    text-shadow: none;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+}
 
+body.theme-light header p {
+    color: #6b7280;
+}
+
+/* Sidebar */
 body.theme-light .sidebar {
-    background: #f7f8fa;
-    border-right: 1px solid #d6d8db;
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
 }
 
+/* Sidebar buttons */
+body.theme-light .sidebar button {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 6px;
+    color: #374151;
+}
+
+body.theme-light .sidebar button.active,
+body.theme-light .sidebar button:hover {
+    background: #e5e7eb;
+    font-weight: 600;
+    transform: none;
+}
+
+/* Content */
 body.theme-light .content {
-    background: #f7f8fa;
+    background: #ffffff;
 }
 
+/* Card */
 body.theme-light .card {
     background: #ffffff;
-    border: 1px solid #e1e3e6;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+}
+
+body.theme-light .card:hover {
+    transform: translateY(-2px);
 }
 
 /* =========================
-   深色主題（灰黑層次）
+   專業深色主題
 ========================= */
 body.theme-dark {
-    background: #121212;
-    color: #e5e5e5;
+    background: #0f172a;
+    color: #e5e7eb;
 }
 
-body.theme-dark header,
-body.theme-dark .sidebar,
-body.theme-dark .content {
-    background-image: none !important;
-}
-
+/* Header */
 body.theme-dark header {
-    background: #202124; /* Google 深色系風格 */
-    border-bottom: 1px solid #2a2a2a;
+    background: #0f172a;
+    border-bottom: 1px solid #1f2937;
 }
 
 body.theme-dark .header-text {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #e0e0e0;
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 body.theme-dark header h1 {
-    color: #111;
+    color: #f9fafb;
     text-shadow: none;
+    font-weight: 600;
 }
 
 body.theme-dark header p {
-    color: #444;
+    color: #9ca3af;
 }
 
+/* Sidebar */
 body.theme-dark .sidebar {
-    background: #1c1c1c;
-    border-right: 1px solid #2a2a2a;
+    background: #111827;
+    border-right: 1px solid #1f2937;
 }
 
+/* Sidebar buttons */
+body.theme-dark .sidebar button {
+    background: transparent;
+    color: #d1d5db;
+    box-shadow: none;
+}
+
+body.theme-dark .sidebar button.active,
+body.theme-dark .sidebar button:hover {
+    background: #1f2937;
+    transform: none;
+    font-weight: 600;
+}
+
+/* Content */
 body.theme-dark .content {
-    background: #121212;
+    background: #0f172a;
 }
 
+/* Card */
 body.theme-dark .card {
-    background: #1f1f1f;
-    border: 1px solid #2e2e2e;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    background: #111827;
+    border: 1px solid #1f2937;
+    box-shadow: none;
 }
 
+body.theme-dark .card:hover {
+    transform: translateY(-2px);
+}
 
 </style>
 </head>
