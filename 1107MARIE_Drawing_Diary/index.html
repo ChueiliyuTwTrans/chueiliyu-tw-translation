@@ -125,9 +125,14 @@ body {
 </head>
 
 <body>
-
+<div id="controls">
+    <button onclick="changeSubtitleSize(-0.1)">A−</button>
+    <span>字幕大小</span>
+    <button onclick="changeSubtitleSize(0.1)">A＋</button>
+    <button id="fs-btn">全螢幕</button>
+</div>
+    
 <h2>MARIE Drawing Diary(MARIE畫畫日記)</h2>
-<button id="fs-btn">字幕全螢幕</button>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -143,6 +148,23 @@ let subtitleTimer = null;
 const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
 const fsBtn = document.getElementById("fs-btn");
+
+/* ===== 字幕大小（記住設定） ===== */
+let subtitleScale = parseFloat(
+    localStorage.getItem("subtitle-scale")
+) || 1;
+
+applySubtitleScale();
+
+function applySubtitleScale() {
+    subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
+}
+
+function changeSubtitleSize(delta) {
+    subtitleScale = Math.min(2, Math.max(0.6, subtitleScale + delta));
+    localStorage.setItem("subtitle-scale", subtitleScale);
+    applySubtitleScale();
+}
 
 /* 載入 SRT */
 fetch("1107MARIE_Drawing_Diary.srt")
