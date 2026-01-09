@@ -59,6 +59,33 @@ header p {
     color: #eaeaea;
 }
 
+/* ===== Header 主題切換（右上角） ===== */
+.header-theme {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.header-theme button {
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.85);
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.header-theme button:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
 /* ===== Layout ===== */
 .container {
     display: flex;
@@ -243,6 +270,146 @@ footer {
     }
 }
 
+/* =========================
+   THEME STYLES
+========================= */
+
+/* =========================
+   專業白色主題
+========================= */
+body.theme-light {
+    background: #ffffff;
+    color: #1f2933;
+}
+
+/* Header */
+body.theme-light header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.theme-light .header-text {
+    display: inline-block;
+    background: #f1f5f9;              /* 淡灰藍 */
+    border: 1px solid #e5e7eb;
+    padding: 14px 22px;
+    border-radius: 10px;
+}
+
+body.theme-light header h1 {
+    margin-bottom: 6px;
+}
+
+body.theme-light header p {
+    font-size: 14px;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+    
+/* Sidebar */
+body.theme-light .sidebar {
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* Sidebar buttons */
+body.theme-light .sidebar button {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 6px;
+    color: #374151;
+}
+
+body.theme-light .sidebar button.active,
+body.theme-light .sidebar button:hover {
+    background: #e5e7eb;
+    font-weight: 600;
+    transform: none;
+}
+
+/* Content */
+body.theme-light .content {
+    background: #ffffff;
+}
+
+/* Card */
+body.theme-light .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+}
+
+body.theme-light .card:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================
+   專業深色主題
+========================= */
+body.theme-dark {
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+/* Header */
+body.theme-dark header {
+    background: #0f172a;
+    border-bottom: 1px solid #1f2937;
+}
+
+body.theme-dark .header-text {
+    display: inline-block;
+    background: #020617;             /* 比背景深一階 */
+    border: 1px solid #1f2937;
+    padding: 14px 22px;
+    border-radius: 10px;
+}
+
+body.theme-dark header h1 {
+    margin-bottom: 6px;
+}
+
+body.theme-dark header p {
+    font-size: 14px;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+/* Sidebar */
+body.theme-dark .sidebar {
+    background: #111827;
+    border-right: 1px solid #1f2937;
+}
+
+/* Sidebar buttons */
+body.theme-dark .sidebar button {
+    background: transparent;
+    color: #d1d5db;
+    box-shadow: none;
+}
+
+body.theme-dark .sidebar button.active,
+body.theme-dark .sidebar button:hover {
+    background: #1f2937;
+    transform: none;
+    font-weight: 600;
+}
+
+/* Content */
+body.theme-dark .content {
+    background: #0f172a;
+}
+
+/* Card */
+body.theme-dark .card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    box-shadow: none;
+}
+
+body.theme-dark .card:hover {
+    transform: translateY(-2px);
+}
 
 </style>
 </head>
@@ -250,6 +417,13 @@ footer {
 <body>
 
 <header>
+    <!-- 主題切換（右上角） -->
+    <div class="header-theme">
+        <button onclick="setTheme('theme-fancy')">🌸 花俏</button>
+        <button onclick="setTheme('theme-light')">🤍 白色</button>
+        <button onclick="setTheme('theme-dark')">🌙 深色</button>
+    </div>
+    
     <div class="header-text">
         <h1>崔立于台灣翻譯站</h1>
         <p>非官方｜粉絲翻譯整理｜僅作學習與推廣使用</p>
@@ -259,9 +433,9 @@ footer {
 <div class="container">
 
     <nav class="sidebar">
-        <button class="active" onclick="showSection('live')">直播</button>
-        <button onclick="showSection('program')">節目</button>
-        <button onclick="showSection('radio')">電台</button>
+        <button class="active" onclick="showSection('live', this)">直播</button>
+        <button onclick="showSection('program', this)">節目</button>
+        <button onclick="showSection('radio', this)">電台</button>
     </nav>
 
     <main class="content">
@@ -392,6 +566,7 @@ footer {
 </footer>
 
 <script>
+/* ===== 分頁切換 ===== */
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -399,11 +574,20 @@ function showSection(id) {
     document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
 }
+
+/* ===== 主題切換 ===== */
+const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
+
+function setTheme(theme) {
+    document.body.classList.remove(...themes);
+    document.body.classList.add(theme);
+    localStorage.setItem('site-theme', theme);
+}
+
+/* ===== 載入時套用上次主題 ===== */
+const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
+setTheme(savedTheme);
 </script>
 
 </body>
 </html>
-
-
-
-
