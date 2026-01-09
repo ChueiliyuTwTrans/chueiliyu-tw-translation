@@ -59,6 +59,33 @@ header p {
     color: #eaeaea;
 }
 
+/* ===== Header 主題切換（右上角） ===== */
+.header-theme {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.header-theme button {
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.85);
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.header-theme button:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
 /* ===== Layout ===== */
 .container {
     display: flex;
@@ -247,24 +274,12 @@ footer {
    THEME STYLES
 ========================= */
 
-/* 預設：花俏版 */
-body.theme-fancy {
-}
-
-/* 白色簡約版 */
+/* 白色簡約 */
 body.theme-light header,
 body.theme-light .sidebar,
 body.theme-light .content {
     background-image: none !important;
     background-color: #ffffff !important;
-}
-
-body.theme-light header {
-    border-bottom: 1px solid #ddd;
-}
-
-body.theme-light .sidebar {
-    border-right: 1px solid #ddd;
 }
 
 body.theme-light .header-text {
@@ -277,12 +292,7 @@ body.theme-light header p {
     text-shadow: none;
 }
 
-body.theme-light .card {
-    background: #ffffff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
-
-/* 深色夜間版 */
+/* 深色夜間 */
 body.theme-dark {
     background: #121212;
     color: #e0e0e0;
@@ -295,37 +305,9 @@ body.theme-dark .content {
     background-color: #1e1e1e !important;
 }
 
-body.theme-dark .header-text {
-    background: rgba(0,0,0,0.6);
-}
-
-body.theme-dark header h1,
-body.theme-dark header p {
-    color: #ffffff;
-}
-
-body.theme-dark .sidebar button {
+body.theme-dark .header-theme button {
     background: #2a2a2a;
     color: #e0e0e0;
-}
-
-body.theme-dark .sidebar button.active,
-body.theme-dark .sidebar button:hover {
-    background: #3a3a3a;
-}
-
-body.theme-dark .card {
-    background: #242424;
-    color: #e0e0e0;
-}
-
-body.theme-dark .card-desc,
-body.theme-dark .card-credit {
-    color: #bbbbbb;
-}
-
-body.theme-dark footer {
-    color: #888;
 }
 
 </style>
@@ -334,6 +316,13 @@ body.theme-dark footer {
 <body>
 
 <header>
+    <!-- 主題切換（右上角） -->
+    <div class="header-theme">
+        <button onclick="setTheme('theme-fancy')">🌸 花俏</button>
+        <button onclick="setTheme('theme-light')">🤍 白色</button>
+        <button onclick="setTheme('theme-dark')">🌙 深色</button>
+    </div>
+    
     <div class="header-text">
         <h1>崔立于台灣翻譯站</h1>
         <p>非官方｜粉絲翻譯整理｜僅作學習與推廣使用</p>
@@ -343,18 +332,9 @@ body.theme-dark footer {
 <div class="container">
 
     <nav class="sidebar">
-
-        <!-- 主題切換 -->
-        <div class="theme-switcher">
-            <button onclick="setTheme('theme-fancy')">🌸 花俏</button>
-            <button onclick="setTheme('theme-light')">🤍 白色</button>
-            <button onclick="setTheme('theme-dark')">🌙 深色</button>
-        </div>
-
-        <button class="active" onclick="showSection('live')">直播</button>
-        <button onclick="showSection('program')">節目</button>
-        <button onclick="showSection('radio')">電台</button>
-
+        <button class="active" onclick="showSection('live', this)">直播</button>
+        <button onclick="showSection('program', this)">節目</button>
+        <button onclick="showSection('radio', this)">電台</button>
     </nav>
 
     <main class="content">
