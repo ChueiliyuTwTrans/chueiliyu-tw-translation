@@ -786,7 +786,11 @@ function handleSearch(keyword) {
     const resultsBox = document.getElementById('searchResults');
     resultsBox.innerHTML = '';
 
-    if (!keyword.trim()) return;
+    // 沒文字就直接還原
+    if (!keyword.trim()) {
+        clearSearchAll();
+        return;
+    }
 
     const sections = ['live', 'program', 'radio'];
     const labelMap = {
@@ -845,6 +849,19 @@ searchInput.addEventListener('input', e => {
     clearBtn.classList.toggle('hidden', !keyword.trim());
 });
 
+function clearSearchAll() {
+    const input = document.getElementById('searchInput');
+    const resultsBox = document.getElementById('searchResults');
+
+    input.value = '';
+    resultsBox.innerHTML = '';
+
+    // 移除所有高亮
+    document.querySelectorAll('.search-highlight').forEach(el => {
+        el.classList.remove('search-highlight');
+    });
+}
+
 function jumpToResults(sectionId, cards) {
     // 切換分類
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -887,6 +904,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
