@@ -274,41 +274,87 @@ footer {
    THEME STYLES
 ========================= */
 
-/* 白色簡約 */
+/* =========================
+   白色主題（灰白層次）
+========================= */
+body.theme-light {
+    background: #f2f3f5;
+    color: #222;
+}
+
 body.theme-light header,
 body.theme-light .sidebar,
 body.theme-light .content {
     background-image: none !important;
-    background-color: #ffffff !important;
+}
+
+body.theme-light header {
+    background: #e9ebee;
+    border-bottom: 1px solid #d6d8db;
 }
 
 body.theme-light .header-text {
-    background: none;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #d0d3d8;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
-body.theme-light header h1,
-body.theme-light header p {
-    color: #222;
-    text-shadow: none;
+body.theme-light header h1 { color: #222; }
+body.theme-light header p { color: #555; }
+
+body.theme-light .sidebar {
+    background: #f7f8fa;
+    border-right: 1px solid #d6d8db;
 }
 
-/* 深色夜間 */
+body.theme-light .content {
+    background: #f2f3f5;
+}
+
+body.theme-light .card {
+    background: #ffffff;
+    border: 1px solid #e1e3e6;
+}
+
+/* =========================
+   深色主題（灰黑層次）
+========================= */
 body.theme-dark {
     background: #121212;
-    color: #e0e0e0;
+    color: #e5e5e5;
 }
 
 body.theme-dark header,
 body.theme-dark .sidebar,
 body.theme-dark .content {
     background-image: none !important;
-    background-color: #1e1e1e !important;
 }
 
-body.theme-dark .header-theme button {
-    background: #2a2a2a;
-    color: #e0e0e0;
+body.theme-dark header {
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
 }
+
+body.theme-dark .header-text {
+    background: rgba(0,0,0,0.65);
+    border: 1px solid #3a3a3a;
+}
+
+body.theme-dark .sidebar {
+    background: #1c1c1c;
+    border-right: 1px solid #2a2a2a;
+}
+
+body.theme-dark .content {
+    background: #121212;
+}
+
+body.theme-dark .card {
+    background: #1f1f1f;
+    border: 1px solid #2e2e2e;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+}
+
 
 </style>
 </head>
