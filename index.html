@@ -75,6 +75,20 @@ header p {
     border: 1px solid #d1d5db;
 }
 
+.search-input-wrap {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+}
+
+.search-input-wrap input {
+    width: 200px;
+    padding: 6px 28px 6px 10px; /* ⭐ 右邊留空給 X */
+    font-size: 14px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+}
+
 .search-results {
     margin-top: 6px;
     display: flex;
@@ -102,17 +116,13 @@ header p {
 
 #clearSearch {
     position: absolute;
-    right: 10px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
-
     background: transparent;
     border: none;
-    color: #64748b;
-
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
-    padding: 4px;
     line-height: 1;
 }
 
@@ -298,12 +308,21 @@ footer {
         flex-basis: 100%;
         width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: start;
     }
 
     .search-box input {
         width: 100%;
         max-width: 100px;   /* ⭐ 重點：限制長度 */
+    }
+
+    .search-input-wrap input {
+        width: 100%;
+        max-width: 180px;
+    }
+
+    .search-results {
+        width: 100%;
     }
     
     header {
@@ -567,10 +586,13 @@ body.theme-dark .card:hover {
 <body>
 
 <header>
-    <!-- 🔍 關鍵字搜尋 -->
+<!-- 🔍 關鍵字搜尋 -->
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
-    <button id="clearSearch" title="清除搜尋">✕</button>
+    <div class="search-input-wrap">
+        <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
+        <button id="clearSearch" class="hidden">✕</button>
+    </div>
+    
     <div id="searchResults" class="search-results"></div>
 </div>
 
@@ -839,6 +861,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
