@@ -803,6 +803,19 @@ body.theme-dark .content {
 
         <div id="live" class="section active">
             <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/" target="_blank">
+                <img src="images/20251213MBC_Show!MusicCore_MC_cut.png" alt="">
+                <div class="card-body">
+                    <div class="card-title">쇼음악중심, 강민(VERIVERY) X 최립우(CHUEI LI YU)<br>
+                        (《Show! 音樂中心》,岡旻(VERIVERY) X 崔立于(CHUEI LI YU))</div>
+                    <div class="card-desc">cut直播｜中文翻譯</div>
+                    <div class="card-credit">
+                        翻譯：bestchoice_412<br>
+                        字幕製作：C<br>
+                        校對：西卡
+                    </div>
+                </div>
+            </a>
+            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/" target="_blank">
                 <img src="images/20251224_CHRISTMAS_NIGHT_with_LIYU.png" alt="">
                 <div class="card-body">
                     <div class="card-title">립우와 CHRISTMAS NIGHT<br>(和立于一起度過聖誕夜)</div>
@@ -971,9 +984,14 @@ function handleSearch(keyword) {
         const section = document.getElementById(sectionId);
         const cards = section.querySelectorAll('.card');
 
-        const matched = Array.from(cards).filter(card =>
-            card.innerText.toLowerCase().includes(keyword.toLowerCase())
-        );
+        const matched = Array.from(cards).filter(card => {
+            const titleEl = card.querySelector('.card-title');
+            if (!titleEl) return false;
+
+            return titleEl.innerText
+                .toLowerCase()
+                .includes(keyword.toLowerCase());
+        });
 
         if (matched.length > 0) {
             const btn = document.createElement('button');
@@ -1072,6 +1090,7 @@ setTheme(savedTheme);
 
 </body>
 </html>
+
 
 
 
