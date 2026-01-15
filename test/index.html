@@ -200,14 +200,17 @@ body {
     transform: scale(1.1);
 }
 
-/* 針對手機端的微調 */
+/* 手機端微調媒體查詢部分 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        top: 10px;    /* 讓它更靠近頂部 */
+        /* 使用 min 確保在沒有瀏海的手機上也至少保持 5px 距離 */
+        top: calc(max(env(safe-area-inset-top), 5px)); 
         right: 10px;
-        width: 40px;  /* 稍微縮小一點點，看起來更精緻 */
+        width: 40px; /* 增加觸控面積 */
         height: 40px;
-        font-size: 28px;
+        font-size: 26px; /* 稍微放大一點點 */
+        background: rgba(0, 0, 0, 0.7); /* 稍微透明一點點更有質感 */
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
 }
 
@@ -458,22 +461,23 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 先顯示出來，再跑透明度動畫
-        exitFsBtn.style.display = "flex";
-        // 加上強制重繪，確保手機瀏覽器反應
-        void exitFsBtn.offsetWidth; 
-        exitFsBtn.style.opacity = "1";
-        
+        // 強制先變回 flex 並取消之前的隱藏定時
         clearTimeout(exitBtnTimeout);
+        exitFsBtn.style.display = "flex";
+        
+        // 使用 requestAnimationFrame 確保瀏覽器在下一幀渲染顯示，解決消失後喚不回的問題
+        requestAnimationFrame(() => {
+            exitFsBtn.style.opacity = "1";
+        });
+        
         exitBtnTimeout = setTimeout(() => {
             if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
                 exitFsBtn.style.opacity = "0";
-                // 動態隱藏，確保不擋住影片控制項
                 setTimeout(() => {
                     if(exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
                 }, 400);
             }
-        }, 5000); // 稍微延長到 5 秒，對手機使用者較友善
+        }, 5000); 
     }
 }
 
@@ -527,9 +531,12 @@ window.addEventListener("orientationchange", () => {
 });
 
 // 2. 觸控偵測 (手機)
-wrapper.addEventListener('touchstart', (e) => {
-    showExitBtn();
-}, { passive: true });
+document.addEventListener('touchstart', (e) => {
+    // 檢查點擊是否在影片區域內
+    if (wrapper.contains(e.target)) {
+        showExitBtn();
+    }
+}, { passive: true, capture: true });
 
 // 3. 滑鼠偵測 (電腦)
 wrapper.addEventListener('mousemove', showExitBtn);
