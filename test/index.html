@@ -20,12 +20,14 @@ body {
     max-width: 960px;
     margin: 20px auto;
     background: black;
+    transition: all 0.3s ease;
 }
 
 /* YouTube 播放器 */
 #player {
     width: 100%;
     aspect-ratio: 16 / 9;
+    display: block;
 }
 
 /* ===== 字幕 ===== */
@@ -54,13 +56,12 @@ body {
 /* 桌機非全螢幕 */
 @media (min-width: 1024px) {
     #subtitle {
-        font-size: 28px;   /* 🖥 桌機比手機大 */
+        font-size: 28px;
         line-height: 1.7;
     }
 }
 
-/* ========= 全螢幕共用結構 ========= */
-
+/* ========= 全螢幕樣式 (系統級) ========= */
 :fullscreen #video-wrapper,
 :-webkit-full-screen #video-wrapper {
     width: 100vw;
@@ -71,89 +72,78 @@ body {
 
 :fullscreen #player,
 :-webkit-full-screen #player {
-    position: absolute;
-    inset: 0;
     width: 100vw;
     height: 100vh;
 }
 
-/* ========= 全螢幕字幕：裝置分流 ========= */
-
-/* 桌機全螢幕 */
-@media (min-width: 1024px) {
-    :fullscreen #subtitle,
-    :-webkit-full-screen #subtitle {
-        font-size: 32px;
-        line-height: 1.8;
-    }
-}
-
-/* 手機 / 平板全螢幕 */
-@media (max-width: 1023px) {
-    :fullscreen #subtitle,
-    :-webkit-full-screen #subtitle {
-        font-size: 24px;
-        line-height: 1.6;
-    }
-}
-
-/* 偽全螢幕：當 API 失效時，強制填滿瀏覽器視窗 */
+/* ========= 偽全螢幕樣式 (針對 iPad/iPhone/相容性) ========= */
 .pseudo-fullscreen {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    z-index: 9999 !important; /* 確保在最上層 */
+    z-index: 9999 !important;
     background: #000 !important;
     margin: 0 !important;
     touch-action: none;
 }
 
-/* 偽全螢幕下的影片與字幕調整 */
 .pseudo-fullscreen #player {
     width: 100% !important;
     height: 100% !important;
 }
 
 .pseudo-fullscreen #subtitle {
-    font-size: 5vw !important; /* 隨視窗大小縮放字幕 */
+    font-size: 5vw !important; /* 隨螢幕寬度自動縮放 */
     bottom: 10%;
 }
 
-/* 全螢幕按鈕 */
-#fs-btn {
-    margin: 10px;
-    padding: 10px 16px;
-    font-size: 16px;
-    cursor: pointer;
+/* 進入全螢幕時隱藏頁面其餘元素 */
+.pseudo-fullscreen ~ h2, 
+.pseudo-fullscreen ~ #controls {
+    display: none;
 }
 
-/* ===== 控制列 ===== */
+/* ========= 控制列 ========= */
 #controls {
     display: inline-flex;
     gap: 10px;
     align-items: center;
-    margin-bottom: 10px;
+    margin: 15px 0;
     font-size: 14px;
 }
 
 #controls button {
-    padding: 6px 10px;
+    padding: 6px 12px;
     font-size: 14px;
     cursor: pointer;
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+#controls button:hover {
+    background: #444;
+}
+
+#fs-btn {
+    background: #e62117 !important; /* 醒目的紅色 */
+    border: none !important;
+    font-weight: bold;
 }
 
 </style>
-
 </head>
 
 <body>
+
 <div id="controls">
     <button onclick="changeSubtitleSize(-0.1)">A−</button>
     <span>字幕大小</span>
     <button onclick="changeSubtitleSize(0.1)">A＋</button>
-    <button id="fs-btn">全螢幕</button>
+    <button id="fs-btn">進入全螢幕</button>
 </div>
     
 <h2>MARIE Drawing Diary(MARIE畫畫日記)</h2>
@@ -173,11 +163,8 @@ const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
 const fsBtn = document.getElementById("fs-btn");
 
-/* ===== 字幕大小（記住設定） ===== */
-let subtitleScale = parseFloat(
-    localStorage.getItem("subtitle-scale")
-) || 1;
-
+/* ===== 字幕大小設定 ===== */
+let subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
 applySubtitleScale();
 
 function applySubtitleScale() {
@@ -190,74 +177,53 @@ function changeSubtitleSize(delta) {
     applySubtitleScale();
 }
 
-/* 載入 SRT */
+/* ===== 解析 SRT ===== */
 fetch("1107MARIE_Drawing_Diary.srt")
     .then(res => {
-        console.log("字幕 HTTP 狀態碼：", res.status);
-        if (!res.ok) throw new Error("字幕讀取失敗");
+        if (!res.ok) throw new Error("字幕檔案不存在");
         return res.text();
     })
     .then(text => {
-        console.log("字幕原始內容前 100 字：", text.slice(0, 100));
         subtitles = parseSRT(text);
-        console.log("字幕載入完成：", subtitles.length);
-        document.getElementById("subtitle").innerText = "";
+        subtitleEl.innerText = "";
     })
     .catch(err => {
-        console.error("字幕錯誤：", err);
-        document.getElementById("subtitle").innerText = "字幕載入失敗";
+        console.error(err);
+        subtitleEl.innerText = "字幕載入失敗";
     });
 
 function toSeconds(time) {
     const parts = time.replace(",", ".").split(":");
     if (parts.length !== 3) return 0;
-
-    const h = parseFloat(parts[0]);
-    const m = parseFloat(parts[1]);
-    const s = parseFloat(parts[2]);
-
-    return h * 3600 + m * 60 + s;
+    return parseFloat(parts[0]) * 3600 + parseFloat(parts[1]) * 60 + parseFloat(parts[2]);
 }
 
 function parseSRT(data) {
     data = data.replace(/\r/g, "").trim();
-
     const blocks = data.split(/\n{2,}/);
-
     return blocks.map(block => {
-        const lines = block
-            .split("\n")
-            .map(l => l.trim())
-            .filter(l => l && !/^\d+$/.test(l));
-
+        const lines = block.split("\n").map(l => l.trim()).filter(l => l && !/^\d+$/.test(l));
         const timeLine = lines.find(l => l.includes("-->"));
         if (!timeLine) return null;
-
         const times = timeLine.split("-->").map(t => t.trim());
-        if (times.length !== 2) return null;
-
-        const start = times[0];
-        const end = times[1];
-
         const textLines = lines.slice(lines.indexOf(timeLine) + 1);
-        if (!textLines.length) return null;
-
         return {
-            start: toSeconds(start),
-            end: toSeconds(end),
+            start: toSeconds(times[0]),
+            end: toSeconds(times[1]),
             text: textLines.join("<br>")
         };
     }).filter(Boolean);
 }
     
-/* YouTube */
+/* ===== YouTube API ===== */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
         videoId: "OqzZmTh0IRU",
         playerVars: {
             start: 1,
             rel: 0,
-            playsinline: 1
+            playsinline: 1, // 關鍵：防止 iPhone 自動跳出原生播放器
+            modestbranding: 1
         },
         events: {
             onReady,
@@ -269,10 +235,8 @@ function onYouTubeIframeAPIReady() {
 function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
-    iframe.setAttribute("webkitallowfullscreen", "");
 }
 
-/* 播放中才同步字幕 */
 function onStateChange(e) {
     if (e.data === YT.PlayerState.PLAYING && !subtitleTimer) {
         startSubtitleSync();
@@ -282,44 +246,34 @@ function onStateChange(e) {
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
         if (!player || !subtitles.length) return;
-
         const t = player.getCurrentTime();
-
-        const activeSubs = subtitles.filter(
-            x => t >= x.start && t <= x.end
-        );
-
-        if (activeSubs.length) {
-            subtitleEl.innerHTML = activeSubs
-                .map(s => s.text)
-                .join("<br>");
-        } else {
-            subtitleEl.innerHTML = "";
-        }
+        const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
+        subtitleEl.innerHTML = activeSubs.length ? activeSubs.map(s => s.text).join("<br>") : "";
     }, 200);
 }
 
-/* 全螢幕按鈕（桌機 / Android / 部分平板可用） */
+/* ===== 進階全螢幕邏輯 (相容 iPad/iPhone) ===== */
 fsBtn.addEventListener("click", () => {
-    // 1. 檢查是否已經在全螢幕狀態（含各家瀏覽器前綴）
-    const isFullscreen = document.fullscreenElement || 
-                         document.webkitFullscreenElement || 
-                         document.mozFullScreenElement || 
-                         document.msFullscreenElement;
+    const isSystemFullscreen = document.fullscreenElement || 
+                               document.webkitFullscreenElement || 
+                               document.mozFullScreenElement || 
+                               document.msFullscreenElement;
+    
+    const isPseudoFullscreen = wrapper.classList.contains("pseudo-fullscreen");
 
-    if (isFullscreen) {
-        // 退出全螢幕
-        const exitMethod = document.exitFullscreen || 
-                           document.webkitExitFullscreen || 
-                           document.mozCancelFullScreen || 
-                           document.msExitFullscreen;
-        if (exitMethod) {
-            exitMethod.call(document);
+    if (isSystemFullscreen || isPseudoFullscreen) {
+        // --- 執行退出 ---
+        if (isSystemFullscreen) {
+            const exitMethod = document.exitFullscreen || 
+                               document.webkitExitFullscreen || 
+                               document.mozCancelFullScreen || 
+                               document.msExitFullscreen;
+            if (exitMethod) exitMethod.call(document);
         }
-        // 同時確保移除偽全螢幕樣式
         wrapper.classList.remove("pseudo-fullscreen");
+        fsBtn.innerText = "進入全螢幕";
     } else {
-        // 2. 嘗試進入全螢幕
+        // --- 執行進入 ---
         const requestMethod = wrapper.requestFullscreen || 
                               wrapper.webkitRequestFullscreen || 
                               wrapper.mozRequestFullScreen || 
@@ -327,11 +281,20 @@ fsBtn.addEventListener("click", () => {
 
         if (requestMethod) {
             requestMethod.call(wrapper);
+            // 監聽按 Esc 鍵退出全螢幕的情況
+            const exitHandler = () => {
+                if (!document.fullscreenElement && !document.webkitIsFullScreen) {
+                    wrapper.classList.remove("pseudo-fullscreen");
+                    fsBtn.innerText = "進入全螢幕";
+                }
+            };
+            document.addEventListener('fullscreenchange', exitHandler);
+            document.addEventListener('webkitfullscreenchange', exitHandler);
         } else {
-            // 3. 最終方案：針對不支援 API 的平板/手機，使用 CSS 偽全螢幕
+            // API 不支援 (如 iPad)，改用 CSS 偽全螢幕
             wrapper.classList.add("pseudo-fullscreen");
-            // 提醒：在偽全螢幕下，可能需要一個額外的「關閉」按鈕，或是再次點擊全螢幕按鈕來移除 class
         }
+        fsBtn.innerText = "退出全螢幕";
     }
 });
 </script>
