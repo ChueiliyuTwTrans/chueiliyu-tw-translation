@@ -482,9 +482,12 @@ function toggleFullscreen() {
         fsBtn.innerText = "退出全螢幕";
         
         // 【核心修正】多次呼叫確保手機初始顯示
-        showExitBtn(); // 1. 立即呼叫
-        setTimeout(showExitBtn, 500);  // 2. 0.5秒後呼叫（避開全螢幕切換期）
-        setTimeout(showExitBtn, 1500); // 3. 1.5秒後呼叫（確保轉向動畫結束後一定在）
+        let retryCount = 0;
+        const retryShow = setInterval(() => {
+            showExitBtn();
+            retryCount++;
+            if (retryCount > 10) clearInterval(retryShow); // 連續檢查 10 次 (共 2 秒)
+        }, 200);
     }
 }
 
