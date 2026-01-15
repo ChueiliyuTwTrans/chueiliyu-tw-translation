@@ -515,33 +515,6 @@ exitFsBtn.onclick = (e) => {
     e.stopPropagation();
     toggleFullscreen();
 };
-
-/*測試表情*/
-function loadReactions() {
-    ['love', 'funny', 'cool', 'thanks'].forEach(type => {
-        const count = localStorage.getItem('reaction-' + type) || 0;
-        document.getElementById('count-' + type).innerText = count;
-    });
-}
-
-function addReaction(type) {
-    let count = parseInt(localStorage.getItem('reaction-' + type) || 0);
-    count++;
-    localStorage.setItem('reaction-' + type, count);
-    document.getElementById('count-' + type).innerText = count;
-    
-    // 增加一點點擊感
-    const btn = event.currentTarget;
-    btn.style.transform = "scale(1.2)";
-    setTimeout(() => btn.style.transform = "scale(1)", 100);
-}
-
-// 頁面載入時執行
-window.onload = () => {
-    loadReactions();
-    // 原有的字幕與全螢幕初始化代碼...
-};
-   
 </script>
 <script type="module">
   // 1. 載入 Firebase 核心功能
