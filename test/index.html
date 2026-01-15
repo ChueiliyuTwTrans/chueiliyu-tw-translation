@@ -130,22 +130,26 @@ body {
 
 /* 全螢幕按鈕樣式 */
 #fs-btn {
-    background: #27ae60 !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    font-weight: 500;
-    transition: all 0.2s ease; /* 增加過渡動畫 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    background: #27ae60 !important; /* 薄荷綠 */
+    color: white !important;
+    border: none !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 #fs-btn:hover {
-    background: rgba(231, 76, 60, 1) !important; /* 懸停時稍微變亮 */
-    transform: translateY(-1px); /* 輕微往上浮動 */
-    box-shadow: 0 4px 12px rgba(196, 69, 69, 0.3);
+    background: #2ecc71 !important; /* 懸停時稍微變亮，增加互動感 */
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
 }
 
 #fs-btn:active {
-    transform: translateY(0px); /* 點擊時下壓感 */
+    transform: translateY(0px);
 }
 
 </style>
@@ -237,7 +241,9 @@ function onYouTubeIframeAPIReady() {
             start: 1,
             rel: 0,
             playsinline: 1, // 關鍵：防止 iPhone 自動跳出原生播放器
-            modestbranding: 1
+            modestbranding: 1,
+            fs: 0, // 隱藏 YouTube 內建的全螢幕按鈕
+            controls: 1 // 保留進度條、音量等基本控制
         },
         events: {
             onReady,
