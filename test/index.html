@@ -177,6 +177,7 @@ let player;
 let subtitles = [];
 let subtitleTimer = null;
 let saveTimer = null;
+const MY_VIDEO_ID = "stw1z7tCz9Y"; // 影片ID
 
 const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
@@ -305,11 +306,36 @@ function stopAutoSave() {
 
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
-        if (!player || !subtitles.length || typeof player.getCurrentTime !== 'function') return;
+        if (!player || !player.getVideoData) return;
+
+        const currentVideoId = player.getVideoData().video_id;
+        // 如果 ID 不符，或是 player 處於廣告狀態 (getAdState 不為 -1)
+        const isAd = (currentVideoId !== MY_VIDEO_ID) || (player.getAdState && player.getAdState() !== -1);
+
+        if (isAd) {
+            subtitleEl.innerHTML = ""; 
+            return;
+        }
+
         const t = player.getCurrentTime();
         const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
         subtitleEl.innerHTML = activeSubs.length ? activeSubs.map(s => s.text).join("<br>") : "";
     }, 200);
+}
+
+/* 解決進度儲存：確保不存到廣告的時間 */
+function startAutoSave() {
+    if (saveTimer) clearInterval(saveTimer);
+    saveTimer = setInterval(() => {
+        if (player && player.getVideoData) {
+            const currentVideoId = player.getVideoData().video_id;
+            // 只有當前播放的是「正片」時，才儲存時間
+            if (currentVideoId === MY_VIDEO_ID) {
+                localStorage.setItem("yt-played-time", player.getCurrentTime());
+                localStorage.setItem("yt-volume", player.getVolume());
+            }
+        }
+    }, 5000);
 }
 
 /* 清除進度 / 重新播放 */
