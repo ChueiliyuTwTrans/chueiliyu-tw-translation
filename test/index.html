@@ -185,7 +185,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0;
-    filter: drop-shadow(0px 0px 3px rgba(0,0,0,1)) drop-shadow(0px 0px 5px rgba(0,0,0,0.8));
+    filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.5));
     opacity: 0; /* 由動畫控制 */
     transition: opacity 0.3s ease;
 }
@@ -195,21 +195,15 @@ body {
     width: 32px; 
     height: 32px;
     stroke: currentColor; /* 繼承父層顏色 */
-    stroke-width: 3;
+    stroke-width: 2.5;
     fill: none;
 }
 
-#exit-fs-btn:hover {
-    color: #fff;
-    transform: scale(1.1);
-}
-
-/* 手機端：位置最優化 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        top: 8px !important; 
-        right: 8px !important;
-        opacity: 1 !important; /* 強制不透明 */
+        /* 手機端強行拉高，避開可能存在的 UI 遮擋 */
+        top: 5px !important; 
+        right: 5px !important;
     }
 }
 
@@ -453,16 +447,16 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 使用 !important 的 inline style 來確保顯示
         exitFsBtn.style.setProperty('display', 'flex', 'important');
-        // 稍微延遲讓瀏覽器反應，確保透明度動畫能跑
-        setTimeout(() => {
-            exitFsBtn.style.opacity = "1";
-        }, 10);
+        // 強制重繪
+        void exitFsBtn.offsetWidth; 
+        exitFsBtn.style.opacity = "1";
     } else {
         exitFsBtn.style.opacity = "0";
         setTimeout(() => {
-            exitFsBtn.style.display = "none";
+            if (exitFsBtn.style.opacity === "0") {
+                exitFsBtn.style.display = "none";
+            }
         }, 300);
     }
 }
@@ -478,7 +472,7 @@ function toggleFullscreen() {
         }
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
-        exitFsBtn.style.display = "none"; 
+        showExitBtn(); // 退出時立即更新狀態
     } else {
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
         if (req) {
@@ -488,8 +482,10 @@ function toggleFullscreen() {
         }
         fsBtn.innerText = "退出全螢幕";
         
-        // 進入後立即顯示
-        showExitBtn();
+        // 【核心修正】多次呼叫確保手機初始顯示
+        showExitBtn(); // 1. 立即呼叫
+        setTimeout(showExitBtn, 500);  // 2. 0.5秒後呼叫（避開全螢幕切換期）
+        setTimeout(showExitBtn, 1500); // 3. 1.5秒後呼叫（確保轉向動畫結束後一定在）
     }
 }
 
