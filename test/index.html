@@ -176,6 +176,7 @@ body {
 let player;
 let subtitles = [];
 let subtitleTimer = null;
+let saveTimer = null;
 
 const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
@@ -232,7 +233,7 @@ function parseSRT(data) {
         };
     }).filter(Boolean);
 }
-    
+
 /* ===== YouTube API ===== */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
@@ -240,10 +241,10 @@ function onYouTubeIframeAPIReady() {
         playerVars: {
             start: 1,
             rel: 0,
-            playsinline: 1, // 關鍵：防止 iPhone 自動跳出原生播放器
+            playsinline: 1,
             modestbranding: 1,
-            fs: 0, // 隱藏 YouTube 內建的全螢幕按鈕
-            controls: 1 // 保留進度條、音量等基本控制
+            fs: 0, 
+            controls: 1
         },
         events: {
             onReady,
@@ -253,26 +254,60 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onReady(e) {
+    // 1. 設定 iframe 屬性
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
+
+    // 2. 恢復音量
+    const savedVolume = localStorage.getItem("yt-volume");
+    if (savedVolume !== null) {
+        player.setVolume(parseInt(savedVolume));
+    }
+
+    // 3. 恢復播放進度
+    const savedTime = localStorage.getItem("yt-played-time");
+    if (savedTime !== null) {
+        player.seekTo(parseFloat(savedTime), true);
+    }
 }
 
 function onStateChange(e) {
-    if (e.data === YT.PlayerState.PLAYING && !subtitleTimer) {
-        startSubtitleSync();
+    if (e.data === YT.PlayerState.PLAYING) {
+        // 同步字幕
+        if (!subtitleTimer) startSubtitleSync();
+        // 開始自動儲存
+        startAutoSave(); 
+    } else {
+        // 停止儲存（節省資源）
+        stopAutoSave();
     }
+}
+
+function startAutoSave() {
+    if (saveTimer) clearInterval(saveTimer); // 避免重複啟動多個計時器
+    saveTimer = setInterval(() => {
+        if (player && player.getCurrentTime) {
+            localStorage.setItem("yt-played-time", player.getCurrentTime());
+            localStorage.setItem("yt-volume", player.getVolume());
+        }
+    }, 5000);
+}
+
+function stopAutoSave() {
+    clearInterval(saveTimer);
+    saveTimer = null;
 }
 
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
-        if (!player || !subtitles.length) return;
+        if (!player || !subtitles.length || typeof player.getCurrentTime !== 'function') return;
         const t = player.getCurrentTime();
         const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
         subtitleEl.innerHTML = activeSubs.length ? activeSubs.map(s => s.text).join("<br>") : "";
     }, 200);
 }
 
-/* ===== 進階全螢幕邏輯 (相容 iPad/iPhone) ===== */
+/* ===== 進階全螢幕邏輯 ===== */
 fsBtn.addEventListener("click", () => {
     const isSystemFullscreen = document.fullscreenElement || 
                                document.webkitFullscreenElement || 
@@ -282,7 +317,6 @@ fsBtn.addEventListener("click", () => {
     const isPseudoFullscreen = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isSystemFullscreen || isPseudoFullscreen) {
-        // --- 執行退出 ---
         if (isSystemFullscreen) {
             const exitMethod = document.exitFullscreen || 
                                document.webkitExitFullscreen || 
@@ -293,7 +327,6 @@ fsBtn.addEventListener("click", () => {
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
     } else {
-        // --- 執行進入 ---
         const requestMethod = wrapper.requestFullscreen || 
                               wrapper.webkitRequestFullscreen || 
                               wrapper.mozRequestFullScreen || 
@@ -301,7 +334,6 @@ fsBtn.addEventListener("click", () => {
 
         if (requestMethod) {
             requestMethod.call(wrapper);
-            // 監聽按 Esc 鍵退出全螢幕的情況
             const exitHandler = () => {
                 if (!document.fullscreenElement && !document.webkitIsFullScreen) {
                     wrapper.classList.remove("pseudo-fullscreen");
@@ -311,7 +343,6 @@ fsBtn.addEventListener("click", () => {
             document.addEventListener('fullscreenchange', exitHandler);
             document.addEventListener('webkitfullscreenchange', exitHandler);
         } else {
-            // API 不支援 (如 iPad)，改用 CSS 偽全螢幕
             wrapper.classList.add("pseudo-fullscreen");
         }
         fsBtn.innerText = "退出全螢幕";
