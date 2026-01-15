@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MARIE Drawing Diary(MARIE畫畫日記)</title>
+<title>Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)</title>
 
 <style>
 body {
@@ -146,7 +146,7 @@ body {
     <button id="fs-btn">進入全螢幕</button>
 </div>
     
-<h2>MARIE Drawing Diary(MARIE畫畫日記)</h2>
+<h2>Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)</h2>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -178,7 +178,7 @@ function changeSubtitleSize(delta) {
 }
 
 /* ===== 解析 SRT ===== */
-fetch("1107MARIE_Drawing_Diary.srt")
+fetch("1218BadaLee_ep41.srt")
     .then(res => {
         if (!res.ok) throw new Error("字幕檔案不存在");
         return res.text();
@@ -218,7 +218,7 @@ function parseSRT(data) {
 /* ===== YouTube API ===== */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
-        videoId: "OqzZmTh0IRU",
+        videoId: "stw1z7tCz9Y",
         playerVars: {
             start: 1,
             rel: 0,
