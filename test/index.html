@@ -176,7 +176,7 @@ body {
     height: 40px;
     background: none; /* 刪除背景圓框 */
     border: none;     /* 刪除邊框 */
-    color: rgba(255, 255, 255, 0.8); /* 符號顏色，帶點透明度 */
+    color: #ffffff !important; /* 符號顏色，帶點透明度 */
     z-index: 2147483647 !important;
     cursor: pointer;
     
@@ -185,14 +185,18 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0;
-    filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.8)); /* 增加陰影確保在亮色背景也能看見 */
+    filter: drop-shadow(0px 0px 3px rgba(0,0,0,1)) drop-shadow(0px 0px 5px rgba(0,0,0,0.8));
+    opacity: 0; /* 由動畫控制 */
+    transition: opacity 0.3s ease;
 }
 
 /* 內部 SVG：調整大小與粗細 */
 #exit-fs-btn svg {
     width: 32px; 
     height: 32px;
-    stroke-width: 3; /* 讓線條加粗，更清楚 */
+    stroke: currentColor; /* 繼承父層顏色 */
+    stroke-width: 3;
+    fill: none;
 }
 
 #exit-fs-btn:hover {
@@ -448,12 +452,18 @@ function showExitBtn() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
-    // 只要是在全螢幕或偽全螢幕狀態，就強制保持顯示
     if (isFS || isPseudo) {
-        exitFsBtn.style.display = "flex";
-        exitFsBtn.style.opacity = "1";
+        // 使用 !important 的 inline style 來確保顯示
+        exitFsBtn.style.setProperty('display', 'flex', 'important');
+        // 稍微延遲讓瀏覽器反應，確保透明度動畫能跑
+        setTimeout(() => {
+            exitFsBtn.style.opacity = "1";
+        }, 10);
     } else {
-        exitFsBtn.style.display = "none";
+        exitFsBtn.style.opacity = "0";
+        setTimeout(() => {
+            exitFsBtn.style.display = "none";
+        }, 300);
     }
 }
 
