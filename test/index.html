@@ -203,14 +203,11 @@ body {
 /* 手機端微調媒體查詢部分 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        /* 使用 min 確保在沒有瀏海的手機上也至少保持 5px 距離 */
-        top: calc(max(env(safe-area-inset-top), 1px)); 
+        top: calc(env(safe-area-inset-top) + 2px); 
         right: 10px;
-        width: 40px; /* 增加觸控面積 */
+        width: 40px;
         height: 40px;
-        font-size: 26px; /* 稍微放大一點點 */
-        background: rgba(0, 0, 0, 0.7); /* 稍微透明一點點更有質感 */
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-size: 26px;
     }
 }
 
@@ -461,20 +458,20 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 強制先變回 flex 並取消之前的隱藏定時
-        clearTimeout(exitBtnTimeout);
+        // 強制顯示
         exitFsBtn.style.display = "flex";
+        // 觸發重繪確保 opacity 動畫生效
+        void exitFsBtn.offsetWidth; 
+        exitFsBtn.style.opacity = "1";
         
-        // 使用 requestAnimationFrame 確保瀏覽器在下一幀渲染顯示，解決消失後喚不回的問題
-        requestAnimationFrame(() => {
-            exitFsBtn.style.opacity = "1";
-        });
-        
+        clearTimeout(exitBtnTimeout);
+        // 設定 5 秒後自動隱藏
         exitBtnTimeout = setTimeout(() => {
             if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
                 exitFsBtn.style.opacity = "0";
+                // 動畫結束後徹底隱藏，以免擋到 YouTube 內建按鈕
                 setTimeout(() => {
-                    if(exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
+                    if (exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
                 }, 400);
             }
         }, 5000); 
@@ -539,7 +536,18 @@ document.addEventListener('touchstart', (e) => {
 }, { passive: true, capture: true });
 
 // 3. 滑鼠偵測 (電腦)
-wrapper.addEventListener('mousemove', showExitBtn);
+document.addEventListener('mousemove', (e) => {
+    if (wrapper.contains(e.target)) {
+        showExitBtn();
+    }
+}, { capture: true });
+
+// 進入全螢幕那一刻也要立刻顯示
+const originalToggle = toggleFullscreen;
+toggleFullscreen = function() {
+    originalToggle();
+    setTimeout(showExitBtn, 500);
+};
 
 // 4. 按鈕點擊事件
 fsBtn.onclick = toggleFullscreen;
