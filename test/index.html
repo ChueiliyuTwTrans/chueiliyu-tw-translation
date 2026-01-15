@@ -203,23 +203,14 @@ body {
 /* 手機端微調媒體查詢部分 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        top: calc(env(safe-area-inset-top) + 2px); 
+        /* 這裡調到最上面：只加 2px 的間距，確保它緊貼安全區域 */
+        top: calc(env(safe-area-inset-top, 0px) + 2px) !important; 
         right: 10px;
         width: 40px;
         height: 40px;
-        font-size: 26px;
-    }
-}
-
-/* 確保按鈕在手機上更靠頂端且更明顯 */
-@media (max-width: 768px) {
-    #exit-fs-btn {
-        top: env(safe-area-inset-top, 10px); /* 考慮 iPhone 瀏海 */
-        right: 10px;
-        width: 40px;
-        height: 40px;
-        font-size: 24px; /* 字體稍微縮小，讓 X 更有空間感 */
-        background: rgba(0, 0, 0, 0.8); /* 顏色加深，避免被影片背景吃掉 */
+        font-size: 24px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
 }
 
@@ -516,51 +507,40 @@ function toggleFullscreen() {
     }
 }
 
-/* --- 事件監聽註冊 (統一管理，避免重複) --- */
+/* --- 事件監聽註冊 (最終整合版) --- */
 
-// 1. 旋轉偵測
+// 1. 旋轉偵測：合併原本的兩個轉向事件，統一在 800ms 後觸發
 window.addEventListener("orientationchange", () => {
-    // 轉向後，強制滾動到頂部，觸發瀏覽器重新計算可視範圍
     setTimeout(() => {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0); // 確保視窗回到頂部
         showExitBtn();
-    }, 500);
+    }, 800);
 });
 
-// 2. 觸控偵測 (手機)
+// 2. 觸控與滑鼠偵測 (保持 Capture 模式以攔截 YouTube 事件)
 document.addEventListener('touchstart', (e) => {
-    // 檢查點擊是否在影片區域內
     if (wrapper.contains(e.target)) {
         showExitBtn();
     }
 }, { passive: true, capture: true });
 
-// 3. 滑鼠偵測 (電腦)
 document.addEventListener('mousemove', (e) => {
     if (wrapper.contains(e.target)) {
         showExitBtn();
     }
 }, { capture: true });
 
-// 進入全螢幕那一刻也要立刻顯示
-const originalToggle = toggleFullscreen;
-toggleFullscreen = function() {
-    originalToggle();
-    setTimeout(showExitBtn, 500);
+// 3. 按鈕點擊事件 (修正：進入全螢幕時主動呼叫 showExitBtn)
+fsBtn.onclick = () => {
+    toggleFullscreen();
+    // 進入全螢幕後延遲一點點時間強制顯示返回鍵
+    setTimeout(showExitBtn, 500); 
 };
-
-// 4. 按鈕點擊事件
-fsBtn.onclick = toggleFullscreen;
 
 exitFsBtn.onclick = (e) => {
-    e.stopPropagation(); // 阻止事件傳遞給 wrapper
+    e.stopPropagation(); 
     toggleFullscreen();
 };
-
-// 轉向時也強制顯示一次，避免轉向後找不到
-window.addEventListener("orientationchange", () => {
-    setTimeout(showExitBtn, 800);
-});
 
 /*測試表情*/
 function loadReactions() {
