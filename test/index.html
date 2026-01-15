@@ -200,6 +200,17 @@ body {
     transform: scale(1.1);
 }
 
+/* 針對手機端的微調 */
+@media (max-width: 768px) {
+    #exit-fs-btn {
+        top: 10px;    /* 讓它更靠近頂部 */
+        right: 10px;
+        width: 40px;  /* 稍微縮小一點點，看起來更精緻 */
+        height: 40px;
+        font-size: 28px;
+    }
+}
+
 /* 當處於 系統全螢幕 或 偽全螢幕時，顯示按鈕 */
 :fullscreen #exit-fs-btn,
 :-webkit-full-screen #exit-fs-btn,
@@ -443,13 +454,20 @@ function showExitBtn() {
 
     if (isFS || isPseudo) {
         exitFsBtn.style.display = "flex";
-        exitFsBtn.style.opacity = "1";
+        // 使用 setTimeout 確保 display: flex 生效後才改 opacity，動畫才會順
+        setTimeout(() => {
+            exitFsBtn.style.opacity = "1";
+        }, 10);
         
         clearTimeout(exitBtnTimeout);
-        // 4秒後自動淡出
+        // 設定 4 秒後自動隱藏
         exitBtnTimeout = setTimeout(() => {
             if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
                 exitFsBtn.style.opacity = "0";
+                // 為了徹底防止擋住操作，動畫結束後完全隱藏
+                setTimeout(() => {
+                    if (exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
+                }, 400);
             }
         }, 4000);
     }
@@ -519,6 +537,11 @@ exitFsBtn.onclick = (e) => {
     e.stopPropagation(); // 阻止事件傳遞給 wrapper
     toggleFullscreen();
 };
+
+// 轉向時也強制顯示一次，避免轉向後找不到
+window.addEventListener("orientationchange", () => {
+    setTimeout(showExitBtn, 800);
+});
 
 /*測試表情*/
 function loadReactions() {
