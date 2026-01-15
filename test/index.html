@@ -200,17 +200,24 @@ body {
     transform: scale(1.1);
 }
 
-/* 手機端微調媒體查詢部分 */
+/* 手機端 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        /* 這裡調到最上面：只加 2px 的間距，確保它緊貼安全區域 */
-        top: calc(env(safe-area-inset-top, 0px) + 2px) !important; 
-        right: 10px;
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-        background: rgba(0, 0, 0, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        /* 1. 強制位置：忽略 safe-area 直接貼頂，給予 5px 緩衝 */
+        top: 5px !important; 
+        right: 5px !important;
+        
+        /* 2. 增加觸控感應面積：框框維持 40px，但視覺上 X 置中 */
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 24px !important;
+        
+        /* 3. 提高透明度與顏色對比，確保看得到 */
+        background: rgba(0, 0, 0, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        
+        /* 4. 確保層級 */
+        z-index: 2147483647 !important;
     }
 }
 
