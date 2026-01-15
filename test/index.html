@@ -61,6 +61,14 @@ body {
     }
 }
 
+/* 橫向模式下的特別補強 */
+@media screen and (orientation: landscape) {
+    #exit-fs-btn {
+        top: 10px;
+        right: 30px; /* 橫向時離邊緣遠一點，閃開圓角螢幕 */
+    }
+}
+
 /* ========= 全螢幕樣式 (系統級) ========= */
 :fullscreen #video-wrapper,
 :-webkit-full-screen #video-wrapper {
@@ -154,22 +162,18 @@ body {
 
 /* 退出按鈕基礎樣式 */
 #exit-fs-btn {
-    display: none; /* 平時隱藏 */
+    display: none; 
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 36px;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.4); /* 半透明黑 */
-    color: rgba(255, 255, 255, 0.6); /* 半透明白 */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    z-index: 10001; /* 確保在最上層 */
-    transition: all 0.3s ease;
-    align-items: center;
-    justify-content: center;
+    top: 15px;    /* 稍微下移，避免被某些手機的瀏海遮住 */
+    right: 15px;
+    width: 44px;  /* 增加觸控面積，手機更好按 */
+    height: 44px;
+    background: rgba(0, 0, 0, 0.6); /* 顏色加深更明顯 */
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    z-index: 2147483647; /* 使用最大層級 */
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 /* 懸停時才變明顯 */
