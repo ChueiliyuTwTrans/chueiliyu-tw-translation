@@ -380,59 +380,87 @@ function resetProgress() {
 }
 
 /* ===== 全螢幕統一管理邏輯 ===== */
+
+// 顯示與隱藏返回按鈕的邏輯
+function showExitBtn() {
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+    const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
+
+    if (isFS || isPseudo) {
+        exitFsBtn.style.display = "flex";
+        exitFsBtn.style.opacity = "1";
+        
+        clearTimeout(exitBtnTimeout);
+        // 4秒後自動淡出
+        exitBtnTimeout = setTimeout(() => {
+            if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
+                exitFsBtn.style.opacity = "0";
+            }
+        }, 4000);
+    }
+}
+
 function toggleFullscreen() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 執行退出
+        // 退出全螢幕
         if (isFS) {
             const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
             if (exit) exit.call(document);
         }
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
+        exitFsBtn.style.display = "none"; // 退出時立即消失
     } else {
+        // 進入全螢幕
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
         if (req) {
             req.call(wrapper);
-            // 監聽按 Esc 退出
+            // 監聽系統退出事件（例如按 Esc）
             const exitHandler = () => {
                 if (!document.fullscreenElement && !document.webkitIsFullScreen) {
                     wrapper.classList.remove("pseudo-fullscreen");
                     fsBtn.innerText = "進入全螢幕";
+                    exitFsBtn.style.display = "none";
                 }
             };
-            document.addEventListener('fullscreenchange', exitHandler);
-            document.addEventListener('webkitfullscreenchange', exitHandler);
+            document.addEventListener('fullscreenchange', exitHandler, { once: true });
+            document.addEventListener('webkitfullscreenchange', exitHandler, { once: true });
         } else {
             wrapper.classList.add("pseudo-fullscreen");
         }
         fsBtn.innerText = "退出全螢幕";
+        
+        // 核心修正：進入後立即顯示按鈕
+        setTimeout(showExitBtn, 300); 
     }
 }
 
-// 綁定所有按鈕到同一個 function
-fsBtn.addEventListener("click", toggleFullscreen);
-    
-if (exitFsBtn) {
-    exitFsBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); 
-        toggleFullscreen();
-    });
-}
-    
-// 全螢幕下自動隱藏 ✕ 按鈕的優化
-wrapper.addEventListener('mousemove', () => {
-    if (wrapper.classList.contains("pseudo-fullscreen") || document.fullscreenElement) {
-        exitFsBtn.style.display = "block";
-        exitFsBtn.style.opacity = "1";
-        clearTimeout(exitBtnTimeout);
-        exitBtnTimeout = setTimeout(() => {
-            exitFsBtn.style.opacity = "0";
-        }, 3000);
-    }
+/* --- 事件監聽註冊 (統一管理，避免重複) --- */
+
+// 1. 旋轉偵測
+window.addEventListener("orientationchange", () => {
+    setTimeout(showExitBtn, 500);
 });
+
+// 2. 觸控偵測 (手機)
+wrapper.addEventListener('touchstart', (e) => {
+    showExitBtn();
+}, { passive: true });
+
+// 3. 滑鼠偵測 (電腦)
+wrapper.addEventListener('mousemove', showExitBtn);
+
+// 4. 按鈕點擊事件
+fsBtn.onclick = toggleFullscreen;
+
+exitFsBtn.onclick = (e) => {
+    e.stopPropagation(); // 阻止事件傳遞給 wrapper
+    toggleFullscreen();
+};
+    
 </script>
 
 </body>
