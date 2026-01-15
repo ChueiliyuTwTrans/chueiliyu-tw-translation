@@ -170,10 +170,10 @@ body {
 #exit-fs-btn {
     display: none; 
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 15px;
-    width: 40px;      /* 框框寬度 */
-    height: 40px;     /* 框框高度 */
+    width: 44px;      /* 框框寬度 */
+    height: 44px;     /* 框框高度 */
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: 1.5px solid rgba(255, 255, 255, 0.5);
@@ -204,7 +204,7 @@ body {
 @media (max-width: 768px) {
     #exit-fs-btn {
         /* 使用 min 確保在沒有瀏海的手機上也至少保持 5px 距離 */
-        top: calc(max(env(safe-area-inset-top), 5px)); 
+        top: calc(max(env(safe-area-inset-top), 3px)); 
         right: 10px;
         width: 40px; /* 增加觸控面積 */
         height: 40px;
