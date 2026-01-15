@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)</title>
 
 <style>
@@ -33,24 +33,28 @@ body {
 /* ===== 字幕 ===== */
 #subtitle {
     position: absolute;
-    bottom: 6%;
+    /* 預設位置 */
+    bottom: 8%; 
     left: 50%;
     transform: translateX(-50%) scale(var(--subtitle-scale, 1));
     transform-origin: center bottom;
-    width: 94%;
+    width: 90%;
     font-size: 22px;
-    line-height: 1.6;
+    line-height: 1.4;
     color: #fff;
     text-align: center;
-    word-break: break-word;
-    max-height: 40%;
-    z-index: 10;
+    /* 增加陰影確保文字清晰 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0,0,0,0.5);
+    z-index: 100;
     pointer-events: none;
-    text-shadow:
-        2px 2px 4px #000,
-       -2px 2px 4px #000,
-        2px -2px 4px #000,
-       -2px -2px 4px #000;
+    box-sizing: border-box;
+}
+
+/* 當進入全螢幕或偽全螢幕時，強制抬高字幕防止被截斷 */
+.pseudo-fullscreen #subtitle,
+:fullscreen #subtitle,
+:-webkit-full-screen #subtitle {
+    bottom: 15% !important; /* 抬高一點，避開 LINE/FB 底部的控制欄 */
 }
 
 /* 桌機非全螢幕 */
@@ -89,12 +93,14 @@ body {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
+    /* 使用 100% 而非 100vh，避免被 LINE/FB 網址列撐爆畫面 */
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2147483647 !important;
     background: #000 !important;
-    margin: 0 !important;
-    touch-action: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
 }
 
 .pseudo-fullscreen #player {
@@ -200,6 +206,34 @@ body {
 .pseudo-fullscreen #exit-fs-btn {
     display: flex;
 }
+
+/*表情*/
+.reaction-section {
+    margin: 30px auto;
+    padding: 20px;
+    background: #222;
+    border-radius: 15px;
+    max-width: 600px;
+}
+.reaction-wall {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.emoji-btn {
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+.emoji-btn:hover { background: #444; transform: translateY(-2px); }
+.emoji-btn span { font-size: 14px; margin-left: 5px; color: #aaa; }
+    
 </style>
 </head>
 
@@ -218,6 +252,16 @@ body {
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
     <button id="exit-fs-btn" title="退出全螢幕">✕</button>
+</div>
+
+<div class="reaction-section">
+    <p>覺得這部翻譯影片如何？點個表情吧！</p>
+    <div class="reaction-wall">
+        <button class="emoji-btn" onclick="addReaction('love')">❤️ <span id="count-love">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('funny')">😂 <span id="count-funny">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('cool')">😎 <span id="count-cool">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('thanks')">🙏 <span id="count-thanks">0</span></button>
+    </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -453,7 +497,11 @@ function toggleFullscreen() {
 
 // 1. 旋轉偵測
 window.addEventListener("orientationchange", () => {
-    setTimeout(showExitBtn, 500);
+    // 轉向後，強制滾動到頂部，觸發瀏覽器重新計算可視範圍
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+        showExitBtn();
+    }, 500);
 });
 
 // 2. 觸控偵測 (手機)
@@ -471,7 +519,32 @@ exitFsBtn.onclick = (e) => {
     e.stopPropagation(); // 阻止事件傳遞給 wrapper
     toggleFullscreen();
 };
+
+/*測試表情*/
+function loadReactions() {
+    ['love', 'funny', 'cool', 'thanks'].forEach(type => {
+        const count = localStorage.getItem('reaction-' + type) || 0;
+        document.getElementById('count-' + type).innerText = count;
+    });
+}
+
+function addReaction(type) {
+    let count = parseInt(localStorage.getItem('reaction-' + type) || 0);
+    count++;
+    localStorage.setItem('reaction-' + type, count);
+    document.getElementById('count-' + type).innerText = count;
     
+    // 增加一點點擊感
+    const btn = event.currentTarget;
+    btn.style.transform = "scale(1.2)";
+    setTimeout(() => btn.style.transform = "scale(1)", 100);
+}
+
+// 頁面載入時執行
+window.onload = () => {
+    loadReactions();
+    // 原有的字幕與全螢幕初始化代碼...
+};
 </script>
 
 </body>
