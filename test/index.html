@@ -211,11 +211,16 @@ body {
     }
 }
 
-/* 當處於 系統全螢幕 或 偽全螢幕時，顯示按鈕 */
-:fullscreen #exit-fs-btn,
-:-webkit-full-screen #exit-fs-btn,
-.pseudo-fullscreen #exit-fs-btn {
-    display: flex;
+/* 確保按鈕在手機上更靠頂端且更明顯 */
+@media (max-width: 768px) {
+    #exit-fs-btn {
+        top: env(safe-area-inset-top, 10px); /* 考慮 iPhone 瀏海 */
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 24px; /* 字體稍微縮小，讓 X 更有空間感 */
+        background: rgba(0, 0, 0, 0.8); /* 顏色加深，避免被影片背景吃掉 */
+    }
 }
 
 /*表情*/
@@ -453,23 +458,22 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
+        // 先顯示出來，再跑透明度動畫
         exitFsBtn.style.display = "flex";
-        // 使用 setTimeout 確保 display: flex 生效後才改 opacity，動畫才會順
-        setTimeout(() => {
-            exitFsBtn.style.opacity = "1";
-        }, 10);
+        // 加上強制重繪，確保手機瀏覽器反應
+        void exitFsBtn.offsetWidth; 
+        exitFsBtn.style.opacity = "1";
         
         clearTimeout(exitBtnTimeout);
-        // 設定 4 秒後自動隱藏
         exitBtnTimeout = setTimeout(() => {
             if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
                 exitFsBtn.style.opacity = "0";
-                // 為了徹底防止擋住操作，動畫結束後完全隱藏
+                // 動態隱藏，確保不擋住影片控制項
                 setTimeout(() => {
-                    if (exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
+                    if(exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
                 }, 400);
             }
-        }, 4000);
+        }, 5000); // 稍微延長到 5 秒，對手機使用者較友善
     }
 }
 
