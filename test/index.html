@@ -166,58 +166,46 @@ body {
     transform: translateY(0px);
 }
 
-/* 退出按鈕基礎樣式 */
+/* 退出按鈕：移除圓框，僅保留符號 */
 #exit-fs-btn {
-    display: none; /* 預設隱藏 */
+    display: none; /* 初始隱藏，由 JS 開啟 */
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 0, 0, 0.7); /* 加深背景確保可見 */
-    color: #fff;
-    border: 1.5px solid rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: none; /* 刪除背景圓框 */
+    border: none;     /* 刪除邊框 */
+    color: rgba(255, 255, 255, 0.8); /* 符號顏色，帶點透明度 */
     z-index: 2147483647 !important;
     cursor: pointer;
     
-    /* 修正置中：使用 Flex 並確保不被字體行高影響 */
+    /* 置中處理 */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    transition: transform 0.2s ease;
+    filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.8)); /* 增加陰影確保在亮色背景也能看見 */
 }
 
-/* 內部 SVG 圖示大小 */
+/* 內部 SVG：調整大小與粗細 */
 #exit-fs-btn svg {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 32px; 
+    height: 32px;
+    stroke-width: 3; /* 讓線條加粗，更清楚 */
 }
 
 #exit-fs-btn:hover {
-    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
     transform: scale(1.1);
 }
 
-/* 手機端強行拉高位置並「始終顯示」 */
+/* 手機端：位置最優化 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        /* 使用 top: 5px 解決偏下問題 */
-        top: max(env(safe-area-inset-top), 5px) !important;
-        right: 5px !important;
-        width: 40px !important;
-        height: 40px !important;
-        opacity: 1 !important; /* 強制不透明度為 1，不執行隱藏動畫 */
-    }
-    #exit-fs-btn svg {
-        width: 20px;
-        height: 20px;
+        top: 8px !important; 
+        right: 8px !important;
+        opacity: 1 !important; /* 強制不透明 */
     }
 }
 
