@@ -448,8 +448,8 @@ function showExitBtn() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
+    // 只要是在全螢幕或偽全螢幕狀態，就強制保持顯示
     if (isFS || isPseudo) {
-        // 直接顯示，不再設定 setTimeout 隱藏
         exitFsBtn.style.display = "flex";
         exitFsBtn.style.opacity = "1";
     } else {
@@ -457,7 +457,6 @@ function showExitBtn() {
     }
 }
 
-// 修改後的 toggleFullscreen 確保退出時會隱藏按鈕
 function toggleFullscreen() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
@@ -469,7 +468,7 @@ function toggleFullscreen() {
         }
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
-        exitFsBtn.style.display = "none"; // 退出全螢幕，立刻隱藏 ✕
+        exitFsBtn.style.display = "none"; 
     } else {
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
         if (req) {
@@ -478,42 +477,32 @@ function toggleFullscreen() {
             wrapper.classList.add("pseudo-fullscreen");
         }
         fsBtn.innerText = "退出全螢幕";
-        setTimeout(showExitBtn, 300); // 進入全螢幕，立刻顯示 ✕
+        
+        // 進入後立即顯示
+        showExitBtn();
     }
 }
 
 /* --- 事件監聽註冊 (最終整合版) --- */
 
-// 1. 旋轉偵測：合併原本的兩個轉向事件，統一在 800ms 後觸發
+// 1. 旋轉偵測：確保轉向後按鈕還在
 window.addEventListener("orientationchange", () => {
-    setTimeout(() => {
-        window.scrollTo(0, 0); // 確保視窗回到頂部
-        showExitBtn();
-    }, 800);
+    setTimeout(showExitBtn, 500);
 });
 
-// 2. 觸控與滑鼠偵測 (保持 Capture 模式以攔截 YouTube 事件)
+// 2. 點擊偵測：防止 YouTube 攔截導致的邏輯失效 (Capture 模式)
 document.addEventListener('touchstart', (e) => {
-    if (wrapper.contains(e.target)) {
-        showExitBtn();
-    }
+    if (wrapper.contains(e.target)) showExitBtn();
 }, { passive: true, capture: true });
 
 document.addEventListener('mousemove', (e) => {
-    if (wrapper.contains(e.target)) {
-        showExitBtn();
-    }
+    if (wrapper.contains(e.target)) showExitBtn();
 }, { capture: true });
 
-// 3. 按鈕點擊事件 (修正：進入全螢幕時主動呼叫 showExitBtn)
-fsBtn.onclick = () => {
-    toggleFullscreen();
-    // 進入全螢幕後延遲一點點時間強制顯示返回鍵
-    setTimeout(showExitBtn, 500); 
-};
-
+// 3. 按鈕事件綁定
+fsBtn.onclick = toggleFullscreen;
 exitFsBtn.onclick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     toggleFullscreen();
 };
 
