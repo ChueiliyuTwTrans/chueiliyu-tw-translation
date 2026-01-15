@@ -541,6 +541,50 @@ window.onload = () => {
     loadReactions();
     // 原有的字幕與全螢幕初始化代碼...
 };
+   
+</script>
+<script type="module">
+  // 1. 載入 Firebase 核心功能
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  // 2. 這裡貼上你剛才在 Firebase 網頁上「複製」的那段內容
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9Hi740uOlJf1dSyDpyeispds_TtCjNjg",
+    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+    projectId: "chueiliyu-tw-translation",
+    storageBucket: "chueiliyu-tw-translation.firebasestorage.app",
+    messagingSenderId: "625769420546",
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b"
+  };
+
+  // 3. 啟動連線
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // 4. 表情牆連線邏輯
+  const reactionTypes = ['love', 'funny', 'cool', 'thanks'];
+
+  reactionTypes.forEach(type => {
+    const countRef = ref(db, 'reactions/' + type);
+    onValue(countRef, (snapshot) => {
+      const data = snapshot.val() || 0;
+      document.getElementById('count-' + type).innerText = data;
+    });
+  });
+
+  // 讓原本的 addReaction 函數支援雲端同步
+  window.addReaction = function(type) {
+    const countRef = ref(db, 'reactions/' + type);
+    runTransaction(countRef, (current) => {
+      return (current || 0) + 1;
+    });
+    
+    // 原有的縮放特效
+    const btn = event.currentTarget;
+    btn.style.transform = "scale(1.2)";
+    setTimeout(() => btn.style.transform = "scale(1)", 100);
+  };
 </script>
 
 </body>
