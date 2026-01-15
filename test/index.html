@@ -211,11 +211,13 @@ let player;
 let subtitles = [];
 let subtitleTimer = null;
 let saveTimer = null;
+let exitBtnTimeout;
 const MY_VIDEO_ID = "stw1z7tCz9Y"; // 影片ID
 
 const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
 const fsBtn = document.getElementById("fs-btn");
+const exitFsBtn = document.getElementById("exit-fs-btn");
 
 /* ===== 字幕大小設定 ===== */
 let subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
@@ -272,7 +274,7 @@ function parseSRT(data) {
 /* ===== YouTube API ===== */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player("player", {
-        videoId: "stw1z7tCz9Y",
+        videoId: MY_VIDEO_ID,
         playerVars: {
             start: 1,
             rel: 0,
@@ -323,28 +325,18 @@ function onStateChange(e) {
     }
 }
 
-function startAutoSave() {
-    if (saveTimer) clearInterval(saveTimer); // 避免重複啟動多個計時器
-    saveTimer = setInterval(() => {
-        if (player && player.getCurrentTime) {
-            localStorage.setItem("yt-played-time", player.getCurrentTime());
-            localStorage.setItem("yt-volume", player.getVolume());
-        }
-    }, 5000);
-}
-
-function stopAutoSave() {
-    clearInterval(saveTimer);
-    saveTimer = null;
-}
-
+/* ===== 進行廣告判定 (解決電腦版問題) ===== */
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
         if (!player || !player.getVideoData) return;
 
-        const currentVideoId = player.getVideoData().video_id;
-        // 如果 ID 不符，或是 player 處於廣告狀態 (getAdState 不為 -1)
-        const isAd = (currentVideoId !== MY_VIDEO_ID) || (player.getAdState && player.getAdState() !== -1);
+        const videoData = player.getVideoData();
+        const currentVideoId = videoData.video_id;
+        
+        // 電腦版關鍵：增加 author 判定，廣告通常作者會變
+        const isAd = (currentVideoId !== MY_VIDEO_ID) || 
+                     (player.getAdState && player.getAdState() !== -1) ||
+                     (videoData.author === "YouTube" || videoData.author === "");
 
         if (isAd) {
             subtitleEl.innerHTML = ""; 
@@ -357,7 +349,7 @@ function startSubtitleSync() {
     }, 200);
 }
 
-/* 解決進度儲存：確保不存到廣告的時間 */
+/* 自動儲存進度：確保不存到廣告的時間 */
 function startAutoSave() {
     if (saveTimer) clearInterval(saveTimer);
     saveTimer = setInterval(() => {
@@ -372,39 +364,35 @@ function startAutoSave() {
     }, 5000);
 }
 
+function stopAutoSave() {
+    clearInterval(saveTimer);
+    saveTimer = null;
+}
+
 /* 清除進度 / 重新播放 */
 function resetProgress() {
     localStorage.removeItem("yt-played-time");
     location.reload(); // 重新整理頁面
 }
 
-/* ===== 進階全螢幕邏輯 ===== */
-fsBtn.addEventListener("click", () => {
-    const isSystemFullscreen = document.fullscreenElement || 
-                               document.webkitFullscreenElement || 
-                               document.mozFullScreenElement || 
-                               document.msFullscreenElement;
-    
-    const isPseudoFullscreen = wrapper.classList.contains("pseudo-fullscreen");
+/* ===== 全螢幕統一管理邏輯 ===== */
+function toggleFullscreen() {
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
-    if (isSystemFullscreen || isPseudoFullscreen) {
-        if (isSystemFullscreen) {
-            const exitMethod = document.exitFullscreen || 
-                               document.webkitExitFullscreen || 
-                               document.mozCancelFullScreen || 
-                               document.msExitFullscreen;
-            if (exitMethod) exitMethod.call(document);
+    if (isFS || isPseudo) {
+        // 執行退出
+        if (isFS) {
+            const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+            if (exit) exit.call(document);
         }
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
     } else {
-        const requestMethod = wrapper.requestFullscreen || 
-                              wrapper.webkitRequestFullscreen || 
-                              wrapper.mozRequestFullScreen || 
-                              wrapper.msRequestFullscreen;
-
-        if (requestMethod) {
-            requestMethod.call(wrapper);
+        const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
+        if (req) {
+            req.call(wrapper);
+            // 監聽按 Esc 退出
             const exitHandler = () => {
                 if (!document.fullscreenElement && !document.webkitIsFullScreen) {
                     wrapper.classList.remove("pseudo-fullscreen");
@@ -418,40 +406,26 @@ fsBtn.addEventListener("click", () => {
         }
         fsBtn.innerText = "退出全螢幕";
     }
-});
+}
 
-const exitFsBtn = document.getElementById("exit-fs-btn");
-
-// 點擊退出按鈕的邏輯
-exitFsBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // 防止事件冒泡觸發其他播放器行為
-
-    const isSystemFS = document.fullscreenElement || 
-                       document.webkitFullscreenElement || 
-                       document.mozFullScreenElement || 
-                       document.msFullscreenElement;
-
-    if (isSystemFS) {
-        const exit = document.exitFullscreen || 
-                     document.webkitExitFullscreen || 
-                     document.mozCancelFullScreen || 
-                     document.msExitFullscreen;
-        if (exit) exit.call(document);
-    }
-
-    // 無論是不是系統全螢幕，都移除偽全螢幕類別
-    wrapper.classList.remove("pseudo-fullscreen");
-    fsBtn.innerText = "進入全螢幕";
-});
-
-// 進階優化：全螢幕下，滑鼠沒動時自動隱藏按鈕 (選配)
-let exitBtnTimeout;
+// 綁定所有按鈕到同一個 function
+fsBtn.addEventListener("click", toggleFullscreen);
+    
+if (exitFsBtn) {
+    exitFsBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); 
+        toggleFullscreen();
+    });
+}
+    
+// 全螢幕下自動隱藏 ✕ 按鈕的優化
 wrapper.addEventListener('mousemove', () => {
     if (wrapper.classList.contains("pseudo-fullscreen") || document.fullscreenElement) {
+        exitFsBtn.style.display = "block";
         exitFsBtn.style.opacity = "1";
         clearTimeout(exitBtnTimeout);
         exitBtnTimeout = setTimeout(() => {
-            exitFsBtn.style.opacity = "0"; // 3秒沒動就變全透明
+            exitFsBtn.style.opacity = "0";
         }, 3000);
     }
 });
