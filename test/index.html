@@ -164,16 +164,27 @@ body {
 #exit-fs-btn {
     display: none; 
     position: absolute;
-    top: 15px;    /* 稍微下移，避免被某些手機的瀏海遮住 */
+    top: 15px;
     right: 15px;
-    width: 44px;  /* 增加觸控面積，手機更好按 */
-    height: 44px;
-    background: rgba(0, 0, 0, 0.6); /* 顏色加深更明顯 */
+    width: 44px;      /* 框框寬度 */
+    height: 44px;     /* 框框高度 */
+    background: rgba(0, 0, 0, 0.6);
     color: #fff;
     border: 1.5px solid rgba(255, 255, 255, 0.5);
-    z-index: 2147483647; /* 使用最大層級 */
+    border-radius: 50%;
+    z-index: 2147483647 !important;
     opacity: 0;
     transition: opacity 0.4s ease;
+    cursor: pointer;
+    
+    /* 核心修正：讓 X 填滿並置中 */
+    display: flex;          /* 必須是 flex 才能置中 */
+    align-items: center;    /* 垂直置中 */
+    justify-content: center;/* 水平置中 */
+    font-size: 32px;        /* 調大字體，接近 44px */
+    line-height: 1;         /* 移除行高造成的偏移 */
+    padding: 0;             /* 移除任何內距 */
+    font-family: sans-serif;/* 確保 X 符號比例正常 */
 }
 
 /* 懸停時才變明顯 */
