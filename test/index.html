@@ -254,20 +254,25 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onReady(e) {
-    // 1. 設定 iframe 屬性
+    // 1. 設定全螢幕權限
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
 
-    // 2. 恢復音量
-    const savedVolume = localStorage.getItem("yt-volume");
-    if (savedVolume !== null) {
-        player.setVolume(parseInt(savedVolume));
-    }
-
-    // 3. 恢復播放進度
+    // 2. 恢復播放進度
     const savedTime = localStorage.getItem("yt-played-time");
     if (savedTime !== null) {
         player.seekTo(parseFloat(savedTime), true);
+    }
+
+    // 3. 延遲 500 毫秒再恢復音量
+    // 這樣可以避開 YouTube 剛載入時的 UI 混亂期，減少音量條跳到右上角的機率
+    const savedVolume = localStorage.getItem("yt-volume");
+    if (savedVolume !== null) {
+        setTimeout(() => {
+            if (player && player.setVolume) {
+                player.setVolume(parseInt(savedVolume));
+            }
+        }, 500); 
     }
 }
 
@@ -305,6 +310,12 @@ function startSubtitleSync() {
         const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
         subtitleEl.innerHTML = activeSubs.length ? activeSubs.map(s => s.text).join("<br>") : "";
     }, 200);
+}
+
+/* 清除進度 / 重新播放 */
+function resetProgress() {
+    localStorage.removeItem("yt-played-time");
+    location.reload(); // 重新整理頁面
 }
 
 /* ===== 進階全螢幕邏輯 ===== */
