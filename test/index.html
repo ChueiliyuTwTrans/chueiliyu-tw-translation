@@ -168,48 +168,45 @@ body {
 
 /* 退出按鈕：低干擾模式 */
 #exit-fs-btn {
-    display: none; 
+    display: none;
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 48px;
-    height: 48px;
-    background: none !important; 
-    border: none !important;     
-    /* 使用半透明灰，降低視覺衝擊 */
-    color: rgba(255, 255, 255, 0.4) !important; 
+    width: 44px;
+    height: 44px;
+    background: none !important;
+    border: none !important;
+    /* 固定使用淡灰色 (0.25 透明度)，不隨動作改變 */
+    color: rgba(255, 255, 255, 0.25) !important;
     z-index: 2147483647 !important;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    filter: none !important; 
-    /* 預設透明度降低 */
-    opacity: 0; 
-    transition: all 0.4s ease;
+    filter: none !important;
+    /* 移除所有 transition，讓它始終穩定 */
+    transition: none !important; 
 }
 
 #exit-fs-btn svg {
-    width: 28px; /* 稍微縮小一點點 */
+    width: 28px;
     height: 28px;
-    stroke: currentColor; 
-    stroke-width: 2; /* 線條改細，減少干擾 */
+    stroke: currentColor;
+    stroke-width: 2.5;
     fill: none;
 }
 
-/* 滑鼠移上去或點擊時才變亮 */
+/* 移除 hover 變亮的設定，確保它永遠都是淡灰色 */
 #exit-fs-btn:hover {
-    color: rgba(255, 255, 255, 1) !important;
-    transform: scale(1.1);
+    color: rgba(255, 255, 255, 0.25) !important;
+    transform: scale(1); /* 移除縮放效果，減少干擾 */
 }
 
 @media (max-width: 768px) {
     #exit-fs-btn {
-        top: 8px !important; 
-        right: 8px !important;
-        /* 手機上保持更淡的顏色 */
-        color: rgba(255, 255, 255, 0.3) !important;
+        top: 5px !important;
+        right: 5px !important;
     }
 }
 
@@ -454,20 +451,9 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
+        // 直接顯示，且透明度固定為 1 (因為 CSS 已經把 color 設為淡灰色了)
         exitFsBtn.style.setProperty('display', 'flex', 'important');
-        // 強制重繪
-        void exitFsBtn.offsetWidth; 
-        
-        // 進入或觸碰時，先亮起來
         exitFsBtn.style.opacity = "1";
-        
-        // 3 秒後自動進入「低干擾模式」，變得很淡
-        clearTimeout(exitBtnTimeout);
-        exitBtnTimeout = setTimeout(() => {
-            if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
-                exitFsBtn.style.opacity = "0.2"; // 變得很透明，不影響看影片
-            }
-        }, 3000);
     } else {
         exitFsBtn.style.opacity = "0";
         setTimeout(() => {
