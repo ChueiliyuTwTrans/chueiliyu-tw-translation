@@ -128,10 +128,24 @@ body {
     background: #444;
 }
 
+/* 全螢幕按鈕樣式 */
 #fs-btn {
-    background: #333;
-    border: none !important;
-    font-weight: bold;
+    background: rgba(196, 69, 69, 0.9) !important; /* 莫蘭迪紅，帶一點透明 */
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    font-weight: 500;
+    transition: all 0.2s ease; /* 增加過渡動畫 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#fs-btn:hover {
+    background: rgba(231, 76, 60, 1) !important; /* 懸停時稍微變亮 */
+    transform: translateY(-1px); /* 輕微往上浮動 */
+    box-shadow: 0 4px 12px rgba(196, 69, 69, 0.3);
+}
+
+#fs-btn:active {
+    transform: translateY(0px); /* 點擊時下壓感 */
 }
 
 </style>
