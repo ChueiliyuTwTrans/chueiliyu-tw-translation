@@ -152,6 +152,39 @@ body {
     transform: translateY(0px);
 }
 
+/* 退出按鈕基礎樣式 */
+#exit-fs-btn {
+    display: none; /* 平時隱藏 */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.4); /* 半透明黑 */
+    color: rgba(255, 255, 255, 0.6); /* 半透明白 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10001; /* 確保在最上層 */
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 懸停時才變明顯 */
+#exit-fs-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* 當處於 系統全螢幕 或 偽全螢幕時，顯示按鈕 */
+:fullscreen #exit-fs-btn,
+:-webkit-full-screen #exit-fs-btn,
+.pseudo-fullscreen #exit-fs-btn {
+    display: flex;
+}
 </style>
 </head>
 
@@ -169,6 +202,7 @@ body {
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
+    <button id="exit-fs-btn" title="退出全螢幕">✕</button>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -383,6 +417,42 @@ fsBtn.addEventListener("click", () => {
             wrapper.classList.add("pseudo-fullscreen");
         }
         fsBtn.innerText = "退出全螢幕";
+    }
+});
+
+const exitFsBtn = document.getElementById("exit-fs-btn");
+
+// 點擊退出按鈕的邏輯
+exitFsBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // 防止事件冒泡觸發其他播放器行為
+
+    const isSystemFS = document.fullscreenElement || 
+                       document.webkitFullscreenElement || 
+                       document.mozFullScreenElement || 
+                       document.msFullscreenElement;
+
+    if (isSystemFS) {
+        const exit = document.exitFullscreen || 
+                     document.webkitExitFullscreen || 
+                     document.mozCancelFullScreen || 
+                     document.msExitFullscreen;
+        if (exit) exit.call(document);
+    }
+
+    // 無論是不是系統全螢幕，都移除偽全螢幕類別
+    wrapper.classList.remove("pseudo-fullscreen");
+    fsBtn.innerText = "進入全螢幕";
+});
+
+// 進階優化：全螢幕下，滑鼠沒動時自動隱藏按鈕 (選配)
+let exitBtnTimeout;
+wrapper.addEventListener('mousemove', () => {
+    if (wrapper.classList.contains("pseudo-fullscreen") || document.fullscreenElement) {
+        exitFsBtn.style.opacity = "1";
+        clearTimeout(exitBtnTimeout);
+        exitBtnTimeout = setTimeout(() => {
+            exitFsBtn.style.opacity = "0"; // 3秒沒動就變全透明
+        }, 3000);
     }
 });
 </script>
