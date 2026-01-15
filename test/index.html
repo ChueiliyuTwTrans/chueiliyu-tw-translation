@@ -166,43 +166,50 @@ body {
     transform: translateY(0px);
 }
 
-/* 退出按鈕：移除圓框，僅保留符號 */
+/* 退出按鈕：低干擾模式 */
 #exit-fs-btn {
-    display: none; /* 初始隱藏，由 JS 開啟 */
+    display: none; 
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 40px;
-    height: 40px;
-    background: none; /* 刪除背景圓框 */
-    border: none;     /* 刪除邊框 */
-    color: #ffffff !important; /* 符號顏色，帶點透明度 */
+    width: 44px;
+    height: 44px;
+    background: none !important; 
+    border: none !important;     
+    /* 使用半透明灰，降低視覺衝擊 */
+    color: rgba(255, 255, 255, 0.4) !important; 
     z-index: 2147483647 !important;
     cursor: pointer;
-    
-    /* 置中處理 */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    opacity: 0; /* 由動畫控制 */
-    transition: opacity 0.3s ease;
+    filter: none !important; 
+    /* 預設透明度降低 */
+    opacity: 0; 
+    transition: all 0.4s ease;
 }
 
-/* 內部 SVG：調整大小與粗細 */
 #exit-fs-btn svg {
-    width: 32px; 
-    height: 32px;
-    stroke: currentColor; /* 繼承父層顏色 */
-    stroke-width: 2.5;
+    width: 28px; /* 稍微縮小一點點 */
+    height: 28px;
+    stroke: currentColor; 
+    stroke-width: 2; /* 線條改細，減少干擾 */
     fill: none;
+}
+
+/* 滑鼠移上去或點擊時才變亮 */
+#exit-fs-btn:hover {
+    color: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
     #exit-fs-btn {
-        /* 手機端強行拉高，避開可能存在的 UI 遮擋 */
-        top: 5px !important; 
-        right: 5px !important;
+        top: 8px !important; 
+        right: 8px !important;
+        /* 手機上保持更淡的顏色 */
+        color: rgba(255, 255, 255, 0.3) !important;
     }
 }
 
