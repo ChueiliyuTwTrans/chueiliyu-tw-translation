@@ -168,56 +168,56 @@ body {
 
 /* 退出按鈕基礎樣式 */
 #exit-fs-btn {
-    display: none; 
+    display: none; /* 預設隱藏 */
     position: absolute;
     top: 15px;
     right: 15px;
-    width: 44px;      /* 框框寬度 */
-    height: 44px;     /* 框框高度 */
-    background: rgba(0, 0, 0, 0.6);
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.7); /* 加深背景確保可見 */
     color: #fff;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     border-radius: 50%;
     z-index: 2147483647 !important;
-    opacity: 0;
-    transition: opacity 0.4s ease;
     cursor: pointer;
     
-    /* 核心修正：讓 X 填滿並置中 */
-    display: flex;          /* 必須是 flex 才能置中 */
-    align-items: center;    /* 垂直置中 */
-    justify-content: center;/* 水平置中 */
-    font-size: 32px;        /* 調大字體，接近 44px */
-    line-height: 1;         /* 移除行高造成的偏移 */
-    padding: 0;             /* 移除任何內距 */
-    font-family: sans-serif;/* 確保 X 符號比例正常 */
+    /* 修正置中：使用 Flex 並確保不被字體行高影響 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s ease;
 }
 
-/* 懸停時才變明顯 */
+/* 內部 SVG 圖示大小 */
+#exit-fs-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 #exit-fs-btn:hover {
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.9);
     transform: scale(1.1);
 }
 
-/* 手機端 */
+/* 手機端強行拉高位置並「始終顯示」 */
 @media (max-width: 768px) {
     #exit-fs-btn {
-        /* 1. 強制位置：忽略 safe-area 直接貼頂，給予 5px 緩衝 */
-        top: 5px !important; 
+        /* 使用 top: 5px 解決偏下問題 */
+        top: max(env(safe-area-inset-top), 5px) !important;
         right: 5px !important;
-        
-        /* 2. 增加觸控感應面積：框框維持 40px，但視覺上 X 置中 */
-        width: 44px !important;
-        height: 44px !important;
-        font-size: 24px !important;
-        
-        /* 3. 提高透明度與顏色對比，確保看得到 */
-        background: rgba(0, 0, 0, 0.8) !important;
-        border: 1px solid rgba(255, 255, 255, 0.5) !important;
-        
-        /* 4. 確保層級 */
-        z-index: 2147483647 !important;
+        width: 40px !important;
+        height: 40px !important;
+        opacity: 1 !important; /* 強制不透明度為 1，不執行隱藏動畫 */
+    }
+    #exit-fs-btn svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -265,7 +265,12 @@ body {
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
-    <button id="exit-fs-btn" title="退出全螢幕">✕</button>
+    <button id="exit-fs-btn" title="退出全螢幕">
+    <svg viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+</button>
 </div>
 
 <div class="reaction-section">
@@ -456,61 +461,36 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 強制顯示
+        // 直接顯示，不再設定 setTimeout 隱藏
         exitFsBtn.style.display = "flex";
-        // 觸發重繪確保 opacity 動畫生效
-        void exitFsBtn.offsetWidth; 
         exitFsBtn.style.opacity = "1";
-        
-        clearTimeout(exitBtnTimeout);
-        // 設定 5 秒後自動隱藏
-        exitBtnTimeout = setTimeout(() => {
-            if (document.fullscreenElement || wrapper.classList.contains("pseudo-fullscreen")) {
-                exitFsBtn.style.opacity = "0";
-                // 動畫結束後徹底隱藏，以免擋到 YouTube 內建按鈕
-                setTimeout(() => {
-                    if (exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none";
-                }, 400);
-            }
-        }, 5000); 
+    } else {
+        exitFsBtn.style.display = "none";
     }
 }
 
+// 修改後的 toggleFullscreen 確保退出時會隱藏按鈕
 function toggleFullscreen() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
-        // 退出全螢幕
         if (isFS) {
             const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
             if (exit) exit.call(document);
         }
         wrapper.classList.remove("pseudo-fullscreen");
         fsBtn.innerText = "進入全螢幕";
-        exitFsBtn.style.display = "none"; // 退出時立即消失
+        exitFsBtn.style.display = "none"; // 退出全螢幕，立刻隱藏 ✕
     } else {
-        // 進入全螢幕
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
         if (req) {
             req.call(wrapper);
-            // 監聽系統退出事件（例如按 Esc）
-            const exitHandler = () => {
-                if (!document.fullscreenElement && !document.webkitIsFullScreen) {
-                    wrapper.classList.remove("pseudo-fullscreen");
-                    fsBtn.innerText = "進入全螢幕";
-                    exitFsBtn.style.display = "none";
-                }
-            };
-            document.addEventListener('fullscreenchange', exitHandler, { once: true });
-            document.addEventListener('webkitfullscreenchange', exitHandler, { once: true });
         } else {
             wrapper.classList.add("pseudo-fullscreen");
         }
         fsBtn.innerText = "退出全螢幕";
-        
-        // 核心修正：進入後立即顯示按鈕
-        setTimeout(showExitBtn, 300); 
+        setTimeout(showExitBtn, 300); // 進入全螢幕，立刻顯示 ✕
     }
 }
 
