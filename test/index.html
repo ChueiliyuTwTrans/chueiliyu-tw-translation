@@ -412,6 +412,10 @@ body.has-fullscreen {
     transform: scale(1.1);
 }
 
+#emoji-trigger-btn:active {
+    transform: scale(0.9);
+}
+
 /* 表情選擇抽屜 */
 #emoji-drawer {
     position: absolute;
@@ -442,6 +446,12 @@ body.has-fullscreen {
 
 #emoji-drawer .emoji-btn:hover {
     background: rgba(255, 255, 255, 0.2);
+}
+
+/* 表情按鈕按下時的縮放效果 */
+#emoji-drawer button:active {
+    transform: scale(0.8);
+    transition: transform 0.1s;
 }
 
 /* 全螢幕下顯示按鈕 */
@@ -492,12 +502,12 @@ body.has-fullscreen {
     <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
 
     <div id="emoji-drawer">
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('fire')">🔥</button>
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('love')">😍</button>
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('clap')">👏</button>
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('funny')">😂</button>
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('warm')">🥰</button>
-        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('thanks')">🙏</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('fire')">🔥</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('love')">😍</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('clap')">👏</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('funny')">😂</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('warm')">🥰</button>
+        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrage('thanks')">🙏</button>
     </div>
     <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
         <svg viewBox="0 0 24 24">
@@ -900,6 +910,7 @@ let isBarrageEnabled = localStorage.getItem("barrage-enabled") !== "false"; // -
 let barrageSize = localStorage.getItem("barrage-size") || 24; // --- 彈幕顯示大小變數 ---
 let barrageHeight = localStorage.getItem("barrage-height") || 40; // --- 彈幕偏好設定變數 ---
 let barrageSpeed = localStorage.getItem("barrage-speed") || 5; // --- 彈幕速度控制變數 ---
+let lastSentSignal = { time: -1, type: '' }; // 紀錄自己最後發送的秒數與類型
 let lastCheckedSecond = -1;
 let lastClickTime = 0;
 
@@ -923,10 +934,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- A. UI 切換功能 ---
 window.toggleEmojiDrawer = function(event) {
-    if (event) event.stopPropagation();
+    if (event) {
+        event.stopPropagation(); // 阻止事件傳給 document
+        event.preventDefault();  // 阻止預設行為
+    }
     const drawer = document.getElementById('emoji-drawer');
     if (!drawer) return;
-    drawer.style.display = (drawer.style.display === 'grid') ? 'none' : 'grid';
+    
+    // 強制切換狀態
+    const isVisible = drawer.style.display === 'grid';
+    drawer.style.display = isVisible ? 'none' : 'grid';
 };
 
 window.toggleBarrageDisplay = function() {
@@ -983,19 +1000,29 @@ window.updateBarrageSpeed = function(val) {
 };
 
 // --- C. 核心彈幕邏輯 ---
-window.sendBarrage = function(type) {
+window.sendBarrageWithFeedback = function(type, event) {
+    if (event) event.stopPropagation();
+
     const now = Date.now();
-    if (now - lastClickTime < 300) return; // 防止連點
+    if (now - lastClickTime < 200) return; 
     lastClickTime = now;
 
-    if (!player || typeof player.getCurrentTime !== 'function') return;
-    const currentTime = Math.floor(player.getCurrentTime());
+    const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
     
-    // 1. 傳送至雲端
-    const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
-    runTransaction(barrageRef, (count) => (count || 0) + 1);
+    // 1. 立即反饋：自己按的立刻噴出來，不用等網路！
+    window.createBarrageDom(emojiMap[type]); 
 
-    // 2. 修復重點：發送後自動把抽屜關掉，這樣使用者視覺上會立刻得到回饋
+    // 2. 紀錄標記：告訴系統這一秒的這個表情是我發的，等一下監聽時不要重複噴
+    if (player && typeof player.getCurrentTime === 'function') {
+        const currentTime = Math.floor(player.getCurrentTime());
+        lastSentSignal = { time: currentTime, type: type }; // 儲存標記
+
+        // 3. 傳送至雲端
+        const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
+        runTransaction(barrageRef, (count) => (count || 0) + 1);
+    }
+
+    // 關閉抽屜
     const drawer = document.getElementById('emoji-drawer');
     if (drawer) drawer.style.display = 'none';
 };
@@ -1044,6 +1071,11 @@ setInterval(() => {
                 const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
                 Object.keys(data).forEach(type => {
                     const count = Math.min(data[type], 3); 
+                    // 如果這個秒數和類型剛好等於我剛剛「手動噴出」的那個，就減 1
+                    if (now === lastSentSignal.time && type === lastSentSignal.type) {
+                        count = Math.max(0, count - 1);
+                    }
+
                     for(let i=0; i<count; i++) {
                         setTimeout(() => window.createBarrageDom(emojiMap[type]), Math.random() * 800);
                     }
