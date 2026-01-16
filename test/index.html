@@ -14,6 +14,10 @@ body {
     text-align: center;
 }
 
+html, body {
+    background: #000; 
+}
+
 /* 影片容器 */
 #video-wrapper {
     position: relative;
@@ -50,11 +54,13 @@ body {
     box-sizing: border-box;
 }
 
-/* 當進入全螢幕或偽全螢幕時，強制抬高字幕防止被截斷 */
+/* 修正字幕位置 */
 .pseudo-fullscreen #subtitle,
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle {
-    bottom: 15% !important; /* 抬高一點，避開 LINE/FB 底部的控制欄 */
+    /* 15% 是基底，再加上系統規定的安全距離 */
+    bottom: calc(15% + env(safe-area-inset-bottom)) !important; 
+    font-size: 5vw !important;
 }
 
 /* 桌機非全螢幕 */
@@ -113,18 +119,21 @@ body.is-in-fullscreen .reaction-section {
     display: none !important;
 }
 
-/* 確保 body 背景變黑且不可捲動 */
+/* 統一 body Class 並確保徹底隱藏背景 */
 body.is-in-fullscreen {
     overflow: hidden !important;
-    background: #000 !important;
+    position: fixed; /* 防止捲動引起的 UI 偏移 */
+    width: 100%;
+    height: 100%;
 }
 
-/* 偽全螢幕下的播放器必須強制填滿 */
+/* 確保影片在偽全螢幕下完全填滿，不留任何細縫 */
 .pseudo-fullscreen #player {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    object-fit: contain; /* 確保影片比例正確且背景全黑 */
 }
-
+    
 /* 確保 iPhone 橫向時能填滿安全區域 (瀏海區) */
 @supports (padding: env(safe-area-inset-top)) {
     .pseudo-fullscreen {
@@ -515,21 +524,17 @@ function toggleFullscreen() {
         fsBtn.innerText = "進入全螢幕";
         showExitBtn();
     } else {
-        // 【進入全螢幕邏輯】
-        const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
-        
-        // 判斷是否為 iPhone (iPhone Safari 不支援 Element 等級的全螢幕)
+        // --- 進入全螢幕 ---
         const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+        const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
 
         if (req && !isIPhone) {
-            req.call(wrapper).catch(() => {
-                wrapper.classList.add("pseudo-fullscreen");
-            });
+            req.call(wrapper).catch(() => wrapper.classList.add("pseudo-fullscreen"));
         } else {
             wrapper.classList.add("pseudo-fullscreen");
         }
         
-        // [標註] 加上這個 Class，CSS 會自動隱藏標題、按鈕和表情牆
+        // 加上 Class，CSS 會自動隱藏標題、按鈕和表情牆
         document.body.classList.add("is-in-fullscreen"); 
         fsBtn.innerText = "退出全螢幕";
         window.scrollTo(0, 0); 
