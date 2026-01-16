@@ -540,8 +540,8 @@ body.has-fullscreen {
 /* 表情選擇抽屜 */
 #emoji-drawer {
     position: absolute;
-    bottom: 100px;
-    right: 30px;
+    bottom: calc(100px + env(safe-area-inset-bottom)); 
+    right: calc(30px + env(safe-area-inset-right));
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
     border-radius: 20px;
@@ -603,4 +603,29 @@ body.has-fullscreen {
 /* 全螢幕下顯示按鈕 */
 .is-in-fullscreen #emoji-trigger-btn {
     display: flex !important;
+}
+
+/* =============================================
+   修復：強制在全螢幕下顯示即時表情按鈕
+   ============================================= */
+
+/* 1. 針對電腦與 Android (原生全螢幕 API) */
+:fullscreen #emoji-trigger-btn,
+:-webkit-full-screen #emoji-trigger-btn {
+    display: flex !important;
+    z-index: 2147483647 !important; /* 確保最上層 */
+}
+
+/* 2. 針對 iPhone (偽全螢幕 Class) */
+.pseudo-fullscreen #emoji-trigger-btn {
+    display: flex !important;
+    z-index: 2147483647 !important;
+}
+
+/* 3. 確保按鈕本身在全螢幕時的位置正確 (避免跑版) */
+:fullscreen #emoji-trigger-btn,
+:-webkit-full-screen #emoji-trigger-btn,
+.pseudo-fullscreen #emoji-trigger-btn {
+    bottom: calc(30px + env(safe-area-inset-bottom)) !important;
+    right: calc(30px + env(safe-area-inset-right)) !important;
 }
