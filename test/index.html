@@ -89,23 +89,34 @@ body {
 }
 
 /* ========= 偽全螢幕樣式 (針對 iPad/iPhone/相容性) ========= */
+/* 修改偽全螢幕樣式，確保覆蓋力 */
 .pseudo-fullscreen {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
-    /* svh 是關鍵：它代表「最小視窗高度」，能避開 iPhone 網址列擠壓 */
-    height: 100vh !important; 
-    height: 100svh !important; 
-    z-index: 2147483647 !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* 使用動態視窗高度 */
+    z-index: 2147483647 !important; /* 確保在最上層 */
     background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    margin: 0 !important;
-    padding: 0 !important;
-    /* 防止背後的內容捲動 */
+}
+
+/* 當進入全螢幕模式時，隱藏頁面上所有其他內容 */
+body.is-in-fullscreen #controls,
+body.is-in-fullscreen h2,
+body.is-in-fullscreen .reaction-section {
+    display: none !important;
+}
+
+/* 確保 body 背景變黑且不可捲動 */
+body.is-in-fullscreen {
     overflow: hidden !important;
+    background: #000 !important;
 }
 
 /* 確保 iPhone 橫向時能填滿安全區域 (瀏海區) */
@@ -495,17 +506,25 @@ function toggleFullscreen() {
         fsBtn.innerText = "進入全螢幕";
         showExitBtn();
     } else {
-        // 進入
+        // 進入全螢幕邏輯
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
-        if (req) {
-            req.call(wrapper);
+        
+        if (req && !/iPhone|iPod/.test(navigator.userAgent)) {
+            // 非 iPhone 的裝置嘗試使用系統全螢幕
+            req.call(wrapper).catch(() => {
+                wrapper.classList.add("pseudo-fullscreen");
+            });
         } else {
-            // iPhone 通常走這裡
+            // iPhone 強制使用偽全螢幕 (因為 iPhone Safari 不支援 Element.requestFullscreen)
             wrapper.classList.add("pseudo-fullscreen");
-            document.body.classList.add("has-fullscreen"); // 鎖定 body
-            window.scrollTo(0, 0); // 捲動到頂部防止偏移
         }
+        
+        document.body.classList.add("is-in-fullscreen"); // 隱藏原本的控制欄與標題
         fsBtn.innerText = "退出全螢幕";
+        window.scrollTo(0, 0); // 確保畫面不偏移
+
+        // 延遲確保按鈕顯示
+        setTimeout(showExitBtn, 300);
         
         let retryCount = 0;
         const retryShow = setInterval(() => {
