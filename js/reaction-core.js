@@ -375,6 +375,8 @@ function updateBarrageUI() {
             container.classList.remove('hide-barrage');
             // 移除強制隱藏 class
             if (triggerBtn) triggerBtn.classList.remove('force-hide');
+            // 移除強制隱藏，讓按鈕顯示 (CSS 會決定它是在左上還是左中)
+            if (triggerBtn) triggerBtn.classList.remove('force-hide');
         } else {
             container.classList.add('hide-barrage');
             // 加上強制隱藏 class
@@ -382,7 +384,10 @@ function updateBarrageUI() {
                 triggerBtn.classList.add('force-hide');
                 // 順便關閉抽屜，避免按鈕消失但抽屜還開著
                 const drawer = document.getElementById('emoji-drawer');
-                if (drawer) drawer.classList.remove('show');
+                if (drawer) {
+                    drawer.classList.remove('show');
+                    triggerBtn.classList.remove('active');
+                }
             }
         }
         
