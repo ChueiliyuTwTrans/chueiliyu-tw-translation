@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>여러분과 함께하는 첫 생일♥(和大家一起度過的第一個生日♥)</title>
 
 <style>
@@ -14,122 +14,46 @@ body {
     text-align: center;
 }
 
-/* 影片容器 */
-#video-wrapper {
-    position: relative;
-    max-width: 960px;
-    margin: 20px auto;
-    background: black;
-}
-
-/* YouTube 播放器 */
-#player {
+html, body {
+    background: #000 !important; /* 強制全黑 */
+    height: 100%;
     width: 100%;
-    aspect-ratio: 16 / 9;
-}
-
-/* ===== 字幕 ===== */
-#subtitle {
-    position: absolute;
-    bottom: 6%;
-    left: 50%;
-    transform: translateX(-50%) scale(var(--subtitle-scale, 1));
-    transform-origin: center bottom;
-    width: 94%;
-    font-size: 22px;
-    line-height: 1.6;
-    color: #fff;
-    text-align: center;
-    word-break: break-word;
-    max-height: 40%;
-    z-index: 10;
-    pointer-events: none;
-    text-shadow:
-        2px 2px 4px #000,
-       -2px 2px 4px #000,
-        2px -2px 4px #000,
-       -2px -2px 4px #000;
-}
-
-/* 桌機非全螢幕 */
-@media (min-width: 1024px) {
-    #subtitle {
-        font-size: 28px;   /* 🖥 桌機比手機大 */
-        line-height: 1.7;
-    }
-}
-
-/* ========= 全螢幕共用結構 ========= */
-
-:fullscreen #video-wrapper,
-:-webkit-full-screen #video-wrapper {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
     margin: 0;
 }
 
-:fullscreen #player,
-:-webkit-full-screen #player {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-}
-
-/* ========= 全螢幕字幕：裝置分流 ========= */
-
-/* 桌機全螢幕 */
-@media (min-width: 1024px) {
-    :fullscreen #subtitle,
-    :-webkit-full-screen #subtitle {
-        font-size: 32px;
-        line-height: 1.8;
-    }
-}
-
-/* 手機 / 平板全螢幕 */
-@media (max-width: 1023px) {
-    :fullscreen #subtitle,
-    :-webkit-full-screen #subtitle {
-        font-size: 24px;
-        line-height: 1.6;
-    }
-}
-
-/* 全螢幕按鈕 */
-#fs-btn {
-    margin: 10px;
-    padding: 10px 16px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* ===== 控制列 ===== */
-#controls {
-    display: inline-flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-#controls button {
-    padding: 6px 10px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
 </style>
-
+<link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
 </head>
 
 <body>
 <div id="controls">
-    <button onclick="changeSubtitleSize(-0.1)">A−</button>
-    <span>字幕大小</span>
-    <button onclick="changeSubtitleSize(0.1)">A＋</button>
-    <button id="fs-btn">全螢幕</button>
+    <div class="control-row">
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
+
+        <div class="control-group barrage-control">
+            <span>大小</span>
+            <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
+        </div>
+
+        <div class="control-group barrage-control">
+            <span>範圍</span>
+            <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
+            <span id="height-val">40%</span>
+        </div>
+
+        <div class="control-group barrage-control">
+            <span>速度</span>
+            <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
+        </div>
+
+        <div class="control-group">
+            <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
+            <span>字幕</span>
+            <button class="sub-btn" onclick="changeSubtitleSize(0.1)">A＋</button>
+        </div>
+
+        <button id="fs-btn">進入全螢幕</button>
+    </div>
 </div>
 
 <h2>여러분과 함께하는 첫 생일♥(和大家一起度過的第一個生日♥)</h2>
@@ -137,119 +61,64 @@ body {
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
+    <div id="barrage-container"></div>
+
+    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
+
+    <div id="emoji-drawer"></div>
+    
+    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
+        <svg viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
 </div>
 
-<script src="https://www.youtube.com/iframe_api"></script>
+<div class="reaction-section">
+    <p id="reaction-title">覺得這部翻譯影片如何？點個表情吧！</p>
+    <div class="reaction-wall"></div>
+    <br>
+</div>
+
 <script>
-let player;
-let subtitles = [];
-let subtitleTimer = null;
+/* 影片ID和SRT文件 */
+const MY_VIDEO_ID = "8X2dyJw1XGQ"; 
+const MY_SRT_FILE = "0103Liyu_Birthday_Live.srt";
 
-const subtitleEl = document.getElementById("subtitle");
-const wrapper = document.getElementById("video-wrapper");
-const fsBtn = document.getElementById("fs-btn");
-
-/* ===== 字幕大小（記住設定） ===== */
-let subtitleScale = parseFloat(
-    localStorage.getItem("subtitle-scale")
-) || 1;
-
-applySubtitleScale();
-
-function applySubtitleScale() {
-    subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
-}
-
+/* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
-    subtitleScale = Math.min(2, Math.max(0.6, subtitleScale + delta));
-    localStorage.setItem("subtitle-scale", subtitleScale);
-    applySubtitleScale();
+        if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
 }
-
-/* 載入 SRT */
-fetch("0103Liyu_Birthday_Live.srt")
-    .then(r => r.text())
-    .then(t => {
-        subtitles = parseSRT(t);
-        subtitleEl.innerHTML = "";
-    })
-    .catch(() => {
-        subtitleEl.innerText = "字幕載入失敗";
-    });
-
-function parseSRT(data) {
-    return data.replace(/\r/g, "").trim().split("\n\n").map(b => {
-        const l = b.split("\n");
-        const [s, e] = l[1].split(" --> ");
-        return { start: sec(s), end: sec(e), text: l.slice(2).join("<br>") };
-    });
-}
-
-function sec(t) {
-    const [h, m, s] = t.replace(",", ".").split(":");
-    return h * 3600 + m * 60 + parseFloat(s);
-}
-
-/* YouTube */
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player("player", {
-        videoId: "8X2dyJw1XGQ",
-        playerVars: {
-            start: 1,
-            rel: 0,
-            playsinline: 1
-        },
-        events: {
-            onReady,
-            onStateChange
-        }
-    });
-}
-
-function onReady(e) {
-    const iframe = e.target.getIframe();
-    iframe.setAttribute("allowfullscreen", "");
-    iframe.setAttribute("webkitallowfullscreen", "");
-}
-
-/* 播放中才同步字幕 */
-function onStateChange(e) {
-    if (e.data === YT.PlayerState.PLAYING && !subtitleTimer) {
-        startSubtitleSync();
-    }
-}
-
-function startSubtitleSync() {
-    subtitleTimer = setInterval(() => {
-        if (!player || !subtitles.length) return;
-
-        const t = player.getCurrentTime();
-
-        const activeSubs = subtitles.filter(
-            x => t >= x.start && t <= x.end
-        );
-
-        if (activeSubs.length) {
-            subtitleEl.innerHTML = activeSubs
-                .map(s => s.text)
-                .join("<br>");
-        } else {
-            subtitleEl.innerHTML = "";
-        }
-    }, 200);
-}
-
-/* 全螢幕按鈕（桌機 / Android / 部分平板可用） */
-fsBtn.addEventListener("click", () => {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-        document.exitFullscreen?.();
-        document.webkitExitFullscreen?.();
-    } else {
-        wrapper.requestFullscreen?.();
-        wrapper.webkitRequestFullscreen?.();
-    }
-});
 </script>
+    
+<script type="module">
+  // 1. 載入 Firebase 核心功能
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    
+  // 2. Firebase 設定
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9Hi740uOlJf1dSyDpyeispds_TtCjNjg",
+    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chueiliyu-tw-translation",
+    storageBucket: "chueiliyu-tw-translation.appspot.com",
+    messagingSenderId: "625769420546",
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b"
+  };
+
+  // 3. 啟動連線並「借」給外部 JS 使用
+  const app = initializeApp(firebaseConfig);
+  window.db = getDatabase(app);
+  window.fb_ref = ref;            // 修正點：掛載到 window
+  window.fb_onValue = onValue;    // 修正點：掛載到 window
+  window.fb_runTransaction = runTransaction; // 修正點：掛載到 window
+</script>
+
+<script src="/chueiliyu-tw-translation/js/core-player.js"></script>
+<script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 
 </body>
 </html>
