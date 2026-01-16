@@ -518,7 +518,7 @@ body.has-fullscreen {
     font-size: clamp(20px, 3vw, 30px);
     cursor: pointer;
     z-index: 2147483647 !important;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
@@ -547,8 +547,8 @@ body.has-fullscreen {
 #emoji-drawer {
     position: absolute;
     /* 讓抽屜底部對齊按鈕的上方 (60px + 按鈕高度 + 間距) */
-    bottom: 130px; 
-    right: 20px;
+    bottom: 120px; 
+    right: 10px;
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
     border-radius: 20px;
@@ -563,8 +563,8 @@ body.has-fullscreen {
 :fullscreen #emoji-drawer,
 :-webkit-full-screen #emoji-drawer,
 .pseudo-fullscreen #emoji-drawer {
-    bottom: calc(110px + env(safe-area-inset-bottom)) !important;
-    right: calc(30px + env(safe-area-inset-right)) !important;
+    bottom: calc(170px + env(safe-area-inset-bottom)) !important;
+    right: calc(20px + env(safe-area-inset-right)) !important;
 }
 
 #emoji-drawer .emoji-btn {
