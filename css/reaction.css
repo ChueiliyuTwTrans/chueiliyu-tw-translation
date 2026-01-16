@@ -389,7 +389,7 @@ body.has-fullscreen {
 }
     
 .emoji-btn {
-    background: #333;
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid #444;
     color: white;
     padding: 8px 16px;
@@ -403,7 +403,6 @@ body.has-fullscreen {
 
 /* 當按鈕擁有 .active 類別時的樣式 */
 .emoji-btn.active {
-    background: #5A98ED !important; 
     border-color: #ffffff !important;
     box-shadow: 0 4px 15px rgba(90, 152, 237, 0.4);
     transform: scale(1.05) translateY(-2px);
