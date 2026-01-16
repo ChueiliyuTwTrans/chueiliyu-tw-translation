@@ -50,7 +50,11 @@ function coreChangeSubtitleSize(delta) {
 
 // --- 核心功能：YouTube API 邏輯 ---
 function onYouTubeIframeAPIReady() {
-    if (typeof MY_VIDEO_ID === 'undefined') return;
+    // 如果因為載入太快沒抓到 ID，就等 100 毫秒再試一次
+    if (typeof MY_VIDEO_ID === 'undefined' || !MY_VIDEO_ID) {
+        setTimeout(onYouTubeIframeAPIReady, 100);
+        return;
+    }
     player = new YT.Player("player", {
         videoId: MY_VIDEO_ID,
         playerVars: {
