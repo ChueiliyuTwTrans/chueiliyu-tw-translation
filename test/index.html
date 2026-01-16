@@ -211,18 +211,25 @@ body.has-fullscreen {
 
 /* 按鈕基礎樣式 */
 #controls button {
-    padding: 6px 12px;
+    padding: 6px 18px;
     font-size: 14px;
     cursor: pointer;
     background: #333;
     color: white;
-    border: 1px solid #555;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 使用極淡的邊框代替硬白邊 */
+    border-radius: 30px !important;              /* 強制統一為圓角 */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #controls button:hover {
     background: #444;
+    transform: translateY(-1px);
 }
 
 /* --- 高級感滑動軸 --- */
@@ -504,6 +511,7 @@ body.has-fullscreen {
 #barrage-toggle-btn, #fs-btn {
     min-width: 110px;        /* 讓左右按鈕寬度相近，增加對稱感 */
     height: 34px;            /* 統一高度 */
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1061,7 +1069,7 @@ function updateBarrageDisplayUI() {
 
         // 顯示所有及時表情相關滑動軸
         btn.style.background = "#5A98ED"; 
-        btn.style.borderColor = "#ffffff";
+        btn.style.borderColor = "rgba(255, 255, 255, 0.3)"; // 半透明白邊，比較高級
         btn.style.color = "#ffffff";
         btn.style.boxShadow = "0 0 12px rgba(90, 152, 237, 0.5)";
         
@@ -1074,10 +1082,13 @@ function updateBarrageDisplayUI() {
         container.classList.add('hide-barrage');
         btn.innerText = "及時表情：關";
         btn.style.background = "#333";
-        btn.style.borderColor = "#555";
+        btn.style.borderColor = "rgba(255, 255, 255, 0.1)";
         btn.style.boxShadow = "none";
         // 隱藏所有及時表情相關滑動軸
-        barrageControls.forEach(el => el.style.display = 'none');
+        barrageControls.forEach(el => {
+            el.style.display = 'none';
+            el.style.opacity = '0';
+        });
     }
 }
 
