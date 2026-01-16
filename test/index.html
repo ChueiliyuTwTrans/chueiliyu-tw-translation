@@ -292,6 +292,70 @@ body.has-fullscreen {
 .emoji-btn.active span {
     color: #fff !important; /* 數字變白色 */
 }
+
+/* 彈幕容器：覆蓋在影片上方 */
+#barrage-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%; /* 彈幕出現在上半部，避免遮擋字幕 */
+    pointer-events: none; /* 不影響點擊影片 */
+    overflow: hidden;
+    z-index: 200;
+}
+
+/* 彈幕本體樣式 */
+.barrage-item {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 24px;
+    will-change: transform;
+    animation: moveLeft 5s linear forwards;
+}
+
+@keyframes moveLeft {
+    from { transform: translateX(100vw); }
+    to { transform: translateX(-100%); }
+}
+
+/* 全螢幕表情觸發鈕 */
+#emoji-trigger-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 2147483647;
+    display: none; /* 預設隱藏，全螢幕才顯示 */
+    align-items: center;
+    justify-content: center;
+}
+
+/* 表情選擇抽屜 */
+#emoji-drawer {
+    position: absolute;
+    bottom: 75px;
+    right: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 10px;
+    border-radius: 15px;
+    display: none; /* 點擊後切換 */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    z-index: 2147483647;
+}
+
+/* 全螢幕下顯示按鈕 */
+.is-in-fullscreen #emoji-trigger-btn {
+    display: flex !important;
+}
     
 </style>
 </head>
@@ -310,6 +374,17 @@ body.has-fullscreen {
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
+    <div id="barrage-container"></div>
+
+    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer()">😊</button>
+    <div id="emoji-drawer">
+        <button class="emoji-btn" onclick="sendBarrage('fire')">🔥</button>
+        <button class="emoji-btn" onclick="sendBarrage('love')">😍</button>
+        <button class="emoji-btn" onclick="sendBarrage('clap')">👏</button>
+        <button class="emoji-btn" onclick="sendBarrage('funny')">😂</button>
+        <button class="emoji-btn" onclick="sendBarrage('warm')">🥰</button>
+        <button class="emoji-btn" onclick="sendBarrage('thanks')">🙏</button>
+    </div>
     <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
         <svg viewBox="0 0 24 24">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -694,6 +769,74 @@ function handleExit() {
         console.error("同步失敗（請檢查 Firebase 規則）:", err);
     });
   };
+
+  import { getDatabase, ref, onValue, runTransaction, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// --- A. 切換表情抽屜 ---
+window.toggleEmojiDrawer = function() {
+    const drawer = document.getElementById('emoji-drawer');
+    drawer.style.display = (drawer.style.display === 'grid') ? 'none' : 'grid';
+};
+
+// --- B. 發送彈幕 (含時間點) ---
+window.sendBarrage = function(type) {
+    if (!player) return;
+    const currentTime = Math.floor(player.getCurrentTime());
+    const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
+    
+    // 1. 存入 Firebase (路徑：barrages/影片ID/秒數/表情)
+    const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
+    runTransaction(barrageRef, (count) => (count || 0) + 1);
+
+    // 2. 立即在自己畫面上產生一個彈幕（增加即時反饋感）
+    createBarrageDom(emojiMap[type]);
+    
+    // 點擊後可自動關閉或保持開啟，這裡建議保持開啟方便連點
+};
+
+// --- C. 建立彈幕 DOM 並動畫 ---
+function createBarrageDom(text) {
+    const container = document.getElementById('barrage-container');
+    const el = document.createElement('div');
+    el.className = 'barrage-item';
+    el.innerText = text;
+    
+    // 隨機高度 (10% - 80%)
+    el.style.top = Math.random() * 70 + 10 + "%";
+    
+    container.appendChild(el);
+    
+    // 動畫結束後移除元素節點，避免網頁變慢
+    el.onanimationend = () => el.remove();
+}
+
+// --- D. 監聽影片時間並同步他人彈幕 ---
+let lastCheckedSecond = -1;
+setInterval(() => {
+    if (!player || player.getPlayerState() !== 1) return; // 只在播放時執行
+    
+    const now = Math.floor(player.getCurrentTime());
+    if (now !== lastCheckedSecond) {
+        lastCheckedSecond = now;
+        
+        // 抓取雲端該秒數的所有點擊
+        const secondRef = ref(db, `barrages/${MY_VIDEO_ID}/${now}`);
+        onValue(secondRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
+                Object.keys(data).forEach(type => {
+                    // 根據點擊次數噴發彈幕（例如該秒有3人點，就噴3個，但建議設定上限避免刷屏）
+                    const count = Math.min(data[type], 5); 
+                    for(let i=0; i<count; i++) {
+                        // 稍微延遲噴發，讓視覺更自然
+                        setTimeout(() => createBarrageDom(emojiMap[type]), Math.random() * 800);
+                    }
+                });
+            }
+        }, { onlyOnce: true });
+    }
+}, 500); // 每半秒檢查一次
 </script>
 
 </body>
