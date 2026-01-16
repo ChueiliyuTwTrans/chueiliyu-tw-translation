@@ -367,29 +367,22 @@ body.has-fullscreen {
    退出全螢幕按鈕 (修復 iPhone 裁切問題版)
    ============================================= */
 #exit-fs-btn {
-    display: none; /* 預設隱藏，靠 JS 控制顯示 */
+    display: none; 
+    position: fixed !important;
     
-    /* 1. 改用 fixed，鎖定在螢幕玻璃上 */
-    position: fixed !important; 
+    /* 垂直位置：上方 */
+    top: calc(20px + env(safe-area-inset-top)) !important;
     
-    /* 2. 關鍵位置修正：使用 calc 確保離邊緣有足夠距離 */
-    /* 上方：安全區域 + 15px 緩衝 */
-    top: calc(15px + env(safe-area-inset-top)) !important;
+    /* ★★★ 基準水平位置 (直向預設) ★★★ */
+    right: 20px !important; 
     
-    /* 右方：安全區域 + 20px 緩衝 (避免被圓角切掉) */
-    right: calc(20px + env(safe-area-inset-right)) !important;
-    
-    /* 大小與樣式 */
     width: 50px;
     height: 50px;
     background: rgba(0, 0, 0, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 50%;
     color: rgba(255, 255, 255, 0.9) !important;
-    
-    /* 層級最高 */
     z-index: 2147483647 !important;
-    
     cursor: pointer;
     align-items: center;
     justify-content: center;
@@ -553,7 +546,7 @@ body.has-fullscreen {
     /* 抬高到 80px，避開大部分手機的底部操作條 */
     bottom: 80px;  
     /* 離右邊遠一點，避免被手機保護殼或極窄邊框切到 */
-    right: 20px;   
+    right: 20px !important;  
     
     /* 大小設定 */
     width: clamp(45px, 12vw, 60px); 
@@ -602,7 +595,7 @@ body.has-fullscreen {
     
     /* 基礎位置 */
     bottom: 150px; 
-    right: 20px;
+    right: 20px !important;
     
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
@@ -614,14 +607,18 @@ body.has-fullscreen {
 }
 
 /* 全螢幕時的抽屜位置微調 */
+:fullscreen #emoji-trigger-btn,
+:-webkit-full-screen #emoji-trigger-btn,
+.pseudo-fullscreen #emoji-trigger-btn {
+    /* 調整全螢幕時的高度，避開進度條 */
+    bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+}
+
 :fullscreen #emoji-drawer,
 :-webkit-full-screen #emoji-drawer,
 .pseudo-fullscreen #emoji-drawer {
-    /* 跟隨按鈕往上移 (按鈕bottom 100 + 按鈕高 60 + 間距 20) */
+    /* 調整全螢幕時抽屜的高度 */
     bottom: calc(180px + env(safe-area-inset-bottom)) !important;
-    
-    /* 跟隨按鈕右邊距 */
-    right: calc(45px + env(safe-area-inset-right)) !important;
 }
 
 #emoji-drawer .emoji-btn {
@@ -713,14 +710,27 @@ body.has-fullscreen {
    如果覺得 45px 還不夠，這裡再加碼
    ============================================= */
 @media screen and (orientation: landscape) {
+    
+    /* 1. 退出按鈕 (右上) */
+    #exit-fs-btn {
+        /* 統一設定為 50px + 安全距離 */
+        right: calc(50px + env(safe-area-inset-right)) !important;
+        top: 20px !important;
+    }
+
+    /* 2. 表情按鈕 (右下) - 無論是全螢幕還是網頁模式 */
+    #emoji-trigger-btn,
     :fullscreen #emoji-trigger-btn,
     .pseudo-fullscreen #emoji-trigger-btn {
-        /* 橫向時，右邊距加到 60px，絕對安全 */
-        right: calc(60px + env(safe-area-inset-right)) !important;
+        /* 統一設定為 50px + 安全距離 (必須跟上面一樣) */
+        right: calc(50px + env(safe-area-inset-right)) !important;
     }
-    
+
+    /* 3. 表情抽屜 */
+    #emoji-drawer,
     :fullscreen #emoji-drawer,
     .pseudo-fullscreen #emoji-drawer {
-        right: calc(60px + env(safe-area-inset-right)) !important;
+        /* 統一設定為 50px + 安全距離 */
+        right: calc(50px + env(safe-area-inset-right)) !important;
     }
 }
