@@ -321,10 +321,18 @@ body.has-fullscreen {
 <div class="reaction-section">
     <p>覺得這部翻譯影片如何？點個表情吧！</p>
     <div class="reaction-wall">
-        <button class="emoji-btn" onclick="addReaction('love')">❤️ <span id="count-love">0</span></button>
-        <button class="emoji-btn" onclick="addReaction('funny')">😂 <span id="count-funny">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('bunny')">🐰 <span id="count-bunny">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('haha')">😆 <span id="count-haha">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('warm')">🥰 <span id="count-warm">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('love_eyes')">😍 <span id="count-love_eyes">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('laugh')">😂 <span id="count-laugh">0</span></button>
         <button class="emoji-btn" onclick="addReaction('cool')">😎 <span id="count-cool">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('thumb_up')">👍 <span id="count-thumb_up">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('clap')">👏 <span id="count-clap">0</span></button>
         <button class="emoji-btn" onclick="addReaction('thanks')">🙏 <span id="count-thanks">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('star')">🌟 <span id="count-star">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('fire')">🔥 <span id="count-fire">0</span></button>
+        <button class="emoji-btn" onclick="addReaction('heart')">❤️ <span id="count-heart">0</span></button>
     </div>
 </div>
 
@@ -620,21 +628,24 @@ function handleExit() {
   const db = getDatabase(app);
 
   // 4. 表情牆連線邏輯
-  const reactionTypes = ['love', 'funny', 'cool', 'thanks'];
+  const reactionTypes = [
+    'bunny', 'haha', 'warm', 'love_eyes', 'laugh', 'cool',
+    'thumb_up', 'clap', 'thanks', 'star', 'fire', 'heart'
+  ];
 
   // --- 1. 初始化讀取：同步雲端數字與本地狀態 ---
   reactionTypes.forEach(type => {
-    // 讀取雲端數字
     const countRef = ref(db, 'reactions/' + type);
     onValue(countRef, (snapshot) => {
       const data = snapshot.val() || 0;
-      document.getElementById('count-' + type).innerText = data;
+      const countEl = document.getElementById('count-' + type);
+      if (countEl) countEl.innerText = data; // 確保元素存在才更新
     });
 
-    // 檢查本地 LocalStorage，若已點擊則加上 active 樣式
+    // 初始化按鈕 active 狀態
     if (localStorage.getItem('reacted-' + type) === 'true') {
         const btn = document.querySelector(`button[onclick="addReaction('${type}')"]`);
-        if (btn) btn.classList.add('active');
+        if (btn) btn.classList.add('active'); // 確保元素存在才添加 class
     }
   });
 
