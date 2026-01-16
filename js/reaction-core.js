@@ -166,15 +166,20 @@ window.sendInstantBarrage = function(type, event) {
     window.createBarrageDom(EMOJI_MAP[type]);
 
     // 2. 寫入 Firebase (只為了同步給別的觀眾看，不計入 Wall)
-    if (window.player && typeof window.player.getCurrentTime === 'function') {
+   if (window.player && typeof window.player.getCurrentTime === 'function') {
         const currentTime = Math.floor(window.player.getCurrentTime());
         lastSentSignal = { time: currentTime, type: type }; // 標記是自己發的
 
-        // 寫入路徑是 barrages (彈幕)，不是 video_reactions (統計)
-        if (window.db) {
+        // 檢查 Firebase 是否連接成功
+        if (window.db && window.fb_ref && window.fb_runTransaction) {
             const barrageRef = window.fb_ref(window.db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
-            window.fb_runTransaction(barrageRef, (count) => (count || 0) + 1);
+            window.fb_runTransaction(barrageRef, (count) => (count || 0) + 1)
+                .catch(err => console.error("Firebase 寫入失敗:", err));
+        } else {
+            console.error("Firebase 未初始化：請檢查 index.html 是否有掛載 window.db / window.fb_ref");
         }
+    } else {
+        console.warn("找不到播放器 (window.player)：無法記錄時間，僅顯示本地動畫");
     }
 
     // 3. 發送後關閉抽屜
