@@ -796,80 +796,62 @@ function handleExit() {
         console.error("同步失敗（請檢查 Firebase 規則）:", err);
     });
   };
-
-  import { getDatabase, ref, onValue, runTransaction, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+    
+// --- 全螢幕彈幕功能 ---
 // --- A. 切換表情抽屜 ---
 window.toggleEmojiDrawer = function(event) {
-    if (event) event.stopPropagation(); // 防止點擊事件穿透到影片播放器
+    if (event) event.stopPropagation();
     const drawer = document.getElementById('emoji-drawer');
-    if (!drawer) return;
-    
-    // 改用 class 切換更穩定
     const isVisible = drawer.style.display === 'grid';
     drawer.style.display = isVisible ? 'none' : 'grid';
-};
+  };
 
 // --- B. 發送彈幕 (含時間點) ---
 window.sendBarrage = function(type) {
     if (!player || typeof player.getCurrentTime !== 'function') return;
-    
     const currentTime = Math.floor(player.getCurrentTime());
     const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
     
-    // 1. 存入 Firebase
     const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
     runTransaction(barrageRef, (count) => (count || 0) + 1);
 
-    // 2. 立即在畫面上產生彈幕
-    if (emojiMap[type]) {
-        createBarrageDom(emojiMap[type]);
-    }
-};
+    createBarrageDom(emojiMap[type]);
+  };
 
 // --- C. 建立彈幕 DOM 並動畫 ---
-function createBarrageDom(text) {
+window.createBarrageDom = function(text) {
     const container = document.getElementById('barrage-container');
+    if (!container) return;
     const el = document.createElement('div');
     el.className = 'barrage-item';
     el.innerText = text;
-    
-    // 隨機高度 (10% - 80%)
-    el.style.top = Math.random() * 70 + 10 + "%";
-    
+    el.style.top = (Math.random() * 60 + 5) + "%"; // 稍微避開最上方
     container.appendChild(el);
-    
-    // 動畫結束後移除元素節點，避免網頁變慢
     el.onanimationend = () => el.remove();
-}
+  };
 
 // --- D. 監聽影片時間並同步他人彈幕 ---
 let lastCheckedSecond = -1;
-setInterval(() => {
-    if (!player || player.getPlayerState() !== 1) return; // 只在播放時執行
-    
+  setInterval(() => {
+    if (!player || player.getPlayerState() !== 1) return;
     const now = Math.floor(player.getCurrentTime());
     if (now !== lastCheckedSecond) {
         lastCheckedSecond = now;
-        
-        // 抓取雲端該秒數的所有點擊
         const secondRef = ref(db, `barrages/${MY_VIDEO_ID}/${now}`);
         onValue(secondRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
                 Object.keys(data).forEach(type => {
-                    // 根據點擊次數噴發彈幕（例如該秒有3人點，就噴3個，但建議設定上限避免刷屏）
                     const count = Math.min(data[type], 5); 
                     for(let i=0; i<count; i++) {
-                        // 稍微延遲噴發，讓視覺更自然
-                        setTimeout(() => createBarrageDom(emojiMap[type]), Math.random() * 800);
+                        setTimeout(() => window.createBarrageDom(emojiMap[type]), Math.random() * 800);
                     }
                 });
             }
         }, { onlyOnce: true });
     }
-}, 500); // 每半秒檢查一次
+  }, 500);
 </script>
 
 </body>
