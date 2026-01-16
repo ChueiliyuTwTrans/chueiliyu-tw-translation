@@ -39,11 +39,7 @@ function initReactionButtons() {
 
 // --- 3. 同步 Firebase 數據 (讀取) ---
 function syncFirebaseData() {
-    // 檢查 index.html 的 Firebase 是否準備好
-    if (!window.db || !window.fb_ref) {
-        console.warn("Firebase 尚未就緒，稍後重試...");
-        return;
-    }
+    if (!window.db || !window.fb_ref) return;
     
     EMOJI_DATA.forEach(item => {
         const type = item.type;
@@ -51,21 +47,25 @@ function syncFirebaseData() {
         
         window.fb_onValue(countRef, (snapshot) => {
             const data = snapshot.val() || 0;
-            const countEls = document.querySelectorAll('#count-' + type);
+            // 同時更新表情牆和抽屜中「對應類型」的數字
+            const countEls = document.querySelectorAll(`.count-${type}`);
             countEls.forEach(el => el.innerText = data);
         });
 
         // 初始化本地 active 狀態
         if (localStorage.getItem(`reacted-${MY_VIDEO_ID}-${type}`) === 'true') {
-            const btns = document.querySelectorAll(`button[onclick="addReaction('${type}')"]`);
+            const btns = document.querySelectorAll(`button[data-type="${type}"]`);
             btns.forEach(btn => btn.classList.add('active'));
         }
     });
 }
 
 // --- 4. 點擊反應 (寫入) ---
-window.addReaction = function(type) {
-    const btn = event.currentTarget || event.target.closest('.emoji-btn'); 
+window.addReaction = function(type, event) {
+    if (event) {
+        event.stopPropagation(); // 防止事件冒泡
+    }
+    
     const storageKey = `reacted-${MY_VIDEO_ID}-${type}`;
     const isReacted = localStorage.getItem(storageKey) === 'true';
     const countRef = window.fb_ref(window.db, `video_reactions/${MY_VIDEO_ID}/${type}`);
@@ -74,21 +74,35 @@ window.addReaction = function(type) {
         let val = (currentCount === null) ? 0 : currentCount;
         return isReacted ? Math.max(0, val - 1) : val + 1;
     }).then(() => {
+        const btns = document.querySelectorAll(`button[data-type="${type}"]`);
         if (isReacted) {
             localStorage.removeItem(storageKey);
-            btn.classList.remove('active');
-            btn.style.transform = "scale(1)";
+            btns.forEach(btn => btn.classList.remove('active'));
         } else {
             localStorage.setItem(storageKey, 'true');
-            btn.classList.add('active');
-            btn.style.transform = "scale(1.3)";
-            setTimeout(() => { btn.style.transform = "scale(1.05)"; }, 100);
-            
-            // 觸發彈幕噴射反饋
+            btns.forEach(btn => btn.classList.add('active'));
+            // 觸發彈幕
             window.sendBarrageWithFeedback(type);
         }
     });
 };
+
+// --- 修正按鈕生成 (加上 data-type 和專屬 class) ---
+function initReactionButtons() {
+    const wall = document.querySelector('.reaction-wall');
+    const drawer = document.getElementById('emoji-drawer');
+    
+    const buttonsHTML = EMOJI_DATA.map(item => `
+        <button class="emoji-btn" data-type="${item.type}" onclick="addReaction('${item.type}', event)">
+            ${item.icon} <span class="count-${item.type}">0</span>
+        </button>
+    `).join('');
+
+    if (wall) wall.innerHTML = buttonsHTML;
+    if (drawer) drawer.innerHTML = buttonsHTML;
+
+    setTimeout(syncFirebaseData, 500);
+}
     
 // --- 5. 彈幕顯示控制與變數 ---
 let isBarrageEnabled = localStorage.getItem("barrage-enabled") !== "false";
