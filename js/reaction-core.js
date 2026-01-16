@@ -212,9 +212,19 @@ window.createBarrageDom = function(text) {
 
     // 計算隨機高度
     const containerHeight = container.offsetHeight || 100; 
-    const emojiHeight = el.offsetHeight || 30;
-    const availableSpace = Math.max(0, containerHeight - emojiHeight);
-    el.style.top = Math.floor(Math.random() * availableSpace) + "px";
+    const emojiHeight = el.offsetHeight || 30; // 取得表情實際高度
+    
+    // 如果表情比容器還大 (或是容器超小)
+    if (emojiHeight > containerHeight) {
+        // 強制垂直置中：(容器高度 - 表情高度) / 2
+        // 結果會是負數，這會讓表情往上偏移，達成置中效果
+        const centerTop = (containerHeight - emojiHeight) / 2;
+        el.style.top = centerTop + "px";
+    } else {
+        // 正常情況：隨機分佈在可用空間內
+        const availableSpace = containerHeight - emojiHeight;
+        el.style.top = Math.floor(Math.random() * availableSpace) + "px";
+    }
     
     // 動畫結束後自毀
     el.onanimationend = () => el.remove();
