@@ -59,6 +59,26 @@ html, body {
     box-sizing: border-box;
 }
 
+/* 當 wrapper 被加上 pseudo-fullscreen class 時 */
+#video-wrapper.pseudo-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important; /* 強制視窗寬度 */
+    height: 100vh !important; /* 強制視窗高度 */
+    z-index: 9999 !important; /* 最上層 */
+    background: #000;
+    
+    /* 針對 iPhone 瀏海/動態島的處理 */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    
+    /* 垂直置中 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* ===== 2. iOS Safari 偽全螢幕 強制樣式 ===== */
 /* 讓 iframe 在偽全螢幕下填滿容器 */
 #video-wrapper.pseudo-fullscreen #player {
