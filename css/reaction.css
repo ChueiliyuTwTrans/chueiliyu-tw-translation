@@ -35,25 +35,29 @@ html, body {
 /* ===== 字幕 ===== */
 #subtitle {
     position: absolute;
-    /* 預設位置 */
     bottom: 8%; 
     left: 50%;
     transform: translateX(-50%) scale(var(--subtitle-scale, 1));
     transform-origin: center bottom;
     width: 90%;
+    
+    /* 1. 取消粗體 */
+    font-weight: 500; /* 500 比普通稍厚一點點，比粗體細，閱讀最舒服 */
+    
+    /* 2. 增加半透明背景底色，徹底解決「原文字幕干擾」問題 */
+    background-color: rgba(0, 0, 0, 0.5); /* 黑底 50% 透明 */
+    padding: 4px 12px;
+    border-radius: 8px; /* 圓角背景更美觀 */
+    display: inline-block; /* 讓背景寬度隨文字長度變化 */
+    
     font-size: 22px;
-    font-weight: bold;
     line-height: 1.4;
     color: #fff;
     text-align: center;
-    /* 增加陰影確保文字清晰 */
-    text-shadow: 
-        2px 2px 0px #000, 
-        -1px -1px 0px #000,  
-        1px -1px 0px #000,
-        -1px 1px 0px #000,
-        1px 1px 0px #000,
-        0px 2px 4px rgba(0,0,0,0.8);
+    
+    /* 3. 保留細微陰影增加立體感，但不使用原本那種沉重的多重陰影 */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    
     z-index: 100;
     pointer-events: none;
     box-sizing: border-box;
