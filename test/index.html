@@ -638,36 +638,47 @@ function handleExit() {
     }
   });
 
-  // --- 2. 核心邏輯：切換點擊 (Toggle) ---
+  // --- 2. 切換點擊 (Toggle) ---
   window.addReaction = function(type) {
-    const btn = event.currentTarget;
+    // 確保能正確捕捉到點擊的按鈕（相容舊版瀏覽器）
+    const btn = event.currentTarget || event.target.closest('.emoji-btn'); 
     const isReacted = localStorage.getItem('reacted-' + type) === 'true';
     const countRef = ref(db, 'reactions/' + type);
 
     // 執行 Firebase 交易更新
     runTransaction(countRef, (currentCount) => {
+      // 1. 初始化數值：如果雲端沒資料 (null)，視為 0
+      let val = (currentCount === null || typeof currentCount === 'undefined') ? 0 : currentCount;
+
       if (isReacted) {
-        // 取消點擊：數字 -1
-        return (currentCount || 1) - 1;
+        // 2. 取消點擊：數字 -1，但用 Math.max 確保不低於 0
+        return Math.max(0, val - 1);
       } else {
-        // 首次點擊：數字 +1
-        return (currentCount || 0) + 1;
+        // 3. 首次點擊：數字 +1
+        return val + 1;
       }
     }).then(() => {
         // 交易成功後更新本地狀態
         if (isReacted) {
             localStorage.removeItem('reacted-' + type);
             btn.classList.remove('active');
+            // 取消時不需要縮放動畫，回歸原始狀態
+            btn.style.transform = "scale(1)"; 
         } else {
             localStorage.setItem('reacted-' + type, 'true');
             btn.classList.add('active');
             
-            // 只有在「點讚」時才跳一下，取消時不跳
+            // 點讚動畫：跳大一點再縮回 1.05（配合 CSS active 狀態）
             btn.style.transform = "scale(1.3)";
-            setTimeout(() => btn.style.transform = "scale(1.05)", 100);
+            setTimeout(() => {
+                // 檢查是否還在 active 狀態，是的話維持 1.05，否則回到 1
+                const currentActive = localStorage.getItem('reacted-' + type) === 'true';
+                btn.style.transform = currentActive ? "scale(1.05)" : "scale(1)";
+            }, 100);
         }
     }).catch((err) => {
-        console.error("同步失敗:", err);
+        // 如果是因為 Firebase 規則拒絕寫入（例如數字變小被拒絕），這裡會噴錯
+        console.error("同步失敗（請檢查 Firebase 規則）:", err);
     });
   };
 </script>
