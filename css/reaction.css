@@ -413,8 +413,150 @@ body #emoji-trigger-btn.force-hide {
 #exit-fs-btn svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 2.5; fill: none; }
 #exit-fs-btn:hover { background: rgba(50, 50, 50, 0.9) !important; color: #fff !important; transform: scale(1.1); }
 
+/* =============================================
+   針對 iPhone 橫向模式 (Landscape) 的特別補強
+   ============================================= */
+@media screen and (orientation: landscape) {
+    #exit-fs-btn {
+        /* 橫向時，因為有瀏海或動態島，右邊要退更多 */
+        right: calc(45px + env(safe-area-inset-right)) !important;
+        
+        /* 橫向時上方通常空間比較小，稍微貼近一點點沒關係 */
+        top: 20px !important;
+    }
+}
 
-/* --- 2. 即時表情按鈕 (預設狀態：非全螢幕 - 左中) --- */
+/*表情*/
+.reaction-section {
+    margin: 30px auto;
+    padding: 20px;
+    background: #222;
+    border-radius: 15px;
+    max-width: 600px;
+}
+.reaction-wall {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#reaction-title {
+    font-size: 24px;            /* 增大字體 */
+    font-weight: 700;           /* 加粗 */
+    color: #ffffff;             /* 白色文字 */
+    margin-top: 5px;            /* 離上方近一點 (如果還不夠近，可以改成 0 或 -5px) */
+    margin-bottom: 20px;        /* 離下方的表情按鈕遠一點，保持視覺呼吸感 */
+    text-align: center;         /* 文字居中 */
+    
+    /* 高級感特效：細微的文字陰影讓字體更立體 */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    
+    /* 讓文字有一點點發光感，更吸引注意 */
+    letter-spacing: 1px;        /* 字距微調 */
+}
+
+/* 針對手機版的微調：避免字體太大導致換行太亂 */
+@media (max-width: 600px) {
+    #reaction-title {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+}
+
+/* --- 3. 表情按鈕 --- */
+.emoji-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+.emoji-btn:hover { background: #444; transform: translateY(-2px); }
+.emoji-btn span { font-size: 14px; margin-left: 5px; color: #aaa; }
+
+/* 當按鈕擁有 .active 類別時的樣式 */
+.emoji-btn.active {
+    border-color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(90, 152, 237, 0.4);
+    transform: scale(1.05) translateY(-2px);
+}
+
+.emoji-btn.active span {
+    color: #ffffff !important;
+}
+
+/* 彈幕容器：覆蓋在影片上方 */
+#barrage-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--barrage-height, 40%); /* 使用變數 --barrage-height，預設 40% */
+    pointer-events: none; /* 不影響點擊影片 */
+    overflow: visible !important;
+    z-index: 999;   
+    transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
+    /* 確保容器內容不會換行 */
+    white-space: nowrap;
+}
+
+/* 彈幕本體樣式 */
+.barrage-item {
+    position: absolute;
+    left: 100%;
+    white-space: nowrap;
+    font-size: var(--barrage-size, 24px); 
+    line-height: 1; /* 設為 1 讓高度計算更精準 */
+    padding: 0;
+    will-change: transform;
+    animation: moveLeft var(--barrage-speed, 5s) linear forwards;
+    /* 確保表情不會被滑鼠選到或干擾 */
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.3s ease;
+}
+
+.barrage-item.removing {
+    opacity: 0;
+}
+
+/* 當彈幕被關閉時隱藏容器 */
+#barrage-container.hide-barrage {
+    display: none;
+}
+
+/* 讓控制列的滑桿好看一點 */
+#barrage-size-slider {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+/* 加入淡入淡出效果 */
+.barrage-control {
+    opacity: 0;           /* 配合 JS 做淡入 */
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    display: none;        /* 預設隱藏 */
+}
+
+#barrage-toggle-btn, #fs-btn {
+    min-width: 110px;        /* 讓左右按鈕寬度相近，增加對稱感 */
+    height: 34px;            /* 統一高度 */
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes moveLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100vw - 100%)); }
+}
+
+/* --- 3. 即時表情按鈕 (預設狀態：非全螢幕 - 左中) --- */
 #emoji-trigger-btn {
     position: fixed !important;
     
@@ -450,7 +592,7 @@ body #emoji-trigger-btn.force-hide {
 #emoji-trigger-btn:active { transform: translateY(-50%) scale(0.9); }
 
 
-/* --- 3. 表情抽屜 (預設狀態：跟隨左中按鈕) --- */
+/* --- 4. 表情抽屜 (預設狀態：跟隨左中按鈕) --- */
 #emoji-drawer {
     position: fixed !important; 
     display: none;
