@@ -360,8 +360,8 @@ body.has-fullscreen {
     position: absolute;
     white-space: nowrap;
     font-size: var(--barrage-size, 24px); 
-    line-height: 1.2; /* 增加行高防止裁切 */
-    padding: 2px;
+    line-height: 1; /* 設為 1 讓高度計算更精準 */
+    padding: 0;
     will-change: transform;
     animation: moveLeft var(--barrage-speed, 5s) linear forwards;
     /* 確保表情不會被滑鼠選到或干擾 */
@@ -996,11 +996,24 @@ window.createBarrageDom = function(text) {
     el.className = 'barrage-item';
     el.innerText = text;
 
-    // 安全範圍算法，防止裁切
-    const safePadding = 10; 
-    el.style.top = (Math.random() * (100 - safePadding * 2) + safePadding) + "%"; 
-    
+    // 先將元素加入容器，才能取得它的實際高度
     container.appendChild(el);
+
+    // --- 動態位置計算 (核心) ---
+    const containerHeight = container.offsetHeight; // 容器現在有多高 (px)
+    const emojiHeight = el.offsetHeight;           // 表情現在有多大 (px)
+
+    // 如果表情比容器還大，強行讓它置中顯示，避免完全看不見
+    if (emojiHeight >= containerHeight) {
+        el.style.top = "0px";
+    } else {
+        // 計算可移動的剩餘空間 (容器高 - 表情高)
+        const availableSpace = containerHeight - emojiHeight;
+        // 在剩餘空間內隨機產生一個像素值，這樣表情永遠不會超出邊界
+        const randomTop = Math.floor(Math.random() * availableSpace);
+        el.style.top = randomTop + "px";
+    }
+    
     el.onanimationend = () => el.remove();
 };
 
