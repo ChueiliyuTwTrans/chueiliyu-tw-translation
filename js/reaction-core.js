@@ -1,11 +1,17 @@
 // --- 1. 固定 6 個表情資料 ---
 const EMOJI_DATA = [
-    { type: 'love', icon: '❤️', label: '喜歡' },
-    { type: 'funny', icon: '🤣', label: '笑死' },
-    { type: 'shock', icon: '😮', label: '驚訝' },
-    { type: 'fire', icon: '🔥', label: '太帥' },
-    { type: 'cry', icon: '😭', label: '感人' },
-    { type: 'thumb', icon: '👍', label: '強大' }
+    { icon: "🐰", label: "兔子" },
+    { icon: "😆", label: "笑死" },
+    { icon: "🥰", label: "喜歡" },
+    { icon: "😍", label: "愛死" },
+    { icon: "🤣", label: "爆笑" },
+    { icon: "😎", label: "酷" },
+    { icon: "😮", label: "驚訝" },
+    { icon: "👍", label: "讚" },
+    { icon: "👏", label: "拍手" },
+    { icon: "🙏", label: "祈禱" },
+    { icon: "🔥", label: "火" },
+    { icon: "❤️", label: "愛心" }
 ];
 
 // 彈幕映射表 (自動根據 EMOJI_DATA 生成)
@@ -45,8 +51,8 @@ function syncFirebaseData() {
         
         window.fb_onValue(countRef, (snapshot) => {
             const data = snapshot.val() || 0;
-            const countEl = document.getElementById('count-' + type);
-            if (countEl) countEl.innerText = data;
+            const countEls = document.querySelectorAll('#count-' + type);
+            countEls.forEach(el => el.innerText = data);
         });
 
         // 初始化本地 active 狀態
