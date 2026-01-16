@@ -367,11 +367,24 @@ function updateBarrageUI() {
     const container = document.getElementById('barrage-container');
     const btn = document.getElementById('barrage-toggle-btn');
     const controls = document.querySelectorAll('.barrage-control');
+    const triggerBtn = document.getElementById('emoji-trigger-btn'); // 取得表情按鈕
     
     // 套用變數
     if (container) {
-        if (isBarrageEnabled) container.classList.remove('hide-barrage');
-        else container.classList.add('hide-barrage');
+        if (isBarrageEnabled) {
+            container.classList.remove('hide-barrage');
+            // 移除強制隱藏 class
+            if (triggerBtn) triggerBtn.classList.remove('force-hide');
+        } else {
+            container.classList.add('hide-barrage');
+            // 加上強制隱藏 class
+            if (triggerBtn) {
+                triggerBtn.classList.add('force-hide');
+                // 順便關閉抽屜，避免按鈕消失但抽屜還開著
+                const drawer = document.getElementById('emoji-drawer');
+                if (drawer) drawer.classList.remove('show');
+            }
+        }
         
         container.style.setProperty('--barrage-size', barrageSize + 'px');
         container.style.setProperty('--barrage-height', barrageHeight + '%');
