@@ -176,12 +176,18 @@ function handleFullscreenState() {
 //-------------------------------------------------------------------------------
 // --- 自動生成 6 個表情按鈕 ---
 const EMOJI_DATA = [
-    { icon: "❤️", label: "喜歡" },
-    { icon: "🤣", label: "笑死" },
+    { icon: "🐰", label: "兔子" },
+    { icon: "😆", label: "笑死" },
+    { icon: "🥰", label: "喜歡" },
+    { icon: "😍", label: "愛死" },
+    { icon: "🤣", label: "爆笑" },
+    { icon: "😎", label: "酷" },
     { icon: "😮", label: "驚訝" },
-    { icon: "🔥", label: "太帥" },
-    { icon: "😭", label: "感人" },
-    { icon: "👍", label: "強大" }
+    { icon: "👍", label: "讚" },
+    { icon: "👏", label: "拍手" },
+    { icon: "🙏", label: "祈禱" },
+    { icon: "🔥", label: "火" },
+    { icon: "❤️", label: "愛心" }
 ];
 
 function initReactionButtons() {
