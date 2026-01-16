@@ -62,6 +62,8 @@ function onYouTubeIframeAPIReady() {
         },
         events: { onReady, onStateChange }
     });
+
+    window.player = player; // 將 player 明確掛載到 window，讓 reaction-core.js 讀得到
 }
 
 function onReady(e) {
