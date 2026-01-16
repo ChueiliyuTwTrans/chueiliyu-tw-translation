@@ -343,44 +343,65 @@ body.has-fullscreen {
 }
 
 /* 退出按鈕：低干擾模式 */
+/* =============================================
+   退出全螢幕按鈕 (修復 iPhone 裁切問題版)
+   ============================================= */
 #exit-fs-btn {
-    display: none;
-    position: absolute;
-    top: env(safe-area-inset-top, 20px); 
-    right: env(safe-area-inset-right, 20px);
-    /* 加大尺寸 */
+    display: none; /* 預設隱藏，靠 JS 控制顯示 */
+    
+    /* 1. 改用 fixed，鎖定在螢幕玻璃上 */
+    position: fixed !important; 
+    
+    /* 2. 關鍵位置修正：使用 calc 確保離邊緣有足夠距離 */
+    /* 上方：安全區域 + 15px 緩衝 */
+    top: calc(15px + env(safe-area-inset-top)) !important;
+    
+    /* 右方：安全區域 + 20px 緩衝 (避免被圓角切掉) */
+    right: calc(20px + env(safe-area-inset-right)) !important;
+    
+    /* 大小與樣式 */
     width: 50px;
     height: 50px;
-    /* 改為深色圓形底盤 */
     background: rgba(0, 0, 0, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 50%;
-    /* 提高顏色亮度 */
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    
+    /* 層級最高 */
     z-index: 2147483647 !important;
+    
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    filter: none !important;
-    /* 移除所有 transition，讓它始終穩定 */
     transition: none !important; 
 }
 
 #exit-fs-btn svg {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     stroke: currentColor;
     stroke-width: 2.5;
     fill: none;
 }
 
-/* 增加懸停效果方便電腦點擊 */
 #exit-fs-btn:hover {
     background: rgba(50, 50, 50, 0.9) !important;
     color: #fff !important;
     transform: scale(1.1);
+}
+
+/* =============================================
+   針對 iPhone 橫向模式 (Landscape) 的特別補強
+   ============================================= */
+@media screen and (orientation: landscape) {
+    #exit-fs-btn {
+        /* 橫向時，因為有瀏海或動態島，右邊要退更多 */
+        right: calc(45px + env(safe-area-inset-right)) !important;
+        
+        /* 橫向時上方通常空間比較小，稍微貼近一點點沒關係 */
+        top: 20px !important;
+    }
 }
 
 /*表情*/
