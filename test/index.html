@@ -189,12 +189,13 @@ body.has-fullscreen {
     width: 100%; /* 強制每一組 row 佔據一行 */
 }
 
-/* 控制列內的每一組小控制項 */
+/* --- 控制組膠囊背景 --- */
 .control-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap; /* 確保「大小」兩個字跟滑桿永遠在一起 */
+    background: rgba(255, 255, 255, 0.08); /* 半透明深灰底 */
+    padding: 6px 12px;
+    border-radius: 30px;        /* 圓角膠囊 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px); /* 毛玻璃效果（選配） */
 }
 
 /* 按鈕基礎樣式 */
@@ -213,10 +214,35 @@ body.has-fullscreen {
     background: #444;
 }
 
-/* 滑桿垂直對齊修正 */
+/* --- 高級感滑動軸 --- */
 #controls input[type="range"] {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 4px;                /* 更細、更簡約的軌道 */
+    background: #444;           /* 軌道背景色 */
+    border-radius: 10px;
+    outline: none;
     cursor: pointer;
-    vertical-align: middle;
+    transition: 0.3s;
+}
+
+/* 滑塊 (Thumb) - Chrome/Safari/Edge */
+#controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #27ae60;       /* 核心主題綠色 */
+    border: 2px solid #fff;    /* 白色外框 */
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(39, 174, 96, 0.6); /* 綠色發光效果 */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 滑塊點擊時的動畫 */
+#controls input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.4);      /* 點擊時有彈跳放大的感覺 */
+    background: #2ecc71;
 }
 
 /* ========= 手機版 (600px 以下) 專屬微調 ========= */
@@ -319,6 +345,30 @@ body.has-fullscreen {
     gap: 15px;
     flex-wrap: wrap;
 }
+
+#reaction-title {
+    font-size: 24px;            /* 增大字體 */
+    font-weight: 700;           /* 加粗 */
+    color: #ffffff;             /* 白色文字 */
+    margin-top: 5px;            /* 離上方近一點 (如果還不夠近，可以改成 0 或 -5px) */
+    margin-bottom: 20px;        /* 離下方的表情按鈕遠一點，保持視覺呼吸感 */
+    text-align: center;         /* 文字居中 */
+    
+    /* 高級感特效：細微的文字陰影讓字體更立體 */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    
+    /* 讓文字有一點點發光感，更吸引注意 */
+    letter-spacing: 1px;        /* 字距微調 */
+}
+
+/* 針對手機版的微調：避免字體太大導致換行太亂 */
+@media (max-width: 600px) {
+    #reaction-title {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+}
+    
 .emoji-btn {
     background: #333;
     border: 1px solid #444;
@@ -384,6 +434,11 @@ body.has-fullscreen {
 #barrage-size-slider {
     cursor: pointer;
     margin-right: 15px;
+}
+
+.barrage-control {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* 預設隱藏時的狀態 */
 }
 
 @keyframes moveLeft {
@@ -471,21 +526,21 @@ body.has-fullscreen {
 <body>
 
 <div id="controls">
-    <div class="control-row">
-        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
-        <div class="control-group">
+    <div class="control-row">        
+        <div class="control-group barrage-control">
             <span>大小</span>
             <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
         </div>
-        <div class="control-group">
+        <div class="control-group barrage-control">
             <span>範圍</span>
             <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
             <span id="height-val">40%</span>
         </div>
-        <div class="control-group">
+        <div class="control-group barrage-control">
             <span>速度</span>
             <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
         </div>
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
     </div>
 
     <div class="control-row">
@@ -524,7 +579,7 @@ body.has-fullscreen {
 </div>
 
 <div class="reaction-section">
-    <p>覺得這部翻譯影片如何？點個表情吧！</p>
+    <p id="reaction-title">覺得這部翻譯影片如何？點個表情吧！</p>
     <div class="reaction-wall">
         <button class="emoji-btn" onclick="addReaction('bunny')">🐰 <span id="count-bunny">0</span></button>
         <button class="emoji-btn" onclick="addReaction('haha')">😆 <span id="count-haha">0</span></button>
@@ -962,16 +1017,22 @@ window.toggleBarrageDisplay = function() {
 function updateBarrageDisplayUI() {
     const container = document.getElementById('barrage-container');
     const btn = document.getElementById('barrage-toggle-btn');
+    const barrageControls = document.querySelectorAll('.barrage-control'); // 抓取所有及時表情控制項
+    
     if (!container || !btn) return;
     
     if (isBarrageEnabled) {
         container.classList.remove('hide-barrage');
         btn.innerText = "彈幕：開";
         btn.style.background = "#27ae60";
+        // 顯示所有及時表情相關滑動軸
+        barrageControls.forEach(el => el.style.display = 'flex');
     } else {
         container.classList.add('hide-barrage');
         btn.innerText = "彈幕：關";
         btn.style.background = "#333";
+        // 隱藏所有及時表情相關滑動軸
+        barrageControls.forEach(el => el.style.display = 'none');
     }
 }
 
