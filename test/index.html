@@ -189,13 +189,23 @@ body.has-fullscreen {
     width: 100%; /* 強制每一組 row 佔據一行 */
 }
 
-/* --- 控制組膠囊背景 --- */
+/* --- 控制組背景 --- */
 .control-group {
-    background: rgba(255, 255, 255, 0.08); /* 半透明深灰底 */
-    padding: 6px 12px;
-    border-radius: 30px;        /* 圓角膠囊 */
+    display: inline-flex;  /* 確保寬度自適應內容 */
+    align-items: center;   /* 關鍵：垂直置中對齊 */
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08); 
+    padding: 6px 15px;
+    border-radius: 30px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px); /* 毛玻璃效果（選配） */
+    backdrop-filter: blur(5px);
+}
+
+.control-group span {
+    line-height: 1;        /* 移除行高造成的偏移 */
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* 按鈕基礎樣式 */
@@ -218,12 +228,13 @@ body.has-fullscreen {
 #controls input[type="range"] {
     -webkit-appearance: none;
     width: 100px;
-    height: 4px;                /* 更細、更簡約的軌道 */
-    background: #444;           /* 軌道背景色 */
+    height: 4px;
+    background: #444; 
     border-radius: 10px;
     outline: none;
     cursor: pointer;
-    transition: 0.3s;
+    /* 修正對齊：有些瀏覽器需要微調 margin-top */
+    margin-top: 0; 
 }
 
 /* 滑塊 (Thumb) - Chrome/Safari/Edge */
@@ -232,17 +243,17 @@ body.has-fullscreen {
     appearance: none;
     width: 14px;
     height: 14px;
-    background: #27ae60;       /* 核心主題綠色 */
-    border: 2px solid #fff;    /* 白色外框 */
+    background: #007bff;    /* 高級亮藍色 */
+    border: 2px solid #fff; 
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(39, 174, 96, 0.6); /* 綠色發光效果 */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* 藍色發光 */
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* 滑塊點擊時的動畫 */
 #controls input[type="range"]:active::-webkit-slider-thumb {
-    transform: scale(1.4);      /* 點擊時有彈跳放大的感覺 */
-    background: #2ecc71;
+    transform: scale(1.4);
+    background: #0056b3;    /* 按下時變深藍 */
 }
 
 /* ========= 手機版 (600px 以下) 專屬微調 ========= */
@@ -384,12 +395,14 @@ body.has-fullscreen {
 
 /* 當按鈕擁有 .active 類別時的樣式 */
 .emoji-btn.active {
-    background: #27ae60 !important; /* 變成綠色 */
-    border-color: #2ecc71 !important;
-    transform: scale(1.05);
+    background: #0052cc !important; /* 深邃藍 */
+    border-color: #007bff !important; /* 電信藍邊框 */
+    box-shadow: 0 4px 15px rgba(0, 82, 204, 0.4);
+    transform: scale(1.05) translateY(-2px);
 }
+
 .emoji-btn.active span {
-    color: #fff !important; /* 數字變白色 */
+    color: #ffffff !important;
 }
 
 /* 彈幕容器：覆蓋在影片上方 */
@@ -1023,14 +1036,20 @@ function updateBarrageDisplayUI() {
     
     if (isBarrageEnabled) {
         container.classList.remove('hide-barrage');
-        btn.innerText = "彈幕：開";
-        btn.style.background = "#27ae60";
+        btn.innerText = "及時表情：開";
+
         // 顯示所有及時表情相關滑動軸
+        btn.style.background = "#0052cc"; // 深藍底
+        btn.style.borderColor = "#007bff"; // 亮藍邊
+        btn.style.boxShadow = "0 0 10px rgba(0, 82, 204, 0.5)";
+        
         barrageControls.forEach(el => el.style.display = 'flex');
     } else {
         container.classList.add('hide-barrage');
-        btn.innerText = "彈幕：關";
+        btn.innerText = "及時表情：關";
         btn.style.background = "#333";
+        btn.style.borderColor = "#555";
+        btn.style.boxShadow = "none";
         // 隱藏所有及時表情相關滑動軸
         barrageControls.forEach(el => el.style.display = 'none');
     }
