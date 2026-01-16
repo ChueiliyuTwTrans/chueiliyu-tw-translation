@@ -119,6 +119,12 @@ body.is-in-fullscreen {
     background: #000 !important;
 }
 
+/* 偽全螢幕下的播放器必須強制填滿 */
+.pseudo-fullscreen #player {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 /* 確保 iPhone 橫向時能填滿安全區域 (瀏海區) */
 @supports (padding: env(safe-area-inset-top)) {
     .pseudo-fullscreen {
@@ -502,28 +508,32 @@ function toggleFullscreen() {
             if (exit) exit.call(document);
         }
         wrapper.classList.remove("pseudo-fullscreen");
+        // 必須移除這兩個 Class，否則退出後按鈕依然會被 display:none 隱藏
+        document.body.classList.remove("is-in-fullscreen"); 
         document.body.classList.remove("has-fullscreen"); // 移除鎖定
+        
         fsBtn.innerText = "進入全螢幕";
         showExitBtn();
     } else {
-        // 進入全螢幕邏輯
+        // 【進入全螢幕邏輯】
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
         
-        if (req && !/iPhone|iPod/.test(navigator.userAgent)) {
-            // 非 iPhone 的裝置嘗試使用系統全螢幕
+        // 判斷是否為 iPhone (iPhone Safari 不支援 Element 等級的全螢幕)
+        const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+
+        if (req && !isIPhone) {
             req.call(wrapper).catch(() => {
                 wrapper.classList.add("pseudo-fullscreen");
             });
         } else {
-            // iPhone 強制使用偽全螢幕 (因為 iPhone Safari 不支援 Element.requestFullscreen)
             wrapper.classList.add("pseudo-fullscreen");
         }
         
-        document.body.classList.add("is-in-fullscreen"); // 隱藏原本的控制欄與標題
+        // [標註] 加上這個 Class，CSS 會自動隱藏標題、按鈕和表情牆
+        document.body.classList.add("is-in-fullscreen"); 
         fsBtn.innerText = "退出全螢幕";
-        window.scrollTo(0, 0); // 確保畫面不偏移
+        window.scrollTo(0, 0); 
 
-        // 延遲確保按鈕顯示
         setTimeout(showExitBtn, 300);
         
         let retryCount = 0;
