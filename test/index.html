@@ -492,12 +492,12 @@ body.has-fullscreen {
     <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
 
     <div id="emoji-drawer">
-        <button class="emoji-btn" onclick="sendBarrage('fire')">🔥</button>
-        <button class="emoji-btn" onclick="sendBarrage('love')">😍</button>
-        <button class="emoji-btn" onclick="sendBarrage('clap')">👏</button>
-        <button class="emoji-btn" onclick="sendBarrage('funny')">😂</button>
-        <button class="emoji-btn" onclick="sendBarrage('warm')">🥰</button>
-        <button class="emoji-btn" onclick="sendBarrage('thanks')">🙏</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('fire')">🔥</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('love')">😍</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('clap')">👏</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('funny')">😂</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('warm')">🥰</button>
+        <button class="emoji-btn" onclick="event.stopPropagation(); sendBarrage('thanks')">🙏</button>
     </div>
     <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
         <svg viewBox="0 0 24 24">
@@ -781,18 +781,27 @@ exitFsBtn.onclick = (e) => {
     toggleFullscreen();
 };
 
-// 監聽系統全螢幕變化（修正按下 Esc 鍵後的問題）
-document.addEventListener('fullscreenchange', handleExit);
-document.addEventListener('webkitfullscreenchange', handleExit);
+// 監聽系統全螢幕變化（修正按下 Esc 鍵後的問題 + 強制關閉即時表情抽屜）
+document.addEventListener('fullscreenchange', handleFullscreenState);
+document.addEventListener('webkitfullscreenchange', handleFullscreenState);
 
-function handleExit() {
-    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
-    if (!isFS && !wrapper.classList.contains("pseudo-fullscreen")) {
-        // 如果系統已經退出全螢幕，且也不是偽全螢幕狀態
-        document.body.classList.remove("is-in-fullscreen");
-        document.body.classList.remove("has-fullscreen");
-        fsBtn.innerText = "進入全螢幕";
-        showExitBtn();
+function handleFullscreenState() {
+    const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+    
+    // 如果「退出」了全螢幕
+    if (!isFullscreen) {
+        // 1. 處理 UI 狀態回歸（原本 handleExit 的內容）
+        if (typeof wrapper !== 'undefined' && !wrapper.classList.contains("pseudo-fullscreen")) {
+            document.body.classList.remove("is-in-fullscreen", "has-fullscreen");
+            if (typeof fsBtn !== 'undefined') fsBtn.innerText = "進入全螢幕";
+            // 如果你有 showExitBtn() 也可以在這裡呼叫
+        }
+
+        // 2. 強制關閉即時表情抽屜（原本 handleFullscreenChange 的內容）
+        const drawer = document.getElementById('emoji-drawer');
+        if (drawer) {
+            drawer.style.display = 'none';
+        }
     }
 }
 </script>
@@ -982,9 +991,13 @@ window.sendBarrage = function(type) {
     if (!player || typeof player.getCurrentTime !== 'function') return;
     const currentTime = Math.floor(player.getCurrentTime());
     
-    // 只負責傳送雲端，顯示交給 D 段的監聽器
+    // 1. 傳送至雲端
     const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
     runTransaction(barrageRef, (count) => (count || 0) + 1);
+
+    // 2. 修復重點：發送後自動把抽屜關掉，這樣使用者視覺上會立刻得到回饋
+    const drawer = document.getElementById('emoji-drawer');
+    if (drawer) drawer.style.display = 'none';
 };
 
 window.createBarrageDom = function(text) {
