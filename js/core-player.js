@@ -173,48 +173,6 @@ function handleFullscreenState() {
     }
 }
 
-//-------------------------------------------------------------------------------
-// --- 自動生成 6 個表情按鈕 ---
-const EMOJI_DATA = [
-    { icon: "🐰", label: "兔子" },
-    { icon: "😆", label: "笑死" },
-    { icon: "🥰", label: "喜歡" },
-    { icon: "😍", label: "愛死" },
-    { icon: "🤣", label: "爆笑" },
-    { icon: "😎", label: "酷" },
-    { icon: "😮", label: "驚訝" },
-    { icon: "👍", label: "讚" },
-    { icon: "👏", label: "拍手" },
-    { icon: "🙏", label: "祈禱" },
-    { icon: "🔥", label: "火" },
-    { icon: "❤️", label: "愛心" }
-];
-
-function initReactionButtons() {
-    const wall = document.querySelector('.reaction-wall');
-    const drawer = document.getElementById('emoji-drawer');
-    
-    if (!wall) return; // 如果頁面沒這個盒子就不執行
-
-    // 生成按鈕的 HTML
-    const buttonsHTML = EMOJI_DATA.map(item => `
-        <button class="emoji-btn" onclick="sendEmoji('${item.icon}')">
-            ${item.icon} <span class="count">0</span>
-        </button>
-    `).join('');
-
-    // 塞進一般模式的牆
-    wall.innerHTML = buttonsHTML;
-
-    // 如果全螢幕抽屜存在，也塞進去
-    if (drawer) {
-        drawer.innerHTML = buttonsHTML;
-    }
-}
-
-// 確保網頁載入完後執行一次
-window.addEventListener('DOMContentLoaded', initReactionButtons);
-
 //----------------------------------------------------------------
 // 自動執行：載入字幕
 if (typeof MY_SRT_FILE !== 'undefined' && MY_SRT_FILE) {
