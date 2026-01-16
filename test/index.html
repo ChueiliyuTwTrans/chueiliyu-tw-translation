@@ -179,6 +179,16 @@ body.has-fullscreen {
     max-width: 98%;      /* 讓手機版有更多伸展空間 */
 }
 
+/* 讓每一行功能分開 */
+.control-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%; /* 強制每一組 row 佔據一行 */
+}
+
 /* 控制列內的每一組小控制項 */
 .control-group {
     display: flex;
@@ -353,7 +363,7 @@ body.has-fullscreen {
     line-height: 1.2; /* 增加行高防止裁切 */
     padding: 2px;
     will-change: transform;
-    animation: moveLeft 5s linear forwards;
+    animation: moveLeft var(--barrage-speed, 5s) linear forwards;
     /* 確保表情不會被滑鼠選到或干擾 */
     user-select: none;
     -webkit-user-select: none;
@@ -445,19 +455,31 @@ body.has-fullscreen {
 <body>
 
 <div id="controls">
-    <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">彈幕：開</button>
-    
-    <span>大小</span>
-    <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)" style="width: 60px; vertical-align: middle;">
-    
-    <span>範圍</span>
-    <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)" style="width: 60px; vertical-align: middle;">
-    <span id="height-val">40%</span>
-    
-    <button onclick="changeSubtitleSize(-0.1)">A−</button>
-    <span>字幕大小</span>
-    <button onclick="changeSubtitleSize(0.1)">A＋</button>
-    <button id="fs-btn">進入全螢幕</button>
+    <div class="control-row">
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
+        <div class="control-group">
+            <span>大小</span>
+            <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
+        </div>
+        <div class="control-group">
+            <span>範圍</span>
+            <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
+            <span id="height-val">40%</span>
+        </div>
+        <div class="control-group">
+            <span>速度</span>
+            <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
+        </div>
+    </div>
+
+    <div class="control-row">
+        <div class="control-group">
+            <button onclick="changeSubtitleSize(-0.1)">A−</button>
+            <span>字幕大小</span>
+            <button onclick="changeSubtitleSize(0.1)">A＋</button>
+        </div>
+        <button id="fs-btn">進入全螢幕</button>
+    </div>
 </div>
     
 <h2>Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)</h2>
@@ -868,6 +890,7 @@ function handleExit() {
 let isBarrageEnabled = localStorage.getItem("barrage-enabled") !== "false"; // --- 彈幕是否顯示變數 ---
 let barrageSize = localStorage.getItem("barrage-size") || 24; // --- 彈幕顯示大小變數 ---
 let barrageHeight = localStorage.getItem("barrage-height") || 40; // --- 彈幕偏好設定變數 ---
+let barrageSpeed = localStorage.getItem("barrage-speed") || 5; // --- 彈幕速度控制變數 ---
 let lastCheckedSecond = -1;
 let lastClickTime = 0;
 
@@ -882,6 +905,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('barrage-size-slider').value = barrageSize;
     if(document.getElementById('barrage-height-slider')) 
         document.getElementById('barrage-height-slider').value = barrageHeight;
+
+    // 初始化速度
+    updateBarrageSpeed(barrageSpeed);
+    if(document.getElementById('barrage-speed-slider'))
+        document.getElementById('barrage-speed-slider').value = barrageSpeed;
 });
 
 // --- A. UI 切換功能 ---
@@ -929,6 +957,20 @@ window.updateBarrageHeight = function(val) {
     const heightDisplay = document.getElementById('height-val');
     if (container) container.style.setProperty('--barrage-height', val + '%');
     if (heightDisplay) heightDisplay.innerText = val + '%';
+};
+
+window.updateBarrageSpeed = function(val) {
+    barrageSpeed = val;
+    localStorage.setItem("barrage-speed", val);
+    
+    // 計算方式：滑桿 3~10，對應到秒數則是 12s(慢) 到 2s(快)
+    // 我們用一個簡單的反轉公式：
+    const duration = (13 - val) + "s";
+    
+    const container = document.getElementById('barrage-container');
+    if (container) {
+        container.style.setProperty('--barrage-speed', duration);
+    }
 };
 
 // --- C. 核心彈幕邏輯 ---
