@@ -526,22 +526,33 @@ body.has-fullscreen {
 
 /* 全螢幕表情觸發鈕 */
 #emoji-trigger-btn {
-    position: absolute;
-    bottom: 60px; 
-    right: 10px;
-    /* 手機 45px，電腦 60px */
-    width: clamp(45px, 6vw, 65px);
-    height: clamp(45px, 6vw, 65px);
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid rgba(255, 255, 255, 0.4);
+    /* 1. 核心修正：改用 fixed，鎖定在視窗最上層，不受容器影響 */
+    position: fixed !important; 
+    
+    /* 2. 基礎位置 (直向/視窗模式) */
+    /* 抬高到 80px，避開大部分手機的底部操作條 */
+    bottom: 80px;  
+    /* 離右邊遠一點，避免被手機保護殼或極窄邊框切到 */
+    right: 20px;   
+    
+    /* 大小設定 */
+    width: clamp(45px, 12vw, 60px); 
+    height: clamp(45px, 12vw, 60px);
+    font-size: clamp(20px, 5vw, 28px);
+    
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     color: white;
-    font-size: clamp(20px, 3vw, 30px);
     cursor: pointer;
-    z-index: 2147483647 !important;
-    display: flex !important;
+    
+    /* 強制顯示 */
+    display: flex !important; 
     align-items: center;
     justify-content: center;
+    
+    /* 層級最高 */
+    z-index: 2147483647 !important; 
     transition: all 0.2s ease;
     outline: none;
 }
@@ -550,7 +561,6 @@ body.has-fullscreen {
     background: rgba(50, 50, 50, 0.9);
     transform: scale(1.1);
 }
-
 #emoji-trigger-btn:active {
     transform: scale(0.9);
 }
@@ -566,14 +576,17 @@ body.has-fullscreen {
 
 /* 表情選擇抽屜 */
 #emoji-drawer {
-    position: absolute;
-    /* 讓抽屜底部對齊按鈕的上方 (60px + 按鈕高度 + 間距) */
-    bottom: 120px; 
-    right: 10px;
+    /* 改用 fixed 確保跟按鈕同一基準 */
+    position: fixed !important; 
+    display: none;
+    
+    /* 基礎位置 */
+    bottom: 150px; 
+    right: 20px;
+    
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
     border-radius: 20px;
-    display: none; /* 預設隱藏，靠 JS 的 .show 顯示 */
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     z-index: 2147483647 !important;
@@ -584,8 +597,11 @@ body.has-fullscreen {
 :fullscreen #emoji-drawer,
 :-webkit-full-screen #emoji-drawer,
 .pseudo-fullscreen #emoji-drawer {
-    bottom: calc(170px + env(safe-area-inset-bottom)) !important;
-    right: calc(20px + env(safe-area-inset-right)) !important;
+    /* 跟隨按鈕往上移 (按鈕bottom 100 + 按鈕高 60 + 間距 20) */
+    bottom: calc(180px + env(safe-area-inset-bottom)) !important;
+    
+    /* 跟隨按鈕右邊距 */
+    right: calc(45px + env(safe-area-inset-right)) !important;
 }
 
 #emoji-drawer .emoji-btn {
@@ -662,6 +678,29 @@ body.has-fullscreen {
 :fullscreen #emoji-trigger-btn,
 :-webkit-full-screen #emoji-trigger-btn,
 .pseudo-fullscreen #emoji-trigger-btn {
-    bottom: calc(30px + env(safe-area-inset-bottom)) !important;
-    right: calc(30px + env(safe-area-inset-right)) !important;
+    display: flex !important;
+    
+    /* 3. 高度修正：全螢幕時抬高，避開影片進度條 */
+    bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+    
+    /* 4. 防裁切關鍵：使用 calc 加大邊距 */
+    /* 這裡設為 45px，保證避開 iPhone 橫向時的巨大圓角 */
+    right: calc(45px + env(safe-area-inset-right)) !important;
+}
+
+/* =============================================
+   針對 iPhone 橫向模式的特別加強 (Landscape)
+   如果覺得 45px 還不夠，這裡再加碼
+   ============================================= */
+@media screen and (orientation: landscape) {
+    :fullscreen #emoji-trigger-btn,
+    .pseudo-fullscreen #emoji-trigger-btn {
+        /* 橫向時，右邊距加到 60px，絕對安全 */
+        right: calc(60px + env(safe-area-inset-right)) !important;
+    }
+    
+    :fullscreen #emoji-drawer,
+    .pseudo-fullscreen #emoji-drawer {
+        right: calc(60px + env(safe-area-inset-right)) !important;
+    }
 }
