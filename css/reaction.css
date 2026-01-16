@@ -32,7 +32,7 @@ html, body {
     display: block;
 }
 
-/* ===== 字幕 ===== */
+/* ===== 字幕 (精緻多重陰影版) ===== */
 #subtitle {
     position: absolute;
     bottom: 8%; 
@@ -41,26 +41,32 @@ html, body {
     transform-origin: center bottom;
     width: 90%;
     
-    /* 1. 取消粗體 */
-    font-weight: 500; /* 500 比普通稍厚一點點，比粗體細，閱讀最舒服 */
-    
-    /* 2. 增加半透明背景底色，徹底解決「原文字幕干擾」問題 */
-    background-color: rgba(0, 0, 0, 0.5); /* 黑底 50% 透明 */
-    padding: 4px 12px;
-    border-radius: 8px; /* 圓角背景更美觀 */
-    display: inline-block; /* 讓背景寬度隨文字長度變化 */
-    
+    /* 1. 調整字重與大小 */
+    font-weight: 500;           /* 改為中等厚度，不使用 Bold */
     font-size: 22px;
-    line-height: 1.4;
+    line-height: 1.6;           /* 增加行高，兩行字幕時不會太擠 */
     color: #fff;
     text-align: center;
     
-    /* 3. 保留細微陰影增加立體感，但不使用原本那種沉重的多重陰影 */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    /* 2. 關鍵：多重柔和陰影 (解決干擾且美觀) */
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 1),
+        -2px 2px 4px rgba(0, 0, 0, 1),
+        2px -2px 4px rgba(0, 0, 0, 1),
+        -2px -2px 4px rgba(0, 0, 0, 1);
     
     z-index: 100;
     pointer-events: none;
     box-sizing: border-box;
+    word-break: break-word;     /* 避免長單字超出範圍 */
+}
+
+/* 針對全螢幕時的優化：讓文字稍微大一點更清楚 */
+:fullscreen #subtitle,
+:-webkit-full-screen #subtitle,
+.pseudo-fullscreen #subtitle {
+    font-size: min(5.5vw, 32px) !important;
+    bottom: calc(8% + env(safe-area-inset-bottom)) !important;
 }
 
 /* 當 wrapper 被加上 pseudo-fullscreen class 時 */
