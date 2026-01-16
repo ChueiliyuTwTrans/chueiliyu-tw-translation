@@ -200,33 +200,43 @@ window.createBarrageDom = function(text) {
     const container = document.getElementById('barrage-container');
     if (!container) return;
 
-    // 清理舊的
+    // A. 清理舊表情
     const currentItems = container.getElementsByClassName('barrage-item');
     if (currentItems.length >= MAX_BARRAGE_COUNT) currentItems[0].remove();
 
-    // 建立新的
+    // B. 建立新元素
     const el = document.createElement('div');
     el.className = 'barrage-item';
     el.innerText = text;
     container.appendChild(el);
 
-    // 計算隨機高度
+    // C. 智慧位置計算
     const containerHeight = container.offsetHeight || 100; 
     const emojiHeight = el.offsetHeight || 30; // 取得表情實際高度
     
-    // 如果表情比容器還大 (或是容器超小)
+    let targetTop = 0;
+
+    // 邏輯：計算垂直置中或隨機位置
     if (emojiHeight > containerHeight) {
-        // 強制垂直置中：(容器高度 - 表情高度) / 2
-        // 結果會是負數，這會讓表情往上偏移，達成置中效果
-        const centerTop = (containerHeight - emojiHeight) / 2;
-        el.style.top = centerTop + "px";
+        // 如果表情比容器大，嘗試垂直置中 (這會產生負值)
+        targetTop = (containerHeight - emojiHeight) / 2;
     } else {
-        // 正常情況：隨機分佈在可用空間內
+        // 如果表情比容器小，在範圍內隨機
         const availableSpace = containerHeight - emojiHeight;
-        el.style.top = Math.floor(Math.random() * availableSpace) + "px";
+        targetTop = Math.floor(Math.random() * availableSpace);
     }
+
+    // 防止全螢幕時飄出頂部邊界
+    // 如果計算出的 top 是負的 (例如 -20px)，且容器貼齊螢幕頂部 (全螢幕模式)
+    // 我們要強制把它校正回 0，頂多貼著邊緣，不要消失
+    // (在非全螢幕模式下，因為容器上方還有標題，所以負值其實是允許的，可以蓋住標題，這裡我們做個折衷：不允許小於 -10px)
+    if (targetTop < -10) {
+        targetTop = -5; // 稍微突出一點點沒關係，但不要太多
+    }
+
+    el.style.top = targetTop + "px";
     
-    // 動畫結束後自毀
+    // D. 動畫結束後自毀
     el.onanimationend = () => el.remove();
 };
 
