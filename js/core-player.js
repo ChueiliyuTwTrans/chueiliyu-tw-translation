@@ -125,10 +125,12 @@ function showExitBtn() {
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
     if (isFS || isPseudo) {
         exitFsBtn.style.setProperty('display', 'flex', 'important');
-        exitFsBtn.style.opacity = "1";
+        requestAnimationFrame(() => {
+            exitFsBtn.style.opacity = "1";
+        });
     } else {
         exitFsBtn.style.opacity = "0";
-        setTimeout(() => { if (exitFsBtn.style.opacity === "0") exitFsBtn.style.display = "none"; }, 300);
+        exitFsBtn.style.display = "none";
     }
 }
 
@@ -153,7 +155,10 @@ function toggleFullscreen() {
         document.body.style.position = "";
         
         if (fsBtn) fsBtn.innerText = "進入全螢幕";
-        showExitBtn();
+        if (exitFsBtn) {
+            exitFsBtn.style.opacity = "0";
+            exitFsBtn.style.display = "none";
+        }
         
         // 針對 iOS 轉向處理
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
@@ -165,14 +170,14 @@ function toggleFullscreen() {
         const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
 
-        // 如果是電腦或安卓，使用原生 API
         if (req && !isIPhone) {
-            req.call(wrapper).catch(() => {
-                // 如果原生失敗，退回偽全螢幕
+            req.call(wrapper).then(() => {
+                // 原生全螢幕成功後，手動呼叫顯示按鈕
+                setTimeout(showExitBtn, 100);
+            }).catch(() => {
                 enterPseudoFullscreen();
             });
         } else {
-            // iPhone 強制使用偽全螢幕
             enterPseudoFullscreen();
         }
     }
@@ -191,8 +196,9 @@ function enterPseudoFullscreen() {
     // 鎖死 Body 防止背景滑動，這對 iOS Safari 隱藏 UI 很重要
     document.body.style.overflow = "hidden"; 
     
-    // 延遲一下顯示退出按鈕
-    setTimeout(showExitBtn, 300);
+    // 進入時「立刻」呼叫顯示，並多呼叫幾次確保出現
+    showExitBtn();
+    setTimeout(showExitBtn, 300); // 300ms 後再確認一次，防止轉向延遲
 }
 
 // 綁定事件
