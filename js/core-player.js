@@ -1,4 +1,17 @@
 <script>
+// core-player.js 最上方
+let player;
+let subtitles = [];
+let subtitleTimer = null;
+let saveTimer = null;
+let subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
+
+// 抓取 DOM (確保這些 ID 在所有 HTML 都一樣)
+const subtitleEl = document.getElementById("subtitle");
+const wrapper = document.getElementById("video-wrapper");
+const fsBtn = document.getElementById("fs-btn");
+const exitFsBtn = document.getElementById("exit-fs-btn");
+
 function parseSRT(data) {
     data = data.replace(/\r/g, "").trim();
     const blocks = data.split(/\n{2,}/);
