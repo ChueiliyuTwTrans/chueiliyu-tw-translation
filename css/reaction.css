@@ -366,16 +366,17 @@ body.has-fullscreen {
 /* =============================================
    退出全螢幕按鈕 (修復 iPhone 裁切問題版)
    ============================================= */
+/* --- 0. 新增：強制隱藏類別 (給 JS 控制開關用) --- */
+.force-hide {
+    display: none !important;
+}
+
+/* --- 1. 退出全螢幕按鈕 (維持右上角，稍微加強定位權重) --- */
 #exit-fs-btn {
     display: none; 
     position: fixed !important;
-    
-    /* 垂直位置：上方 */
     top: calc(20px + env(safe-area-inset-top)) !important;
-    
-    /* ★★★ 基準水平位置 (直向預設) ★★★ */
     right: 20px !important; 
-    
     width: 50px;
     height: 50px;
     background: rgba(0, 0, 0, 0.6) !important;
@@ -390,19 +391,8 @@ body.has-fullscreen {
     transition: none !important; 
 }
 
-#exit-fs-btn svg {
-    width: 28px;
-    height: 28px;
-    stroke: currentColor;
-    stroke-width: 2.5;
-    fill: none;
-}
-
-#exit-fs-btn:hover {
-    background: rgba(50, 50, 50, 0.9) !important;
-    color: #fff !important;
-    transform: scale(1.1);
-}
+#exit-fs-btn svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 2.5; fill: none; }
+#exit-fs-btn:hover { background: rgba(50, 50, 50, 0.9) !important; color: #fff !important; transform: scale(1.1); }
 
 /* =============================================
    針對 iPhone 橫向模式 (Landscape) 的特別補強
@@ -570,13 +560,8 @@ body.has-fullscreen {
     outline: none;
 }
 
-#emoji-trigger-btn:hover {
-    background: rgba(50, 50, 50, 0.9);
-    transform: scale(1.1);
-}
-#emoji-trigger-btn:active {
-    transform: scale(0.9);
-}
+#emoji-trigger-btn:hover { background: rgba(50, 50, 50, 0.9); transform: scale(1.1); }
+#emoji-trigger-btn:active { transform: scale(0.9); }
 
 #barrage-toggle-btn, #fs-btn {
     min-width: 110px;        /* 讓左右按鈕寬度相近，增加對稱感 */
@@ -658,15 +643,9 @@ body.has-fullscreen {
 }
 
 /* 抽屜彈出的小動畫 */
-@keyframes drawerPopUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+@keyframes drawerPopUp { 
+    from { opacity: 0; transform: translateY(-20px) scale(0.9); } 
+    to { opacity: 1; transform: translateY(0) scale(1); } 
 }
 
 /* 全螢幕下顯示按鈕 */
@@ -695,14 +674,15 @@ body.has-fullscreen {
 :fullscreen #emoji-trigger-btn,
 :-webkit-full-screen #emoji-trigger-btn,
 .pseudo-fullscreen #emoji-trigger-btn {
-    display: flex !important;
-    
-    /* 3. 高度修正：全螢幕時抬高，避開影片進度條 */
-    bottom: calc(100px + env(safe-area-inset-bottom)) !important;
-    
-    /* 4. 防裁切關鍵：使用 calc 加大邊距 */
-    /* 這裡設為 45px，保證避開 iPhone 橫向時的巨大圓角 */
-    right: calc(45px + env(safe-area-inset-right)) !important;
+    /* 全螢幕時，頂部通常有空間，可以稍微靠上一點 */
+    top: calc(50px + env(safe-area-inset-top)) !important;
+}
+
+:fullscreen #emoji-drawer,
+:-webkit-full-screen #emoji-drawer,
+.pseudo-fullscreen #emoji-drawer {
+    /* 抽屜跟隨按鈕上移 (50 + 60 + 10) */
+    top: calc(120px + env(safe-area-inset-top)) !important;
 }
 
 /* =============================================
@@ -711,26 +691,26 @@ body.has-fullscreen {
    ============================================= */
 @media screen and (orientation: landscape) {
     
-    /* 1. 退出按鈕 (右上) */
+    /* 1. 退出按鈕 (右上) - 保持不變 */
     #exit-fs-btn {
-        /* 統一設定為 50px + 安全距離 */
         right: calc(50px + env(safe-area-inset-right)) !important;
         top: 20px !important;
     }
 
-    /* 2. 表情按鈕 (右下) - 無論是全螢幕還是網頁模式 */
+    /* 2. 表情按鈕 (左上) - 往右推避開瀏海 */
     #emoji-trigger-btn,
     :fullscreen #emoji-trigger-btn,
+    :-webkit-full-screen #emoji-trigger-btn,
     .pseudo-fullscreen #emoji-trigger-btn {
-        /* 統一設定為 50px + 安全距離 (必須跟上面一樣) */
-        right: calc(50px + env(safe-area-inset-right)) !important;
+        /* 左側加寬避開圓角/瀏海 */
+        left: calc(50px + env(safe-area-inset-left)) !important;
     }
 
-    /* 3. 表情抽屜 */
+    /* 3. 表情抽屜 (左上) */
     #emoji-drawer,
     :fullscreen #emoji-drawer,
+    :-webkit-full-screen #emoji-drawer,
     .pseudo-fullscreen #emoji-drawer {
-        /* 統一設定為 50px + 安全距離 */
-        right: calc(50px + env(safe-area-inset-right)) !important;
+        left: calc(50px + env(safe-area-inset-left)) !important;
     }
 }
