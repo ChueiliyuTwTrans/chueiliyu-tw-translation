@@ -132,29 +132,65 @@ function showExitBtn() {
 
 function toggleFullscreen() {
     const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+    // 檢查是否有偽全螢幕 class
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
+
     if (isFS || isPseudo) {
+        // === 退出全螢幕 ===
         if (isFS) {
             const exit = document.exitFullscreen || document.webkitExitFullscreen;
             if (exit) exit.call(document);
         }
+        
+        // 移除偽全螢幕樣式
         wrapper.classList.remove("pseudo-fullscreen");
         document.body.classList.remove("is-in-fullscreen", "has-fullscreen");
-        fsBtn.innerText = "進入全螢幕";
+        
+        // 恢復背景捲動
+        document.body.style.overflow = "";
+        document.body.style.position = "";
+        
+        if (fsBtn) fsBtn.innerText = "進入全螢幕";
         showExitBtn();
+        
+        // 針對 iOS 轉向處理
+        if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
+             setTimeout(() => window.scrollTo(0, 0), 100);
+        }
+
     } else {
+        // === 進入全螢幕 ===
         const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
         const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
+
+        // 如果是電腦或安卓，使用原生 API
         if (req && !isIPhone) {
-            req.call(wrapper).catch(() => wrapper.classList.add("pseudo-fullscreen"));
+            req.call(wrapper).catch(() => {
+                // 如果原生失敗，退回偽全螢幕
+                enterPseudoFullscreen();
+            });
         } else {
-            wrapper.classList.add("pseudo-fullscreen");
+            // iPhone 強制使用偽全螢幕
+            enterPseudoFullscreen();
         }
-        document.body.classList.add("is-in-fullscreen");
-        fsBtn.innerText = "退出全螢幕";
-        window.scrollTo(0, 0);
-        setTimeout(showExitBtn, 300);
     }
+}
+
+// 抽離出來的偽全螢幕邏輯
+function enterPseudoFullscreen() {
+    wrapper.classList.add("pseudo-fullscreen");
+    document.body.classList.add("is-in-fullscreen");
+    
+    if (fsBtn) fsBtn.innerText = "退出全螢幕";
+    
+    // 嘗試隱藏網址列 (Hack)：先捲動到最上方
+    window.scrollTo(0, 0);
+    
+    // 鎖死 Body 防止背景滑動，這對 iOS Safari 隱藏 UI 很重要
+    document.body.style.overflow = "hidden"; 
+    
+    // 延遲一下顯示退出按鈕
+    setTimeout(showExitBtn, 300);
 }
 
 // 綁定事件
