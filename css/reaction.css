@@ -1,1 +1,553 @@
+body {
+    margin: 0;
+    background: #111;
+    color: #fff;
+    font-family: Arial, "Noto Sans TC", sans-serif;
+    text-align: center;
+}
 
+html, body {
+    background: #000 !important; /* 強制全黑 */
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+/* 影片容器 */
+#video-wrapper {
+    position: relative;
+    max-width: 960px;
+    margin: 20px auto;
+    background: black;
+    transition: all 0.3s ease;
+}
+
+/* YouTube 播放器 */
+#player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+}
+
+/* ===== 字幕 ===== */
+#subtitle {
+    position: absolute;
+    /* 預設位置 */
+    bottom: 8%; 
+    left: 50%;
+    transform: translateX(-50%) scale(var(--subtitle-scale, 1));
+    transform-origin: center bottom;
+    width: 90%;
+    font-size: 22px;
+    line-height: 1.4;
+    color: #fff;
+    text-align: center;
+    /* 增加陰影確保文字清晰 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0,0,0,0.5);
+    z-index: 100;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+/* 修正字幕位置 */
+.pseudo-fullscreen #subtitle,
+:fullscreen #subtitle,
+:-webkit-full-screen #subtitle {
+    /* 這裡改用 min() 確保字體在電腦上不會無限變大 */
+    font-size: min(5.5vw, 36px) !important; 
+    /* 降低位置，減少底部空蕩感 */
+    bottom: calc(8% + env(safe-area-inset-bottom)) !important; 
+}
+
+/* 桌機非全螢幕 */
+@media (min-width: 1024px) {
+    #subtitle {
+        font-size: 28px;
+        line-height: 1.7;
+    }
+}
+
+/* 橫向模式下的特別補強 */
+@media screen and (orientation: landscape) {
+    #exit-fs-btn {
+        top: 10px;
+        right: 30px; /* 橫向時離邊緣遠一點，閃開圓角螢幕 */
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    :fullscreen #subtitle,
+    :-webkit-full-screen #subtitle {
+        font-size: 28px !important;
+        bottom: 10% !important;
+    }
+}
+
+/* ========= 全螢幕樣式 (系統級) ========= */
+:fullscreen #video-wrapper,
+:-webkit-full-screen #video-wrapper {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+}
+
+:fullscreen #player,
+:-webkit-full-screen #player {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ========= 偽全螢幕樣式 (針對 iPad/iPhone/相容性) ========= */
+/* 修改偽全螢幕樣式，確保覆蓋力 */
+.pseudo-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* 使用動態視窗高度 */
+    z-index: 2147483647 !important; /* 確保在最上層 */
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 當進入全螢幕模式時，隱藏頁面上所有其他內容 */
+body.is-in-fullscreen #controls,
+body.is-in-fullscreen h2,
+body.is-in-fullscreen .reaction-section {
+    display: none !important;
+}
+
+/* 統一 body Class 並確保徹底隱藏背景 */
+body.is-in-fullscreen {
+    overflow: hidden !important;
+    position: fixed; /* 修改點：改為 fixed 徹底鎖死滑動 */
+    width: 100vw;
+    height: 100vh;
+    height: -webkit-fill-available; /* 針對 iOS Safari 的高度修正 */
+    background: #000 !important;
+    touch-action: none; /* 防止在全螢幕時產生縮放或滑動 */
+}
+
+/* 確保影片在偽全螢幕下完全填滿，不留任何細縫 */
+.pseudo-fullscreen #player {
+    width: 100vw !important;
+    height: 100dvh !important;
+    object-fit: contain; /* 確保影片比例正確且背景全黑 */
+}
+    
+/* 確保 iPhone 橫向時能填滿安全區域 (瀏海區) */
+@supports (padding: env(safe-area-inset-top)) {
+    .pseudo-fullscreen {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
+
+/* 強制讓背景 body 在偽全螢幕時變黑，防止邊緣白邊 */
+body.has-fullscreen {
+    overflow: hidden !important;
+}
+
+/* 進入全螢幕時隱藏頁面其餘元素 */
+.pseudo-fullscreen ~ h2, 
+.pseudo-fullscreen ~ #controls {
+    display: none;
+}
+
+/* ========= 控制列 ========= */
+#controls {
+    display: flex;
+    flex-wrap: wrap;      /* 寬度不夠自動換行 */
+    gap: 10px 15px;      /* 設定：上下間距 10px, 左右間距 15px */
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto;
+    max-width: 98%;      /* 讓手機版有更多伸展空間 */
+}
+
+/* 讓每一行功能分開 */
+.control-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%; /* 強制每一組 row 佔據一行 */
+}
+
+/* --- 控制組背景 --- */
+.control-group {
+    display: inline-flex;  /* 確保寬度自適應內容 */
+    align-items: center;   /* 關鍵：垂直置中對齊 */
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.12); /* 稍微調亮底色 */
+    padding: 6px 15px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px); /* 加強毛玻璃質感 */
+    transition: all 0.3s ease;
+}
+
+.control-group span {
+    line-height: 1;        /* 移除行高造成的偏移 */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* 按鈕基礎樣式 */
+#controls button {
+    padding: 6px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #333;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 使用極淡的邊框代替硬白邊 */
+    border-radius: 30px !important;              /* 強制統一為圓角 */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#controls button:hover {
+    background: #444;
+    transform: translateY(-1px);
+}
+
+/* --- 高級感滑動軸 --- */
+#controls input[type="range"] {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2); /* 軌道更透明一點 */
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* 滑塊 (Thumb) - Chrome/Safari/Edge */
+#controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #5A98ED;    /* 圖片中的天藍色 */
+    border: 2px solid #fff; 
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(90, 152, 237, 0.5); /* 柔和藍光 */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 滑塊點擊時的動畫 */
+#controls input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.3);
+    background: #4A88DD;    /* 點擊時顏色微深 */
+}
+
+/* 滑塊隱藏動畫 */
+.control-hidden {
+    opacity: 0;
+    transform: translateY(5px);
+    pointer-events: none;
+}
+
+/* ========= 手機版 (600px 以下) 專屬微調 ========= */
+@media screen and (max-width: 600px) {
+    #controls {
+        gap: 12px 8px;    /* 增加上下行距，減少左右間距 */
+    }
+    
+    #controls span {
+        font-size: 13px;  /* 字體稍微縮小，但維持可讀性 */
+    }
+
+    #controls button {
+        padding: 5px 10px; /* 按鈕稍微變小，省空間 */
+        font-size: 13px;
+    }
+
+    /* 縮小滑桿寬度，讓一排能塞下更多組 */
+    input[type="range"] {
+        width: 60px !important; 
+    }
+}
+
+/* 全螢幕按鈕樣式 */
+#fs-btn {
+    background: #42b983 !important; /* 使用更高級的薄荷綠 */
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important; /* 加入細微白色邊框 */
+    padding: 6px 18px;             /* 稍微縮小一點高度，對齊滑桿膠囊 */
+    border-radius: 30px !important; /* 統一為膠囊造型 */
+    font-weight: 600;              /* 字體加粗 */
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(66, 185, 131, 0.4); /* 薄荷綠發光感 */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 14px;
+    letter-spacing: 0.5px;         /* 稍微撐開字距 */
+    outline: none;
+}
+
+#fs-btn:hover {
+    background: #4ec992 !important; /* 懸停時顏色微亮 */
+    transform: translateY(-2px) scale(1.03); /* 輕微放大與上浮 */
+    box-shadow: none !important;
+}
+
+#fs-btn:active {
+    transform: translateY(0px) scale(0.95); /* 按下時縮小的回饋 */
+    box-shadow: 0 2px 5px rgba(66, 185, 131, 0.4);
+}
+
+/* 退出按鈕：低干擾模式 */
+#exit-fs-btn {
+    display: none;
+    position: absolute;
+    top: env(safe-area-inset-top, 20px); 
+    right: env(safe-area-inset-right, 20px);
+    /* 加大尺寸 */
+    width: 50px;
+    height: 50px;
+    /* 改為深色圓形底盤 */
+    background: rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50%;
+    /* 提高顏色亮度 */
+    color: rgba(255, 255, 255, 0.8) !important;
+    z-index: 2147483647 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    filter: none !important;
+    /* 移除所有 transition，讓它始終穩定 */
+    transition: none !important; 
+}
+
+#exit-fs-btn svg {
+    width: 32px;
+    height: 32px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    fill: none;
+}
+
+/* 增加懸停效果方便電腦點擊 */
+#exit-fs-btn:hover {
+    background: rgba(50, 50, 50, 0.9) !important;
+    color: #fff !important;
+    transform: scale(1.1);
+}
+
+/*表情*/
+.reaction-section {
+    margin: 30px auto;
+    padding: 20px;
+    background: #222;
+    border-radius: 15px;
+    max-width: 600px;
+}
+.reaction-wall {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#reaction-title {
+    font-size: 24px;            /* 增大字體 */
+    font-weight: 700;           /* 加粗 */
+    color: #ffffff;             /* 白色文字 */
+    margin-top: 5px;            /* 離上方近一點 (如果還不夠近，可以改成 0 或 -5px) */
+    margin-bottom: 20px;        /* 離下方的表情按鈕遠一點，保持視覺呼吸感 */
+    text-align: center;         /* 文字居中 */
+    
+    /* 高級感特效：細微的文字陰影讓字體更立體 */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    
+    /* 讓文字有一點點發光感，更吸引注意 */
+    letter-spacing: 1px;        /* 字距微調 */
+}
+
+/* 針對手機版的微調：避免字體太大導致換行太亂 */
+@media (max-width: 600px) {
+    #reaction-title {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+}
+    
+.emoji-btn {
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+.emoji-btn:hover { background: #444; transform: translateY(-2px); }
+.emoji-btn span { font-size: 14px; margin-left: 5px; color: #aaa; }
+
+/* 當按鈕擁有 .active 類別時的樣式 */
+.emoji-btn.active {
+    background: #5A98ED !important; 
+    border-color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(90, 152, 237, 0.4);
+    transform: scale(1.05) translateY(-2px);
+}
+
+.emoji-btn.active span {
+    color: #ffffff !important;
+}
+
+/* 彈幕容器：覆蓋在影片上方 */
+#barrage-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--barrage-height, 40%); /* 使用變數 --barrage-height，預設 40% */
+    pointer-events: none; /* 不影響點擊影片 */
+    overflow: hidden;
+    z-index: 999;   
+    transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
+}
+
+/* 彈幕本體樣式 */
+.barrage-item {
+    position: absolute;
+    left: 100%;
+    white-space: nowrap;
+    font-size: var(--barrage-size, 24px); 
+    line-height: 1; /* 設為 1 讓高度計算更精準 */
+    padding: 0;
+    will-change: transform;
+    animation: moveLeft var(--barrage-speed, 5s) linear forwards;
+    /* 確保表情不會被滑鼠選到或干擾 */
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.3s ease;
+}
+
+.barrage-item.removing {
+    opacity: 0;
+}
+
+/* 當彈幕被關閉時隱藏容器 */
+#barrage-container.hide-barrage {
+    display: none;
+}
+
+/* 讓控制列的滑桿好看一點 */
+#barrage-size-slider {
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+/* 加入淡入淡出效果 */
+.barrage-control {
+    opacity: 0;           /* 配合 JS 做淡入 */
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    display: none;        /* 預設隱藏 */
+}
+
+@keyframes moveLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100vw - 100%)); }
+}
+
+/* 全螢幕表情觸發鈕 */
+#emoji-trigger-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    /* 手機 45px，電腦 60px */
+    width: clamp(45px, 6vw, 65px);
+    height: clamp(45px, 6vw, 65px);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    color: white;
+    font-size: clamp(20px, 3vw, 30px);
+    cursor: pointer;
+    z-index: 2147483647 !important;
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+#emoji-trigger-btn:hover {
+    background: rgba(50, 50, 50, 0.9);
+    transform: scale(1.1);
+}
+
+#emoji-trigger-btn:active {
+    transform: scale(0.9);
+}
+
+#barrage-toggle-btn, #fs-btn {
+    min-width: 110px;        /* 讓左右按鈕寬度相近，增加對稱感 */
+    height: 34px;            /* 統一高度 */
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 表情選擇抽屜 */
+#emoji-drawer {
+    position: absolute;
+    bottom: 100px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border-radius: 20px;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    z-index: 2147483647 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#emoji-drawer .emoji-btn {
+    width: clamp(50px, 5vw, 70px);
+    height: clamp(50px, 5vw, 70px);
+    font-size: clamp(24px, 2.5vw, 32px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+#emoji-drawer .emoji-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 表情按鈕按下時的縮放效果 */
+#emoji-drawer button:active {
+    transform: scale(0.8);
+    transition: transform 0.1s;
+}
+
+/* 全螢幕下顯示按鈕 */
+.is-in-fullscreen #emoji-trigger-btn {
+    display: flex !important;
+}
