@@ -93,14 +93,32 @@ body {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    /* 使用 100% 而非 100vh，避免被 LINE/FB 網址列撐爆畫面 */
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    /* svh 是關鍵：它代表「最小視窗高度」，能避開 iPhone 網址列擠壓 */
+    height: 100vh !important; 
+    height: 100svh !important; 
     z-index: 2147483647 !important;
     background: #000 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* 防止背後的內容捲動 */
+    overflow: hidden !important;
+}
+
+/* 確保 iPhone 橫向時能填滿安全區域 (瀏海區) */
+@supports (padding: env(safe-area-inset-top)) {
+    .pseudo-fullscreen {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
+
+/* 強制讓背景 body 在偽全螢幕時變黑，防止邊緣白邊 */
+body.has-fullscreen {
+    overflow: hidden !important;
 }
 
 .pseudo-fullscreen #player {
@@ -463,32 +481,37 @@ function showExitBtn() {
 }
 
 function toggleFullscreen() {
-    const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
     const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
 
     if (isFS || isPseudo) {
+        // 退出
         if (isFS) {
-            const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+            const exit = document.exitFullscreen || document.webkitExitFullscreen;
             if (exit) exit.call(document);
         }
         wrapper.classList.remove("pseudo-fullscreen");
+        document.body.classList.remove("has-fullscreen"); // 移除鎖定
         fsBtn.innerText = "進入全螢幕";
-        showExitBtn(); // 退出時立即更新狀態
+        showExitBtn();
     } else {
-        const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen || wrapper.mozRequestFullScreen || wrapper.msRequestFullscreen;
+        // 進入
+        const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
         if (req) {
             req.call(wrapper);
         } else {
+            // iPhone 通常走這裡
             wrapper.classList.add("pseudo-fullscreen");
+            document.body.classList.add("has-fullscreen"); // 鎖定 body
+            window.scrollTo(0, 0); // 捲動到頂部防止偏移
         }
         fsBtn.innerText = "退出全螢幕";
         
-        // 【核心修正】多次呼叫確保手機初始顯示
         let retryCount = 0;
         const retryShow = setInterval(() => {
             showExitBtn();
             retryCount++;
-            if (retryCount > 10) clearInterval(retryShow); // 連續檢查 10 次 (共 2 秒)
+            if (retryCount > 10) clearInterval(retryShow);
         }, 200);
     }
 }
