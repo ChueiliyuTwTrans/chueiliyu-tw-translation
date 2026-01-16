@@ -15,7 +15,10 @@ body {
 }
 
 html, body {
-    background: #000; 
+    background: #000 !important; /* 強制全黑 */
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 /* 影片容器 */
@@ -59,7 +62,7 @@ html, body {
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle {
     /* 修改點：確保 bottom 使用 calc，並刪除下方重複的 10% 設定 */
-    bottom: calc(12% + env(safe-area-inset-bottom)) !important; 
+    bottom: calc(15% + env(safe-area-inset-bottom)) !important; 
     font-size: 5.5vw !important; /* 稍微放大一點點增加可讀性 */
 }
 
@@ -238,13 +241,6 @@ body.has-fullscreen {
     transform: scale(1); /* 移除縮放效果，減少干擾 */
 }
 
-@media (max-width: 768px) {
-    #exit-fs-btn {
-        top: 5px !important;
-        right: 5px !important;
-    }
-}
-
 /*表情*/
 .reaction-section {
     margin: 30px auto;
@@ -290,12 +286,11 @@ body.has-fullscreen {
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
     <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
-    <svg viewBox="0 0 24 24">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-</button>
-</button>
+        <svg viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
 </div>
 
 <div class="reaction-section">
