@@ -170,13 +170,24 @@ body.has-fullscreen {
 
 /* ========= 控制列 ========= */
 #controls {
-    display: inline-flex;
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;      /* 寬度不夠自動換行 */
+    gap: 10px 15px;      /* 設定：上下間距 10px, 左右間距 15px */
+    justify-content: center;
     align-items: center;
-    margin: 15px 0;
-    font-size: 14px;
+    margin: 15px auto;
+    max-width: 98%;      /* 讓手機版有更多伸展空間 */
 }
 
+/* 控制列內的每一組小控制項 */
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* 確保「大小」兩個字跟滑桿永遠在一起 */
+}
+
+/* 按鈕基礎樣式 */
 #controls button {
     padding: 6px 12px;
     font-size: 14px;
@@ -185,10 +196,38 @@ body.has-fullscreen {
     color: white;
     border: 1px solid #555;
     border-radius: 4px;
+    transition: all 0.2s ease;
 }
 
 #controls button:hover {
     background: #444;
+}
+
+/* 滑桿垂直對齊修正 */
+#controls input[type="range"] {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* ========= 手機版 (600px 以下) 專屬微調 ========= */
+@media screen and (max-width: 600px) {
+    #controls {
+        gap: 12px 8px;    /* 增加上下行距，減少左右間距 */
+    }
+    
+    #controls span {
+        font-size: 13px;  /* 字體稍微縮小，但維持可讀性 */
+    }
+
+    #controls button {
+        padding: 5px 10px; /* 按鈕稍微變小，省空間 */
+        font-size: 13px;
+    }
+
+    /* 縮小滑桿寬度，讓一排能塞下更多組 */
+    input[type="range"] {
+        width: 60px !important; 
+    }
 }
 
 /* 全螢幕按鈕樣式 */
@@ -310,9 +349,14 @@ body.has-fullscreen {
 .barrage-item {
     position: absolute;
     white-space: nowrap;
-    font-size: var(--barrage-size, 24px);
+    font-size: var(--barrage-size, 24px); 
+    line-height: 1.2; /* 增加行高防止裁切 */
+    padding: 2px;
     will-change: transform;
     animation: moveLeft 5s linear forwards;
+    /* 確保表情不會被滑鼠選到或干擾 */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* 當彈幕被關閉時隱藏容器 */
@@ -824,15 +868,30 @@ function handleExit() {
 let isBarrageEnabled = localStorage.getItem("barrage-enabled") !== "false"; // --- 彈幕是否顯示變數 ---
 let barrageSize = localStorage.getItem("barrage-size") || 24; // --- 彈幕顯示大小變數 ---
 let barrageHeight = localStorage.getItem("barrage-height") || 40; // --- 彈幕偏好設定變數 ---
+let lastCheckedSecond = -1;
+let lastClickTime = 0;
 
 // 初始化狀態
 document.addEventListener("DOMContentLoaded", () => {
     updateBarrageDisplayUI();
     updateBarrageSize(barrageSize);
-    document.getElementById('barrage-size-slider').value = barrageSize;
+    updateBarrageHeight(barrageHeight);
+    
+    // 設定滑桿初始位置
+    if(document.getElementById('barrage-size-slider')) 
+        document.getElementById('barrage-size-slider').value = barrageSize;
+    if(document.getElementById('barrage-height-slider')) 
+        document.getElementById('barrage-height-slider').value = barrageHeight;
 });
 
-// 切換開關
+// --- A. UI 切換功能 ---
+window.toggleEmojiDrawer = function(event) {
+    if (event) event.stopPropagation();
+    const drawer = document.getElementById('emoji-drawer');
+    if (!drawer) return;
+    drawer.style.display = (drawer.style.display === 'grid') ? 'none' : 'grid';
+};
+
 window.toggleBarrageDisplay = function() {
     isBarrageEnabled = !isBarrageEnabled;
     localStorage.setItem("barrage-enabled", isBarrageEnabled);
@@ -842,6 +901,8 @@ window.toggleBarrageDisplay = function() {
 function updateBarrageDisplayUI() {
     const container = document.getElementById('barrage-container');
     const btn = document.getElementById('barrage-toggle-btn');
+    if (!container || !btn) return;
+    
     if (isBarrageEnabled) {
         container.classList.remove('hide-barrage');
         btn.innerText = "彈幕：開";
@@ -853,82 +914,59 @@ function updateBarrageDisplayUI() {
     }
 }
 
-// 調整大小
+// --- B. 屬性調整功能 ---
 window.updateBarrageSize = function(val) {
     barrageSize = val;
     localStorage.setItem("barrage-size", val);
-    // 將大小套用到容器的 CSS 變數中
-    document.getElementById('barrage-container').style.setProperty('--barrage-size', val + 'px');
+    const container = document.getElementById('barrage-container');
+    if (container) container.style.setProperty('--barrage-size', val + 'px');
 };
 
-// 初始化（在 DOMContentLoaded 內呼叫）
-document.addEventListener("DOMContentLoaded", () => {
-    // ... 原有的初始化代碼 ...
-    updateBarrageHeight(barrageHeight);
-    document.getElementById('barrage-height-slider').value = barrageHeight;
-});
-
-// 調整顯示高度範圍
 window.updateBarrageHeight = function(val) {
     barrageHeight = val;
     localStorage.setItem("barrage-height", val);
-    
     const container = document.getElementById('barrage-container');
     const heightDisplay = document.getElementById('height-val');
-    
-    // 更新 CSS 變數
-    container.style.setProperty('--barrage-height', val + '%');
-    
-    // 更新文字顯示（例如顯示 40%）
+    if (container) container.style.setProperty('--barrage-height', val + '%');
     if (heightDisplay) heightDisplay.innerText = val + '%';
 };
-    
-// --- A. 切換表情抽屜 ---
-window.toggleEmojiDrawer = function(event) {
-    if (event) event.stopPropagation();
-    const drawer = document.getElementById('emoji-drawer');
-    const isVisible = drawer.style.display === 'grid';
-    drawer.style.display = isVisible ? 'none' : 'grid';
-  };
 
-// --- B. 發送彈幕 (含時間點) ---
+// --- C. 核心彈幕邏輯 ---
 window.sendBarrage = function(type) {
+    const now = Date.now();
+    if (now - lastClickTime < 300) return; // 防止連點
+    lastClickTime = now;
+
     if (!player || typeof player.getCurrentTime !== 'function') return;
     const currentTime = Math.floor(player.getCurrentTime());
-    const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
     
+    // 只負責傳送雲端，顯示交給 D 段的監聽器
     const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
     runTransaction(barrageRef, (count) => (count || 0) + 1);
+};
 
-    createBarrageDom(emojiMap[type]);
-  };
-
-// --- C. 建立彈幕 DOM 並動畫 ---
 window.createBarrageDom = function(text) {
-    if (!isBarrageEnabled) return; 
-    
+    if (!isBarrageEnabled) return;
     const container = document.getElementById('barrage-container');
     if (!container) return;
+
     const el = document.createElement('div');
     el.className = 'barrage-item';
     el.innerText = text;
 
-    /** * 修改重點：
-     * 因為 container 的高度現在會隨「範圍滑桿」變動 (例如變成 20% 高)
-     * 所以這裡的 top 只要在 0% ~ 90% 之間隨機分佈即可，
-     * 它會自動被限制在那個縮小的 container 裡面。
-     */
-    el.style.top = (Math.random() * 90) + "%"; 
+    // 安全範圍算法，防止裁切
+    const safePadding = 10; 
+    el.style.top = (Math.random() * (100 - safePadding * 2) + safePadding) + "%"; 
     
     container.appendChild(el);
     el.onanimationend = () => el.remove();
 };
 
-// --- D. 監聽影片時間並同步他人彈幕 ---
-let lastCheckedSecond = -1;
-  setInterval(() => {
+// --- D. 監聽與同步 ---
+setInterval(() => {
     if (!player || player.getPlayerState() !== 1) return;
     const now = Math.floor(player.getCurrentTime());
+    
     if (now !== lastCheckedSecond) {
         lastCheckedSecond = now;
         const secondRef = ref(db, `barrages/${MY_VIDEO_ID}/${now}`);
@@ -937,7 +975,7 @@ let lastCheckedSecond = -1;
             if (data) {
                 const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
                 Object.keys(data).forEach(type => {
-                    const count = Math.min(data[type], 5); 
+                    const count = Math.min(data[type], 3); 
                     for(let i=0; i<count; i++) {
                         setTimeout(() => window.createBarrageDom(emojiMap[type]), Math.random() * 800);
                     }
@@ -945,9 +983,7 @@ let lastCheckedSecond = -1;
             }
         }, { onlyOnce: true });
     }
-  }, 500);
-
-
+}, 500);
 </script>
 
 </body>
