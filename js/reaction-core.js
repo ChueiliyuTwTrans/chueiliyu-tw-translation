@@ -178,8 +178,7 @@ window.sendInstantBarrage = function(type, event) {
     }
 
     // 3. 發送後關閉抽屜
-    const drawer = document.getElementById('emoji-drawer');
-    if (drawer) drawer.style.display = 'none';
+    closeEmojiDrawer();
 };
 
 
@@ -267,19 +266,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
 });
 
+// === 即時表情抽屜控制邏輯 ===
 
-// ==========================================
-// 6. UI 控制項 (開關、大小、速度)
-// ==========================================
-
-window.toggleEmojiDrawer = function(e) {
-    if (e) { e.stopPropagation(); e.preventDefault(); }
-    const drawer = document.getElementById('emoji-drawer');
-    if (drawer) {
-        const isVisible = drawer.style.display === 'grid';
-        drawer.style.display = isVisible ? 'none' : 'grid';
+// 1. 切換抽屜顯示/隱藏 (綁定在觸發按鈕 onclick)
+window.toggleEmojiDrawer = function(event) {
+    if (event) {
+        event.stopPropagation(); // 防止點擊穿透
+        event.preventDefault();
     }
+
+    const drawer = document.getElementById('emoji-drawer');
+    const triggerBtn = document.getElementById('emoji-trigger-btn');
+
+    if (!drawer || !triggerBtn) return;
+
+    // 清除可能殘留的行內樣式，確保 CSS class 能生效
+    drawer.style.removeProperty('display');
+
+    // 切換 class
+    drawer.classList.toggle('show');
+    triggerBtn.classList.toggle('active');
 };
+
+// 2. 關閉抽屜的共用函式
+function closeEmojiDrawer() {
+    const drawer = document.getElementById('emoji-drawer');
+    const triggerBtn = document.getElementById('emoji-trigger-btn');
+    
+    if (drawer) drawer.classList.remove('show');
+    if (triggerBtn) triggerBtn.classList.remove('active');
+}
+
+// 3. 監聽 ESC 鍵 (keydown)
+document.addEventListener('keydown', (e) => {
+    // 如果按下 ESC 且抽屜是打開的，就關閉它
+    if (e.key === 'Escape') {
+        closeEmojiDrawer();
+    }
+});
+
+// 4. 監聽全螢幕狀態改變 (退出全螢幕時關閉)
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange); // Safari
+
+function handleFullscreenChange() {
+    const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+    
+    // 如果「目前沒有」全螢幕元素 (代表退出了)，則強制關閉抽屜
+    if (!isFullscreen) {
+        closeEmojiDrawer();
+    }
+}
+
+// 5. 點擊畫面其他地方時關閉 (選用，增加體驗)
+// 如果你希望點擊影片空白處也能關閉抽屜，可以加上這段
+document.addEventListener('click', (e) => {
+    const drawer = document.getElementById('emoji-drawer');
+    const triggerBtn = document.getElementById('emoji-trigger-btn');
+    
+    // 如果點擊的目標不是抽屜內部，也不是觸發按鈕，就關閉
+    if (drawer && triggerBtn && 
+        !drawer.contains(e.target) && 
+        !triggerBtn.contains(e.target)) {
+        closeEmojiDrawer();
+    }
+});
 
 window.toggleBarrageDisplay = function() {
     isBarrageEnabled = !isBarrageEnabled;
