@@ -58,9 +58,9 @@ html, body {
 .pseudo-fullscreen #subtitle,
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle {
-    /* 15% 是基底，再加上系統規定的安全距離 */
-    bottom: calc(15% + env(safe-area-inset-bottom)) !important; 
-    font-size: 5vw !important;
+    /* 修改點：確保 bottom 使用 calc，並刪除下方重複的 10% 設定 */
+    bottom: calc(12% + env(safe-area-inset-bottom)) !important; 
+    font-size: 5.5vw !important; /* 稍微放大一點點增加可讀性 */
 }
 
 /* 桌機非全螢幕 */
@@ -122,9 +122,10 @@ body.is-in-fullscreen .reaction-section {
 /* 統一 body Class 並確保徹底隱藏背景 */
 body.is-in-fullscreen {
     overflow: hidden !important;
-    position: fixed; /* 防止捲動引起的 UI 偏移 */
-    width: 100%;
-    height: 100%;
+    position: fixed; /* 修改點：改為 fixed 徹底鎖死滑動 */
+    width: 100vw;
+    height: 100vh;
+    background: #000 !important;
 }
 
 /* 確保影片在偽全螢幕下完全填滿，不留任何細縫 */
@@ -145,16 +146,6 @@ body.is-in-fullscreen {
 /* 強制讓背景 body 在偽全螢幕時變黑，防止邊緣白邊 */
 body.has-fullscreen {
     overflow: hidden !important;
-}
-
-.pseudo-fullscreen #player {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.pseudo-fullscreen #subtitle {
-    font-size: 5vw !important; /* 隨螢幕寬度自動縮放 */
-    bottom: 10%;
 }
 
 /* 進入全螢幕時隱藏頁面其餘元素 */
@@ -214,8 +205,8 @@ body.has-fullscreen {
 #exit-fs-btn {
     display: none;
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: env(safe-area-inset-top, 15px); 
+    right: env(safe-area-inset-right, 15px);
     width: 44px;
     height: 44px;
     background: none !important;
