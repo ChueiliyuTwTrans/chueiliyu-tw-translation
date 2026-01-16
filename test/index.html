@@ -368,6 +368,11 @@ body.has-fullscreen {
     /* 確保表情不會被滑鼠選到或干擾 */
     user-select: none;
     -webkit-user-select: none;
+    transition: opacity 0.3s ease;
+}
+
+.barrage-item.removing {
+    opacity: 0;
 }
 
 /* 當彈幕被關閉時隱藏容器 */
@@ -914,6 +919,7 @@ let barrageSpeed = localStorage.getItem("barrage-speed") || 5; // --- 彈幕速�
 let lastSentSignal = { time: -1, type: '' }; // 紀錄自己最後發送的秒數與類型
 let lastCheckedSecond = -1;
 let lastClickTime = 0;
+const MAX_BARRAGE_COUNT = 10; // 設定最大同時顯示數量
 
 // 初始化狀態
 document.addEventListener("DOMContentLoaded", () => {
@@ -1033,24 +1039,27 @@ window.createBarrageDom = function(text) {
     const container = document.getElementById('barrage-container');
     if (!container) return;
 
+    // --- A. 自動清理舊表情 ---
+    const currentItems = container.getElementsByClassName('barrage-item');
+    if (currentItems.length >= MAX_BARRAGE_COUNT) {
+        // 刪除最舊的一個 (索引 0 的元素)
+        currentItems[0].remove();
+    }
+
+    // --- B. 建立新表情 ---
     const el = document.createElement('div');
     el.className = 'barrage-item';
     el.innerText = text;
-
-    // 先將元素加入容器，才能取得它的實際高度
     container.appendChild(el);
 
-    // --- 動態位置計算 (核心) ---
-    const containerHeight = container.offsetHeight; // 容器現在有多高 (px)
-    const emojiHeight = el.offsetHeight;           // 表情現在有多大 (px)
+    // --- C. 計算位置 (防裁切邏輯) ---
+    const containerHeight = container.offsetHeight || 100; 
+    const emojiHeight = el.offsetHeight || 24;
 
-    // 如果表情比容器還大，強行讓它置中顯示，避免完全看不見
     if (emojiHeight >= containerHeight) {
         el.style.top = "0px";
     } else {
-        // 計算可移動的剩餘空間 (容器高 - 表情高)
         const availableSpace = containerHeight - emojiHeight;
-        // 在剩餘空間內隨機產生一個像素值，這樣表情永遠不會超出邊界
         const randomTop = Math.floor(Math.random() * availableSpace);
         el.style.top = randomTop + "px";
     }
@@ -1066,19 +1075,23 @@ setInterval(() => {
     if (now !== lastCheckedSecond) {
         lastCheckedSecond = now;
         const secondRef = ref(db, `barrages/${MY_VIDEO_ID}/${now}`);
+        
         onValue(secondRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
                 Object.keys(data).forEach(type => {
-                    const count = Math.min(data[type], 3); 
-                    // 如果這個秒數和類型剛好等於我剛剛「手動噴出」的那個，就減 1
+                    let count = Math.min(data[type], 3); 
+
+                    // 1. 去重邏輯：如果是我剛剛點擊的，就減 1
                     if (now === lastSentSignal.time && type === lastSentSignal.type) {
                         count = Math.max(0, count - 1);
                     }
 
-                    for(let i=0; i<count; i++) {
-                        setTimeout(() => window.createBarrageDom(emojiMap[type]), Math.random() * 800);
+                    // 2. 分散發送：讓表情在 0 ~ 1.5 秒內隨機出現，避免疊在一起
+                    for(let i = 0; i < count; i++) {
+                        const randomDelay = Math.random() * 1500; 
+                        setTimeout(() => window.createBarrageDom(emojiMap[type]), randomDelay);
                     }
                 });
             }
