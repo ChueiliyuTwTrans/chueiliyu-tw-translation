@@ -14,7 +14,6 @@ html, body {
     margin: 0;
     /* 新增：針對 iOS 的優化 */
     -webkit-text-size-adjust: 100%;
-    overscroll-behavior: none; /* 防止 iOS 橡皮筋下拉效果 */
 }
 
 /* 影片容器 */
@@ -74,6 +73,11 @@ body.is-in-fullscreen {
     position: fixed;
     width: 100%;
     height: 100%;
+    height: -webkit-fill-available;
+    background: #000 !important;
+    touch-action: none;
+    /* 禁止 iOS 橡皮筋效果 */
+    overscroll-behavior: none;
 }
 
 /* 修正字幕位置 */
@@ -449,9 +453,12 @@ body.has-fullscreen {
     width: 100%;
     height: var(--barrage-height, 40%); /* 使用變數 --barrage-height，預設 40% */
     pointer-events: none; /* 不影響點擊影片 */
-    overflow: hidden;
+    overflow-x: hidden;  /* 左右超出隱藏 (為了飛入飛出動畫) */
+    overflow-y: visible; /* 上下超出顯示 (防止大表情被切頭切尾) */
     z-index: 999;   
     transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
+    /* 確保容器內容不會換行 */
+    white-space: nowrap;
 }
 
 /* 彈幕本體樣式 */
