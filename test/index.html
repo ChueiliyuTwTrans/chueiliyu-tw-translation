@@ -322,34 +322,60 @@ body.has-fullscreen {
 /* 全螢幕表情觸發鈕 */
 #emoji-trigger-btn {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.3);
+    bottom: 30px;
+    right: 30px;
+    /* 手機 45px，電腦 60px */
+    width: clamp(45px, 6vw, 65px);
+    height: clamp(45px, 6vw, 65px);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 50%;
     color: white;
-    font-size: 20px;
+    font-size: clamp(20px, 3vw, 30px);
     cursor: pointer;
-    z-index: 2147483647;
-    display: none; /* 預設隱藏，全螢幕才顯示 */
+    z-index: 2147483647 !important;
+    display: none; 
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+#emoji-trigger-btn:hover {
+    background: rgba(50, 50, 50, 0.9);
+    transform: scale(1.1);
 }
 
 /* 表情選擇抽屜 */
 #emoji-drawer {
     position: absolute;
-    bottom: 75px;
-    right: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 10px;
-    border-radius: 15px;
-    display: none; /* 點擊後切換 */
+    bottom: 100px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border-radius: 20px;
+    display: none;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    z-index: 2147483647;
+    gap: 12px;
+    z-index: 2147483647 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#emoji-drawer .emoji-btn {
+    width: clamp(50px, 5vw, 70px);
+    height: clamp(50px, 5vw, 70px);
+    font-size: clamp(24px, 2.5vw, 32px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+#emoji-drawer .emoji-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* 全螢幕下顯示按鈕 */
@@ -376,7 +402,8 @@ body.has-fullscreen {
     <div id="subtitle">字幕載入中...</div>
     <div id="barrage-container"></div>
 
-    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer()">😊</button>
+    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
+
     <div id="emoji-drawer">
         <button class="emoji-btn" onclick="sendBarrage('fire')">🔥</button>
         <button class="emoji-btn" onclick="sendBarrage('love')">😍</button>
@@ -773,25 +800,31 @@ function handleExit() {
   import { getDatabase, ref, onValue, runTransaction, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // --- A. 切換表情抽屜 ---
-window.toggleEmojiDrawer = function() {
+window.toggleEmojiDrawer = function(event) {
+    if (event) event.stopPropagation(); // 防止點擊事件穿透到影片播放器
     const drawer = document.getElementById('emoji-drawer');
-    drawer.style.display = (drawer.style.display === 'grid') ? 'none' : 'grid';
+    if (!drawer) return;
+    
+    // 改用 class 切換更穩定
+    const isVisible = drawer.style.display === 'grid';
+    drawer.style.display = isVisible ? 'none' : 'grid';
 };
 
 // --- B. 發送彈幕 (含時間點) ---
 window.sendBarrage = function(type) {
-    if (!player) return;
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    
     const currentTime = Math.floor(player.getCurrentTime());
     const emojiMap = { fire:'🔥', love:'😍', clap:'👏', funny:'😂', warm:'🥰', thanks:'🙏' };
     
-    // 1. 存入 Firebase (路徑：barrages/影片ID/秒數/表情)
+    // 1. 存入 Firebase
     const barrageRef = ref(db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
     runTransaction(barrageRef, (count) => (count || 0) + 1);
 
-    // 2. 立即在自己畫面上產生一個彈幕（增加即時反饋感）
-    createBarrageDom(emojiMap[type]);
-    
-    // 點擊後可自動關閉或保持開啟，這裡建議保持開啟方便連點
+    // 2. 立即在畫面上產生彈幕
+    if (emojiMap[type]) {
+        createBarrageDom(emojiMap[type]);
+    }
 };
 
 // --- C. 建立彈幕 DOM 並動畫 ---
