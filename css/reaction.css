@@ -453,8 +453,7 @@ body.has-fullscreen {
     width: 100%;
     height: var(--barrage-height, 40%); /* 使用變數 --barrage-height，預設 40% */
     pointer-events: none; /* 不影響點擊影片 */
-    overflow-x: hidden;  /* 左右超出隱藏 (為了飛入飛出動畫) */
-    overflow-y: visible; /* 上下超出顯示 (防止大表情被切頭切尾) */
+    overflow: visible !important;
     z-index: 999;   
     transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
     /* 確保容器內容不會換行 */
