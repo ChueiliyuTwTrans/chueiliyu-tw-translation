@@ -366,6 +366,11 @@ body.has-fullscreen {
 /* =============================================
    退出全螢幕按鈕 (修復 iPhone 裁切問題版)
    ============================================= */
+/* --- 強制隱藏  --- */
+#emoji-trigger-btn.force-hide { 
+    display: none !important; 
+}
+
 /* --- 0. 新增：強制隱藏類別 (給 JS 控制開關用) --- */
 .force-hide {
     display: none !important;
