@@ -10,7 +10,7 @@ const REACTION_WALL_LIST = [
     { type: 'haha',  icon: '😆', label: '笑死' },
     { type: 'warm',  icon: '🥰', label: '喜歡' },
     { type: 'cool',  icon: '😎', label: '酷' },
-    { type: 'clap',  icon: '👍', label: '讚' },
+    { type: 'thumb_up',  icon: '👍', label: '讚' },
     { type: 'fire',  icon: '🔥', label: '燃' }
 ];
 
