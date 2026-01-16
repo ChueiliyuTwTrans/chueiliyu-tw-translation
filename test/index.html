@@ -635,7 +635,7 @@ function handleExit() {
 
   // --- 1. 初始化讀取：同步雲端數字與本地狀態 ---
   reactionTypes.forEach(type => {
-    const countRef = ref(db, 'reactions/' + type);
+    const countRef = ref(db, `video_reactions/${MY_VIDEO_ID}/${type}`);
     onValue(countRef, (snapshot) => {
       const data = snapshot.val() || 0;
       const countEl = document.getElementById('count-' + type);
@@ -643,18 +643,19 @@ function handleExit() {
     });
 
     // 初始化按鈕 active 狀態
-    if (localStorage.getItem('reacted-' + type) === 'true') {
-        const btn = document.querySelector(`button[onclick="addReaction('${type}')"]`);
-        if (btn) btn.classList.add('active'); // 確保元素存在才添加 class
-    }
+    if (localStorage.getItem(`reacted-${MY_VIDEO_ID}-${type}`) === 'true') {
+      const btn = document.querySelector(`button[onclick="addReaction('${type}')"]`);
+      if (btn) btn.classList.add('active');
+      }
   });
 
   // --- 2. 切換點擊 (Toggle) ---
   window.addReaction = function(type) {
     // 確保能正確捕捉到點擊的按鈕（相容舊版瀏覽器）
     const btn = event.currentTarget || event.target.closest('.emoji-btn'); 
-    const isReacted = localStorage.getItem('reacted-' + type) === 'true';
-    const countRef = ref(db, 'reactions/' + type);
+    const storageKey = `reacted-${MY_VIDEO_ID}-${type}`;
+    const isReacted = localStorage.getItem(storageKey) === 'true';
+    const countRef = ref(db, `video_reactions/${MY_VIDEO_ID}/${type}`);
 
     // 執行 Firebase 交易更新
     runTransaction(countRef, (currentCount) => {
@@ -671,12 +672,12 @@ function handleExit() {
     }).then(() => {
         // 交易成功後更新本地狀態
         if (isReacted) {
-            localStorage.removeItem('reacted-' + type);
+            localStorage.removeItem(storageKey);
             btn.classList.remove('active');
             // 取消時不需要縮放動畫，回歸原始狀態
             btn.style.transform = "scale(1)"; 
         } else {
-            localStorage.setItem('reacted-' + type, 'true');
+            localStorage.setItem(storageKey, 'true');
             btn.classList.add('active');
             
             // 點讚動畫：跳大一點再縮回 1.05（配合 CSS active 狀態）
