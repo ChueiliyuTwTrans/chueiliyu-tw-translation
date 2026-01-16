@@ -529,32 +529,25 @@ body.has-fullscreen {
 
 /* 全螢幕表情觸發鈕 */
 #emoji-trigger-btn {
-    /* 1. 核心修正：改用 fixed，鎖定在視窗最上層，不受容器影響 */
-    position: fixed !important; 
+    position: fixed !important;
     
-    /* 2. 基礎位置 (直向/視窗模式) */
-    /* 抬高到 80px，避開大部分手機的底部操作條 */
-    bottom: 80px;  
-    /* 離右邊遠一點，避免被手機保護殼或極窄邊框切到 */
-    right: 20px !important;  
+    /* 基礎定位：左上角 */
+    top: 80px; 
+    left: 20px !important;
+    bottom: auto !important; /* 確保 bottom 不干擾 top */
+    right: auto !important;
     
-    /* 大小設定 */
     width: clamp(45px, 12vw, 60px); 
     height: clamp(45px, 12vw, 60px);
     font-size: clamp(20px, 5vw, 28px);
-    
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     color: white;
     cursor: pointer;
-    
-    /* 強制顯示 */
-    display: flex !important; 
+    display: flex !important; /* 強制顯示 */
     align-items: center;
     justify-content: center;
-    
-    /* 層級最高 */
     z-index: 2147483647 !important; 
     transition: all 0.2s ease;
     outline: none;
@@ -574,13 +567,14 @@ body.has-fullscreen {
 
 /* 表情選擇抽屜 */
 #emoji-drawer {
-    /* 改用 fixed 確保跟按鈕同一基準 */
     position: fixed !important; 
     display: none;
     
-    /* 基礎位置 */
-    bottom: 150px; 
-    right: 20px !important;
+    /* 讓抽屜出現在按鈕的「下方」 */
+    top: 150px; 
+    left: 20px !important; 
+    bottom: auto !important;
+    right: auto !important;
     
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
@@ -610,13 +604,9 @@ body.has-fullscreen {
     width: clamp(50px, 5vw, 70px);
     height: clamp(50px, 5vw, 70px);
     font-size: clamp(24px, 2.5vw, 32px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
+    border-radius: 12px; border: none; cursor: pointer;
 }
 
 #emoji-drawer .emoji-btn:hover {
@@ -691,7 +681,7 @@ body.has-fullscreen {
    ============================================= */
 @media screen and (orientation: landscape) {
     
-    /* 1. 退出按鈕 (右上) - 保持不變 */
+    /* 1. 退出按鈕 (右上) - 往左推避開圓角 */
     #exit-fs-btn {
         right: calc(50px + env(safe-area-inset-right)) !important;
         top: 20px !important;
@@ -702,11 +692,10 @@ body.has-fullscreen {
     :fullscreen #emoji-trigger-btn,
     :-webkit-full-screen #emoji-trigger-btn,
     .pseudo-fullscreen #emoji-trigger-btn {
-        /* 左側加寬避開圓角/瀏海 */
         left: calc(50px + env(safe-area-inset-left)) !important;
     }
 
-    /* 3. 表情抽屜 (左上) */
+    /* 3. 表情抽屜 (左上) - 跟隨按鈕 */
     #emoji-drawer,
     :fullscreen #emoji-drawer,
     :-webkit-full-screen #emoji-drawer,
