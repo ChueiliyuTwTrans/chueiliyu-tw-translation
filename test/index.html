@@ -137,7 +137,9 @@ body.is-in-fullscreen {
     position: fixed; /* 修改點：改為 fixed 徹底鎖死滑動 */
     width: 100vw;
     height: 100vh;
-    background: #000 !important;
+    height: -webkit-fill-available; /* 針對 iOS Safari 的高度修正 */
+    background: #000 !important;
+    touch-action: none; /* 防止在全螢幕時產生縮放或滑動 */
 }
 
 /* 確保影片在偽全螢幕下完全填滿，不留任何細縫 */
@@ -290,7 +292,7 @@ body.has-fullscreen {
     <button onclick="changeSubtitleSize(-0.1)">A−</button>
     <span>字幕大小</span>
     <button onclick="changeSubtitleSize(0.1)">A＋</button>
-    <button id="fs-btn">進入全螢幕</button>
+    <button id="fs-btn">進入全螢幕1</button>
 </div>
     
 <h2>Ep.41 최립우 | 연습실 바다쌤(練習室的Bada老師 ep.41)</h2>
