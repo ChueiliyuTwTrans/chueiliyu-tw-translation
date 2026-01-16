@@ -4,6 +4,7 @@ body {
     color: #fff;
     font-family: Arial, "Noto Sans TC", sans-serif;
     text-align: center;
+    overflow-x: hidden;
 }
 
 html, body {
@@ -11,6 +12,9 @@ html, body {
     height: 100%;
     width: 100%;
     margin: 0;
+    /* 新增：針對 iOS 的優化 */
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none; /* 防止 iOS 橡皮筋下拉效果 */
 }
 
 /* 影片容器 */
@@ -39,14 +43,37 @@ html, body {
     transform-origin: center bottom;
     width: 90%;
     font-size: 22px;
+    font-weight: bold;
     line-height: 1.4;
     color: #fff;
     text-align: center;
     /* 增加陰影確保文字清晰 */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0,0,0,0.5);
+    text-shadow: 
+        2px 2px 0px #000, 
+        -1px -1px 0px #000,  
+        1px -1px 0px #000,
+        -1px 1px 0px #000,
+        1px 1px 0px #000,
+        0px 2px 4px rgba(0,0,0,0.8);
     z-index: 100;
     pointer-events: none;
     box-sizing: border-box;
+}
+
+/* ===== 2. iOS Safari 偽全螢幕 強制樣式 ===== */
+/* 讓 iframe 在偽全螢幕下填滿容器 */
+#video-wrapper.pseudo-fullscreen #player {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+}
+
+/* 隱藏 iOS Safari 橫向時可能的捲軸 */
+body.is-in-fullscreen {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 /* 修正字幕位置 */
@@ -114,6 +141,8 @@ html, body {
     display: flex !important;
     align-items: center;
     justify-content: center;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
 }
 
 /* 當進入全螢幕模式時，隱藏頁面上所有其他內容 */
