@@ -567,7 +567,7 @@ body.has-fullscreen {
 
 <div id="controls">
     <div class="control-row">
-        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">及時表情：開</button>
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
 
         <div class="control-group barrage-control">
             <span>大小</span>
@@ -1065,7 +1065,7 @@ function updateBarrageDisplayUI() {
     
     if (isBarrageEnabled) {
         container.classList.remove('hide-barrage');
-        btn.innerText = "及時表情：開";
+        btn.innerText = "即時表情：開";
 
         // 顯示所有及時表情相關滑動軸
         btn.style.background = "#5A98ED"; 
@@ -1080,7 +1080,7 @@ function updateBarrageDisplayUI() {
         });
     } else {
         container.classList.add('hide-barrage');
-        btn.innerText = "及時表情：關";
+        btn.innerText = "即時表情：關";
         btn.style.background = "#333";
         btn.style.borderColor = "rgba(255, 255, 255, 0.1)";
         btn.style.boxShadow = "none";
