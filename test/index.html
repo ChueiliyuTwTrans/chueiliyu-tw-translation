@@ -65,14 +65,8 @@ html, body {
 
     <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
 
-    <div id="emoji-drawer">
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('fire', event)">🔥</button>
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('love', event)">😍</button>
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('clap', event)">👏</button>
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('funny', event)">😂</button>
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('warm', event)">🥰</button>
-        <button class="emoji-btn" type="button" onclick="event.stopPropagation(); sendBarrageWithFeedback('thanks', event)">🙏</button>
-    </div>
+    <div id="emoji-drawer"></div>
+    
     <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
         <svg viewBox="0 0 24 24">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -94,29 +88,9 @@ const MY_SRT_FILE = "1218BadaLee_ep41.srt";
 
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
-        // 檢查 core 的功能是否載入，避免報錯
-        if (typeof coreChangeSubtitleSize === "function") {
-            coreChangeSubtitleSize(delta);
-        }
+        if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
 }
-
-/* ===== 解析 SRT ===== */
-fetch(MY_SRT_FILE)
-    .then(res => {
-        if (!res.ok) throw new Error("字幕檔案不存在");
-        return res.text();
-    })
-    .then(text => {
-        subtitles = parseSRT(text);
-        subtitleEl.innerText = "";
-    })
-    .catch(err => {
-        console.error(err);
-        subtitleEl.innerText = "字幕載入失敗";
-    });
 </script>
-    
-<script src="../js/core-player.js"></script>
     
 <script type="module">
   // 1. 載入 Firebase 核心功能
@@ -141,7 +115,8 @@ fetch(MY_SRT_FILE)
   window.fb_onValue = onValue;    // 修正點：掛載到 window
   window.fb_runTransaction = runTransaction; // 修正點：掛載到 window
 </script>
-    
+
+<script src="../js/core-player.js"></script>
 <script src="../js/reaction-core.js"></script>
 
 </body>
