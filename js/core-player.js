@@ -214,3 +214,21 @@ function initReactionButtons() {
 
 // 確保網頁載入完後執行一次
 window.addEventListener('DOMContentLoaded', initReactionButtons);
+
+//----------------------------------------------------------------
+// 自動執行：載入字幕
+if (typeof MY_SRT_FILE !== 'undefined' && MY_SRT_FILE) {
+    fetch(MY_SRT_FILE)
+        .then(res => {
+            if (!res.ok) throw new Error("字幕檔案不存在");
+            return res.text();
+        })
+        .then(text => {
+            subtitles = parseSRT(text);
+            if (subtitleEl) subtitleEl.innerText = "";
+        })
+        .catch(err => {
+            console.error(err);
+            if (subtitleEl) subtitleEl.innerText = "字幕載入失敗";
+        });
+}
