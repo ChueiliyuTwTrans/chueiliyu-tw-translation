@@ -299,19 +299,31 @@ body.has-fullscreen {
     top: 0;
     left: 0;
     width: 100%;
-    height: 70%; /* 彈幕出現在上半部，避免遮擋字幕 */
+    height: var(--barrage-height, 40%); /* 使用變數 --barrage-height，預設 40% */
     pointer-events: none; /* 不影響點擊影片 */
     overflow: hidden;
-    z-index: 200;
+    z-index: 200;   
+    transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
 }
 
 /* 彈幕本體樣式 */
 .barrage-item {
     position: absolute;
     white-space: nowrap;
-    font-size: 24px;
+    font-size: var(--barrage-size, 24px);
     will-change: transform;
     animation: moveLeft 5s linear forwards;
+}
+
+/* 當彈幕被關閉時隱藏容器 */
+#barrage-container.hide-barrage {
+    display: none;
+}
+
+/* 讓控制列的滑桿好看一點 */
+#barrage-size-slider {
+    cursor: pointer;
+    margin-right: 15px;
 }
 
 @keyframes moveLeft {
@@ -389,6 +401,15 @@ body.has-fullscreen {
 <body>
 
 <div id="controls">
+    <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">彈幕：開</button>
+    
+    <span>大小</span>
+    <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)" style="width: 60px; vertical-align: middle;">
+    
+    <span>範圍</span>
+    <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)" style="width: 60px; vertical-align: middle;">
+    <span id="height-val">40%</span>
+    
     <button onclick="changeSubtitleSize(-0.1)">A−</button>
     <span>字幕大小</span>
     <button onclick="changeSubtitleSize(0.1)">A＋</button>
@@ -798,6 +819,70 @@ function handleExit() {
   };
     
 // --- 全螢幕彈幕功能 ---
+
+// --- 彈幕顯示控制 ---
+let isBarrageEnabled = localStorage.getItem("barrage-enabled") !== "false"; // --- 彈幕是否顯示變數 ---
+let barrageSize = localStorage.getItem("barrage-size") || 24; // --- 彈幕顯示大小變數 ---
+let barrageHeight = localStorage.getItem("barrage-height") || 40; // --- 彈幕偏好設定變數 ---
+
+// 初始化狀態
+document.addEventListener("DOMContentLoaded", () => {
+    updateBarrageDisplayUI();
+    updateBarrageSize(barrageSize);
+    document.getElementById('barrage-size-slider').value = barrageSize;
+});
+
+// 切換開關
+window.toggleBarrageDisplay = function() {
+    isBarrageEnabled = !isBarrageEnabled;
+    localStorage.setItem("barrage-enabled", isBarrageEnabled);
+    updateBarrageDisplayUI();
+};
+
+function updateBarrageDisplayUI() {
+    const container = document.getElementById('barrage-container');
+    const btn = document.getElementById('barrage-toggle-btn');
+    if (isBarrageEnabled) {
+        container.classList.remove('hide-barrage');
+        btn.innerText = "彈幕：開";
+        btn.style.background = "#27ae60";
+    } else {
+        container.classList.add('hide-barrage');
+        btn.innerText = "彈幕：關";
+        btn.style.background = "#c0392b"; // 關閉時顯示紅色
+    }
+}
+
+// 調整大小
+window.updateBarrageSize = function(val) {
+    barrageSize = val;
+    localStorage.setItem("barrage-size", val);
+    // 將大小套用到容器的 CSS 變數中
+    document.getElementById('barrage-container').style.setProperty('--barrage-size', val + 'px');
+};
+
+// 初始化（在 DOMContentLoaded 內呼叫）
+document.addEventListener("DOMContentLoaded", () => {
+    // ... 原有的初始化代碼 ...
+    updateBarrageHeight(barrageHeight);
+    document.getElementById('barrage-height-slider').value = barrageHeight;
+});
+
+// 調整顯示高度範圍
+window.updateBarrageHeight = function(val) {
+    barrageHeight = val;
+    localStorage.setItem("barrage-height", val);
+    
+    const container = document.getElementById('barrage-container');
+    const heightDisplay = document.getElementById('height-val');
+    
+    // 更新 CSS 變數
+    container.style.setProperty('--barrage-height', val + '%');
+    
+    // 更新文字顯示（例如顯示 40%）
+    if (heightDisplay) heightDisplay.innerText = val + '%';
+};
+    
 // --- A. 切換表情抽屜 ---
 window.toggleEmojiDrawer = function(event) {
     if (event) event.stopPropagation();
@@ -820,15 +905,24 @@ window.sendBarrage = function(type) {
 
 // --- C. 建立彈幕 DOM 並動畫 ---
 window.createBarrageDom = function(text) {
+    if (!isBarrageEnabled) return; 
+    
     const container = document.getElementById('barrage-container');
     if (!container) return;
     const el = document.createElement('div');
     el.className = 'barrage-item';
     el.innerText = text;
-    el.style.top = (Math.random() * 60 + 5) + "%"; // 稍微避開最上方
+
+    /** * 修改重點：
+     * 因為 container 的高度現在會隨「範圍滑桿」變動 (例如變成 20% 高)
+     * 所以這裡的 top 只要在 0% ~ 90% 之間隨機分佈即可，
+     * 它會自動被限制在那個縮小的 container 裡面。
+     */
+    el.style.top = (Math.random() * 90) + "%"; 
+    
     container.appendChild(el);
     el.onanimationend = () => el.remove();
-  };
+};
 
 // --- D. 監聽影片時間並同步他人彈幕 ---
 let lastCheckedSecond = -1;
@@ -852,6 +946,8 @@ let lastCheckedSecond = -1;
         }, { onlyOnce: true });
     }
   }, 500);
+
+
 </script>
 
 </body>
