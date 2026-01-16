@@ -61,9 +61,10 @@ html, body {
 .pseudo-fullscreen #subtitle,
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle {
-    /* 修改點：確保 bottom 使用 calc，並刪除下方重複的 10% 設定 */
-    bottom: calc(15% + env(safe-area-inset-bottom)) !important; 
-    font-size: 5.5vw !important; /* 稍微放大一點點增加可讀性 */
+    /* 這裡改用 min() 確保字體在電腦上不會無限變大 */
+    font-size: min(5.5vw, 36px) !important; 
+    /* 降低位置，減少底部空蕩感 */
+    bottom: calc(8% + env(safe-area-inset-bottom)) !important; 
 }
 
 /* 桌機非全螢幕 */
@@ -79,6 +80,14 @@ html, body {
     #exit-fs-btn {
         top: 10px;
         right: 30px; /* 橫向時離邊緣遠一點，閃開圓角螢幕 */
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    :fullscreen #subtitle,
+    :-webkit-full-screen #subtitle {
+        font-size: 32px !important;
+        bottom: 10% !important;
     }
 }
 
@@ -208,14 +217,17 @@ body.has-fullscreen {
 #exit-fs-btn {
     display: none;
     position: absolute;
-    top: env(safe-area-inset-top, 15px); 
-    right: env(safe-area-inset-right, 15px);
-    width: 44px;
-    height: 44px;
-    background: none !important;
-    border: none !important;
-    /* 固定使用淡灰色 (0.25 透明度)，不隨動作改變 */
-    color: rgba(255, 255, 255, 0.25) !important;
+    top: env(safe-area-inset-top, 20px); 
+    right: env(safe-area-inset-right, 20px);
+    /* 加大尺寸 */
+    width: 50px;
+    height: 50px;
+    /* 改為深色圓形底盤 */
+    background: rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50%;
+    /* 提高顏色亮度 */
+    color: rgba(255, 255, 255, 0.8) !important;
     z-index: 2147483647 !important;
     cursor: pointer;
     display: flex;
@@ -228,17 +240,18 @@ body.has-fullscreen {
 }
 
 #exit-fs-btn svg {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     stroke: currentColor;
     stroke-width: 2.5;
     fill: none;
 }
 
-/* 移除 hover 變亮的設定，確保它永遠都是淡灰色 */
+/* 增加懸停效果方便電腦點擊 */
 #exit-fs-btn:hover {
-    color: rgba(255, 255, 255, 0.25) !important;
-    transform: scale(1); /* 移除縮放效果，減少干擾 */
+    background: rgba(50, 50, 50, 0.9) !important;
+    color: #fff !important;
+    transform: scale(1.1);
 }
 
 /*表情*/
@@ -558,6 +571,21 @@ exitFsBtn.onclick = (e) => {
     e.stopPropagation();
     toggleFullscreen();
 };
+
+// 監聽系統全螢幕變化（修正按下 Esc 鍵後的問題）
+document.addEventListener('fullscreenchange', handleExit);
+document.addEventListener('webkitfullscreenchange', handleExit);
+
+function handleExit() {
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFS && !wrapper.classList.contains("pseudo-fullscreen")) {
+        // 如果系統已經退出全螢幕，且也不是偽全螢幕狀態
+        document.body.classList.remove("is-in-fullscreen");
+        document.body.classList.remove("has-fullscreen");
+        fsBtn.innerText = "進入全螢幕";
+        showExitBtn();
+    }
+}
 </script>
 <script type="module">
   // 1. 載入 Firebase 核心功能
