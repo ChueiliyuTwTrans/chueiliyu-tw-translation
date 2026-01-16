@@ -506,8 +506,8 @@ body.has-fullscreen {
 /* 全螢幕表情觸發鈕 */
 #emoji-trigger-btn {
     position: absolute;
-    bottom: 30px;
-    right: 30px;
+    bottom: 60px; 
+    right: 10px;
     /* 手機 45px，電腦 60px */
     width: clamp(45px, 6vw, 65px);
     height: clamp(45px, 6vw, 65px);
@@ -518,7 +518,7 @@ body.has-fullscreen {
     font-size: clamp(20px, 3vw, 30px);
     cursor: pointer;
     z-index: 2147483647 !important;
-    display: none; 
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
@@ -546,16 +546,25 @@ body.has-fullscreen {
 /* 表情選擇抽屜 */
 #emoji-drawer {
     position: absolute;
-    bottom: calc(100px + env(safe-area-inset-bottom)); 
-    right: calc(30px + env(safe-area-inset-right));
+    /* 讓抽屜底部對齊按鈕的上方 (60px + 按鈕高度 + 間距) */
+    bottom: 130px; 
+    right: 20px;
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
     border-radius: 20px;
-    display: none;
+    display: none; /* 預設隱藏，靠 JS 的 .show 顯示 */
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     z-index: 2147483647 !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 全螢幕時的抽屜位置微調 */
+:fullscreen #emoji-drawer,
+:-webkit-full-screen #emoji-drawer,
+.pseudo-fullscreen #emoji-drawer {
+    bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+    right: calc(30px + env(safe-area-inset-right)) !important;
 }
 
 #emoji-drawer .emoji-btn {
