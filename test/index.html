@@ -282,6 +282,16 @@ body.has-fullscreen {
 }
 .emoji-btn:hover { background: #444; transform: translateY(-2px); }
 .emoji-btn span { font-size: 14px; margin-left: 5px; color: #aaa; }
+
+/* 當按鈕擁有 .active 類別時的樣式 */
+.emoji-btn.active {
+    background: #27ae60 !important; /* 變成綠色 */
+    border-color: #2ecc71 !important;
+    transform: scale(1.05);
+}
+.emoji-btn.active span {
+    color: #fff !important; /* 數字變白色 */
+}
     
 </style>
 </head>
@@ -612,25 +622,53 @@ function handleExit() {
   // 4. 表情牆連線邏輯
   const reactionTypes = ['love', 'funny', 'cool', 'thanks'];
 
+  // --- 1. 初始化讀取：同步雲端數字與本地狀態 ---
   reactionTypes.forEach(type => {
+    // 讀取雲端數字
     const countRef = ref(db, 'reactions/' + type);
     onValue(countRef, (snapshot) => {
       const data = snapshot.val() || 0;
       document.getElementById('count-' + type).innerText = data;
     });
+
+    // 檢查本地 LocalStorage，若已點擊則加上 active 樣式
+    if (localStorage.getItem('reacted-' + type) === 'true') {
+        const btn = document.querySelector(`button[onclick="addReaction('${type}')"]`);
+        if (btn) btn.classList.add('active');
+    }
   });
 
-  // 讓原本的 addReaction 函數支援雲端同步
+  // --- 2. 核心邏輯：切換點擊 (Toggle) ---
   window.addReaction = function(type) {
-    const countRef = ref(db, 'reactions/' + type);
-    runTransaction(countRef, (current) => {
-      return (current || 0) + 1;
-    });
-    
-    // 原有的縮放特效
     const btn = event.currentTarget;
-    btn.style.transform = "scale(1.2)";
-    setTimeout(() => btn.style.transform = "scale(1)", 100);
+    const isReacted = localStorage.getItem('reacted-' + type) === 'true';
+    const countRef = ref(db, 'reactions/' + type);
+
+    // 執行 Firebase 交易更新
+    runTransaction(countRef, (currentCount) => {
+      if (isReacted) {
+        // 取消點擊：數字 -1
+        return (currentCount || 1) - 1;
+      } else {
+        // 首次點擊：數字 +1
+        return (currentCount || 0) + 1;
+      }
+    }).then(() => {
+        // 交易成功後更新本地狀態
+        if (isReacted) {
+            localStorage.removeItem('reacted-' + type);
+            btn.classList.remove('active');
+        } else {
+            localStorage.setItem('reacted-' + type, 'true');
+            btn.classList.add('active');
+            
+            // 只有在「點讚」時才跳一下，取消時不跳
+            btn.style.transform = "scale(1.3)";
+            setTimeout(() => btn.style.transform = "scale(1.05)", 100);
+        }
+    }).catch((err) => {
+        console.error("同步失敗:", err);
+    });
   };
 </script>
 
