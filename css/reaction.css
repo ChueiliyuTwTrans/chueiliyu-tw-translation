@@ -375,10 +375,17 @@ body.has-fullscreen {
 #exit-fs-btn {
     display: none; 
     position: fixed !important;
+    
+    /* 基準 Y 軸：上方 20px */
     top: calc(20px + env(safe-area-inset-top)) !important;
+    
+    /* 基準 X 軸：右方 20px */
     right: 20px !important; 
-    width: 50px;
-    height: 50px;
+    
+    /* 基準大小：50px */
+    width: 50px !important;
+    height: 50px !important;
+    
     background: rgba(0, 0, 0, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 50%;
@@ -531,30 +538,38 @@ body.has-fullscreen {
 #emoji-trigger-btn {
     position: fixed !important;
     
-    /* 基礎定位：左上角 */
-    top: 80px; 
+    /* 垂直置中關鍵代碼 */
+    top: 50% !important;
+    transform: translateY(-50%); /* 往回拉 50% 自身高度，達成絕對置中 */
+    
+    /* 水平位置：靠左 */
     left: 20px !important;
-    bottom: auto !important; /* 確保 bottom 不干擾 top */
+    
+    /* 清除其他干擾 */
+    bottom: auto !important; 
     right: auto !important;
     
-    width: clamp(45px, 12vw, 60px); 
-    height: clamp(45px, 12vw, 60px);
-    font-size: clamp(20px, 5vw, 28px);
+    /* 大小：為了全螢幕對稱，建議統一設為 50px，或者用 clamp 微調 */
+    /* 這裡設為 50px 以保證跟退出按鈕一致 */
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px; /* 表情符號大小 */
+    
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     color: white;
     cursor: pointer;
-    display: flex !important; /* 強制顯示 */
+    display: flex !important;
     align-items: center;
     justify-content: center;
     z-index: 2147483647 !important; 
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 加入滑順過渡動畫 */
     outline: none;
 }
 
-#emoji-trigger-btn:hover { background: rgba(50, 50, 50, 0.9); transform: scale(1.1); }
-#emoji-trigger-btn:active { transform: scale(0.9); }
+#emoji-trigger-btn:hover { background: rgba(50, 50, 50, 0.9); transform: translateY(-50%) scale(1.1); }
+#emoji-trigger-btn:active { transform: translateY(-50%) scale(0.9); }
 
 #barrage-toggle-btn, #fs-btn {
     min-width: 110px;        /* 讓左右按鈕寬度相近，增加對稱感 */
@@ -570,16 +585,18 @@ body.has-fullscreen {
     position: fixed !important; 
     display: none;
     
-    /* 讓抽屜出現在按鈕的「下方」 */
-    top: 150px; 
-    left: 20px !important; 
+    /* 因為按鈕在中間，抽屜顯示在按鈕的「右邊」比較不會擋到視線或超出螢幕 */
+    top: 50% !important;
+    left: 80px !important; /* 20px(邊距) + 50px(按鈕) + 10px(間隙) */
+    transform: translateY(-50%); /* 跟著按鈕一起垂直置中 */
+    
     bottom: auto !important;
     right: auto !important;
     
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
     border-radius: 20px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* 恢復成 3x4 排列 */
     gap: 12px;
     z-index: 2147483647 !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -601,41 +618,19 @@ body.has-fullscreen {
 }
 
 #emoji-drawer .emoji-btn {
-    width: clamp(50px, 5vw, 70px);
-    height: clamp(50px, 5vw, 70px);
-    font-size: clamp(24px, 2.5vw, 32px);
+    width: 50px; height: 50px; font-size: 28px; /* 固定大小比較整齊 */
     display: flex; align-items: center; justify-content: center;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px; border: none; cursor: pointer;
 }
+#emoji-drawer .emoji-btn:hover { background: rgba(255, 255, 255, 0.2); }
+#emoji-drawer button:active { transform: scale(0.8); transition: transform 0.1s; }
+#emoji-drawer.show { display: grid !important; animation: drawerFadeIn 0.3s ease; }
+#emoji-trigger-btn.active { background: #5A98ED; border-color: #fff; }
 
-#emoji-drawer .emoji-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* 表情按鈕按下時的縮放效果 */
-#emoji-drawer button:active {
-    transform: scale(0.8);
-    transition: transform 0.1s;
-}
-
-/* 當加上 .show class 時，強制顯示為 grid */
-#emoji-drawer.show {
-    display: grid !important;
-    animation: drawerPopUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* 讓按鈕在開啟抽屜時，變色提示 */
-#emoji-trigger-btn.active {
-    background: #5A98ED; /* 亮藍色 */
-    border-color: #fff;
-    transform: scale(1.1);
-}
-
-/* 抽屜彈出的小動畫 */
-@keyframes drawerPopUp { 
-    from { opacity: 0; transform: translateY(-20px) scale(0.9); } 
-    to { opacity: 1; transform: translateY(0) scale(1); } 
+@keyframes drawerFadeIn { 
+    from { opacity: 0; transform: translateY(-50%) scale(0.9); } 
+    to { opacity: 1; transform: translateY(-50%) scale(1); } 
 }
 
 /* 全螢幕下顯示按鈕 */
@@ -660,19 +655,45 @@ body.has-fullscreen {
     z-index: 2147483647 !important;
 }
 
-/* 3. 確保按鈕本身在全螢幕時的位置正確 (避免跑版) */
+/* 全螢幕模式 - 觸發對稱變形 按鈕飛到左上角，與右上角的退出按鈕 Y 軸對齊 */
 :fullscreen #emoji-trigger-btn,
 :-webkit-full-screen #emoji-trigger-btn,
 .pseudo-fullscreen #emoji-trigger-btn {
-    /* 全螢幕時，頂部通常有空間，可以稍微靠上一點 */
-    top: calc(50px + env(safe-area-inset-top)) !important;
+    /* 1. 位置移到左上角 */
+    /* top: 20px (跟退出按鈕一樣) + 安全區域 */
+    top: calc(20px + env(safe-area-inset-top)) !important;
+    left: 20px !important;
+    
+    /* 2. 取消垂直置中 (很重要，不然會偏掉) */
+    transform: none !important; 
+    
+    /* 3. 大小確保與退出按鈕一致 (50px) */
+    width: 50px !important;
+    height: 50px !important;
 }
 
+/* 全螢幕時的 hover 效果修正 (不需要 translateY 了) */
+:fullscreen #emoji-trigger-btn:hover,
+.pseudo-fullscreen #emoji-trigger-btn:hover {
+    transform: scale(1.1) !important;
+}
+
+/* 全螢幕時的抽屜位置 (改為在按鈕下方) */
 :fullscreen #emoji-drawer,
 :-webkit-full-screen #emoji-drawer,
 .pseudo-fullscreen #emoji-drawer {
-    /* 抽屜跟隨按鈕上移 (50 + 60 + 10) */
-    top: calc(120px + env(safe-area-inset-top)) !important;
+    /* top: 20px(按鈕top) + 50px(按鈕高) + 10px(間隙) = 80px */
+    top: calc(80px + env(safe-area-inset-top)) !important;
+    left: 20px !important;
+    
+    /* 取消垂直置中 */
+    transform: none !important;
+    animation: drawerDrop 0.3s ease !important;
+}
+
+@keyframes drawerDrop { 
+    from { opacity: 0; transform: translateY(-10px); } 
+    to { opacity: 1; transform: translateY(0); } 
 }
 
 /* =============================================
@@ -681,22 +702,19 @@ body.has-fullscreen {
    ============================================= */
 @media screen and (orientation: landscape) {
     
-    /* 1. 退出按鈕 (右上) - 往左推避開圓角 */
+    /* 1. 右上角：退出按鈕 */
     #exit-fs-btn {
         right: calc(50px + env(safe-area-inset-right)) !important;
-        top: 20px !important;
     }
 
-    /* 2. 表情按鈕 (左上) - 往右推避開瀏海 */
-    #emoji-trigger-btn,
+    /* 2. 左上角：表情按鈕 (全螢幕模式下) */
     :fullscreen #emoji-trigger-btn,
     :-webkit-full-screen #emoji-trigger-btn,
     .pseudo-fullscreen #emoji-trigger-btn {
         left: calc(50px + env(safe-area-inset-left)) !important;
     }
 
-    /* 3. 表情抽屜 (左上) - 跟隨按鈕 */
-    #emoji-drawer,
+    /* 3. 左上角：抽屜 (全螢幕模式下) */
     :fullscreen #emoji-drawer,
     :-webkit-full-screen #emoji-drawer,
     .pseudo-fullscreen #emoji-drawer {
