@@ -1103,9 +1103,40 @@ function setTheme(theme) {
 const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
 setTheme(savedTheme);
 </script>
+<script type="module">
+  // 1. 載入 Firebase 核心功能與 Analytics
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  // 加上這行來載入分析模組
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    
+  // 2. Firebase 設定
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9Hi740uOlJf1dSyDpyeispds_TtCjNjg",
+    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chueiliyu-tw-translation",
+    storageBucket: "chueiliyu-tw-translation.appspot.com",
+    messagingSenderId: "625769420546",
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+    measurementId: "G-3PM3GTXPHF"
+  };
 
+  // 3. 啟動連線
+  const app = initializeApp(firebaseConfig);
+  
+  // 啟動 Analytics
+  const analytics = getAnalytics(app);
+
+  // 「借」給外部 JS 使用
+  window.db = getDatabase(app);
+  window.fb_ref = ref;            
+  window.fb_onValue = onValue;    
+  window.fb_runTransaction = runTransaction; 
+</script>
 </body>
 </html>
+
 
 
 
