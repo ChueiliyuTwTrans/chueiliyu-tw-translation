@@ -636,6 +636,13 @@ body.theme-dark .news-board { background: #1e293b; color: #cbd5e1; border-bottom
         padding: 8px 12px; 
         gap: 8px; /* 縮小間距 */
         justify-content: flex-start; /* 靠左對齊，比較整齊 */
+        position: relative; 
+        z-index: 5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    body.theme-fancy .news-board {
+        /* 讓底部邊框稍微亮一點，形成一條明顯但柔和的分割線 */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.35);
     }
     .news-item {
         width: 100%; /* 手機版一行一個 */
@@ -1135,6 +1142,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
