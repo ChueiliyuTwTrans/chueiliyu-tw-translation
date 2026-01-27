@@ -11,8 +11,10 @@
 
 <meta property="og:title" content="崔立于台灣翻譯站">
 <meta property="og:description" content="整理崔立于的直播、節目、電台中文翻譯。">
-<meta property="og:image" content="images/content33.webp"> <meta property="og:url" content="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/">
+<meta property="og:image" content="images/content33.webp"> 
+<meta property="og:url" content="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/">
 <meta property="og:type" content="website">
+
 <style>
 :root {
     --header-box-width: 320px;
@@ -131,7 +133,7 @@ header p {
     font-size: 16px;
     cursor: pointer;
     line-height: 1;
-    display: none; /* 預設隱藏 */
+    display: none;
 }
 #clearSearch.visible { display: block; }
 
@@ -224,14 +226,13 @@ header p {
 .section { display: none; }
 .section.active { display: block; }
 
-/* Grid 容器 (原本直接是 .section，現在改為內部容器以便放篩選器) */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
 }
 
-/* ===== ⭐ 新增：篩選按鈕列樣式 ⭐ ===== */
+/* ===== Filter Bar ===== */
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
@@ -239,6 +240,11 @@ header p {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px dashed rgba(0,0,0,0.1);
+    min-height: 38px; /* 避免沒按鈕時完全塌陷 */
+}
+/* 如果該分類沒有任何篩選按鈕，隱藏那條線與空間 */
+.filter-bar:empty {
+    display: none;
 }
 
 .filter-btn {
@@ -264,7 +270,6 @@ header p {
     box-shadow: 0 2px 5px rgba(96, 165, 250, 0.4);
 }
 
-/* 深色模式適配 */
 .theme-dark .filter-btn {
     background: rgba(30,41,59,0.7);
     color: #ccc;
@@ -289,7 +294,7 @@ header p {
     color: inherit;
     transition: transform 0.2s;
     position: relative;
-    display: block; /* 讓 a tag 變成 block */
+    display: block;
 }
 
 .card:hover { transform: translateY(-4px); }
@@ -307,7 +312,6 @@ header p {
 .card-desc { font-size: 13px; color: #666; margin-top: 6px; }
 .card-credit { margin-top: 10px; font-size: 12px; color: #777; line-height: 1.5; }
 
-/* 搜尋高亮 */
 .search-highlight {
     outline: 3px solid #60a5fa;
     outline-offset: 4px;
@@ -316,10 +320,8 @@ header p {
     outline: 3px solid #fde68a;
 }
 
-/* Footer */
 footer { text-align: center; font-size: 12px; color: #999; padding: 16px; }
 
-/* ===== Mobile Media Queries (保留原本的邏輯，稍微簡化) ===== */
 @media (max-width: 768px) {
     header {
         display: flex;
@@ -336,11 +338,9 @@ footer { text-align: center; font-size: 12px; color: #999; padding: 16px; }
     .sidebar { width: 100%; display: flex; padding: 12px; border-right: none; border-bottom: 2px solid #fff; gap: 8px; }
     .sidebar button { flex: 1; margin-bottom: 0; }
     .content { width: 100%; box-sizing: border-box; padding: 16px; }
-    
     .theme-fancy { --header-box-width: 100%; }
 }
 
-/* ===== Theme Colors (Light/Dark) ===== */
 body.theme-light { background: #ffffff; color: #1f2933; }
 body.theme-light .card { border: 1px solid #e5e7eb; box-shadow: none; }
 body.theme-light header, body.theme-light .sidebar, body.theme-light .content { background-color: #f9fafb; }
@@ -393,6 +393,7 @@ body.theme-dark header, body.theme-dark .sidebar, body.theme-dark .content { bac
 
     <main class="content">
         <div id="live" class="section active">
+            <div id="live-filters" class="filter-bar"></div>
             <div class="card-grid" id="live-grid"></div>
         </div>
 
@@ -402,6 +403,7 @@ body.theme-dark header, body.theme-dark .sidebar, body.theme-dark .content { bac
         </div>
 
         <div id="radio" class="section">
+            <div id="radio-filters" class="filter-bar"></div>
             <div class="card-grid" id="radio-grid"></div>
         </div>
     </main>
@@ -414,7 +416,6 @@ body.theme-dark header, body.theme-dark .sidebar, body.theme-dark .content { bac
 <script>
 /* =========================================
    ⭐ 1. 資料庫 (JSON Data)
-   在這裡新增資料，頁面會自動更新
    ========================================= */
 const videoData = [
     // --- LIVE ---
@@ -452,7 +453,7 @@ const videoData = [
         cast: []
     },
 
-    // --- PROGRAM (這裡加上 cast 參演人員 tag) ---
+    // --- PROGRAM ---
     {
         id: 'p1',
         category: 'program',
@@ -568,20 +569,20 @@ const videoData = [
 ];
 
 /* =========================================
-   ⭐ 2. 核心渲染功能 (Rendering)
+   ⭐ 2. 核心渲染功能
    ========================================= */
-
-// 初始化
 window.onload = function() {
     renderAllCards(videoData);
-    generateProgramFilters(); // 生成篩選按鈕
     
-    // 恢復上次主題
+    // ⭐ 修改 2: 初始化所有類別的篩選器
+    ['live', 'program', 'radio'].forEach(cat => {
+        generateFilters(cat);
+    });
+    
     const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
     setTheme(savedTheme);
 };
 
-// 產生單一卡片 HTML
 function createCardHTML(item) {
     const badge = item.isNew ? '<span class="new-badge">NEW</span>' : '';
     const credit = item.credit ? `<div class="card-credit">${item.credit}</div>` : '';
@@ -603,7 +604,6 @@ function createCardHTML(item) {
     `;
 }
 
-// 渲染所有卡片
 function renderAllCards(data) {
     const liveContainer = document.getElementById('live-grid');
     const programContainer = document.getElementById('program-grid');
@@ -615,64 +615,67 @@ function renderAllCards(data) {
 }
 
 /* =========================================
-   ⭐ 3. 節目篩選功能 (Program Filters)
+   ⭐ 3. 通用篩選功能 (Generic Filters)
    ========================================= */
-function generateProgramFilters() {
-    // 找出所有 Program 分類的 cast
-    const programs = videoData.filter(i => i.category === 'program');
-    const allCasts = programs.flatMap(p => p.cast); // 攤平所有陣列
-    const uniqueCasts = [...new Set(allCasts)]; // 去除重複
 
+// ⭐ 修改 3: 函式通用化 (接受 category 參數)
+function generateFilters(category) {
+    // 1. 找出該分類的所有 cast
+    const items = videoData.filter(i => i.category === category);
+    const allCasts = items.flatMap(p => p.cast);
+    const uniqueCasts = [...new Set(allCasts)];
+
+    // 如果該分類沒有任何出演名單，就直接結束，不產生任何按鈕
     if (uniqueCasts.length === 0) return;
 
-    const filterContainer = document.getElementById('program-filters');
+    // 2. 找到對應的容器 (例如 program-filters, live-filters...)
+    const filterContainer = document.getElementById(category + '-filters');
+    if (!filterContainer) return;
     
-    // "全部" 按鈕
-    let html = `<button class="filter-btn active" onclick="filterProgram('all', this)">全部</button>`;
+    // 3. 產生 "全部" 按鈕
+    let html = `<button class="filter-btn active" onclick="filterCategory('${category}', 'all', this)">全部</button>`;
     
-    // 各個參演人員按鈕
+    // 4. 產生各個參演人員按鈕
     uniqueCasts.forEach(cast => {
-        html += `<button class="filter-btn" onclick="filterProgram('${cast}', this)">${cast}</button>`;
+        html += `<button class="filter-btn" onclick="filterCategory('${category}', '${cast}', this)">${cast}</button>`;
     });
 
     filterContainer.innerHTML = html;
 }
 
-function filterProgram(castName, btnElement) {
-    // 按鈕樣式切換
-    document.querySelectorAll('#program-filters .filter-btn').forEach(b => b.classList.remove('active'));
+// ⭐ 修改 4: 篩選動作通用化
+function filterCategory(category, castName, btnElement) {
+    // 1. 按鈕樣式切換 (只針對該分類的按鈕)
+    const containerId = '#' + category + '-filters';
+    document.querySelectorAll(containerId + ' .filter-btn').forEach(b => b.classList.remove('active'));
     btnElement.classList.add('active');
 
-    // 篩選資料
-    const programContainer = document.getElementById('program-grid');
+    // 2. 篩選資料
+    const gridId = category + '-grid';
+    const gridContainer = document.getElementById(gridId);
     let filteredData;
 
     if (castName === 'all') {
-        filteredData = videoData.filter(i => i.category === 'program');
+        filteredData = videoData.filter(i => i.category === category);
     } else {
-        filteredData = videoData.filter(i => i.category === 'program' && i.cast.includes(castName));
+        filteredData = videoData.filter(i => i.category === category && i.cast.includes(castName));
     }
 
-    // 重新渲染 Program 區塊
-    programContainer.innerHTML = filteredData.map(createCardHTML).join('');
+    // 3. 重新渲染該區塊
+    gridContainer.innerHTML = filteredData.map(createCardHTML).join('');
 }
 
 /* =========================================
    ⭐ 4. 切換與搜尋功能
    ========================================= */
-
 function switchTab(sectionId, btn) {
-    // 隱藏所有 section
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    // 顯示目標 section
     document.getElementById(sectionId).classList.add('active');
     
-    // Sidebar 按鈕樣式
     document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 }
 
-/* 搜尋 (支援跳轉與高亮) */
 const searchInput = document.getElementById('searchInput');
 const clearBtn = document.getElementById('clearSearch');
 const resultsBox = document.getElementById('searchResults');
@@ -694,12 +697,10 @@ function handleSearch(keyword) {
         'radio': '📻 電台'
     };
 
-    // 搜尋資料庫
     const matched = videoData.filter(item => 
         item.title.toLowerCase().includes(keyword.toLowerCase())
     );
 
-    // 依分類統計
     ['live', 'program', 'radio'].forEach(cat => {
         const count = matched.filter(m => m.category === cat).length;
         if (count > 0) {
@@ -711,51 +712,47 @@ function handleSearch(keyword) {
     });
 }
 
-// 跳轉到分類並高亮
 function jumpToCategory(catId, keyword) {
-    // 1. 切換分頁
     const tabBtn = document.querySelector(`.sidebar button[onclick*="${catId}"]`);
     switchTab(catId, tabBtn);
 
-    // 2. 清除舊高亮
     clearHighlight();
 
-    // 3. 找出目前畫面上的卡片並高亮
-    // 注意：如果是 Program 頁面且有篩選，可能需要先重置篩選，這裡簡單處理直接針對目前顯示的 DOM 做高亮
-    const container = document.getElementById(`${catId}-grid`);
-    const cards = container.querySelectorAll('.card');
-    let firstMatch = null;
+    // 這裡需要注意：如果使用者之前篩選過，這裡可能需要重置篩選才能找到被隱藏的卡片
+    // 簡單解法：先自動觸發 "全部" 按鈕
+    const allBtn = document.querySelector(`#${catId}-filters button:first-child`);
+    if(allBtn) allBtn.click(); 
 
-    cards.forEach(card => {
-        const title = card.getAttribute('data-title').toLowerCase();
-        if (title.includes(keyword.toLowerCase())) {
-            card.classList.add('search-highlight');
-            if (!firstMatch) firstMatch = card;
-        }
-    });
+    // 稍微延遲等渲染完
+    setTimeout(() => {
+        const container = document.getElementById(`${catId}-grid`);
+        const cards = container.querySelectorAll('.card');
+        let firstMatch = null;
 
-    // 4. 滾動
-    if (firstMatch) {
-        setTimeout(() => {
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title').toLowerCase();
+            if (title.includes(keyword.toLowerCase())) {
+                card.classList.add('search-highlight');
+                if (!firstMatch) firstMatch = card;
+            }
+        });
+
+        if (firstMatch) {
             firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-    }
+        }
+    }, 50);
 }
 
 function clearHighlight() {
     document.querySelectorAll('.search-highlight').forEach(el => el.classList.remove('search-highlight'));
 }
 
-// 清除按鈕事件
 clearBtn.addEventListener('click', () => {
     searchInput.value = '';
     handleSearch('');
     searchInput.focus();
 });
 
-/* =========================================
-   ⭐ 5. 主題設定
-   ========================================= */
 function setTheme(theme) {
     const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
     document.body.classList.remove(...themes);
@@ -765,7 +762,6 @@ function setTheme(theme) {
 </script>
 
 <script type="module">
-  // Firebase 設定保持不變
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
