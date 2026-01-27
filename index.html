@@ -489,28 +489,29 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    /* 使用 rgb(84, 99, 108) 製作深色質感漸層 */
-    background: linear-gradient(135deg, rgba(84, 99, 108, 0.9), rgba(45, 55, 60, 0.9));
+    /* 將透明度從 0.9 調降至 0.75，讓顏色看起來更淡、更通透 */
+    background: linear-gradient(135deg, rgba(84, 99, 108, 0.75), rgba(45, 55, 60, 0.75));
     
     /* 毛玻璃 */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     
     /* 質感邊框 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 陰影也稍微調淡 */
     
     /* 文字反白 */
     color: #ffffff; 
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 /* ⭐ 花俏模式下的標籤調整為低調半透明，讓深灰底更協調 */
 body.theme-fancy .news-tag {
-    background: rgba(255, 255, 255, 0.15);
-    color: #e2e8f0;
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
+    color: #f3f4f6;
+    border: 1px solid rgba(255,255,255,0.25);
 }
+    
 /* 重要標籤可以用原本顏色 */
 body.theme-fancy .tag-new {
     background: var(--primary-color);
@@ -1142,6 +1143,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
