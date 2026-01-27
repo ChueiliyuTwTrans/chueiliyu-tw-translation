@@ -188,26 +188,23 @@ header p {
     color: #333;
 }
 
-/* ===== 📢 NEW: 靜態公告板 (Static News Board) ===== */
+/* ===== 靜態公告板 (Static News Board) ===== */
 .news-board {
     width: 100%;
-    /* 高度自動，依內容多寡決定 */
     height: auto;
     min-height: 40px;
     background: #f8f9fa;
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    
-    /* 改用 Flex 讓內容置中並自動換行 */
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; /* 允許換行 */
-    
+    flex-wrap: wrap; 
     padding: 8px 16px;
     box-sizing: border-box;
     font-size: 13px;
     color: #555;
-    gap: 16px; /* 公告之間的間距 */
+    gap: 16px;
+    transition: all 0.3s ease; /* 讓切換模式時顏色平滑過渡 */
 }
 
 /* 每一則公告的樣式 */
@@ -492,12 +489,17 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(5px);
-    color: #333;
-    border-bottom: 1px solid rgba(255,255,255,0.4);
+    /* 更通透的背景，讓藍天透出來 */
+    background: rgba(255, 255, 255, 0.25);
+    /* 強力模糊，製造霧面玻璃質感 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* 玻璃邊緣光澤 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    /* 文字保持深色，確保在亮背景上可讀 */
+    color: #1f2937;
 }
-
 
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #ffffff; color: #1f2937; }
@@ -1116,6 +1118,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
