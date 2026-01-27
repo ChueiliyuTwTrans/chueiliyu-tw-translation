@@ -490,17 +490,16 @@ body.theme-fancy .search-highlight {
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
     /* 更通透的背景，讓藍天透出來 */
-    background: rgba(255, 255, 255, 0.25);
-    /* 強力模糊，製造霧面玻璃質感 */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    /* 玻璃邊緣光澤 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    /* 文字保持深色，確保在亮背景上可讀 */
-    color: #1f2937;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("images/content5.webp");
+    background-size: cover;
+    background-position: center top;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    color: #333;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6); /* 讓文字在背景上更清晰 */
 }
-
+    
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #ffffff; color: #1f2937; }
 
@@ -1118,6 +1117,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
