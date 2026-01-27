@@ -574,7 +574,7 @@ const videoData = [
 window.onload = function() {
     renderAllCards(videoData);
     
-    // ⭐ 修改 2: 初始化所有類別的篩選器
+    // 初始化所有類別的篩選器
     ['live', 'program', 'radio'].forEach(cat => {
         generateFilters(cat);
     });
@@ -615,27 +615,47 @@ function renderAllCards(data) {
 }
 
 /* =========================================
-   ⭐ 3. 通用篩選功能 (Generic Filters)
+   ⭐ 3. 通用篩選功能 (Generic Filters) - 已加入置頂排序
    ========================================= */
 
-// ⭐ 修改 3: 函式通用化 (接受 category 參數)
 function generateFilters(category) {
     // 1. 找出該分類的所有 cast
     const items = videoData.filter(i => i.category === category);
     const allCasts = items.flatMap(p => p.cast);
-    const uniqueCasts = [...new Set(allCasts)];
+    let uniqueCasts = [...new Set(allCasts)]; // 使用 let 讓我們可以對它進行排序
 
     // 如果該分類沒有任何出演名單，就直接結束，不產生任何按鈕
     if (uniqueCasts.length === 0) return;
 
-    // 2. 找到對應的容器 (例如 program-filters, live-filters...)
+    // 2. ⭐ 定義優先顯示名單 (Priority List)
+    const priorityList = ['HANULIZ', '張瀚音', '姜玗進'];
+
+    // 3. ⭐ 執行自定義排序
+    uniqueCasts.sort((a, b) => {
+        const indexA = priorityList.indexOf(a);
+        const indexB = priorityList.indexOf(b);
+
+        // 如果兩人都在優先名單內，依照 priorityList 的順序排
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+
+        // 如果只有 A 在優先名單，A 排前面
+        if (indexA !== -1) return -1;
+
+        // 如果只有 B 在優先名單，B 排前面
+        if (indexB !== -1) return 1;
+
+        // 剩下的人，依照筆畫或字母順序排列 (使用 localeCompare)
+        return a.localeCompare(b, 'zh-TW'); 
+    });
+
+    // 4. 找到對應的容器 (例如 program-filters, live-filters...)
     const filterContainer = document.getElementById(category + '-filters');
     if (!filterContainer) return;
     
-    // 3. 產生 "全部" 按鈕
+    // 5. 產生 "全部" 按鈕
     let html = `<button class="filter-btn active" onclick="filterCategory('${category}', 'all', this)">全部</button>`;
     
-    // 4. 產生各個參演人員按鈕
+    // 6. 產生排序後的參演人員按鈕
     uniqueCasts.forEach(cast => {
         html += `<button class="filter-btn" onclick="filterCategory('${category}', '${cast}', this)">${cast}</button>`;
     });
@@ -643,7 +663,6 @@ function generateFilters(category) {
     filterContainer.innerHTML = html;
 }
 
-// ⭐ 修改 4: 篩選動作通用化
 function filterCategory(category, castName, btnElement) {
     // 1. 按鈕樣式切換 (只針對該分類的按鈕)
     const containerId = '#' + category + '-filters';
@@ -781,7 +800,7 @@ function setTheme(theme) {
   const analytics = getAnalytics(app);
   window.db = getDatabase(app);
   window.fb_ref = ref;            
-  window.fb_onValue = onValue;     
+  window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 </script>
 </body>
