@@ -18,7 +18,8 @@
 <style>
 :root {
     --header-box-width: 320px;
-    --primary-color: #60a5fa; /* 主要藍色 */
+    --primary-color: #60a5fa; /* 主要藍色 (用於 Light/Dark) */
+    --fancy-color: #d946ef;   /* 花俏粉紫 (用於 Fancy 模式) */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -32,10 +33,11 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* ===== Header ===== */
+/* ===== Header (預設樣式 - 對應花俏模式) ===== */
 header {
     position: relative;
     height: 220px;
+    /* 預設保留圖片 (Fancy模式用) */
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
@@ -43,19 +45,21 @@ header {
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* 移除舊的粗白邊，改用陰影增加層次 */
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 10;
+    transition: background 0.3s ease; /* 讓背景切換有動畫 */
 }
 
 .header-text {
     position: relative;
     z-index: 1;
     padding: 16px 24px;
-    background: rgba(0, 0, 0, 0.45); /*稍微加深一點增加對比*/
+    background: rgba(0, 0, 0, 0.45);
     border-radius: 16px;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.2); /* 增加細緻的半透明邊框 */
+    border: 1px solid rgba(255,255,255,0.2);
+    /* 限制最大寬度，避免在電腦版太寬 */
+    max-width: 600px; 
 }
 
 header h1 {
@@ -105,7 +109,6 @@ header p {
     transition: all 0.2s;
 }
 
-/* 讓搜尋框Focus時更明顯 */
 .search-input-wrap input:focus {
     background: rgba(255, 255, 255, 0.95);
     color: #333;
@@ -113,13 +116,8 @@ header p {
     box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
 }
 
-.search-input-wrap input::placeholder {
-    color: rgba(255,255,255,0.8);
-}
-/* Focus時 placeholder 顏色變深 */
-.search-input-wrap input:focus::placeholder {
-    color: #999;
-}
+.search-input-wrap input::placeholder { color: rgba(255,255,255,0.8); }
+.search-input-wrap input:focus::placeholder { color: #999; }
 
 .search-results {
     margin-top: 8px;
@@ -158,9 +156,7 @@ header p {
     display: none;
     color: rgba(255,255,255,0.8);
 }
-.search-input-wrap input:focus ~ #clearSearch {
-    color: #666;
-}
+.search-input-wrap input:focus ~ #clearSearch { color: #666; }
 #clearSearch.visible { display: block; }
 
 
@@ -194,19 +190,17 @@ header p {
 /* ===== Layout ===== */
 .container {
     display: flex;
-    min-height: calc(100vh - 220px); /* 扣掉 Header 高度 */
+    min-height: calc(100vh - 220px);
 }
 
 .sidebar {
     width: 260px;
     padding: 24px;
-    /* 移除舊背景設定，改由 Theme 控制 */
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
-    /* 移除粗白邊 */
     border-right: none; 
     display: flex;
     flex-direction: column;
@@ -216,9 +210,9 @@ header p {
 .sidebar button {
     width: 100%;
     padding: 14px 16px;
-    margin-bottom: 0; /* 用 gap 控制間距 */
+    margin-bottom: 0;
     border: none;
-    background: transparent; /* 預設透明 */
+    background: transparent;
     cursor: pointer;
     font-size: 15px;
     font-weight: 500;
@@ -230,20 +224,12 @@ header p {
     align-items: center;
 }
 
-/* 讓按鈕 hover 時有輕微背景 */
-.sidebar button:hover {
-    background: rgba(0,0,0,0.05);
-}
-
-/* Active 狀態統一在 Theme 裡設定顏色，這裡只設形狀 */
-.sidebar button.active {
-    font-weight: 700;
-}
+.sidebar button:hover { background: rgba(0,0,0,0.05); }
+.sidebar button.active { font-weight: 700; }
 
 .content {
     flex: 1;
     padding: 32px;
-    /* 移除舊背景 */
     background-size: cover;
     background-position: center;
 }
@@ -258,7 +244,7 @@ header p {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* 卡片稍微寬一點 */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 24px;
 }
 
@@ -269,7 +255,7 @@ header p {
     gap: 10px;
     margin-bottom: 24px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(0,0,0,0.06); /* 虛線改成極淡的實線 */
+    border-bottom: 1px solid rgba(0,0,0,0.06);
     min-height: 38px;
 }
 .filter-bar:empty { display: none; }
@@ -278,7 +264,7 @@ header p {
     padding: 8px 16px;
     border-radius: 99px;
     border: 1px solid transparent;
-    background: rgba(0,0,0,0.05); /* 淺灰底 */
+    background: rgba(0,0,0,0.05);
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s;
@@ -286,10 +272,9 @@ header p {
     font-weight: 500;
 }
 
-.filter-btn:hover {
-    background: rgba(0,0,0,0.1);
-}
+.filter-btn:hover { background: rgba(0,0,0,0.1); }
 
+/* 預設 active 顏色 (Light/Dark 用藍色) */
 .filter-btn.active {
     background: var(--primary-color);
     color: white;
@@ -299,20 +284,19 @@ header p {
 /* ===== Card ===== */
 .card {
     background: #ffffff;
-    border-radius: 16px; /* 更圓潤 */
+    border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
     position: relative;
     display: block;
-    border: none; /* 移除邊框，改用陰影 */
+    border: none;
 }
 
-/* 圖片容器 */
 .card-img-wrap {
     width: 100%;
-    height: 160px; /* 圖片加高一點 */
+    height: 160px;
     overflow: hidden;
     position: relative;
     background: #e5e7eb;
@@ -325,9 +309,7 @@ header p {
     transition: transform 0.5s ease;
 }
 
-.card:hover img {
-    transform: scale(1.05); /* 圖片微放大 */
-}
+.card:hover img { transform: scale(1.05); }
 
 .card-body { padding: 16px; }
 
@@ -377,10 +359,10 @@ footer {
    🎨 THEME SYSTEMS (樣式系統)
    ========================================= */
 
-/* 1. 🌸 花俏模式 (維持原圖，但優化細節) */
+/* 1. 🌸 花俏模式 (Fancy) */
 body.theme-fancy .sidebar {
     background-image: url("images/content5.webp");
-    border-right: 1px solid rgba(255,255,255,0.4); /* 極細白線 */
+    border-right: 1px solid rgba(255,255,255,0.4);
 }
 body.theme-fancy .content {
     background-image: url("images/content6.webp");
@@ -396,146 +378,142 @@ body.theme-fancy .sidebar button:hover {
 }
 body.theme-fancy .sidebar button.active {
     background: #fff;
-    color: #d946ef; /* 花俏粉紫色 */
+    color: var(--fancy-color); /* 粉紫色 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-body.theme-fancy .card {
-    box-shadow: var(--shadow-md);
+/* ⭐ 重點：花俏模式下 Filter 換成粉紫色，避免跟藍色背景撞色 */
+body.theme-fancy .filter-btn.active {
+    background: var(--fancy-color); 
+    box-shadow: 0 4px 10px rgba(217, 70, 239, 0.4);
 }
+body.theme-fancy .card { box-shadow: var(--shadow-md); }
 body.theme-fancy .card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
 
-/* 2. 🤍 高級白色模式 (Premium Light) */
-body.theme-light {
-    background: #ffffff;
-    color: #1f2937;
+/* 2. 🤍 高級白色模式 (Light) */
+body.theme-light { background: #ffffff; color: #1f2937; }
+
+/* Header: 移除圖片，改用淺灰藍底 */
+body.theme-light header {
+    background-image: none; 
+    background-color: #f1f5f9; 
+}
+/* 讓文字框在淺色底上更乾淨 (移除深色遮罩，改為白色半透明) */
+body.theme-light .header-text {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255,255,255,0.8);
+}
+body.theme-light header h1 { color: #1f2937; text-shadow: none; }
+body.theme-light header p { color: #4b5563; }
+body.theme-light .search-input-wrap input {
+    background: #ffffff; color: #333; border: 1px solid #cbd5e1;
 }
 
-/* 讓 Content 區域有淺灰藍背景，與卡片和 Sidebar 區隔 */
-body.theme-light .content {
-    background-color: #f3f4f6; /* 護眼淺灰 */
-    background-image: none;
-}
-
-/* Sidebar 純白，乾淨 */
+body.theme-light .content { background-color: #f8fafc; background-image: none; }
 body.theme-light .sidebar {
-    background-color: #ffffff;
-    background-image: none;
-    border-right: 1px solid #e5e7eb; /* 只有一條很淡的灰線 */
+    background-color: #ffffff; background-image: none;
+    border-right: 1px solid #e2e8f0;
 }
+body.theme-light .sidebar button { background: transparent; color: #64748b; box-shadow: none; }
+body.theme-light .sidebar button:hover { background: #f1f5f9; color: #334155; }
+body.theme-light .sidebar button.active { background: #eff6ff; color: #2563eb; }
 
-/* 按鈕樣式：像 App 一樣的選單 */
-body.theme-light .sidebar button {
-    background: transparent;
-    color: #64748b; /* 預設灰字 */
-    box-shadow: none;
-}
-body.theme-light .sidebar button:hover {
-    background: #f1f5f9;
-    color: #334155;
-}
-body.theme-light .sidebar button.active {
-    background: #eff6ff; /* 極淺藍底 */
-    color: #2563eb;       /* 質感藍字 */
-}
-
-/* 卡片：白色浮在淺灰背景上 */
 body.theme-light .card {
-    background: #ffffff;
-    box-shadow: var(--shadow-sm); /* 平時只有微微陰影 */
-    border: 1px solid transparent; /* 預留邊框位置 */
+    background: #ffffff; box-shadow: var(--shadow-sm); border: 1px solid transparent;
 }
 body.theme-light .card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg); /* 懸浮感 */
-    border-color: #bfdbfe; /* 微藍邊框 */
+    transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #bfdbfe;
 }
-body.theme-light .card-credit {
-    border-top-color: #f3f4f6;
-}
+body.theme-light .card-credit { border-top-color: #f3f4f6; }
 
 
-/* 3. 🌙 高級深色模式 (Premium Dark) */
-body.theme-dark {
-    background: #0f172a; /* Slate 900 深岩灰 */
-    color: #f1f5f9;
+/* 3. 🌙 高級深色模式 (Dark) */
+body.theme-dark { background: #0f172a; color: #f1f5f9; }
+
+/* Header: 移除圖片，改用深岩灰底 */
+body.theme-dark header {
+    background-image: none;
+    background-color: #1e293b; /* Slate 800 */
 }
 body.theme-dark .header-text {
-    background: rgba(2, 6, 23, 0.6);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Sidebar 比背景稍微亮一點點，做出層次 */
 body.theme-dark .sidebar {
-    background-color: #1e293b; /* Slate 800 */
+    background-color: #0f172a; /* Slate 900 (與背景同色) */
     background-image: none;
     border-right: 1px solid #334155;
 }
-body.theme-dark .content {
-    background-color: #0f172a; /* Slate 900 */
-    background-image: none;
-}
+body.theme-dark .content { background-color: #0f172a; background-image: none; }
 
-/* 深色模式按鈕 */
-body.theme-dark .sidebar button {
-    color: #94a3b8;
-    background: transparent;
-    box-shadow: none;
-}
-body.theme-dark .sidebar button:hover {
-    background: rgba(255,255,255,0.05);
-    color: #e2e8f0;
-}
+body.theme-dark .sidebar button { color: #94a3b8; background: transparent; box-shadow: none; }
+body.theme-dark .sidebar button:hover { background: rgba(255,255,255,0.05); color: #e2e8f0; }
 body.theme-dark .sidebar button.active {
-    background: #334155; /* Slate 700 */
-    color: #60a5fa; /* 亮藍色 */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    background: #1e293b; color: #60a5fa; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* 深色模式卡片 */
 body.theme-dark .card {
-    background: #1e293b; /* Slate 800 */
-    border: 1px solid #334155; /* 深灰細邊框 */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    background: #1e293b; border: 1px solid #334155; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 body.theme-dark .card:hover {
-    transform: translateY(-4px);
-    background: #273549; /* Hover 變亮 */
-    border-color: #475569;
+    transform: translateY(-4px); background: #273549; border-color: #475569;
 }
-body.theme-dark .card-desc {
-    color: #94a3b8;
-}
-body.theme-dark .card-credit {
-    color: #64748b;
-    border-top-color: #334155;
-}
+body.theme-dark .card-desc { color: #94a3b8; }
+body.theme-dark .card-credit { color: #64748b; border-top-color: #334155; }
 
-/* 深色模式的 Filter */
 body.theme-dark .filter-btn {
-    background: #1e293b;
-    color: #cbd5e1;
-    border: 1px solid #334155;
+    background: #1e293b; color: #cbd5e1; border: 1px solid #334155;
 }
-body.theme-dark .filter-btn:hover {
-    background: #334155;
-}
+body.theme-dark .filter-btn:hover { background: #334155; }
 body.theme-dark .filter-btn.active {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: #fff;
+    background: #3b82f6; border-color: #3b82f6; color: #fff;
 }
 
 
-/* RWD 手機版調整 */
+/* ⭐ RWD 手機版優化 ⭐ */
 @media (max-width: 768px) {
     header {
         height: auto;
-        padding: 60px 20px 20px; /* 上方留空間給搜尋框 */
+        padding: 20px 20px 30px; /* 增加底部 Padding */
+        flex-direction: column;  /* 垂直排列 */
+        gap: 16px; /* 元件之間的間距 */
     }
+    
+    /* 1. 搜尋框在最上方 */
+    .search-box {
+        position: relative;
+        top: 0; left: 0;
+        width: 100%;
+        max-width: 100%;
+        order: 1; /* 排第一 */
+    }
+    .search-input-wrap { width: 100%; }
+
+    /* 2. 主題按鈕排第二 */
+    .header-theme {
+        position: relative;
+        top: 0; right: 0;
+        order: 2; /* 排第二 */
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* 3. 文字內容排第三 */
+    .header-text {
+        order: 3;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 10px;
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 24px; /* 字體縮小，防止換行 */
+    }
+    
     .container { flex-direction: column; }
     
     .sidebar { 
@@ -544,15 +522,14 @@ body.theme-dark .filter-btn.active {
         flex-direction: row; 
         border-right: none; 
         border-bottom: 1px solid rgba(0,0,0,0.1);
-        overflow-x: auto; /* 允許橫向滑動 */
+        overflow-x: auto;
         white-space: nowrap;
     }
-    /* 手機版 Sidebar 顏色調整 */
     body.theme-light .sidebar { border-bottom: 1px solid #e5e7eb; }
     body.theme-dark .sidebar { border-bottom: 1px solid #334155; }
     
     .sidebar button { 
-        flex: 0 0 auto; /* 不縮放 */
+        flex: 0 0 auto;
         width: auto;
         margin-bottom: 0;
         margin-right: 8px;
@@ -562,17 +539,7 @@ body.theme-dark .filter-btn.active {
     }
     
     .content { padding: 20px; }
-    .card-grid { grid-template-columns: 1fr; } /* 手機版單欄 */
-    
-    .search-box {
-        position: relative;
-        top: 0; left: 0;
-        width: 100%;
-        margin-bottom: 16px;
-    }
-    .header-theme {
-        top: 10px; right: 10px;
-    }
+    .card-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
