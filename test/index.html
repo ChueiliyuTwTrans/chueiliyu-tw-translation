@@ -503,4 +503,290 @@ const videoData = [
         title: '홍석천의 보석함 시즌4 EP.23<br>(洪錫天的寶石盒第四季 EP.23)',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon\'s_Jewel_Box/',
         img: 'images/20251125_HongSeokCheon\'s_Jewel_Box_ep.23.webp',
-        desc: '
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：西卡、Yuli<br>校對：西卡<br>字幕製作：C',
+        isNew: false,
+        cast: ['洪錫天']
+    },
+    {
+        id: 'p6',
+        category: 'program',
+        title: 'Ep.41 최립우 | 연습실 바다쌤<br>(練習室的Bada老師 ep.41)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/',
+        img: 'images/20251218_BadaLee_ep41.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：Lepus<br>校對：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: ['Bada Lee']
+    },
+    {
+        id: 'p7',
+        category: 'program',
+        title: '두근두근 립우 타임💗 최립우의 귀여움 모음🐰.zip<br>(撲通撲通立于time💗崔立于的可愛合集🐰.zip)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/',
+        img: 'images/20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：Lepus<br>校對：西卡<br>字幕製作：C',
+        isNew: false,
+        cast: ['Archive']
+    },
+
+    // --- RADIO ---
+    {
+        id: 'r1',
+        category: 'radio',
+        title: '[한해의 키스 더 라디오] 놀라운 초대석 with. 장한음 & 최립우<br>[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/',
+        img: 'images/20251211_kiss_the_radio.webp',
+        desc: '完整電台｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：C & 西卡',
+        isNew: true,
+        cast: []
+    },
+    {
+        id: 'r2',
+        category: 'radio',
+        title: '박소현의 러브게임<br>(朴素賢的 Love Game) | 251221',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/',
+        img: 'images/20251221_love_game.webp',
+        desc: '完整電台｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: []
+    },
+    {
+        id: 'r3',
+        category: 'radio',
+        title: 'IDOL RADIO BEHIND EP.173',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251123idol-radio-ep173-behind/',
+        img: 'images/20251123_idol_radio_behind_ep173.webp',
+        desc: 'Behind 片段｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: []
+    }
+];
+
+/* =========================================
+   ⭐ 2. 核心渲染功能 (Rendering)
+   ========================================= */
+
+// 初始化
+window.onload = function() {
+    renderAllCards(videoData);
+    generateProgramFilters(); // 生成篩選按鈕
+    
+    // 恢復上次主題
+    const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
+    setTheme(savedTheme);
+};
+
+// 產生單一卡片 HTML
+function createCardHTML(item) {
+    const badge = item.isNew ? '<span class="new-badge">NEW</span>' : '';
+    const credit = item.credit ? `<div class="card-credit">${item.credit}</div>` : '';
+    
+    return `
+    <article class="card" data-id="${item.id}" data-title="${item.title}">
+        <a href="${item.link}" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+            <div style="position:relative;">
+                <img src="${item.img}" alt="${item.title.replace(/<br>/g, ' ')}" loading="lazy">
+                ${badge}
+            </div>
+            <div class="card-body">
+                <div class="card-title">${item.title}</div>
+                <div class="card-desc">${item.desc}</div>
+                ${credit}
+            </div>
+        </a>
+    </article>
+    `;
+}
+
+// 渲染所有卡片
+function renderAllCards(data) {
+    const liveContainer = document.getElementById('live-grid');
+    const programContainer = document.getElementById('program-grid');
+    const radioContainer = document.getElementById('radio-grid');
+
+    liveContainer.innerHTML = data.filter(i => i.category === 'live').map(createCardHTML).join('');
+    programContainer.innerHTML = data.filter(i => i.category === 'program').map(createCardHTML).join('');
+    radioContainer.innerHTML = data.filter(i => i.category === 'radio').map(createCardHTML).join('');
+}
+
+/* =========================================
+   ⭐ 3. 節目篩選功能 (Program Filters)
+   ========================================= */
+function generateProgramFilters() {
+    // 找出所有 Program 分類的 cast
+    const programs = videoData.filter(i => i.category === 'program');
+    const allCasts = programs.flatMap(p => p.cast); // 攤平所有陣列
+    const uniqueCasts = [...new Set(allCasts)]; // 去除重複
+
+    if (uniqueCasts.length === 0) return;
+
+    const filterContainer = document.getElementById('program-filters');
+    
+    // "全部" 按鈕
+    let html = `<button class="filter-btn active" onclick="filterProgram('all', this)">全部</button>`;
+    
+    // 各個參演人員按鈕
+    uniqueCasts.forEach(cast => {
+        html += `<button class="filter-btn" onclick="filterProgram('${cast}', this)">${cast}</button>`;
+    });
+
+    filterContainer.innerHTML = html;
+}
+
+function filterProgram(castName, btnElement) {
+    // 按鈕樣式切換
+    document.querySelectorAll('#program-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    // 篩選資料
+    const programContainer = document.getElementById('program-grid');
+    let filteredData;
+
+    if (castName === 'all') {
+        filteredData = videoData.filter(i => i.category === 'program');
+    } else {
+        filteredData = videoData.filter(i => i.category === 'program' && i.cast.includes(castName));
+    }
+
+    // 重新渲染 Program 區塊
+    programContainer.innerHTML = filteredData.map(createCardHTML).join('');
+}
+
+/* =========================================
+   ⭐ 4. 切換與搜尋功能
+   ========================================= */
+
+function switchTab(sectionId, btn) {
+    // 隱藏所有 section
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    // 顯示目標 section
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Sidebar 按鈕樣式
+    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+/* 搜尋 (支援跳轉與高亮) */
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearSearch');
+const resultsBox = document.getElementById('searchResults');
+
+function handleSearch(keyword) {
+    resultsBox.innerHTML = '';
+    
+    if (!keyword.trim()) {
+        clearBtn.classList.remove('visible');
+        clearHighlight();
+        return;
+    }
+    
+    clearBtn.classList.add('visible');
+
+    const categories = {
+        'live': '📺 直播',
+        'program': '🎬 節目',
+        'radio': '📻 電台'
+    };
+
+    // 搜尋資料庫
+    const matched = videoData.filter(item => 
+        item.title.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    // 依分類統計
+    ['live', 'program', 'radio'].forEach(cat => {
+        const count = matched.filter(m => m.category === cat).length;
+        if (count > 0) {
+            const btn = document.createElement('button');
+            btn.innerText = `${categories[cat]} (${count})`;
+            btn.onclick = () => jumpToCategory(cat, keyword);
+            resultsBox.appendChild(btn);
+        }
+    });
+}
+
+// 跳轉到分類並高亮
+function jumpToCategory(catId, keyword) {
+    // 1. 切換分頁
+    const tabBtn = document.querySelector(`.sidebar button[onclick*="${catId}"]`);
+    switchTab(catId, tabBtn);
+
+    // 2. 清除舊高亮
+    clearHighlight();
+
+    // 3. 找出目前畫面上的卡片並高亮
+    // 注意：如果是 Program 頁面且有篩選，可能需要先重置篩選，這裡簡單處理直接針對目前顯示的 DOM 做高亮
+    const container = document.getElementById(`${catId}-grid`);
+    const cards = container.querySelectorAll('.card');
+    let firstMatch = null;
+
+    cards.forEach(card => {
+        const title = card.getAttribute('data-title').toLowerCase();
+        if (title.includes(keyword.toLowerCase())) {
+            card.classList.add('search-highlight');
+            if (!firstMatch) firstMatch = card;
+        }
+    });
+
+    // 4. 滾動
+    if (firstMatch) {
+        setTimeout(() => {
+            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    }
+}
+
+function clearHighlight() {
+    document.querySelectorAll('.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+}
+
+// 清除按鈕事件
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    handleSearch('');
+    searchInput.focus();
+});
+
+/* =========================================
+   ⭐ 5. 主題設定
+   ========================================= */
+function setTheme(theme) {
+    const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
+    document.body.classList.remove(...themes);
+    document.body.classList.add(theme);
+    localStorage.setItem('site-theme', theme);
+}
+</script>
+
+<script type="module">
+  // Firebase 設定保持不變
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9Hi740uOlJf1dSyDpyeispds_TtCjNjg",
+    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chueiliyu-tw-translation",
+    storageBucket: "chueiliyu-tw-translation.appspot.com",
+    messagingSenderId: "625769420546",
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+    measurementId: "G-3PM3GTXPHF"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  window.db = getDatabase(app);
+  window.fb_ref = ref;            
+  window.fb_onValue = onValue;     
+  window.fb_runTransaction = runTransaction; 
+</script>
+</body>
+</html>
