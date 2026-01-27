@@ -44,11 +44,9 @@ header {
     background-size: cover;
     background-position: 30% 35%;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     text-align: center;
-    padding-bottom: 30px;
-    box-sizing: border-box;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 10;
     transition: background 0.3s ease;
@@ -491,15 +489,19 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    /* 更通透的背景，讓藍天透出來 */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("images/content6.webp");
-    background-size: cover;
-    background-position: center top;
+    /* 冰霜天藍色漸層 (Icy Sky Blue) */
+    background: linear-gradient(135deg, rgba(224, 242, 254, 0.85), rgba(186, 230, 253, 0.85));
+    /* 毛玻璃 */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    color: #333;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.6); /* 讓文字在背景上更清晰 */
+    /* 邊框與陰影 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    
+    /* 文字改為深海藍，提升質感與可讀性 */
+    color: #0c4a6e; 
+    text-shadow: none;
 }
     
 /* 2. 🤍 高級白色模式 (Light) */
@@ -1119,6 +1121,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
