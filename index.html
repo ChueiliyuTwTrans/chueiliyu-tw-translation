@@ -489,19 +489,29 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    /* 冰霜天藍色漸層 (Icy Sky Blue) */
-    background: linear-gradient(135deg, rgba(224, 242, 254, 0.85), rgba(186, 230, 253, 0.85));
-    /* 毛玻璃 */
+    /* 深藍 -> 亮藍 漸層 */
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.85));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     
-    /* 邊框與陰影 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
     
-    /* 文字改為深海藍，提升質感與可讀性 */
-    color: #0c4a6e; 
-    text-shadow: none;
+    /* 因為背景深，文字改成白色 */
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+body.theme-fancy .news-tag {
+    background: rgba(255, 255, 255, 0.2); /* 半透明白底 */
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+body.theme-fancy .tag-new {
+    background: #ffffff;
+    color: var(--primary-color);
+    font-weight: 800;
 }
     
 /* 2. 🤍 高級白色模式 (Light) */
@@ -570,7 +580,7 @@ body.theme-dark .news-board { background: #1e293b; color: #cbd5e1; border-bottom
 @media (max-width: 768px) {
     header {
         height: auto;
-        padding: 16px 16px 12px; 
+        padding: 16px 16px 18px; 
         flex-direction: row; 
         flex-wrap: wrap; 
         align-items: center; 
@@ -656,10 +666,10 @@ body.theme-dark .news-board { background: #1e293b; color: #cbd5e1; border-bottom
 
 <div class="news-board">
     <div class="news-item">
-        <span class="news-tag tag-new">更新</span> 2026/01/23 [電台]韓海的Kiss the Radio已上傳📻 
+        <span class="news-tag tag-new">更新</span> 01/23 [電台]韓海的Kiss the Radio已上傳📻 
     </div>
     <div class="news-item">
-        <span class="news-tag tag-new">更新</span> 2026/01/20 [節目]《炸雞王座》ep3已上傳🍗
+        <span class="news-tag tag-new">更新</span> 01/20 [節目]《炸雞王座》ep3已上傳🍗
     </div>
     <div class="news-item">
         <span class="news-tag tag-note">公告</span> 歡迎使用「出演人員篩選」按鈕以及「回到頂端」按鈕功能！
@@ -1121,6 +1131,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
