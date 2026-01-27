@@ -1152,24 +1152,38 @@ function setTheme(theme) {
 const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
 setTheme(savedTheme);
 
-/* 定義資料結構 */
+// ⭐ 1. 定義資料
 const videoList = [
-  {
-    id: "kiss_the_radio_20251211",
-    title: "Kiss the Radio",
-    fullTitle: "[한해의 키스 더 라디오] 놀라운 초대석 with. 장한음 & 최립우",
-    chineseTitle: "[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于",
-    link: "https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/",
-    img: "images/20251211_kiss_the_radio.webp",
-    category: "radio",
-    guests: ["張瀚音", "韓海"],
-    desc: "完整電台｜中文翻譯",
-    credits: "翻譯：西卡 / 字幕：C & 西卡",
-    isNew: true
-  },
-  
+    {
+        id: "kiss_the_radio",
+        title: "Kiss the Radio",
+        fullTitle: "[한해의 키스 더 라디오] 놀라운 초대석",
+        chineseTitle: "[韓海的Kiss the Radio] 驚喜招待會",
+        link: "https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/",
+        img: "images/20251211_kiss_the_radio.webp",
+        category: "radio",
+        guests: ["張瀚音", "韓海"],
+        desc: "完整電台｜中文翻譯",
+        credits: "翻譯：西卡 / 字幕：C & 西卡",
+        isNew: true
+    },
+    {
+        id: "kkang-sian",
+        title: "硬撐詩安",
+        fullTitle: "깡시안 EP#9",
+        chineseTitle: "硬撐詩安 EP#9",
+        link: "https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/",
+        img: "images/20251220_kkang-sian_ep9.webp",
+        category: "program",
+        guests: ["詩安"],
+        desc: "完整節目｜中文翻譯",
+        credits: "翻譯：西卡 / 字幕：西卡",
+        isNew: false
+    }
+    // ... 其他影片以此類推
 ];
 
+// ⭐ 2. 實作渲染 Function
 function renderCards(data) {
     const containerMap = {
         live: document.getElementById('live'),
@@ -1177,45 +1191,45 @@ function renderCards(data) {
         radio: document.getElementById('radio')
     };
 
-    // 先清空原本手寫的 HTML
-    Object.values(containerMap).forEach(el => el.innerHTML = '');
+    // 先把畫面清空，準備放過濾後的結果
+    Object.values(containerMap).forEach(el => {
+        if (el) el.innerHTML = ''; 
+    });
 
     data.forEach(item => {
         const cardHtml = `
-            <a class="card" href="${item.link}" target="_blank" data-guests="${item.guests.join(',')}">
+            <a class="card" href="${item.link}" target="_blank">
                 <img src="${item.img}" alt="${item.chineseTitle}">
                 ${item.isNew ? '<span class="new-badge">NEW</span>' : ''}
                 <div class="card-body">
                     <div class="card-title">${item.fullTitle}<br>(${item.chineseTitle})</div>
                     <div class="card-desc">${item.desc}</div>
-                    <div class="card-credit">${item.credits.replace(/\//g, '<br>')}</div>
+                    <div class="card-credit">${item.credits}</div>
                 </div>
             </a>
         `;
         
-        // 根據 category 塞進對應的 div
         if (containerMap[item.category]) {
             containerMap[item.category].innerHTML += cardHtml;
         }
     });
 }
 
-// 網頁載入後執行
-renderCards(videoList);
-
+// ⭐ 3. 過濾 Function
 function filterByGuest(name) {
+    console.log("正在搜尋嘉賓:", name); // 測試用，你可以按 F12 檢查
     if (name === '全部') {
-        renderCards(videoList); // 顯示原始完整的 videoList
+        renderCards(videoList);
         return;
     }
-
-    // 過濾出 guests 陣列中包含該名字的影片
-    const filtered = videoList.filter(item => {
-        return item.guests && item.guests.includes(name);
-    });
-
-    renderCards(filtered); // 重新渲染畫面
+    const filtered = videoList.filter(item => item.guests && item.guests.includes(name));
+    renderCards(filtered);
 }
+
+// ⭐ 4. 網頁開啟時先跑一次
+window.onload = () => {
+    renderCards(videoList);
+};
     
 </script>
 <script type="module">
