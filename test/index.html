@@ -1185,17 +1185,21 @@ const videoList = [
 
 // ⭐ 2. 實作渲染 Function
 function renderCards(data) {
-    const containerMap = {
+    const sections = {
         live: document.getElementById('live'),
         program: document.getElementById('program'),
         radio: document.getElementById('radio')
     };
 
-    // 先把畫面清空，準備放過濾後的結果
-    Object.values(containerMap).forEach(el => {
-        if (el) el.innerHTML = ''; 
+    // 1. 先清空所有區塊
+    Object.values(sections).forEach(el => {
+        if (el) {
+            el.innerHTML = '';
+            el.classList.remove('active'); // 先把 active 拿掉
+        }
     });
 
+    // 2. 渲染資料
     data.forEach(item => {
         const cardHtml = `
             <a class="card" href="${item.link}" target="_blank">
@@ -1209,8 +1213,10 @@ function renderCards(data) {
             </a>
         `;
         
-        if (containerMap[item.category]) {
-            containerMap[item.category].innerHTML += cardHtml;
+        if (sections[item.category]) {
+            sections[item.category].innerHTML += cardHtml;
+            // ⭐ 只要該區塊有資料，就強行讓它顯示 (加上 active)
+            sections[item.category].classList.add('active');
         }
     });
 }
