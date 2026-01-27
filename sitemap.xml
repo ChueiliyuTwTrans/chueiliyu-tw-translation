@@ -1,13 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
   <url>
     <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/</loc>
     <lastmod>2026-01-28</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/videos</loc>
-    <lastmod>2026-01-28</lastmod>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251213MBC_Show!MusicCore_MC_cut/</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-</urlset>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/</loc>
+    <lastmod>2025-12-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BRITHDAY_LIVE/</loc>
+    <lastmod>2026-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/king-of-chicken/</loc>
+    <lastmod>2026-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/king-of-chicken/ep1/</loc>
+    <lastmod>2026-01-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/king-of-chicken/ep2/</loc>
+    <lastmod>2026-01-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/king-of-chicken/ep3/</loc>
+    <lastmod>2026-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/king-of-chicken/ep4/</loc>
+    <lastmod>2026-01-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251216deok_rice_restaurant_ep5/</loc>
+    <lastmod>2026-01-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251107MARIE_Drawing_Diary/</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon's_Jewel_Box/</loc>
+    <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/</loc>
+    <lastmod>2026-01-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+   <url>
+    <loc>https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251123idol-radio-ep173-behind/</loc>
+    <lastmod>2025-12-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  </urlset>
