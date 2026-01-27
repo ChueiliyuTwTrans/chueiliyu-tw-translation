@@ -381,8 +381,9 @@ body.theme-fancy .sidebar button:hover {
 }
 /* ⭐ 修改 2: 花俏模式被選到時改為「金黃色」 */
 body.theme-fancy .sidebar button.active {
-    background: #fff;
-    color: var(--gold-highlight); /* 金黃色 */
+    background: rgba(255, 255, 255, 0.85); /* 85% 透明度 */
+    backdrop-filter: blur(4px);
+    color: var(--premium-yellow); /* 金黃色文字 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
@@ -1063,6 +1064,7 @@ function setTheme(theme) {
 </script>
 </body>
 </html>
+
 
 
 
