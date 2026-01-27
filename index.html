@@ -2,18 +2,27 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>崔立于台灣翻譯站</title>
+<title>崔立于台灣翻譯站 | 粉絲翻譯整理</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="崔立于 (CHUEI LI YU) 台灣非官方翻譯站。整理直播、節目、電台等中文翻譯影片，僅作學習與推廣使用。">
+<meta name="keywords" content="崔立于, CHUEI LI YU, 翻譯, 中字, 直播, 韓星">
+<meta name="author" content="西卡">
+
+<meta property="og:title" content="崔立于台灣翻譯站">
+<meta property="og:description" content="整理崔立于的直播、節目、電台中文翻譯。">
+<meta property="og:image" content="images/content33.webp"> 
+<meta property="og:url" content="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/">
+<meta property="og:type" content="website">
 
 <style>
 :root {
-    --header-box-width: 320px; /* ⭐ 標題框 & 搜尋框共用寬度 */
+    --header-box-width: 320px;
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                 "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
     background: #ffffff;
     color: #333;
 }
@@ -21,7 +30,7 @@ body {
 /* ===== Header ===== */
 header {
     position: relative;
-    height: 220px; /* 可自行調整高度 */
+    height: 220px;
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
@@ -29,20 +38,18 @@ header {
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-bottom: 5px solid #ffffff; /* 白色分隔線 */
+    border-bottom: 5px solid #ffffff;
 }
 
-/* ===== Header 文字容器 ===== */
 .header-text {
     position: relative;
     z-index: 1;
-    padding: 14px 18px;  /* 透明框內距 */
-    background: rgba(0, 0, 0, 0.35); /* 半透明背景 */
+    padding: 14px 18px;
+    background: rgba(0, 0, 0, 0.35);
     border-radius: 12px;
-    backdrop-filter: blur(4px); /* 模糊效果 */
+    backdrop-filter: blur(4px);
 }
 
-/* 標題 */
 header h1 {
     margin: 0;
     font-size: 32px;
@@ -50,10 +57,9 @@ header h1 {
     letter-spacing: 2px;
     line-height: 1.3;
     color: #ffffff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* 文字立體感 */
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
-/* 副標 */
 header p {
     margin-top: 10px;
     font-size: 14px;
@@ -63,20 +69,12 @@ header p {
     color: #eaeaea;
 }
 
-/* ===== Header Search ===== */
+/* ===== Search ===== */
 .search-box {
     position: absolute;
     top: 14px;
     left: 16px;
     z-index: 3;
-}
-
-.search-box input {
-    width: 200px;
-    padding: 6px 10px;
-    font-size: 14px;
-    border-radius: 999px;
-    border: 1px solid #d1d5db;
 }
 
 .search-input-wrap {
@@ -87,22 +85,20 @@ header p {
 
 .search-input-wrap input {
     width: 100%;
-    padding: 6px 32px 6px 12px; /* 右側留給 ✕ */
+    padding: 6px 32px 6px 12px;
     font-size: 14px;
     border-radius: 999px;
     border: 1px solid #d1d5db;
     box-sizing: border-box;
 }
 
-/* ===== 花俏版面：搜尋框透明化 ===== */
 .theme-fancy .search-input-wrap input {
-    background: rgba(255, 255, 255, 0.55);  /* ⭐ 半透明白 */
-    backdrop-filter: blur(6px);             /* ⭐ 霧化背景 */
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(6px);
     border: 1px solid rgba(255,255,255,0.6);
     color: #111;
 }
 
-/* placeholder 也柔一點 */
 .theme-fancy .search-input-wrap input::placeholder {
     color: rgba(0,0,0,0.55);
 }
@@ -127,17 +123,6 @@ header p {
     background: #d1d5db;
 }
 
-.search-highlight {
-    outline: 3px solid #60a5fa;
-    outline-offset: 4px;
-}
-
-/* ===== 花俏版面：搜尋命中高亮改為白色 ===== */
-.theme-fancy .search-highlight {
-    outline: 3px solid #fde68a; /* 淡金黃 */
-    outline-offset: 4px;
-}
-
 #clearSearch {
     position: absolute;
     right: 8px;
@@ -148,21 +133,14 @@ header p {
     font-size: 16px;
     cursor: pointer;
     line-height: 1;
+    display: none;
 }
+#clearSearch.visible { display: block; }
 
-#clearSearch:hover {
-    color: #e5e7eb;
-}
+#clearSearch:hover { color: #e5e7eb; }
+.theme-fancy #clearSearch { color: rgba(0,0,0,0.6); }
 
-.theme-fancy #clearSearch {
-    color: rgba(0,0,0,0.6);
-}
-
-.theme-fancy #clearSearch:hover {
-    color: rgba(0,0,0,0.9);
-}
-
-/* ===== Header 主題切換（右上角） ===== */
+/* ===== Header Theme Buttons ===== */
 .header-theme {
     position: absolute;
     top: 14px;
@@ -189,24 +167,13 @@ header p {
     transform: translateY(-1px);
 }
 
-/* =========================
-   花俏版面：版面按鈕半透明
-========================= */
 .theme-fancy .header-theme button {
-    background: rgba(255, 255, 255, 0.55); /* 半透明白 */
+    background: rgba(255, 255, 255, 0.55);
     color: #1f2937;
     border: 1px solid rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: all 0.2s ease;
-}
-
-.theme-fancy .header-theme button:hover,
-.theme-fancy .header-theme button.active {
-    background: rgba(255, 255, 255, 0.8); /* hover 更清楚 */
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: translateY(-1px);
 }
 
 /* ===== Layout ===== */
@@ -215,14 +182,13 @@ header p {
     min-height: calc(100vh - 16px);
 }
 
-/* ===== Sidebar ===== */
 .sidebar {
-    width: 250px; /* 調大寬度可容納圖片 */
+    width: 250px;
     padding: 20px;
     background-image: url("images/content5.webp");
     background-size: cover;
     background-position: center;
-    border-right: 5px solid #ffffff; /* 白色分隔線 */
+    border-right: 5px solid #ffffff;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
@@ -241,7 +207,6 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* 按鈕 hover / active 效果 */
 .sidebar button.active,
 .sidebar button:hover {
     background: #ffffff;
@@ -250,7 +215,6 @@ header p {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* ===== Content ===== */
 .content {
     flex: 1;
     padding: 24px;
@@ -259,15 +223,65 @@ header p {
     background-position: center;
 }
 
-/* ===== Section ===== */
-.section {
-    display: none;
-}
+.section { display: none; }
+.section.active { display: block; }
 
-.section.active {
+.card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
+}
+
+/* ===== Filter Bar ===== */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    min-height: 38px; /* 避免沒按鈕時完全塌陷 */
+}
+/* 如果該分類沒有任何篩選按鈕，隱藏那條線與空間 */
+.filter-bar:empty {
+    display: none;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background: rgba(255,255,255,0.7);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #555;
+}
+
+.filter-btn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    background: #60a5fa;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(96, 165, 250, 0.4);
+}
+
+.theme-dark .filter-btn {
+    background: rgba(30,41,59,0.7);
+    color: #ccc;
+    border: 1px solid #334155;
+}
+.theme-dark .filter-btn:hover {
+    background: #334155;
+}
+.theme-dark .filter-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
 }
 
 /* ===== Card ===== */
@@ -280,11 +294,10 @@ header p {
     color: inherit;
     transition: transform 0.2s;
     position: relative;
+    display: block;
 }
 
-.card:hover {
-    transform: translateY(-4px);
-}
+.card:hover { transform: translateY(-4px); }
 
 .card img {
     width: 100%;
@@ -294,492 +307,71 @@ header p {
     filter: brightness(1.03) contrast(0.98);
 }
 
-.card-body {
-    padding: 12px;
+.card-body { padding: 12px; }
+.card-title { font-size: 15px; font-weight: 600; }
+.card-desc { font-size: 13px; color: #666; margin-top: 6px; }
+.card-credit { margin-top: 10px; font-size: 12px; color: #777; line-height: 1.5; }
+
+.search-highlight {
+    outline: 3px solid #60a5fa;
+    outline-offset: 4px;
+}
+.theme-fancy .search-highlight {
+    outline: 3px solid #fde68a;
 }
 
-.card-title {
-    font-size: 15px;
-    font-weight: 600;
-}
+footer { text-align: center; font-size: 12px; color: #999; padding: 16px; }
 
-.card-desc {
-    font-size: 13px;
-    color: #666;
-    margin-top: 6px;
-}
-
-.card-credit {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #777;
-    line-height: 1.5;
-}
-
-/* ===== Footer ===== */
-footer {
-    text-align: center;
-    font-size: 12px;
-    color: #999;
-    padding: 16px;
-}
-
-/* ===== Mobile ===== */
 @media (max-width: 768px) {
-    
-    /* ===== Header 直向排列 ===== */
     header {
         display: flex;
         flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
         height: auto;
         padding: 10px 12px 14px;
     }
-
-    /* ===== 排序控制 ===== */
-    .header-theme {
-        order: 1;               /* ⭐ 第一排 */
-    }
-
-    .search-box {
-        order: 2;               /* ⭐ 第二排 */
-    }
-
-    .header-text {
-        order: 3;               /* 第三排（Logo） */
-    }
-
-    /* ===== 第一排：版面按鈕 ===== */
-    .header-theme {
-        position: static;
-        display: flex;
-        gap: 8px;
-    }
-
-    .header-theme button {
-        flex: 1;
-        font-size: 12px;
-    }
-
-    /* ===== 第二排：搜尋框 ===== */
-    /* ===== 搜尋框整體 ===== */
-    .search-box {
-        position: static;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* ⭐ 置中 */
-    }
-
-    /* 搜尋輸入框本體 */
-    .search-input-wrap {
-        width: var(--header-box-width); /* 跟標題框同寬 */
-        max-width: 100%;
-        position: relative;
-    }
-
-    .search-input-wrap input {
-        width: 100%;
-        padding-right: 32px;    /* ⭐ 留空間給 ✕ */
-    }
-
-    /*花俏版本的搜尋框*/
-    .theme-fancy {
-        --header-box-width: min(92vw, 320px); /* ⭐ 同一個寬度來源 */
-    }
-
-    .theme-fancy .header-text {
-        width: var(--header-box-width);
-        box-sizing: border-box;
-    }
-
-    .theme-fancy .search-input-wrap {
-        width: var(--header-box-width);
-        max-width: 100%;
-    }
-
-    .theme-fancy .search-input-wrap input {
-        width: 100%;
-    }
-
-    /* 清除按鈕：貼在 input 右邊框內 */
-    #clearSearch {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 16px;
-        padding: 0;
-        line-height: 1;
-        opacity: 0.6;
-    }
-
-    #clearSearch:hover {
-        opacity: 1;
-    }
-
-    /* 搜尋結果按鈕 */
-    .search-results {
-        margin-top: 6px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        justify-content: center;      /* ⭐ 關鍵 */
-        width: 100%;
-    }
-
-    /* ===== 第三排：Logo ===== */
-    .header-text {
-        align-self: center;
-        text-align: center;
-        padding: 10px 12px;
-    }
-
-    header h1 {
-        font-size: 20px;
-    }
-
-    header p {
-        font-size: 12px;
-    }
-
-    /* Layout 改為直向 */
-    .container {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    /* Sidebar 直向且與 container 對齊 */
-    .sidebar {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 12px;
-        border-right: none;
-        border-bottom: 2px solid #ffffff;
-        background-image: url("images/content5.webp"); /* 保留圖片 */
-        background-size: cover;
-        background-position: center;
-    }
-
-    /* Sidebar 按鈕自適應寬度 */
-    .sidebar button {
-        flex: 1 1 calc(33.333% - 8px);
-        min-width: 0;
-        padding: 10px 8px;
-        font-size: 14px;
-        box-sizing: border-box;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .sidebar button.active,
-    .sidebar button:hover {
-        background: #ffffff;
-        font-weight: 600;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Content 滿寬對齊 */
-    .content {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 16px;
-        background-image: url("images/content6.webp");
-        background-size: cover;
-        background-position: center;
-    }
-
-    .card img {
-        display: block;
-        height: 140px;
-        max-width: 100%;
-    }
-
-    /* 手機上下分隔 */
-    body.theme-light .sidebar {
-        border-right: none;
-        border-bottom: 1px solid #e5e7eb;
-        box-shadow: 0 1px 0 rgba(0,0,0,0.04);
-    }
-
-    body.theme-dark .sidebar {
-        border-right: none;
-        border-bottom: 1px solid #1f2937;
-        box-shadow: 0 1px 0 rgba(255,255,255,0.04);
-    }
+    .header-theme { order: 1; position: static; display: flex; gap: 8px; }
+    .header-theme button { flex: 1; }
+    .search-box { order: 2; position: static; width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .search-input-wrap { width: 100%; padding-right: 0; }
+    .header-text { order: 3; align-self: center; width: 100%; box-sizing: border-box; }
+    .container { flex-direction: column; width: 100%; }
+    .sidebar { width: 100%; display: flex; padding: 12px; border-right: none; border-bottom: 2px solid #fff; gap: 8px; }
+    .sidebar button { flex: 1; margin-bottom: 0; }
+    .content { width: 100%; box-sizing: border-box; padding: 16px; }
+    .theme-fancy { --header-box-width: 100%; }
 }
 
-/* =========================
-   THEME STYLES
-========================= */
+body.theme-light { background: #ffffff; color: #1f2933; }
+body.theme-light .card { border: 1px solid #e5e7eb; box-shadow: none; }
+body.theme-light header, body.theme-light .sidebar, body.theme-light .content { background-color: #f9fafb; }
 
-/* =========================
-   專業白色主題
-========================= */
-body.theme-light {
-    background: #ffffff;
-    color: #1f2933;
-}
+body.theme-dark { background: #0f172a; color: #e5e7eb; }
+body.theme-dark .header-text { background: #020617; border: 1px solid #1f2937; }
+body.theme-dark header h1 { color: #e5e7eb; }
+body.theme-dark .card { background: #111827; border: 1px solid #1f2937; }
+body.theme-dark .search-box input { background: #020617; color: #e5e7eb; border: 1px solid #1f2937; }
+body.theme-dark header, body.theme-dark .sidebar, body.theme-dark .content { background-color: #0f172a; }
 
-/* Header */
-body.theme-light header {
-    border-bottom: 1px solid #e5e7eb;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-
-body.theme-light .header-text {
-    display: inline-block;
-    background: #f1f5f9;              /* 淡灰藍 */
-    border: 1px solid #e5e7eb;
-    padding: 14px 22px;
-    border-radius: 10px;
-}
-
-body.theme-light header h1 {
-    margin-bottom: 6px;
-    color: #475569;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.08);
-}
-
-body.theme-light header p {
-    font-size: 14px;
-    color: #475569;
-    letter-spacing: 0.5px;
-}
-    
-/* Sidebar */
-body.theme-light .sidebar {
-    border-right: 1px solid #e5e7eb;
-    box-shadow: inset -1px 0 0 rgba(255,255,255,0.6);
-}
-
-/* ===== 白色主題：分類按鈕 ===== */
-body.theme-light .sidebar button {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-}
-
-body.theme-light .sidebar button:hover {
-    background: #ffffff;
-    border-color: #cbd5f5;
-}
-
-body.theme-light .sidebar button.active {
-    background: #ffffff;
-    border-color: #94a3b8;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    font-weight: 600;
-}
-
-/* Content */
-body.theme-light .content {
-    border-left: 1px solid #f1f5f9;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
-/* Card */
-body.theme-light .card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: none;
-}
-
-body.theme-light .card:hover {
-    transform: translateY(-2px);
-}
-
-/* 背景 */
-body.theme-light header,
-body.theme-light .sidebar,
-body.theme-light .content {
-    background-color: #f9fafb;
-    background-image:
-        repeating-linear-gradient(
-            45deg,
-            rgba(0, 0, 0, 0.015),
-            rgba(0, 0, 0, 0.015) 1px,
-            transparent 1px,
-            transparent 6px
-        );
-}
-
-/* =========================
-   專業深色主題
-========================= */
-body.theme-dark {
-    background: #0f172a;
-    color: #e5e7eb;
-}
-
-/* Header */
-body.theme-dark header {
-    border-bottom: 1px solid #1f2937;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.03);
-}
-
-body.theme-dark .header-text {
-    display: inline-block;
-    background: #020617;             /* 比背景深一階 */
-    border: 1px solid #1f2937;
-    padding: 14px 22px;
-    border-radius: 10px;
-}
-
-body.theme-dark header h1 {
-    margin-bottom: 6px;
-    color: #e5e7eb;
-}
-
-body.theme-dark header p {
-    font-size: 14px;
-    color: #94a3b8;
-    letter-spacing: 0.5px;
-}
-
-/* ===== 深色模式：版面按鈕 ===== */
-.theme-dark .header-theme button {
-    background: rgba(255, 255, 255, 0.12);  /* ⭐ 深色但看得見 */
-    color: #f1f5f9;                         /* 亮字 */
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-}
-
-/* Hover 狀態：稍微亮一點 */
-.theme-dark .header-theme button:hover {
-    background: rgba(255, 255, 255, 0.22);
-    transform: translateY(-1px);
-}
-
-/* 可選：目前選中狀態（如果你有 active） */
-.theme-dark .header-theme button.active {
-    background: rgba(255, 255, 255, 0.28);
-    font-weight: 600;
-}
-
-/* ===== 搜尋框（深色主題） ===== */
-body.theme-dark .search-box input {
-    background: #020617;          /* 與 header-text 一致 */
-    color: #e5e7eb;
-    border: 1px solid #1f2937;
-}
-
-body.theme-dark .search-box input::placeholder {
-    color: #64748b;
-}
-
-body.theme-dark .search-box input:focus {
-    outline: none;
-    border-color: #38bdf8;         /* 淡藍聚焦色 */
-    box-shadow: 0 0 0 2px rgba(56,189,248,0.25);
-}
-
-/* 搜尋結果分類按鈕 */
-body.theme-dark .search-results button {
-    background: #1f2937;
-    color: #e5e7eb;
-}
-
-body.theme-dark .search-results button:hover {
-    background: #334155;
-}
-
-/* Sidebar */
-body.theme-dark .sidebar {
-    border-right: 1px solid #1f2937;
-    box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
-}
-
-/* ===== 深色主題：分類按鈕 ===== */
-body.theme-dark .sidebar button {
-    background: rgba(15,23,42,0.8);
-    border: 1px solid #334155;
-    color: #e5e7eb;
-}
-
-body.theme-dark .sidebar button:hover {
-    background: rgba(30,41,59,0.9);
-    border-color: #475569;
-}
-
-body.theme-dark .sidebar button.active {
-    background: rgba(30,41,59,1);
-    border-color: #60a5fa;
-    box-shadow: 0 0 0 1px rgba(96,165,250,0.4);
-    font-weight: 600;
-}
-
-/* Content */
-body.theme-dark .content {
-    border-left: 1px solid #020617;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-}
-
-/* Card */
-body.theme-dark .card {
-    background: #111827;
-    border: 1px solid #1f2937;
-    box-shadow: none;
-}
-
-body.theme-dark .card:hover {
-    transform: translateY(-2px);
-}
-
-/* ===== NEW Badge ===== */
 .new-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
-    background: #ef4444;
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-
-    padding: 4px 8px;
-    border-radius: 999px;
-
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    z-index: 3;
+    position: absolute; top: 10px; right: 10px;
+    background: #ef4444; color: #ffffff;
+    font-size: 11px; font-weight: 700; padding: 4px 8px;
+    border-radius: 999px; z-index: 3;
 }
-
-/* 背景 */
-body.theme-dark header,
-body.theme-dark .sidebar,
-body.theme-dark .content {
-    background-color: #0f172a;
-    background-image:
-        radial-gradient(
-            rgba(255,255,255,0.03) 1px,
-            transparent 1px
-        );
-    background-size: 4px 4px;
-}
-
 </style>
 </head>
 
 <body>
 
 <header>
-<!-- 🔍 關鍵字搜尋 -->
-<div class="search-box">
-    <div class="search-input-wrap">
-        <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
-        <button id="clearSearch">✕</button>
+    <div class="search-box">
+        <div class="search-input-wrap">
+            <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
+            <button id="clearSearch">✕</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
     </div>
     
-    <div id="searchResults" class="search-results"></div>
-</div>
-
-    <!-- 主題切換（右上角） -->
     <div class="header-theme">
         <button onclick="setTheme('theme-fancy')">🌸 花俏</button>
         <button onclick="setTheme('theme-light')">🤍 白色</button>
@@ -793,324 +385,406 @@ body.theme-dark .content {
 </header>
 
 <div class="container">
-
     <nav class="sidebar">
-        <button class="active" onclick="showSection('live', this)">直播</button>
-        <button onclick="showSection('program', this)">節目</button>
-        <button onclick="showSection('radio', this)">電台</button>
+        <button class="active" onclick="switchTab('live', this)">直播</button>
+        <button onclick="switchTab('program', this)">節目</button>
+        <button onclick="switchTab('radio', this)">電台</button>
     </nav>
 
     <main class="content">
-
         <div id="live" class="section active">
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251213MBC_Show!MusicCore_MC_cut/" target="_blank">
-                <img src="images/20251213_MBC_Show!MusicCore_MC_cut.webp" alt="20251213MBC_Show!MusicCore_MC_cut">
-                <span class="new-badge">NEW</span>
-                <div class="card-body">
-                    <div class="card-title">쇼음악중심 MC CUT 강민(VERIVERY) X 최립우(CHUEI LI YU)<br>
-                    (《Show! 音樂中心》MC CUT 岡旻(VERIVERY) X 崔立于(CHUEI LI YU))</div>
-                    <div class="card-desc">cut直播｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：Queenie<br>
-                        字幕製作：C<br>
-                        校對：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/" target="_blank">
-                <img src="images/20251224_CHRISTMAS_NIGHT_with_LIYU.webp" alt="20251224_CHRISTMAS_NIGHT_with_LIYU">
-                <div class="card-body">
-                    <div class="card-title">립우와 CHRISTMAS NIGHT<br>(和立于一起度過聖誕夜)</div>
-                    <div class="card-desc">完整直播｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BRITHDAY_LIVE/" target="_blank">
-                <img src="images/20260103_Liyu_Birthday_Live.webp" alt="20260103_Liyu_Birthday_Live">
-                <div class="card-body">
-                    <div class="card-title">여러분과 함께하는 첫 생일♥<br>(和大家一起度過的第一個生日♥)</div>
-                    <div class="card-desc">完整直播｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
+            <div id="live-filters" class="filter-bar"></div>
+            <div class="card-grid" id="live-grid"></div>
         </div>
 
         <div id="program" class="section">
-            <a class="card" href="Program/king-of-chicken/" target="_blank">
-                <img src="images/20260102_bhc.webp" alt="20260102_bhc">
-                <span class="new-badge">NEW</span>
-                <div class="card-body">
-                    <div class="card-title">왕좌의 치킨(炸雞王座系列)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                </div>
-            </a>
-            <a class="card" href="Program/20251216deok_rice_restaurant_ep5/" target="_blank">
-                <img src="images/20251216_deok_rice_restaurant.webp" alt="20251216_deok_rice_restaurant">
-                <div class="card-body">
-                    <div class="card-title">덕밥집 EP.5 최립우 CHUEI LI YU<br/>(德飯店 EP.5 崔立于)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡、Yuli<br>
-                        字幕製作：西卡<br>
-                        校對：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251107MARIE_Drawing_Diary/" target="_blank">
-                <img src="images/20251107_MARIE_Drawing_Diary.webp" alt="20251107_MARIE_Drawing_Diary">
-                <div class="card-body">
-                    <div class="card-title">MARIE Drawing Diary<br>(MARIE畫畫日記)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/" target="_blank">
-                <img src="images/20251220_kkang-sian_ep9.webp" alt="20251220_kkang-sian_ep9">
-                <div class="card-body">
-                    <div class="card-title">깡시안(硬撐詩安) EP#9</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon's_Jewel_Box/" target="_blank">
-                <img src="images/20251125_HongSeokCheon's_Jewel_Box_ep.23.webp" alt="20251125HongSeokCheon's_Jewel_Box_ep.23">
-                <div class="card-body">
-                    <div class="card-title">홍석천의 보석함 시즌4 EP.23<br>(洪錫天的寶石盒第四季 EP.23)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡、Yuli<br>
-                        校對：西卡<br>
-                        字幕製作：C
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/" target="_blank">
-                <img src="images/20251218_BadaLee_ep41.webp" alt="20251218_BadaLee_ep41">
-                <div class="card-body">
-                    <div class="card-title">Ep.41 최립우 | 연습실 바다쌤<br>(練習室的Bada老師 ep.41)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：Lepus<br>
-                        校對：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/" target="_blank">
-                <img src="images/20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU.webp" alt="20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU">
-                <div class="card-body">
-                    <div class="card-title">두근두근 립우 타임💗 최립우의 귀여움 모음🐰.zip<br>(撲通撲通立于time💗崔立于的可愛合集🐰.zip)</div>
-                    <div class="card-desc">完整節目｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：Lepus<br>
-                        校對：西卡<br>
-                        字幕製作：C
-                    </div>
-                </div>
-            </a>
+            <div id="program-filters" class="filter-bar"></div>
+            <div class="card-grid" id="program-grid"></div>
         </div>
 
         <div id="radio" class="section">
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/" target="_blank">
-                <img src="images/20251211_kiss_the_radio.webp" alt="20251211_kiss_the_radio.webp">
-                <span class="new-badge">NEW</span>
-                <div class="card-body">
-                    <div class="card-title">[한해의 키스 더 라디오] 놀라운 초대석 with. 장한음 & 최립우<br>
-                                            [韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于</div>
-                    <div class="card-desc">完整電台｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：C & 西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/" target="_blank">
-                <img src="images/20251221_love_game.webp" alt="20251221_love_game">
-                <div class="card-body">
-                    <div class="card-title">박소현의 러브게임<br>(朴素賢的 Love Game) | 251221</div>
-                    <div class="card-desc">完整電台｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            <a class="card" href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251123idol-radio-ep173-behind/" target="_blank">
-                <img src="images/20251123_idol_radio_behind_ep173.webp" alt="20251123_idol_radio_behind_ep173">
-                <div class="card-body">
-                    <div class="card-title">IDOL RADIO BEHIND EP.173</div>
-                    <div class="card-desc">Behind 片段｜中文翻譯</div>
-                    <div class="card-credit">
-                        翻譯：西卡<br>
-                        字幕製作：西卡
-                    </div>
-                </div>
-            </a>
-            
+            <div id="radio-filters" class="filter-bar"></div>
+            <div class="card-grid" id="radio-grid"></div>
         </div>
-        
     </main>
 </div>
 
 <footer>
-© 崔立于台灣翻譯站 ｜ 網站架設與設計：西卡
+    © 崔立于台灣翻譯站 ｜ 網站架設與設計：西卡
 </footer>
 
 <script>
-/* ===== 分頁切換 ===== */
-function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+/* =========================================
+   ⭐ 1. 資料庫 (JSON Data)
+   ========================================= */
+const videoData = [
+    // --- LIVE ---
+    {
+        id: 'l1',
+        category: 'live',
+        title: '쇼음악중심 MC CUT 강민(VERIVERY) X 최립우(CHUEI LI YU)<br>(《Show! 音樂中心》MC CUT 岡旻(VERIVERY) X 崔立于(CHUEI LI YU))',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251213MBC_Show!MusicCore_MC_cut/',
+        img: 'images/20251213_MBC_Show!MusicCore_MC_cut.webp',
+        desc: 'cut直播｜中文翻譯',
+        credit: '翻譯：Queenie<br>字幕製作：C<br>校對：西卡',
+        isNew: true,
+        cast: ['柳岡旻']
+    },
+    {
+        id: 'l2',
+        category: 'live',
+        title: '립우와 CHRISTMAS NIGHT<br>(和立于一起度過聖誕夜)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/',
+        img: 'images/20251224_CHRISTMAS_NIGHT_with_LIYU.webp',
+        desc: '完整直播｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: []
+    },
+    {
+        id: 'l3',
+        category: 'live',
+        title: '여러분과 함께하는 첫 생일♥<br>(和大家一起度過的第一個生日♥)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BRITHDAY_LIVE/',
+        img: 'images/20260103_Liyu_Birthday_Live.webp',
+        desc: '完整直播｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: []
+    },
 
-    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    // --- PROGRAM ---
+    {
+        id: 'p1',
+        category: 'program',
+        title: '왕좌의 치킨(炸雞王座系列)',
+        link: 'Program/king-of-chicken/',
+        img: 'images/20260102_bhc.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '',
+        isNew: true,
+        cast: ['HANULIZ','張瀚音', '姜玗進', '恩光']
+    },
+    {
+        id: 'p2',
+        category: 'program',
+        title: '덕밥집 EP.5 최립우 CHUEI LI YU<br/>(德飯店 EP.5 崔立于)',
+        link: 'Program/20251216deok_rice_restaurant_ep5/',
+        img: 'images/20251216_deok_rice_restaurant.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：西卡、Yuli<br>字幕製作：西卡<br>校對：西卡',
+        isNew: false,
+        cast: ['昌珉']
+    },
+    {
+        id: 'p3',
+        category: 'program',
+        title: 'MARIE Drawing Diary<br>(MARIE畫畫日記)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251107MARIE_Drawing_Diary/',
+        img: 'images/20251107_MARIE_Drawing_Diary.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: []
+    },
+    {
+        id: 'p4',
+        category: 'program',
+        title: '깡시안(硬撐詩安) EP#9',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/',
+        img: 'images/20251220_kkang-sian_ep9.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: ['李詩安']
+    },
+    {
+        id: 'p5',
+        category: 'program',
+        title: '홍석천의 보석함 시즌4 EP.23<br>(洪錫天的寶石盒第四季 EP.23)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon\'s_Jewel_Box/',
+        img: 'images/20251125_HongSeokCheon\'s_Jewel_Box_ep.23.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：西卡、Yuli<br>校對：西卡<br>字幕製作：C',
+        isNew: false,
+        cast: ['洪錫天','張瀚音']
+    },
+    {
+        id: 'p6',
+        category: 'program',
+        title: 'Ep.41 최립우 | 연습실 바다쌤<br>(練習室的Bada老師 ep.41)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/',
+        img: 'images/20251218_BadaLee_ep41.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：Lepus<br>校對：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: ['Bada Lee']
+    },
+    {
+        id: 'p7',
+        category: 'program',
+        title: '두근두근 립우 타임💗 최립우의 귀여움 모음🐰.zip<br>(撲通撲通立于time💗崔立于的可愛合集🐰.zip)',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/',
+        img: 'images/20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU.webp',
+        desc: '完整節目｜中文翻譯',
+        credit: '翻譯：Lepus<br>校對：西卡<br>字幕製作：C',
+        isNew: false,
+        cast: []
+    },
+
+    // --- RADIO ---
+    {
+        id: 'r1',
+        category: 'radio',
+        title: '[한해의 키스 더 라디오] 놀라운 초대석 with. 장한음 & 최립우<br>[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/',
+        img: 'images/20251211_kiss_the_radio.webp',
+        desc: '完整電台｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：C & 西卡',
+        isNew: true,
+        cast: ['韓海','張瀚音']
+    },
+    {
+        id: 'r2',
+        category: 'radio',
+        title: '박소현의 러브게임<br>(朴素賢的 Love Game) | 251221',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/',
+        img: 'images/20251221_love_game.webp',
+        desc: '完整電台｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: ['朴素賢']
+    },
+    {
+        id: 'r3',
+        category: 'radio',
+        title: 'IDOL RADIO BEHIND EP.173',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251123idol-radio-ep173-behind/',
+        img: 'images/20251123_idol_radio_behind_ep173.webp',
+        desc: 'Behind 片段｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: false,
+        cast: ['HANULIZ','張瀚音', '姜玗進']
+    }
+];
+
+/* =========================================
+   ⭐ 2. 核心渲染功能
+   ========================================= */
+window.onload = function() {
+    renderAllCards(videoData);
+    
+    // 初始化所有類別的篩選器
+    ['live', 'program', 'radio'].forEach(cat => {
+        generateFilters(cat);
+    });
+    
+    const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
+    setTheme(savedTheme);
+};
+
+function createCardHTML(item) {
+    const badge = item.isNew ? '<span class="new-badge">NEW</span>' : '';
+    const credit = item.credit ? `<div class="card-credit">${item.credit}</div>` : '';
+    
+    return `
+    <article class="card" data-id="${item.id}" data-title="${item.title}">
+        <a href="${item.link}" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+            <div style="position:relative;">
+                <img src="${item.img}" alt="${item.title.replace(/<br>/g, ' ')}" loading="lazy">
+                ${badge}
+            </div>
+            <div class="card-body">
+                <div class="card-title">${item.title}</div>
+                <div class="card-desc">${item.desc}</div>
+                ${credit}
+            </div>
+        </a>
+    </article>
+    `;
 }
 
-/* ===== 搜尋功能 ===== */
-function handleSearch(keyword) {
-    const resultsBox = document.getElementById('searchResults');
-    resultsBox.innerHTML = '';
+function renderAllCards(data) {
+    const liveContainer = document.getElementById('live-grid');
+    const programContainer = document.getElementById('program-grid');
+    const radioContainer = document.getElementById('radio-grid');
 
-    // 沒文字就直接還原
-    if (!keyword.trim()) {
-        clearSearchAll();
-        return;
+    liveContainer.innerHTML = data.filter(i => i.category === 'live').map(createCardHTML).join('');
+    programContainer.innerHTML = data.filter(i => i.category === 'program').map(createCardHTML).join('');
+    radioContainer.innerHTML = data.filter(i => i.category === 'radio').map(createCardHTML).join('');
+}
+
+/* =========================================
+   ⭐ 3. 通用篩選功能 (Generic Filters) - 已加入置頂排序
+   ========================================= */
+
+function generateFilters(category) {
+    // 1. 找出該分類的所有 cast
+    const items = videoData.filter(i => i.category === category);
+    const allCasts = items.flatMap(p => p.cast);
+    let uniqueCasts = [...new Set(allCasts)]; // 使用 let 讓我們可以對它進行排序
+
+    // 如果該分類沒有任何出演名單，就直接結束，不產生任何按鈕
+    if (uniqueCasts.length === 0) return;
+
+    // 2. ⭐ 定義優先顯示名單 (Priority List)
+    const priorityList = ['HANULIZ', '張瀚音', '姜玗進'];
+
+    // 3. ⭐ 執行自定義排序
+    uniqueCasts.sort((a, b) => {
+        const indexA = priorityList.indexOf(a);
+        const indexB = priorityList.indexOf(b);
+
+        // 如果兩人都在優先名單內，依照 priorityList 的順序排
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+
+        // 如果只有 A 在優先名單，A 排前面
+        if (indexA !== -1) return -1;
+
+        // 如果只有 B 在優先名單，B 排前面
+        if (indexB !== -1) return 1;
+
+        // 剩下的人，依照筆畫或字母順序排列 (使用 localeCompare)
+        return a.localeCompare(b, 'zh-TW'); 
+    });
+
+    // 4. 找到對應的容器 (例如 program-filters, live-filters...)
+    const filterContainer = document.getElementById(category + '-filters');
+    if (!filterContainer) return;
+    
+    // 5. 產生 "全部" 按鈕
+    let html = `<button class="filter-btn active" onclick="filterCategory('${category}', 'all', this)">全部</button>`;
+    
+    // 6. 產生排序後的參演人員按鈕
+    uniqueCasts.forEach(cast => {
+        html += `<button class="filter-btn" onclick="filterCategory('${category}', '${cast}', this)">${cast}</button>`;
+    });
+
+    filterContainer.innerHTML = html;
+}
+
+function filterCategory(category, castName, btnElement) {
+    // 1. 按鈕樣式切換 (只針對該分類的按鈕)
+    const containerId = '#' + category + '-filters';
+    document.querySelectorAll(containerId + ' .filter-btn').forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    // 2. 篩選資料
+    const gridId = category + '-grid';
+    const gridContainer = document.getElementById(gridId);
+    let filteredData;
+
+    if (castName === 'all') {
+        filteredData = videoData.filter(i => i.category === category);
+    } else {
+        filteredData = videoData.filter(i => i.category === category && i.cast.includes(castName));
     }
 
-    const sections = ['live', 'program', 'radio'];
-    const labelMap = {
-        live: '📺 直播',
-        program: '🎬 節目',
-        radio: '📻 電台'
-    };
+    // 3. 重新渲染該區塊
+    gridContainer.innerHTML = filteredData.map(createCardHTML).join('');
+}
 
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        const cards = section.querySelectorAll('.card');
-
-        const matched = Array.from(cards).filter(card => {
-            const titleEl = card.querySelector('.card-title');
-            if (!titleEl) return false;
-
-            return titleEl.innerText
-                .toLowerCase()
-                .includes(keyword.toLowerCase());
-        });
-
-        if (matched.length > 0) {
-            const btn = document.createElement('button');
-            btn.innerText = `${labelMap[sectionId]}（${matched.length}）`;
-            btn.onclick = () => jumpToResults(sectionId, matched);
-            resultsBox.appendChild(btn);
-        }
-    });
+/* =========================================
+   ⭐ 4. 切換與搜尋功能
+   ========================================= */
+function switchTab(sectionId, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    
+    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 }
 
 const searchInput = document.getElementById('searchInput');
 const clearBtn = document.getElementById('clearSearch');
 const resultsBox = document.getElementById('searchResults');
 
-clearBtn.addEventListener('click', () => {
-    // 1. 清空輸入框
-    searchInput.value = '';
-    searchInput.placeholder = '搜尋影片關鍵字…';
-
-    // 2. 清空搜尋結果區
+function handleSearch(keyword) {
     resultsBox.innerHTML = '';
+    
+    if (!keyword.trim()) {
+        clearBtn.classList.remove('visible');
+        clearHighlight();
+        return;
+    }
+    
+    clearBtn.classList.add('visible');
 
-    // 3. 移除所有高亮
-    document.querySelectorAll('.search-highlight').forEach(el => {
-        el.classList.remove('search-highlight');
+    const categories = {
+        'live': '📺 直播',
+        'program': '🎬 節目',
+        'radio': '📻 電台'
+    };
+
+    const matched = videoData.filter(item => 
+        item.title.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    ['live', 'program', 'radio'].forEach(cat => {
+        const count = matched.filter(m => m.category === cat).length;
+        if (count > 0) {
+            const btn = document.createElement('button');
+            btn.innerText = `${categories[cat]} (${count})`;
+            btn.onclick = () => jumpToCategory(cat, keyword);
+            resultsBox.appendChild(btn);
+        }
     });
+}
 
-    // 4. 隱藏清除按鈕
-    clearBtn.classList.add('hidden');
+function jumpToCategory(catId, keyword) {
+    const tabBtn = document.querySelector(`.sidebar button[onclick*="${catId}"]`);
+    switchTab(catId, tabBtn);
 
-    // 5. 游標回到輸入框（體驗加分）
+    clearHighlight();
+
+    // 這裡需要注意：如果使用者之前篩選過，這裡可能需要重置篩選才能找到被隱藏的卡片
+    // 簡單解法：先自動觸發 "全部" 按鈕
+    const allBtn = document.querySelector(`#${catId}-filters button:first-child`);
+    if(allBtn) allBtn.click(); 
+
+    // 稍微延遲等渲染完
+    setTimeout(() => {
+        const container = document.getElementById(`${catId}-grid`);
+        const cards = container.querySelectorAll('.card');
+        let firstMatch = null;
+
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title').toLowerCase();
+            if (title.includes(keyword.toLowerCase())) {
+                card.classList.add('search-highlight');
+                if (!firstMatch) firstMatch = card;
+            }
+        });
+
+        if (firstMatch) {
+            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, 50);
+}
+
+function clearHighlight() {
+    document.querySelectorAll('.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+}
+
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    handleSearch('');
     searchInput.focus();
 });
 
-searchInput.addEventListener('input', e => {
-    const keyword = e.target.value;
-
-    handleSearch(keyword);
-
-    // 有內容才顯示清除按鈕
-    clearBtn.classList.toggle('hidden', !keyword.trim());
-});
-
-function clearSearchAll() {
-    const input = document.getElementById('searchInput');
-    const resultsBox = document.getElementById('searchResults');
-
-    input.value = '';
-    resultsBox.innerHTML = '';
-
-    // 移除所有高亮
-    document.querySelectorAll('.search-highlight').forEach(el => {
-        el.classList.remove('search-highlight');
-    });
-}
-
-function jumpToResults(sectionId, cards) {
-    // 切換分類
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    const section = document.getElementById(sectionId);
-    section.classList.add('active');
-
-    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.sidebar button[onclick*="${sectionId}"]`)?.classList.add('active');
-
-    // 移除舊高亮
-    document.querySelectorAll('.search-highlight').forEach(el =>
-        el.classList.remove('search-highlight')
-    );
-
-    // 所有命中卡片都高亮
-    cards.forEach(card => card.classList.add('search-highlight'));
-
-    // 捲動到第一個
-    setTimeout(() => {
-        cards[0].scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
-    }, 100);
-}
-    
-/* ===== 主題切換 ===== */
-const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
-
 function setTheme(theme) {
+    const themes = ['theme-fancy', 'theme-light', 'theme-dark'];
     document.body.classList.remove(...themes);
     document.body.classList.add(theme);
     localStorage.setItem('site-theme', theme);
 }
-
-/* ===== 載入時套用上次主題 ===== */
-const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
-setTheme(savedTheme);
 </script>
+
 <script type="module">
-  // 1. 載入 Firebase 核心功能與 Analytics
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  // 加上這行來載入分析模組
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
     
-  // 2. Firebase 設定
   const firebaseConfig = {
     apiKey: "AIzaSyC9Hi740uOlJf1dSyDpyeispds_TtCjNjg",
     authDomain: "chueiliyu-tw-translation.firebaseapp.com",
@@ -1122,73 +796,12 @@ setTheme(savedTheme);
     measurementId: "G-3PM3GTXPHF"
   };
 
-  // 3. 啟動連線
   const app = initializeApp(firebaseConfig);
-  
-  // 啟動 Analytics
   const analytics = getAnalytics(app);
-
-  // 「借」給外部 JS 使用
   window.db = getDatabase(app);
   window.fb_ref = ref;            
-  window.fb_onValue = onValue;    
+  window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
