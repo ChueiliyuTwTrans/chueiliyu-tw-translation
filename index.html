@@ -515,27 +515,22 @@ body.theme-dark .search-highlight {
 
 
 /* RWD 手機版優化 */
-/* RWD 手機版優化 - 左右並排版 */
 @media (max-width: 768px) {
     header {
         height: auto;
-        /* 減少上方留白，因為現在是一行了解決了擁擠問題 */
         padding: 16px 16px 60px; 
-        
-        /* ⭐ 關鍵改動 1: 改回 Row (橫向排列) 並允許換行 */
-        flex-direction: row; 
+        flex-direction: row; /* 改回 Row (橫向排列) 並允許換行 */
         flex-wrap: wrap; 
         align-items: flex-start; /* 靠上對齊 */
         justify-content: space-between; /* 左右撐開 */
         gap: 10px; /* 搜尋框和按鈕中間的縫隙 */
     }
     
-    /* 1. 搜尋框 (左半邊) */
+    /* 搜尋框  */
     .search-box {
         position: relative;
-        top: 0; left: 0;
-        /* ⭐ 關鍵改動 2: flex: 1 代表「自動佔據剩餘寬度」 */
-        flex: 1; 
+        top: 0; left: 0;   
+        flex: 1; /* flex: 1 代表「自動佔據剩餘寬度」 */
         width: auto;
         max-width: none;
         order: 1;
@@ -543,19 +538,18 @@ body.theme-dark .search-highlight {
     }
     .search-input-wrap { width: 100%; }
     
-    /* 手機上搜尋框文字小一點，避免太擠 */
     .search-input-wrap input {
         font-size: 13px;
         padding: 8px 32px 8px 12px; /* 稍微縮小內距 */
     }
 
-    /* 2. 主題按鈕 (右半邊) */
+    /* 版面切換按鈕 */
     .header-theme {
         position: relative;
         top: 0; right: 0;
         order: 2;
         
-        /* ⭐ 關鍵改動 3: 寬度自動 (只包住按鈕)，不佔滿整行 */
+        /* 寬度自動 ，不佔滿整行 */
         width: auto; 
         display: flex;
         justify-content: flex-end;
@@ -570,12 +564,12 @@ body.theme-dark .search-highlight {
         margin: 0;
     }
 
-    /* 3. 標題文字 (被擠到下一行) */
+    /* 標題文字 */
     .header-text {
         order: 3;
         width: 100%; /* 強制佔滿一行 */
         box-sizing: border-box;
-        margin-top: 140px; /* ⭐ 重要：這裡控制文字「往下推」的距離，讓出中間給背景圖 */
+        margin-top: 140px; /* 這裡控制文字「往下推」的距離，讓出中間給背景圖 */
         padding: 16px;
     }
     
@@ -1067,6 +1061,7 @@ function setTheme(theme) {
 </script>
 </body>
 </html>
+
 
 
 
