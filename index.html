@@ -18,8 +18,10 @@
 <style>
 :root {
     --header-box-width: 320px;
-    --primary-color: #60a5fa; /* 主要藍色 (用於 Light/Dark) */
-    --fancy-color: #d946ef;   /* 花俏粉紫 (用於 Fancy 模式) */
+    --primary-color: #60a5fa; /* 主要藍色 */
+    --premium-yellow: #f59e0b; /* 高級黃 (Amber 500) - 用於 Filter Active */
+    --gold-highlight: #fbbf24; /* 金黃色 (Amber 400) - 用於邊框高亮 */
+    
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -37,7 +39,6 @@ body {
 header {
     position: relative;
     height: 220px;
-    /* 預設保留圖片 (Fancy模式用) */
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
@@ -47,7 +48,7 @@ header {
     text-align: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 10;
-    transition: background 0.3s ease; /* 讓背景切換有動畫 */
+    transition: background 0.3s ease;
 }
 
 .header-text {
@@ -58,7 +59,6 @@ header {
     border-radius: 16px;
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,0.2);
-    /* 限制最大寬度，避免在電腦版太寬 */
     max-width: 600px; 
 }
 
@@ -103,6 +103,7 @@ header p {
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.3);
     box-sizing: border-box;
+    /* 預設為花俏模式的半透明白 */
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     color: #fff;
@@ -341,10 +342,10 @@ header p {
     box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
 }
 
+/* 預設的搜尋高亮 (使用 Outline 或 Box-Shadow 模擬邊框) */
 .search-highlight {
-    ring: 3px solid var(--primary-color);
-    ring-offset: 4px;
-    border-radius: 16px;
+    /* 這裡只設定過渡動畫，顏色由 Theme 定義 */
+    transition: box-shadow 0.3s ease;
 }
 
 footer { 
@@ -367,6 +368,8 @@ body.theme-fancy .sidebar {
 body.theme-fancy .content {
     background-image: url("images/content6.webp");
 }
+
+/* 花俏模式 Sidebar 按鈕 */
 body.theme-fancy .sidebar button {
     background: rgba(255,255,255,0.6);
     color: #333;
@@ -376,40 +379,59 @@ body.theme-fancy .sidebar button:hover {
     background: #fff;
     transform: translateX(4px);
 }
+/* ⭐ 需求：選中時變成藍色 (與其他模式一致)，不要粉紫 */
 body.theme-fancy .sidebar button.active {
     background: #fff;
-    color: var(--fancy-color); /* 粉紫色 */
+    color: var(--primary-color); /* 藍色 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-/* ⭐ 重點：花俏模式下 Filter 換成粉紫色，避免跟藍色背景撞色 */
-body.theme-fancy .filter-btn.active {
-    background: var(--fancy-color); 
-    box-shadow: 0 4px 10px rgba(217, 70, 239, 0.4);
+
+/* ⭐ 需求：Filter 未選中時，背景改成跟版面切換按鈕一樣 (半透明白) */
+body.theme-fancy .filter-btn {
+    background: rgba(255, 255, 255, 0.55);
+    color: #333;
 }
+/* ⭐ 需求：Filter 選中時，改成不刺眼的高級黃色 */
+body.theme-fancy .filter-btn.active {
+    background: var(--premium-yellow); 
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+}
+
 body.theme-fancy .card { box-shadow: var(--shadow-md); }
 body.theme-fancy .card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
+/* ⭐ 需求：花俏模式下搜尋高亮邊框為金黃色 */
+body.theme-fancy .search-highlight {
+    box-shadow: 0 0 0 4px var(--gold-highlight);
+}
+
 
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #ffffff; color: #1f2937; }
 
-/* Header: 移除圖片，改用淺灰藍底 */
 body.theme-light header {
     background-image: none; 
     background-color: #f1f5f9; 
 }
-/* 讓文字框在淺色底上更乾淨 (移除深色遮罩，改為白色半透明) */
 body.theme-light .header-text {
     background: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(255,255,255,0.8);
 }
 body.theme-light header h1 { color: #1f2937; text-shadow: none; }
 body.theme-light header p { color: #4b5563; }
+
+/* ⭐ 需求：修復白色模式搜尋框文字不見的問題 */
 body.theme-light .search-input-wrap input {
-    background: #ffffff; color: #333; border: 1px solid #cbd5e1;
+    background: #ffffff; 
+    color: #1f2937; /* 深灰字 */
+    border: 1px solid #cbd5e1;
+}
+body.theme-light .search-input-wrap input::placeholder {
+    color: #94a3b8; /* 淺灰提示字 */
 }
 
 body.theme-light .content { background-color: #f8fafc; background-image: none; }
@@ -429,21 +451,25 @@ body.theme-light .card:hover {
 }
 body.theme-light .card-credit { border-top-color: #f3f4f6; }
 
+/* ⭐ 需求：白色模式下搜尋高亮邊框為藍色 */
+body.theme-light .search-highlight {
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
+
 
 /* 3. 🌙 高級深色模式 (Dark) */
 body.theme-dark { background: #0f172a; color: #f1f5f9; }
 
-/* Header: 移除圖片，改用深岩灰底 */
 body.theme-dark header {
     background-image: none;
-    background-color: #1e293b; /* Slate 800 */
+    background-color: #1e293b;
 }
 body.theme-dark .header-text {
     background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.1);
 }
 
 body.theme-dark .sidebar {
-    background-color: #0f172a; /* Slate 900 (與背景同色) */
+    background-color: #0f172a; 
     background-image: none;
     border-right: 1px solid #334155;
 }
@@ -472,36 +498,38 @@ body.theme-dark .filter-btn.active {
     background: #3b82f6; border-color: #3b82f6; color: #fff;
 }
 
+/* ⭐ 需求：深色模式下搜尋高亮邊框為藍色 */
+body.theme-dark .search-highlight {
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
 
-/* ⭐ RWD 手機版優化 ⭐ */
+
+/* RWD 手機版優化 */
 @media (max-width: 768px) {
     header {
         height: auto;
-        padding: 20px 20px 30px; /* 增加底部 Padding */
-        flex-direction: column;  /* 垂直排列 */
-        gap: 16px; /* 元件之間的間距 */
+        padding: 20px 20px 30px;
+        flex-direction: column; 
+        gap: 16px;
     }
     
-    /* 1. 搜尋框在最上方 */
     .search-box {
         position: relative;
         top: 0; left: 0;
         width: 100%;
         max-width: 100%;
-        order: 1; /* 排第一 */
+        order: 1;
     }
     .search-input-wrap { width: 100%; }
 
-    /* 2. 主題按鈕排第二 */
     .header-theme {
         position: relative;
         top: 0; right: 0;
-        order: 2; /* 排第二 */
+        order: 2;
         justify-content: center;
         width: 100%;
     }
 
-    /* 3. 文字內容排第三 */
     .header-text {
         order: 3;
         width: 100%;
@@ -510,9 +538,7 @@ body.theme-dark .filter-btn.active {
         padding: 20px;
     }
     
-    header h1 {
-        font-size: 24px; /* 字體縮小，防止換行 */
-    }
+    header h1 { font-size: 24px; }
     
     .container { flex-direction: column; }
     
