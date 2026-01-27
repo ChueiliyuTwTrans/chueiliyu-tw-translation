@@ -518,10 +518,10 @@ body.theme-dark .search-highlight {
 @media (max-width: 768px) {
     header {
         height: auto;
-        padding: 16px 16px 60px; 
+        padding: 16px 16px 40px; 
         flex-direction: row; /* 改回 Row (橫向排列) 並允許換行 */
         flex-wrap: wrap; 
-        align-items: flex-start; /* 靠上對齊 */
+        align-items: center;
         justify-content: space-between; /* 左右撐開 */
         gap: 10px; /* 搜尋框和按鈕中間的縫隙 */
     }
@@ -547,13 +547,11 @@ body.theme-dark .search-highlight {
     .header-theme {
         position: relative;
         top: 0; right: 0;
-        order: 2;
-        
-        /* 寬度自動 ，不佔滿整行 */
-        width: auto; 
+        order: 2;        
+        width: auto; /* 寬度自動 ，不佔滿整行 */
         display: flex;
         justify-content: flex-end;
-        gap: 6px; /* 按鈕之間的間距稍微縮小 */
+        gap: 5px; /* 按鈕之間的間距稍微縮小 */
     }
 
     /* 調整按鈕大小，讓它塞得進手機畫面 */
@@ -569,8 +567,11 @@ body.theme-dark .search-highlight {
         order: 3;
         width: 100%; /* 強制佔滿一行 */
         box-sizing: border-box;
-        margin-top: 140px; /* 這裡控制文字「往下推」的距離，讓出中間給背景圖 */
+        margin-top: 20px; 
         padding: 16px;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(3px); 
+        border: 1px solid rgba(255,255,255,0.15);
     }
     
     header h1 { font-size: 24px; }
@@ -616,7 +617,7 @@ body.theme-dark .search-highlight {
 <header>
     <div class="search-box">
         <div class="search-input-wrap">
-            <input type="text" id="searchInput" placeholder="搜尋影片關鍵字…" oninput="handleSearch(this.value)" />
+            <input type="text" id="searchInput" placeholder="搜尋關鍵字" oninput="handleSearch(this.value)" />
             <button id="clearSearch">✕</button>
         </div>
         <div id="searchResults" class="search-results"></div>
@@ -1061,6 +1062,7 @@ function setTheme(theme) {
 </script>
 </body>
 </html>
+
 
 
 
