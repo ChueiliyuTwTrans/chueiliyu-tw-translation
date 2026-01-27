@@ -515,40 +515,68 @@ body.theme-dark .search-highlight {
 
 
 /* RWD 手機版優化 */
+/* RWD 手機版優化 - 左右並排版 */
 @media (max-width: 768px) {
     header {
         height: auto;
-        padding: 20px 20px 30px;
-        flex-direction: column; 
-        gap: 16px;
+        /* 減少上方留白，因為現在是一行了解決了擁擠問題 */
+        padding: 16px 16px 60px; 
+        
+        /* ⭐ 關鍵改動 1: 改回 Row (橫向排列) 並允許換行 */
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        align-items: flex-start; /* 靠上對齊 */
+        justify-content: space-between; /* 左右撐開 */
+        gap: 10px; /* 搜尋框和按鈕中間的縫隙 */
     }
     
+    /* 1. 搜尋框 (左半邊) */
     .search-box {
         position: relative;
         top: 0; left: 0;
-        width: 100%;
-        max-width: 100%;
+        /* ⭐ 關鍵改動 2: flex: 1 代表「自動佔據剩餘寬度」 */
+        flex: 1; 
+        width: auto;
+        max-width: none;
         order: 1;
+        margin-bottom: 0; /* 移除舊的邊距 */
     }
     .search-input-wrap { width: 100%; }
+    
+    /* 手機上搜尋框文字小一點，避免太擠 */
+    .search-input-wrap input {
+        font-size: 13px;
+        padding: 8px 32px 8px 12px; /* 稍微縮小內距 */
+    }
 
+    /* 2. 主題按鈕 (右半邊) */
     .header-theme {
         position: relative;
         top: 0; right: 0;
         order: 2;
-        display: flex;      
-        justify-content: flex-end; 
-        padding-right: 10px;
-        box-sizing: border-box;
-        width: 100%;
+        
+        /* ⭐ 關鍵改動 3: 寬度自動 (只包住按鈕)，不佔滿整行 */
+        width: auto; 
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px; /* 按鈕之間的間距稍微縮小 */
     }
 
+    /* 調整按鈕大小，讓它塞得進手機畫面 */
+    .header-theme button {
+        flex: 0 0 auto;
+        font-size: 12px; /* 字體縮小 */
+        padding: 6px 10px; /* 內距縮小 */
+        margin: 0;
+    }
+
+    /* 3. 標題文字 (被擠到下一行) */
     .header-text {
         order: 3;
-        width: 100%;
+        width: 100%; /* 強制佔滿一行 */
         box-sizing: border-box;
-        margin-top: 10px;
-        padding: 20px;
+        margin-top: 140px; /* ⭐ 重要：這裡控制文字「往下推」的距離，讓出中間給背景圖 */
+        padding: 16px;
     }
     
     header h1 { font-size: 24px; }
@@ -557,13 +585,19 @@ body.theme-dark .search-highlight {
     
     .sidebar { 
         width: 100%; 
-        padding: 16px;
+        padding: 12px 16px; /* 上下邊距微調 */
         flex-direction: row; 
         border-right: none; 
         border-bottom: 1px solid rgba(0,0,0,0.1);
         overflow-x: auto;
         white-space: nowrap;
+        
+        /* 隱藏滾動條 (美觀) */
+        -webkit-overflow-scrolling: touch; 
+        scrollbar-width: none; /* Firefox */
     }
+    .sidebar::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+
     body.theme-light .sidebar { border-bottom: 1px solid #e5e7eb; }
     body.theme-dark .sidebar { border-bottom: 1px solid #334155; }
     
@@ -1033,5 +1067,6 @@ function setTheme(theme) {
 </script>
 </body>
 </html>
+
 
 
