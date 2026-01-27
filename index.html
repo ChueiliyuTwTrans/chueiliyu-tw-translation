@@ -489,33 +489,33 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    /* 亮藍 -> 柔和藍 漸層 (Bright Azure) */
-    /* 這種藍色有活力、清透，且非常高級 */
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(147, 197, 253, 0.85));
+    /* 使用 rgb(84, 99, 108) 製作深色質感漸層 */
+    background: linear-gradient(135deg, rgba(84, 99, 108, 0.9), rgba(45, 55, 60, 0.9));
     
+    /* 毛玻璃 */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     
-    /* 邊框加強玻璃感 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+    /* 質感邊框 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     
-    /* 文字為白色 */
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    /* 文字反白 */
+    color: #ffffff; 
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* ⭐ 花俏模式下的標籤改為「半透明白底」以搭配藍色背景 */
+/* ⭐ 花俏模式下的標籤調整為低調半透明，讓深灰底更協調 */
 body.theme-fancy .news-tag {
-    background: rgba(255, 255, 255, 0.25);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.2);
 }
-/* 特別重要的 Tag (Update) 保持亮眼 */
+/* 重要標籤可以用原本顏色 */
 body.theme-fancy .tag-new {
-    background: #ffffff;
-    color: var(--primary-color);
-    font-weight: 800;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
 }
     
 /* 2. 🤍 高級白色模式 (Light) */
@@ -1135,6 +1135,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
