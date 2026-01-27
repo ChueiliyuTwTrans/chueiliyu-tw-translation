@@ -489,25 +489,29 @@ body.theme-fancy .search-highlight {
 }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
-    /* 深藍 -> 亮藍 漸層 */
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.85));
+    /* 亮藍 -> 柔和藍 漸層 (Bright Azure) */
+    /* 這種藍色有活力、清透，且非常高級 */
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(147, 197, 253, 0.85));
+    
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+    /* 邊框加強玻璃感 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
     
-    /* 因為背景深，文字改成白色 */
+    /* 文字為白色 */
     color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
+/* ⭐ 花俏模式下的標籤改為「半透明白底」以搭配藍色背景 */
 body.theme-fancy .news-tag {
-    background: rgba(255, 255, 255, 0.2); /* 半透明白底 */
+    background: rgba(255, 255, 255, 0.25);
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255,255,255,0.4);
 }
-
+/* 特別重要的 Tag (Update) 保持亮眼 */
 body.theme-fancy .tag-new {
     background: #ffffff;
     color: var(--primary-color);
@@ -1131,6 +1135,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
