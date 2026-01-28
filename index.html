@@ -399,71 +399,47 @@ footer {
     text-align: center; 
     font-size: 13px; 
     color: #999; 
-    padding: 40px 20px; /* 增加一點垂直空間，更透氣 */
+    padding: 20px 20px;
     background: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px; /* 圖示與文字之間的間隔 */
+    gap: 12px; /* 圖示與文字之間的間隔 */
 }
 
 .footer-sns {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px; /* IG 與 Threads 之間的距離 */
-    margin-bottom: 4px;
+    gap: 10px; /* IG 與 Threads 之間的距離 */
+    margin-bottom: 0px;
     font-weight: 500;
     letter-spacing: 0.5px;
 }
 
-.sns-btn {
-    color: #bbb; /* 預設圖示顏色，較淡 */
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
-
 .sns-btn.text-link {
-    color: #888; /* 預設顏色較淡 */
+    color: #666; /* 提高預設顏色對比度，更易讀 */
     text-decoration: none;
     font-size: 13px;
-    transition: all 0.3s ease;
-    position: relative;
+    font-weight: 600; /* 加粗字體，更有按鈕感 */
+    padding: 6px 16px; /* 增加內距，讓點擊區域變大且像按鈕 */
+    border: 1px solid #e5e7eb; /* 加入極細邊框 */
+    border-radius: 20px; /* 膠囊型按鈕，非常有高級感 */
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.5); /* 輕微底色，增加存在感 */
 }
 
 /* 滑鼠移入效果 */
-.sns-btn:hover {
-    color: #666; /* 移入時變深，或你可以改成立于的代表色 */
-    transform: translateY(-2px); /* 輕微上浮 */
-}
-
 .sns-btn.text-link:hover {
-    color: #444; /* 移入時文字變深 */
+    color: #fff;
+    background: var(--primary-color, #444); /* 移入時變成立于的代表色或深灰色 */
+    border-color: var(--primary-color, #444);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* 增加輕微陰影 */
 }
 
-.sns-btn.text-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 1px;
-    bottom: -2px;
-    left: 0;
-    background-color: #444;
-    transition: width 0.3s ease;
-}
-
-.sns-btn.text-link:hover::after {
-    width: 100%;
-}
-
-/* 中間的分隔符號 */
 .sns-divider {
-    color: #ddd;
-    font-size: 12px;
-    user-select: none;
+    display: none;
 }
 
 .footer-info {
@@ -623,12 +599,6 @@ body.theme-fancy .news-item {
 body.theme-fancy .news-item:hover {
     background: rgba(255, 255, 255, 0.2);
 }
-
-/* 底部SNS */
-body.theme-fancy .sns-btn.text-link { color: rgba(255,255,255,0.7); }
-body.theme-fancy .sns-btn.text-link:hover { color: #fff; }
-body.theme-fancy .sns-btn.text-link::after { background-color: #fff; }
-body.theme-fancy .sns-divider { color: rgba(255,255,255,0.3); }
     
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #ffffff; color: #1f2937; }
@@ -721,8 +691,8 @@ body.theme-dark .tag-note {
 }
 
 /* 底部SNS */
-body.theme-dark .sns-btn.text-link { color: #94a3b8; }
-body.theme-dark .sns-btn.text-link:hover { color: #f1f5f9; }
+body.theme-dark .sns-btn.text-link { background: rgba(255, 255, 255, 0.05); border-color: #334155; color: #cbd5e1; }
+body.theme-dark .sns-btn.text-link:hover { background: #475569; color: #fff; }
 body.theme-dark .sns-btn.text-link::after { background-color: #f1f5f9; }
 body.theme-dark .sns-divider { color: #334155; }
 
@@ -1298,6 +1268,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
