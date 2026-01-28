@@ -193,7 +193,7 @@ header p {
     width: 100%;
     height: auto;
     min-height: 40px;
-    background: #f8f9fa;
+    background: #fdfdfd;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     display: flex;
     justify-content: center;
@@ -202,7 +202,7 @@ header p {
     padding: 8px 16px;
     box-sizing: border-box;
     font-size: 13px;
-    color: #555;
+    color: #444;
     gap: 16px;
     transition: all 0.3s ease; /* 讓切換模式時顏色平滑過渡 */
 }
@@ -211,7 +211,13 @@ header p {
 .news-item {
     display: flex;
     align-items: center;
-    white-space: nowrap; /* 文字不換行，保持標籤跟文字在一起 */
+    white-space: nowrap;
+    padding: 6px 14px;
+    background: #ffffff; /* 給每一則公告獨立的白色背景 */
+    border: 1px solid rgba(0, 0, 0, 0.03); /* 極淡的邊框 */
+    border-radius: 8px; /* 圓角增加親和感 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); /* 極輕微的陰影，營造漂浮感 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .news-tag {
@@ -1143,6 +1149,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
