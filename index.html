@@ -212,7 +212,7 @@ header p {
     display: flex;
     align-items: center;
     white-space: nowrap;
-    padding: 6px 14px;
+    padding: 6px 14px 6px 8px;
     background: #ffffff; /* 給每一則公告獨立的白色背景 */
     border: 1px solid rgba(0, 0, 0, 0.03); /* 極淡的邊框 */
     border-radius: 8px; /* 圓角增加親和感 */
@@ -554,6 +554,19 @@ body.theme-fancy .tag-new {
     color: #fff;
     border: none;
 }
+
+/* ⭐ 花俏模式下的公告小卡片 */
+body.theme-fancy .news-item {
+    /* 使用極低透明度的白色，營造玻璃質感 */
+    background: rgba(255, 255, 255, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+}
+
+body.theme-fancy .news-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
     
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #ffffff; color: #1f2937; }
@@ -615,6 +628,19 @@ body.theme-dark .filter-btn.active { background: #3b82f6; border-color: #3b82f6;
 body.theme-dark .search-highlight { box-shadow: 0 0 0 4px var(--primary-color); }
 /* 深色模式公告欄 */
 body.theme-dark .news-board { background: #1e293b; color: #cbd5e1; border-bottom: 1px solid #334155; }
+/* ⭐ 深色模式下的公告小卡片 */
+body.theme-dark .news-item {
+    /* 比底色 #1e293b 稍微淺一點的藍灰色 */
+    background: #334155; 
+    border: 1px solid #475569;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: #cbd5e1;
+}
+
+body.theme-dark .news-item:hover { background: #3e4c5f; }
+
+/* 深色模式下的預設標籤顏色微調，避免太暗 */
+body.theme-dark .news-tag { background: #475569; color: #f1f5f9; }
 
 
 /* RWD 手機版優化 */
@@ -1189,6 +1215,7 @@ backToTopBtn.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
