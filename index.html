@@ -1017,15 +1017,21 @@ const videoData = [
    ⭐ 2. 核心渲染功能
    ========================================= */
 window.onload = function() {
-    renderAllCards(videoData);
-    
-    // 初始化所有類別的篩選器
-    ['live', 'program', 'radio'].forEach(cat => {
-        generateFilters(cat);
-    });
-    
+    // 1. 渲染卡片
+    if (typeof videoData !== 'undefined') {
+        renderAllCards(videoData);
+        // 初始化篩選器
+        ['live', 'program', 'radio'].forEach(cat => {
+            generateFilters(cat);
+        });
+    }
+
+    // 2. 讀取主題
     const savedTheme = localStorage.getItem('site-theme') || 'theme-fancy';
     setTheme(savedTheme);
+
+    // 3. 啟動回到頂端按鈕偵測 (修復 iPhone 沒反應的問題)
+    initBackToTop();
 };
 
 function createCardHTML(item) {
@@ -1108,36 +1114,39 @@ function generateFilters(category) {
     filterContainer.innerHTML = html;
 }
 
-function filterCategory(category, castName, btnElement) {
-    // 1. 按鈕樣式切換 (只針對該分類的按鈕)
-    const containerId = '#' + category + '-filters';
-    document.querySelectorAll(containerId + ' .filter-btn').forEach(b => b.classList.remove('active'));
+function filterCategory(category, cast, btnElement) {
+    // 按鈕樣式切換
+    const container = document.getElementById(category + '-filters');
+    const buttons = container.getElementsByClassName('filter-btn');
+    Array.from(buttons).forEach(btn => btn.classList.remove('active'));
     btnElement.classList.add('active');
 
-    // 2. 篩選資料
+    // 篩選邏輯
     const gridId = category + '-grid';
-    const gridContainer = document.getElementById(gridId);
-    let filteredData;
+    const grid = document.getElementById(gridId);
+    const cards = grid.getElementsByClassName('card');
 
-    if (castName === 'all') {
-        filteredData = videoData.filter(i => i.category === category);
-    } else {
-        filteredData = videoData.filter(i => i.category === category && i.cast.includes(castName));
-    }
-
-    // 3. 重新渲染該區塊
-    gridContainer.innerHTML = filteredData.map(createCardHTML).join('');
+    // 從 videoData 重新過濾並渲染
+    const targetData = videoData.filter(i => i.category === category);
+    const filteredData = (cast === 'all') 
+        ? targetData 
+        : targetData.filter(item => item.cast.includes(cast));
+        
+    grid.innerHTML = filteredData.map(createCardHTML).join('');
 }
 
 /* =========================================
    ⭐ 4. 切換與搜尋功能
    ========================================= */
-function switchTab(sectionId, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.sidebar button').forEach(el => el.classList.remove('active'));
     
-    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
+
+    // 切換分頁時，重置捲動位置，避免卡在中間
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 const searchInput = document.getElementById('searchInput');
@@ -1225,34 +1234,32 @@ function setTheme(theme) {
 }
 
 /* =========================================
-   ⭐ NEW: 回到頂端功能 (Back to Top Logic)
+   ⭐ 回到頂端功能 (Back to Top Logic)
    ========================================= */
-// 確保 DOM 載入後才執行，避免抓不到 #backToTop
-document.addEventListener('DOMContentLoaded', () => {
+function initBackToTop() {
     const backToTopBtn = document.getElementById('backToTop');
-    
-    // 如果 HTML 裡沒這個 ID 就跳出，避免噴錯
     if (!backToTopBtn) return;
 
+    // 使用 passive 提升手機捲動效能
     window.addEventListener('scroll', () => {
-        // 同時檢查 scrollY 和 scrollTop，確保在所有瀏覽器都能抓到數值
+        // 相容性寫法：有些瀏覽器用 scrollY，有些用 documentElement.scrollTop
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        
+
         if (scrollTop > 300) {
             backToTopBtn.classList.add('show');
         } else {
             backToTopBtn.classList.remove('show');
         }
-    }, { passive: true }); // 增加捲動效能
+    }, { passive: true });
 
     backToTopBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // 防止可能的預設行為
+        e.preventDefault(); // 防止手機版可能的跳動
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     });
-});
+}
 </script>
     
 <script type="module">
@@ -1280,6 +1287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
