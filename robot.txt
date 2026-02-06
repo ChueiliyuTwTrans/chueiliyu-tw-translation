@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 指引爬蟲去讀取你在 Root Repo 建立好的 Sitemap
+Sitemap: https://chueiliyutwtrans.github.io/sitemap.xml
