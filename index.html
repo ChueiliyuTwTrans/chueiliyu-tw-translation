@@ -742,13 +742,28 @@ body.theme-dark .sns-divider { color: #334155; }
     .container { flex-direction: column; }
     
     .sidebar { 
-        width: 100%; padding: 12px 16px; flex-direction: row; border-right: none; 
+        width: 100%; padding: 10px 8px; flex-direction: row; border-right: none; gap: 6px;
         border-bottom: 1px solid rgba(0,0,0,0.1); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; 
     }
     body.theme-light .sidebar { border-bottom: 1px solid #e5e7eb; }
     body.theme-dark .sidebar { border-bottom: 1px solid #334155; }
     
     .sidebar button { flex: 0 0 auto; width: auto; margin-bottom: 0; margin-right: 8px; padding: 8px 16px; font-size: 14px; justify-content: center; }
+
+    /* 隱藏醜醜的捲動條 (Chrome/Safari/Webkit) */
+    .sidebar::-webkit-scrollbar { display: none; }
+    /* 隱藏捲動條 (Firefox) */
+    .sidebar { scrollbar-width: none; }
+
+    .sidebar button { 
+        flex: 0 0 auto; /* 不強制伸縮，依文字長度決定 */
+        width: auto; 
+        margin: 0; /* 移除原本的 margin，改用上面的 gap */       
+        /* 縮小內距與字體，讓「媒體採訪」塞得進去 */
+        padding: 6px 10px; 
+        font-size: 13px; /* 稍微縮小 1px 視覺差異不大但省空間 */   
+        justify-content: center; 
+    }
     
     .content { padding: 20px; }
     .card-grid { grid-template-columns: 1fr; }
@@ -801,7 +816,7 @@ body.theme-dark .sns-divider { color: #334155; }
 
 <div class="news-board">
     <div class="news-item">
-        <span class="news-tag tag-new">更新</span> 01/31 [直播]20260130立于IG直播已上傳📺 
+        <span class="news-tag tag-new">更新</span> 02/07 [媒體]Y MAGAZINE特輯-製作杜拜巧克力Q餅已上傳 
     </div>
     <div class="news-item">
         <span class="news-tag tag-new">更新</span> 02/05 [節目]《鄰家K明星》ep24已上傳⭐
@@ -822,6 +837,9 @@ body.theme-dark .sns-divider { color: #334155; }
         <button onclick="switchTab('radio', this)">
             📻 電台
         </button>
+        <button onclick="switchTab('media', this)">
+            🎤 媒體採訪
+        </button>
     </nav>
 
     <main class="content">
@@ -838,6 +856,11 @@ body.theme-dark .sns-divider { color: #334155; }
         <div id="radio" class="section">
             <div id="radio-filters" class="filter-bar"></div>
             <div class="card-grid" id="radio-grid"></div>
+        </div>
+
+        <div id="media" class="section">
+            <div id="media-filters" class="filter-bar"></div>
+            <div class="card-grid" id="media-grid"></div>
         </div>
     </main>
 </div>
@@ -1036,7 +1059,20 @@ const videoData = [
         credit: '翻譯：西卡<br>字幕製作：西卡',
         isNew: false,
         cast: ['HANULIZ','瀚音', '玗進']
-    }
+    },
+   
+    // --- MEDIA ---
+    {
+        id: 'm1',  
+        category: 'media', 
+        title: 'Y MAGAZINE 特輯-製作杜拜巧克力Q餅',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260205Y_MAGAZINE/', 
+        img: 'images/20260205_Y_magazine.webp',
+        desc: '特別企劃｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: true,
+        cast: []
+    },
 ];
 
 /* =========================================
@@ -1313,6 +1349,7 @@ function initBackToTop() {
 </script>
 </body>
 </html>
+
 
 
 
