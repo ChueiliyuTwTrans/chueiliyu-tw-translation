@@ -822,8 +822,8 @@ body.theme-dark .sns-divider { color: #334155; }
         <button onclick="switchTab('radio', this)">
             📻 電台
         </button>
-        <button onclick="switchTab('radio', this)">
-            📸 特別企劃
+        <button onclick="switchTab('', this)">
+            🎤 媒體採訪
         </button>
     </nav>
 
@@ -839,6 +839,10 @@ body.theme-dark .sns-divider { color: #334155; }
         </div>
 
         <div id="radio" class="section">
+            <div id="radio-filters" class="filter-bar"></div>
+            <div class="card-grid" id="radio-grid"></div>
+        </div>
+        <div id="" class="section">
             <div id="radio-filters" class="filter-bar"></div>
             <div class="card-grid" id="radio-grid"></div>
         </div>
@@ -1040,15 +1044,15 @@ const videoData = [
         isNew: false,
         cast: ['HANULIZ','瀚音', '玗進']
     },
-    // --- SPECIAL ---
+    // --- 媒體採訪 ---
     {
-        id: 's1',
-        category: 'special',
+        id: '',
+        category: '',
         title: 'Y MAGAZINE 特輯-製作杜拜巧克力Q餅',
-        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260130Instagram_Live/',
-        img: 'images/20260130_Instagram_Live2.webp',
-        desc: '合作雜誌:Y MAGAZINE｜中文翻譯',
-        credit: '影片來源：퇴마소녀<br>翻譯：Lepus<br>字幕製作：西卡<br>校對：西卡',
+        link: '',
+        img: 'images/20260205_Y_magazine.webp',
+        desc: '特別企劃｜中文翻譯',
+        credit: '翻譯：Lepus<br>字幕製作：西卡',
         isNew: true,
         cast: []
     },
