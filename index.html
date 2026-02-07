@@ -1083,7 +1083,7 @@ window.onload = function() {
     if (typeof videoData !== 'undefined') {
         renderAllCards(videoData);
         // 初始化篩選器
-        ['live', 'program', 'radio'].forEach(cat => {
+        ['live', 'program', 'radio', 'media'].forEach(cat => {
             generateFilters(cat);
         });
     }
@@ -1121,10 +1121,15 @@ function renderAllCards(data) {
     const liveContainer = document.getElementById('live-grid');
     const programContainer = document.getElementById('program-grid');
     const radioContainer = document.getElementById('radio-grid');
+    const mediaContainer = document.getElementById('media-grid');
 
     liveContainer.innerHTML = data.filter(i => i.category === 'live').map(createCardHTML).join('');
     programContainer.innerHTML = data.filter(i => i.category === 'program').map(createCardHTML).join('');
     radioContainer.innerHTML = data.filter(i => i.category === 'radio').map(createCardHTML).join('');
+
+    if(mediaContainer) {
+        mediaContainer.innerHTML = data.filter(i => i.category === 'media').map(createCardHTML).join('');
+    }
 }
 
 /* =========================================
@@ -1229,14 +1234,15 @@ function handleSearch(keyword) {
     const categories = {
         'live': '📺 直播',
         'program': '🎬 節目',
-        'radio': '📻 電台'
+        'radio': '📻 電台',
+        'media': '🎤 媒體採訪'
     };
 
     const matched = videoData.filter(item => 
         item.title.toLowerCase().includes(keyword.toLowerCase())
     );
 
-    ['live', 'program', 'radio'].forEach(cat => {
+    ['live', 'program', 'radio', 'media'].forEach(cat => {
         const count = matched.filter(m => m.category === cat).length;
         if (count > 0) {
             const btn = document.createElement('button');
@@ -1349,6 +1355,7 @@ function initBackToTop() {
 </script>
 </body>
 </html>
+
 
 
 
