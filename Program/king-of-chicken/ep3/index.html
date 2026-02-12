@@ -110,7 +110,7 @@ function changeSubtitleSize(delta) {
     projectId: "chueiliyu-tw-translation",
     storageBucket: "chueiliyu-tw-translation.appspot.com",
     messagingSenderId: "625769420546",
-    appId: "1:625769420546:web:6d25889d1c66a091fe941b", // <-- 這裡原本漏了一個逗號，已補上
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b",
     measurementId: "G-3PM3GTXPHF"
   };
 
@@ -120,7 +120,7 @@ function changeSubtitleSize(delta) {
   // 啟動 Analytics
   const analytics = getAnalytics(app);
 
-  // 「借」給外部 JS 使用
+  // 借給外部 JS 使用
   window.db = getDatabase(app);
   window.fb_ref = ref;            
   window.fb_onValue = onValue;    
