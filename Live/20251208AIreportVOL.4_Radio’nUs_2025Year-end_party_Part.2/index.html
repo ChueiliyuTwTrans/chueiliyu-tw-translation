@@ -55,6 +55,7 @@ html, body {
         </div>
 
         <button id="fs-btn">進入全螢幕</button>
+        <button onclick="jumpToLiyu()">立于出場時間</button>
     </div>
 </div>
 
@@ -94,6 +95,16 @@ const MY_VIDEO_START = 1286;
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
         if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* ===== 立于出場時間按鈕 ===== */
+function jumpToLiyu() {
+    if (window.player && typeof player.seekTo === "function") {
+        player.seekTo(1286, true); // 21分26秒
+        player.playVideo(); // 可選：自動播放
+    } else {
+        alert("播放器尚未載入完成");
+    }
 }
 </script>
     
