@@ -55,10 +55,12 @@ function onYouTubeIframeAPIReady() {
         setTimeout(onYouTubeIframeAPIReady, 100);
         return;
     }
+    // 檢查是否有設定 MY_VIDEO_START，如果沒有則預設從 1 秒開始
+    const startTime = typeof MY_VIDEO_START !== 'undefined' ? MY_VIDEO_START : 1;
     player = new YT.Player("player", {
         videoId: MY_VIDEO_ID,
         playerVars: {
-            start: 1, rel: 0, playsinline: 1, modestbranding: 1, fs: 0, controls: 1
+            start: startTime, rel: 0, playsinline: 1, modestbranding: 1, fs: 0, controls: 1
         },
         events: { onReady, onStateChange }
     });
