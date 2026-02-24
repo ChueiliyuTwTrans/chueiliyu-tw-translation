@@ -72,8 +72,14 @@ function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
     
-    const savedTime = localStorage.getItem("yt-played-time");
-    if (savedTime !== null) player.seekTo(parseFloat(savedTime), true);
+    // 優先判斷是否有設定強制起始時間 (MY_VIDEO_START)
+    if (typeof MY_VIDEO_START !== 'undefined') {
+        player.seekTo(MY_VIDEO_START, true); // 強制跳轉到指定時間
+    } else {
+        // 如果沒有設定強制時間，才讀取歷史觀看紀錄
+        const savedTime = localStorage.getItem("yt-played-time");
+        if (savedTime !== null) player.seekTo(parseFloat(savedTime), true);
+    }
 
     const savedVolume = localStorage.getItem("yt-volume");
     if (savedVolume !== null) {
