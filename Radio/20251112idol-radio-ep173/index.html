@@ -55,6 +55,7 @@ html, body {
         </div>
 
         <button id="fs-btn">進入全螢幕</button>
+        <button id="liyu-time-btn" onclick="jumpToLiyu()" style="background-color: #e91e63; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-left: 5px;">立于出場時間</button>
     </div>
 </div>
 
@@ -87,6 +88,17 @@ html, body {
 /* 影片ID和SRT文件 */
 const MY_VIDEO_ID = "v5Hm4T8zSsw"; 
 const MY_SRT_FILE = "20251112idol_radio_ep173.srt";
+
+/* 設定立于出場時間：16分43秒 = 1003秒 */
+const MY_VIDEO_START = 1003;
+
+/* 點擊按鈕跳轉功能 */
+function jumpToLiyu() {
+    if (window.player && window.player.seekTo) {
+        window.player.seekTo(MY_VIDEO_START, true);
+        window.player.playVideo(); // 跳轉後自動播放
+    }
+}
 
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
