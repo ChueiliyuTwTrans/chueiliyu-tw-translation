@@ -819,7 +819,7 @@ body.theme-dark .sns-divider { color: #334155; }
         <span class="news-tag tag-new">更新</span> 02/24 [直播]Radio’n Us:2025年末派對已上傳 
     </div>
     <div class="news-item">
-        <span class="news-tag tag-new">更新</span> 02/12 [節目]《出差！RISABAE》已上傳⭐
+        <span class="news-tag tag-new">更新</span> 02/27 [電台]IDOL RADIO EP.173已上傳⭐
     </div>
     <div class="news-item">
         <span class="news-tag tag-note">公告</span> 新增「出演人員篩選」按鈕以及「回到頂端」按鈕功能！
@@ -957,7 +957,7 @@ const videoData = [
         desc: '完整節目｜中文翻譯',
         credit: '翻譯：Lepus<br>字幕製作：西卡<br>校對：西卡',
         isNew: true,
-        cast: ['Risabae']
+        cast: []
     },
     {
         id: 'p2',
@@ -968,7 +968,7 @@ const videoData = [
         desc: '完整節目｜中文翻譯',
         credit: '',
         isNew: false,
-        cast: ['瀚音', '東奎', '梓豪', '蘇仁', '強納森']
+        cast: ['瀚音', '東奎', '梓豪', '蘇仁']
     },
     {
         id: 'p3',
@@ -990,7 +990,7 @@ const videoData = [
         desc: '完整節目｜中文翻譯',
         credit: '翻譯：西卡、Yuli<br>字幕製作：C<br>校對：西卡',
         isNew: false,
-        cast: ['洪錫天','瀚音']
+        cast: ['瀚音']
     },
     {
         id: 'p5',
@@ -1012,7 +1012,7 @@ const videoData = [
         desc: '完整節目｜中文翻譯',
         credit: '翻譯：Lepus<br>字幕製作：西卡<br>校對：西卡',
         isNew: false,
-        cast: ['Bada Lee']
+        cast: []
     },
     {
         id: 'p7',
@@ -1023,22 +1023,33 @@ const videoData = [
         desc: '完整節目｜中文翻譯',
         credit: '翻譯：西卡<br>字幕製作：西卡',
         isNew: false,
-        cast: ['詩安']
+        cast: []
     },
     // --- RADIO ---
     {
         id: 'r1',
+        category: 'radio',
+        title: 'IDOL RADIO EP.173',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251112idol-radio-ep173/',
+        img: 'images/20251112_idol_radio_ep173.webp',
+        desc: '完整電台｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: true,
+        cast: ['HANULIZ','瀚音', '玗進']
+    },
+    {
+        id: 'r2',
         category: 'radio',
         title: '[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/',
         img: 'images/20251211_kiss_the_radio.webp',
         desc: '完整電台｜中文翻譯',
         credit: '翻譯：西卡<br>字幕製作：C & 西卡',
-        isNew: true,
-        cast: ['韓海','瀚音']
+        isNew: false,
+        cast: ['瀚音']
     },
     {
-        id: 'r2',
+        id: 'r3',
         category: 'radio',
         title: '朴素賢的 Love Game | 251221',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/',
@@ -1046,10 +1057,10 @@ const videoData = [
         desc: '完整電台｜中文翻譯',
         credit: '翻譯：西卡<br>字幕製作：西卡',
         isNew: false,
-        cast: ['朴素賢']
+        cast: []
     },
     {
-        id: 'r3',
+        id: 'r4',
         category: 'radio',
         title: 'IDOL RADIO BEHIND EP.173',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251123idol-radio-ep173-behind/',
@@ -1376,6 +1387,7 @@ function initBackToTop() {
 </script>
 </body>
 </html>
+
 
 
 
