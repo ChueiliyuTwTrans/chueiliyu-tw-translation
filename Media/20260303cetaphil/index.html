@@ -41,8 +41,9 @@
     
     .content-wrapper { max-width: 800px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; transition: background-color 0.3s ease; }
     
-    /* 🌟 修改：移除 position: sticky; top: 0; 讓 Header 跟著頁面捲動 */
-    .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
+    /* 🌟 解除 Header 固定：拿掉 position: sticky; 讓它可以捲上去！ */
+    .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
+    
     .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     .header p { font-size: 0.95rem; color: var(--text-sub); margin: 4px 0 16px 0; }
     
@@ -62,9 +63,9 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 🌟 給 iframe 完美的比例，適用於電腦版放大 */
-    .video-container { width: 100%; aspect-ratio: 16 / 9; background: #000; }
-    .video-iframe { width: 100%; height: 100%; border: none; display: block; }
+    /* 🌟 控制影片外框，確保在電腦版可以撐滿 800px，手機版按比例縮放 */
+    .video-container { width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative; }
+    .video-iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; display: block; }
     
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.05rem;}
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
@@ -241,13 +242,15 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     // 頁籤切換功能
     function openTab(tabId, btnElement) {
-      // 廣播「暫停指令」給所有的 iframe (防止背景繼續播放)
+      // 1. 廣播暫停指令給已經建立的影片
       document.querySelectorAll('.video-iframe').forEach(iframe => {
         if(iframe.contentWindow) {
-          iframe.contentWindow.postMessage('pauseVideo', '*');
+             iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+             iframe.contentWindow.postMessage('pauseVideo', '*');
         }
       });
 
+      // 2. UI 切換
       const contents = document.querySelectorAll('.tab-content');
       contents.forEach(content => content.classList.remove('active'));
 
@@ -258,10 +261,20 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       targetContent.classList.add('active');
       btnElement.classList.add('active');
 
-      // 延遲載入 (Lazy Load)
-      const iframe = targetContent.querySelector('iframe');
-      if (iframe && !iframe.src) {
-          iframe.src = iframe.getAttribute('data-src');
+      // 3. 🌟 終極載入魔法：只有在點到影片頁籤時，才「無中生有」生出 iframe
+      if (tabId === 'tab-video1' || tabId === 'tab-video2') {
+        const containerId = 'container-' + tabId.replace('tab-', '');
+        const container = document.getElementById(containerId);
+        
+        // 檢查如果容器裡面是空的，才建立影片
+        if (container && !container.hasChildNodes()) {
+          const iframe = document.createElement('iframe');
+          iframe.src = container.getAttribute('data-src');
+          iframe.className = 'video-iframe';
+          iframe.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture";
+          iframe.setAttribute('allowfullscreen', '');
+          container.appendChild(iframe);
+        }
       }
     }
 
