@@ -130,14 +130,18 @@
     }
 
     .unified-reaction-box p, 
-    .unified-reaction-box span { 
+    .unified-reaction-box span,
+    .reaction-section { 
         color: var(--text-main) !important; 
-        font-size: 1.05rem !important; 
+        font-size: 1rem !important; 
+        text-shadow: none !important; /* 取消陰影 */
+        box-shadow: none !important;
     }
     #reaction-title { 
         color: var(--text-main) !important; 
         font-weight: bold !important; 
-        margin-bottom: 10px !important;
+        margin-bottom: 8px !important;
+        text-shadow: none !important; /* 取消陰影 */
     }
   </style>
 </head>
@@ -272,25 +276,25 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     </div>
     <div id="tab-video1" class="tab-content">
         <div class="video-controls-bar">
-            <button onclick="changeSubtitleSize(-0.1, 'subtitle-1')">A−</button>
+            <button onclick="changeSubtitleSize(-0.1, 'subtitle-video1')">A−</button>
             <span style="color:white; line-height:30px;">字幕</span>
-            <button onclick="changeSubtitleSize(0.1, 'subtitle-1')">A＋</button>
+            <button onclick="changeSubtitleSize(0.1, 'subtitle-video1')">A＋</button>
         </div>
         <div class="video-responsive-wrapper">
-            <div id="player-container-1"></div> 
-            <div id="subtitle-1" class="subtitle-overlay"></div>
+            <div id="player-container-video1"></div> 
+            <div id="subtitle-video1" class="subtitle-overlay"></div>
         </div>
     </div>
 
     <div id="tab-video2" class="tab-content">
         <div class="video-controls-bar">
-            <button onclick="changeSubtitleSize(-0.1, 'subtitle-2')">A−</button>
+            <button onclick="changeSubtitleSize(-0.1, 'subtitle-video2')">A−</button>
             <span style="color:white; line-height:30px;">字幕</span>
-            <button onclick="changeSubtitleSize(0.1, 'subtitle-2')">A＋</button>
+            <button onclick="changeSubtitleSize(0.1, 'subtitle-video2')">A＋</button>
         </div>
         <div class="video-responsive-wrapper">
-            <div id="player-container-2"></div>
-            <div id="subtitle-2" class="subtitle-overlay"></div>
+            <div id="player-container-video2"></div>
+            <div id="subtitle-video2" class="subtitle-overlay"></div>
         </div>
     </div>
 
