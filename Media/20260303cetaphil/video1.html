@@ -21,10 +21,10 @@
 
   #video-wrapper {
       position: relative;
-      width: 100%;
-      max-width: 800px;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 85vh !important; /* 留一點空間給上方的按鈕 */
       margin: 0 auto;
-      aspect-ratio: 16 / 9;
       background-color: #000;
   }
 
@@ -39,7 +39,7 @@
   button { background: #333; color: white; border: 1px solid #555; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
   button:hover { background: #555; }
 
-  /* 🌟 終極隱形魔法：把不需要的表情與彈幕介面全部藏起來！ */
+  /* 把不需要的表情與彈幕介面全部藏起來！ */
   #barrage-toggle-btn,
   .barrage-control,
   #barrage-container,
