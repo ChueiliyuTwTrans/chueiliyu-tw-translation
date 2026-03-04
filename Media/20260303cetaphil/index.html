@@ -20,6 +20,7 @@
       --intro-text: #444444; --section-bg: #f0f4f8; --section-text: #5A8BB8; --outfit-bg: #f4f8fb; --outfit-border: #73A5C6;
       --item-divider: #fafafa; --list-divider: #d1dbe3; --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
       --tab-bg: #ffffff; --tab-border: #e1e8ed; --tab-text: #8e8e8e; --tab-active-text: #73A5C6; --tab-active-border: #73A5C6;
+      --home-btn-bg: #e1e8ed; --home-btn-hover: #d1dbe3;
     }
 
     [data-theme="dark"] {
@@ -28,6 +29,7 @@
       --intro-text: #e4e6eb; --section-bg: #2a333c; --section-text: #8ebfec; --outfit-bg: #242526; --outfit-border: #4A7A9B;
       --item-divider: #121212; --list-divider: #3a3b3c; --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
       --tab-bg: #1e1e1e; --tab-border: #3a3b3c; --tab-text: #888888; --tab-active-text: #8ebfec; --tab-active-border: #4A7A9B;
+      --home-btn-bg: #3a3b3c; --home-btn-hover: #4a4b4c;
     }
 
     html, body { 
@@ -37,13 +39,19 @@
       margin: 0; padding: 0; display: flex; justify-content: center; transition: background-color 0.3s ease, color 0.3s ease; 
     }
     
-    /* 🌟 解放電腦版寬度：從 500px 放大到 800px */
     .content-wrapper { max-width: 800px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; transition: background-color 0.3s ease; }
     
     .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; position: sticky; top: 0; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
     .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     .header p { font-size: 0.95rem; color: var(--text-sub); margin: 4px 0 16px 0; }
-    .theme-toggle-group { display: inline-flex; background-color: var(--theme-btn-bg); border-radius: 20px; padding: 4px; margin-top:10px; margin-bottom: 16px; }
+    
+    /* 🌟 修改控制列排版，讓首頁按鈕與主題按鈕並排 */
+    .controls-wrapper { display: flex; gap: 12px; align-items: center; margin-top: 10px; margin-bottom: 16px; }
+    
+    .home-btn { background-color: var(--home-btn-bg); color: var(--text-main); text-decoration: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; font-weight: bold; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
+    .home-btn:hover { background-color: var(--home-btn-hover); }
+
+    .theme-toggle-group { display: inline-flex; background-color: var(--theme-btn-bg); border-radius: 20px; padding: 4px; }
     .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
     .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
@@ -54,7 +62,6 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 🌟 優化影片高度，讓電腦和手機都能完美顯示比例 */
     .video-iframe { width: 100%; aspect-ratio: 16 / 12; min-height: 350px; max-height: 650px; border: none; background: #000; }
     
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.05rem;}
@@ -65,10 +72,9 @@
     .post-item { margin-bottom: 12px; border-bottom: 8px solid var(--item-divider); padding-bottom: 16px; }
     .post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-    /* 🌟 限制 IG 貼文最大寬度，避免在電腦上大到變形 */
     .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 500px !important; }
     
-    .translation-box { padding: 16px 20px; max-width: 600px; margin: 0 auto; /* 讓文字在電腦版置中對齊 */ }
+    .translation-box { padding: 16px 20px; max-width: 600px; margin: 0 auto; }
     .caption-text { font-size: 1rem; line-height: 1.7; margin: 0 0 16px 0; white-space: pre-line; }
     .outfit-section { background-color: var(--outfit-bg); padding: 16px 20px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
     .photo-tag { display: inline-block; font-weight: 600; color: var(--section-text); font-size: 1.1rem; margin-bottom: 8px; letter-spacing: 1px; }
@@ -77,11 +83,6 @@
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--list-divider); }
     .carousel-list li:last-child { border-bottom: none; }
     .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.8rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle;}
-    
-    /* 統一表情區塊 */
-    .unified-reaction-box { padding: 20px; background-color: var(--bg-content); border-top: 2px dashed var(--border-line); margin-top: 20px; text-align: center; }
-    .unified-reaction-box p, .reaction-section { color: var(--text-main) !important; font-size: 1.05rem; }
-    #reaction-title { color: var(--text-main) !important; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -91,9 +92,11 @@
     <header class="header">
       <h1>cetaphil廣告贊助-崔立于 x Esquire Korea</h1>
       
-      <div class="theme-toggle-group">
-        <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
-        <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
+      <div class="controls-wrapper">
+        <a href="../../index.html" class="home-btn">🏠 首頁</a> <div class="theme-toggle-group">
+          <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
+          <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
+        </div>
       </div>
 
       <div class="tabs-container">
