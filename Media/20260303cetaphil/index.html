@@ -10,6 +10,7 @@
   <script>
     const savedTheme = localStorage.getItem('pageTheme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
+    window.MY_VIDEO_ID = "cetaphil_20260303_combined";
   </script>
 
   <style>
@@ -52,6 +53,7 @@
     .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; }
     .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
+    /* 頁籤 */
     .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); }
     .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 1rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; }
     .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
@@ -60,7 +62,7 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 畫報區塊 */
+    /* 畫報樣式 */
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
     .intro-text { font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 20px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
@@ -75,7 +77,7 @@
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-line); }
 
     /* ==================== 
-       🌟 影片區塊完美滿版樣式
+       🌟 影片區塊：標準 16:9 完美自適應版面
        ==================== */
     .video-controls-bar {
         background: #111; padding: 12px; display: flex; justify-content: center; gap: 15px; border-bottom: 1px solid #333;
@@ -88,7 +90,7 @@
     .video-responsive-wrapper {
         position: relative;
         width: 100%;
-        padding-bottom: 56.25%; /* 神奇比例：永遠維持 16:9 */
+        padding-bottom: 56.25%; /* 16:9 神奇比例 */
         background: #000;
     }
     .video-responsive-wrapper iframe {
@@ -103,34 +105,39 @@
     }
 
     /* ==================== 
-       🌟 完美修復表情牆的白底問題
+       🌟 完美修復表情牆：解決黑底與版面過大的問題
        ==================== */
     #barrage-toggle-btn, .barrage-control, #barrage-container, #emoji-trigger-btn, #emoji-drawer { display: none !important; }
     
     .unified-reaction-box { 
         background-color: var(--section-bg) !important; 
         border-radius: 12px; 
-        margin: 20px; 
-        padding: 20px; 
+        margin: 20px auto; 
+        padding: 15px; 
         text-align: center; 
         border: 1px solid var(--intro-border);
+        width: 90%; /* 限制寬度，避免過大 */
     }
     
-    /* 強制把裡面原本黑色的背景變成透明，讓外層漂亮的顏色透出來 */
+    /* 強制打敗 reaction.css 寫死的高度與黑底 */
     .reaction-section, .reaction-wall, .reaction-container {
         background: transparent !important;
         background-color: transparent !important;
+        height: auto !important; 
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .unified-reaction-box p, 
-    .unified-reaction-box span,
-    .reaction-section { 
+    .unified-reaction-box span { 
         color: var(--text-main) !important; 
-        font-size: 1.05rem; 
+        font-size: 1.05rem !important; 
     }
     #reaction-title { 
         color: var(--text-main) !important; 
-        font-weight: bold; 
+        font-weight: bold !important; 
+        margin-bottom: 10px !important;
     }
   </style>
 </head>
@@ -305,67 +312,64 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     const app = initializeApp(firebaseConfig);
     window.db = getDatabase(app); window.fb_ref = ref; window.fb_onValue = onValue; window.fb_runTransaction = runTransaction; 
   </script>
-  <script>
-    const MY_VIDEO_ID = "cetaphil_20260303_combined"; 
-  </script>
+
   <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
   
   <script>
-    // 影片資料
-   const videoData = {
-        'tab-video1': { id: 'KPybYGuC8dc', srt: '20260302cetaphil.srt', player: null, subEl: 'subtitle-1' },
-        'tab-video2': { id: 'HCuShe8LqKU', srt: '20260303cetaphil.srt', player: null, subEl: 'subtitle-2' }
+    // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
+    const videoData = {
+        'tab-video1': { id: 'KPybYGuC8dc', srt: '20260302cetaphil.srt', player: null, subEl: 'subtitle-video1', container: 'player-container-video1' },
+        'tab-video2': { id: 'HCuShe8LqKU', srt: '20260303cetaphil.srt', player: null, subEl: 'subtitle-video2', container: 'player-container-video2' }
     };
-    
-    // 主題切換功能
+
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
       document.getElementById('btn-dark').classList.remove('active');
       document.getElementById('btn-' + theme).classList.add('active');
     }
-
+    
     function switchTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('pageTheme', theme);
       updateButtonUI(theme);
     }
 
-    // 頁籤切換與動態生成影片
     function openTab(tabId, btnElement) {
-      // 暫停所有正在播放的影片
       Object.keys(videoData).forEach(key => {
           if (videoData[key].player && typeof videoData[key].player.pauseVideo === 'function') {
               videoData[key].player.pauseVideo();
           }
       });
 
-      // 切換 UI 顯示
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
 
-      // 載入影片 (只在點擊時載入)
       if (tabId === 'tab-video1' || tabId === 'tab-video2') {
           initVideo(tabId);
       }
     }
 
-    // 🌟 2. 自動重試機制：確保 YouTube API 載入完畢才產生影片，絕對不失敗！
+    // 安全載入 YouTube 播放器
+    window.onYouTubeIframeAPIReady = function() {
+        // API 準備好時，不做任何事，等到讀者點擊頁籤才觸發 initVideo
+    };
+
     function initVideo(tabId) {
         const vData = videoData[tabId];
-        if (vData.player) return; // 已經載入過就不重複建立
+        if (vData.player) return;
 
         if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
-            // 如果 YouTube 還沒準備好，等 100 毫秒再試一次
             setTimeout(() => initVideo(tabId), 100);
             return;
         }
 
-        const containerId = tabId.replace('tab-', 'player-container-');
-        vData.player = new YT.Player(containerId, {
+        vData.player = new YT.Player(vData.container, {
             videoId: vData.id,
-            playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 }, // 絕對禁止自動播放
+            width: '100%',
+            height: '100%',
+            playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 }, // 絕對不偷播
             events: {
                 'onReady': function(event) {
                     loadSRT(vData.srt, vData.subEl, event.target);
@@ -374,14 +378,13 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
         });
     }
 
-    // SRT 字幕解析與同步
     function loadSRT(filename, subtitleId, player) {
         fetch(filename)
             .then(response => response.text())
             .then(text => {
                 const subs = parseSRT(text);
                 setInterval(() => {
-                    if (player && player.getPlayerState() === 1) { // 只有正在播放時才顯示
+                    if (player && player.getPlayerState() === 1) { 
                         const time = player.getCurrentTime();
                         const currentSub = subs.find(s => time >= s.start && time <= s.end);
                         document.getElementById(subtitleId).innerHTML = currentSub ? currentSub.text : '';
@@ -408,7 +411,6 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
         return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]) + parseInt(parts[3]) / 1000;
     }
 
-    // 字幕大小控制
     function changeSubtitleSize(delta, subtitleId) {
         const subDiv = document.getElementById(subtitleId);
         let currentSize = parseFloat(window.getComputedStyle(subDiv).fontSize);
