@@ -10,9 +10,9 @@
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <style>
+ <style>
     /* ==================== 
-       色彩變數 (包含深淺色)
+       色彩變數 
        ==================== */
     :root {
       --bg-body: #fafafa; --bg-content: #ffffff; --text-main: #262626; --text-sub: #8e8e8e; --border-line: #dbdbdb;
@@ -45,9 +45,7 @@
     .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     .header p { font-size: 0.95rem; color: var(--text-sub); margin: 4px 0 16px 0; }
     
-    /* 🌟 修改控制列排版，讓首頁按鈕與主題按鈕並排 */
     .controls-wrapper { display: flex; gap: 12px; align-items: center; margin-top: 10px; margin-bottom: 16px; }
-    
     .home-btn { background-color: var(--home-btn-bg); color: var(--text-main); text-decoration: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; font-weight: bold; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; }
     .home-btn:hover { background-color: var(--home-btn-hover); }
 
@@ -62,7 +60,8 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .video-iframe { width: 100%; aspect-ratio: 16 / 12; min-height: 350px; max-height: 650px; border: none; background: #000; }
+    /* 🌟 給 iframe 完美的比例，並移除了死板的高度限制 */
+    .video-iframe { width: 100%; aspect-ratio: 16 / 9; border: none; background: #000; display: block; }
     
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.05rem;}
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
@@ -73,7 +72,6 @@
     .post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
     .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 500px !important; }
-    
     .translation-box { padding: 16px 20px; max-width: 600px; margin: 0 auto; }
     .caption-text { font-size: 1rem; line-height: 1.7; margin: 0 0 16px 0; white-space: pre-line; }
     .outfit-section { background-color: var(--outfit-bg); padding: 16px 20px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
