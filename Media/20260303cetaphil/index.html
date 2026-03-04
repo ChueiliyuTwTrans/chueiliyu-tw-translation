@@ -10,10 +10,9 @@
   <script>
     const savedTheme = localStorage.getItem('pageTheme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    window.MY_VIDEO_ID = "cetaphil_20260303_combined";
   </script>
 
- <style>
+  <style>
     /* ==================== 
        色彩變數與基礎設定
        ==================== */
@@ -53,7 +52,6 @@
     .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; }
     .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    /* 頁籤 */
     .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); }
     .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 1rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; }
     .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
@@ -62,7 +60,7 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 畫報樣式 */
+    /* 畫報區塊 */
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
     .intro-text { font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 20px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
@@ -77,7 +75,7 @@
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-line); }
 
     /* ==================== 
-       🌟 終極影片容器：標準 16:9 完美自適應版面
+       🌟 影片區塊完美滿版樣式
        ==================== */
     .video-controls-bar {
         background: #111; padding: 12px; display: flex; justify-content: center; gap: 15px; border-bottom: 1px solid #333;
@@ -104,18 +102,26 @@
         text-shadow: 2px 2px 4px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
 
-    /* 🌟 隱藏從 reaction.css 跑出來的多餘彈幕按鈕 */
+    /* ==================== 
+       🌟 完美修復表情牆的白底問題
+       ==================== */
     #barrage-toggle-btn, .barrage-control, #barrage-container, #emoji-trigger-btn, #emoji-drawer { display: none !important; }
     
-    /* 🌟 完美修復表情牆的白底問題，加上漂亮的圓角藍灰底色 */
     .unified-reaction-box { 
-        background-color: var(--section-bg); 
+        background-color: var(--section-bg) !important; 
         border-radius: 12px; 
         margin: 20px; 
         padding: 20px; 
         text-align: center; 
         border: 1px solid var(--intro-border);
     }
+    
+    /* 強制把裡面原本黑色的背景變成透明，讓外層漂亮的顏色透出來 */
+    .reaction-section, .reaction-wall, .reaction-container {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+
     .unified-reaction-box p, 
     .unified-reaction-box span,
     .reaction-section { 
@@ -298,6 +304,9 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     const firebaseConfig = { apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw", authDomain: "chueiliyu-tw-translation.firebaseapp.com", databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "chueiliyu-tw-translation", storageBucket: "chueiliyu-tw-translation.appspot.com", messagingSenderId: "625769420546", appId: "1:625769420546:web:6d25889d1c66a091fe941b" };
     const app = initializeApp(firebaseConfig);
     window.db = getDatabase(app); window.fb_ref = ref; window.fb_onValue = onValue; window.fb_runTransaction = runTransaction; 
+  </script>
+  <script>
+    const MY_VIDEO_ID = "cetaphil_20260303_combined"; 
   </script>
   <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
   
