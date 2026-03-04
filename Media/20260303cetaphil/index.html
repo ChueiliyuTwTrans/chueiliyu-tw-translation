@@ -11,7 +11,7 @@
 
   <style>
     /* ==================== 
-       2. 定義淺色與深色的色彩變數
+       色彩變數 (包含深淺色)
        ==================== */
     :root {
       --bg-body: #fafafa;
@@ -34,9 +34,15 @@
       --theme-btn-bg: #f0f0f0;
       --theme-btn-text: #666;
       --theme-btn-active: #ffffff;
+      
+      /* 頁籤專用變數 */
+      --tab-bg: #ffffff;
+      --tab-border: #e1e8ed;
+      --tab-text: #8e8e8e;
+      --tab-active-text: #73A5C6;
+      --tab-active-border: #73A5C6;
     }
 
-    /* 深色模式變數 */
     [data-theme="dark"] {
       --bg-body: #121212;
       --bg-content: #1e1e1e;
@@ -58,11 +64,16 @@
       --theme-btn-bg: #333333;
       --theme-btn-text: #aaaaaa;
       --theme-btn-active: #1e1e1e;
+      
+      /* 深色模式下的頁籤 */
+      --tab-bg: #1e1e1e;
+      --tab-border: #3a3b3c;
+      --tab-text: #888888;
+      --tab-active-text: #8ebfec;
+      --tab-active-border: #4A7A9B;
     }
 
-    /* ==================== 
-       3. 頁面排版與樣式 (套用變數)
-       ==================== */
+    /* 基本版面 */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg-body);
@@ -84,16 +95,15 @@
       transition: background-color 0.3s ease;
     }
 
-    /* 頂部標題列：改為垂直排列並置中 */
+    /* 頂部 Header */
     .header {
       background-color: var(--bg-content);
-      padding: 20px;
+      padding: 20px 20px 0 20px;
       text-align: center;
-      border-bottom: 1px solid var(--border-line);
       position: sticky;
       top: 0;
       z-index: 10;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      transition: background-color 0.3s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -103,7 +113,6 @@
       font-size: 1.1rem;
       margin: 0;
       font-weight: 600;
-      letter-spacing: 1px;
       color: var(--text-main);
       line-height: 1.4;
     }
@@ -111,12 +120,7 @@
     .header p {
       font-size: 0.85rem;
       color: var(--text-sub);
-      margin: 4px 0 0 0;
-    }
-
-    /* 獨立的主題切換按鈕區塊 */
-    .theme-toggle-wrapper {
-      margin-top: 14px;
+      margin: 4px 0 16px 0;
     }
 
     .theme-toggle-group {
@@ -124,6 +128,7 @@
       background-color: var(--theme-btn-bg);
       border-radius: 20px;
       padding: 4px;
+      margin-bottom: 16px;
     }
 
     .theme-btn {
@@ -144,148 +149,75 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* 官方原文傳送門按鈕 */
-    .btn-article {
+    /* ==================== 
+       新增：頁籤切換列設計
+       ==================== */
+    .tabs-container {
+      display: flex;
+      width: 100%;
+      border-bottom: 2px solid var(--tab-border);
+      background-color: var(--tab-bg);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 14px 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--tab-text);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--tab-active-text);
+      border-bottom: 3px solid var(--tab-active-border);
+    }
+
+    /* 隱藏/顯示區塊邏輯 */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
       display: block;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      text-align: center;
-      padding: 14px 20px;
-      margin: 20px 20px 0 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      letter-spacing: 1px;
-      transition: background-color 0.2s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .btn-article:hover {
-      background-color: var(--btn-hover);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 文章前言卡片 */
-    .intro-box {
-      background-color: var(--bg-content);
-      padding: 0 20px 24px 20px;
-      margin-top: 16px;
+    /* 獨立 iframe 容器 */
+    .video-iframe {
+      width: 100%;
+      height: 85vh; /* 給影片與字幕留足夠高度 */
+      border: none;
+      background: #000;
     }
 
-    .intro-text {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: var(--intro-text);
-      margin: 0;
-      white-space: pre-line;
-      padding: 16px;
-      background-color: var(--intro-bg);
-      border-radius: 12px;
-      border: 1px solid var(--intro-border);
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-
-    /* 區塊大標題 */
-    .section-title {
-      background-color: var(--section-bg);
-      padding: 16px 20px;
-      margin: 0 0 24px 0;
-      font-size: 1rem;
-      color: var(--section-text);
-      font-weight: bold;
-      letter-spacing: 2px;
-      border-bottom: 1px solid var(--intro-border);
-      border-top: 1px solid var(--intro-border);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* 單一項目區塊 */
-    .post-item {
-      margin-bottom: 12px;
-      border-bottom: 8px solid var(--item-divider);
-      padding-bottom: 16px;
-      transition: border-color 0.3s ease;
-    }
-
-    .instagram-media {
-      margin: 0 auto !important;
-      border: none !important;
-      box-shadow: none !important;
-      max-width: 100% !important;
-    }
-
-    /* 翻譯總區塊 */
-    .translation-box {
-      padding: 16px 20px;
-      background-color: var(--bg-content);
-      transition: background-color 0.3s ease;
-    }
-
-    .caption-text {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--text-main);
-      margin: 0 0 16px 0;
-      white-space: pre-line;
-      transition: color 0.3s ease;
-    }
-
-    /* 著裝資訊專屬小區塊 */
-    .outfit-section {
-      background-color: var(--outfit-bg);
-      padding: 14px 16px;
-      border-radius: 8px;
-      border-left: 4px solid var(--outfit-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .photo-tag {
-      display: inline-block;
-      font-weight: 600;
-      color: var(--section-text);
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: color 0.3s ease;
-    }
-    
-    .outfit-text {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--text-main);
-      margin: 0;
-      transition: color 0.3s ease;
-    }
-
-    .carousel-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .carousel-list li {
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px dashed var(--list-divider);
-      transition: border-color 0.3s ease;
-    }
-
-    .carousel-list li:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .ig-index-badge {
-      background-color: var(--outfit-border);
-      color: var(--btn-text);
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 8px;
-      font-weight: normal;
-      transition: background-color 0.3s ease;
-    }
+    /* 原本畫報的 CSS (省略部分不變的設定保持版面整潔) */
+    .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
+    .intro-text { font-size: 0.95rem; line-height: 1.7; color: var(--intro-text); white-space: pre-line; padding: 16px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
+    .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
+    .post-item { margin-bottom: 12px; border-bottom: 8px solid var(--item-divider); padding-bottom: 16px; }
+    .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 100% !important; }
+    .translation-box { padding: 16px 20px; }
+    .caption-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 16px 0; white-space: pre-line; }
+    .outfit-section { background-color: var(--outfit-bg); padding: 14px 16px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
+    .photo-tag { display: inline-block; font-weight: 600; color: var(--section-text); font-size: 0.85rem; margin-bottom: 8px; }
+    .outfit-text { font-size: 0.9rem; line-height: 1.6; margin: 0; }
+    .carousel-list { list-style: none; padding: 0; margin: 0; }
+    .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--list-divider); }
+    .carousel-list li:last-child { border-bottom: none; }
+    .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
   </style>
 </head>
 <body>
@@ -296,20 +228,25 @@
       <h1>2026.03.02 Esquire Korea文章翻譯</h1>
       <p>Esquire Korea x 崔立于</p>
       
-      <div class="theme-toggle-wrapper">
-        <div class="theme-toggle-group">
-          <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
-          <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
-        </div>
+      <div class="theme-toggle-group">
+        <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
+        <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
+      </div>
+
+      <div class="tabs-container">
+        <button class="tab-btn active" onclick="openTab('tab-pictorial', this)">📸 畫報與文章</button>
+        <button class="tab-btn" onclick="openTab('tab-video1', this)">🎬 專訪 (一)</button>
+        <button class="tab-btn" onclick="openTab('tab-video2', this)">🎬 專訪 (二)</button>
       </div>
     </header>
 
-    <a href="https://www.esquirekorea.co.kr/article/1898009" target="_blank" rel="noopener noreferrer" class="btn-article">
-      👉 點此開啟 Esquire 官方原文看畫報
-    </a>
+    <div id="tab-pictorial" class="tab-content active">
+      <a href="https://www.esquirekorea.co.kr/article/1898009" target="_blank" rel="noopener noreferrer" class="btn-article">
+        👉 點此開啟 Esquire 官方原文看畫報
+      </a>
 
-    <div class="intro-box">
-      <p class="intro-text">以清爽的「舒特膚男孩 (Cetaphil Boy)」形象現身的崔立于，全新畫報正式公開！
+      <div class="intro-box">
+        <p class="intro-text">以清爽的「舒特膚男孩 (Cetaphil Boy)」形象現身的崔立于，全新畫報正式公開！
       快來看看那些打造出他那清透臉龐與水潤肌膚的舒特膚必備單品。
 
       #企劃贊助
@@ -317,9 +254,11 @@
       打造出他水潤肌膚的產品正是「舒特膚 舒新雪潤B5安心霜」。
       此外，每天使用也毫無負擔的「舒特膚 三酸煥膚嫩亮潔膚露」與「舒特膚 三酸煥膚嫩亮修護乳」也同步登場。
       請一起來欣賞崔立于所選定的舒特膚耀眼時刻吧。 ✦⟡</p>
-    </div>
+      </div>
 
-    <h2 class="section-title">✨ DIGITAL COVER (數位封面)</h2>
+      <h2 class="section-title">✨ DIGITAL COVER (數位封面)</h2>
+      
+      <h2 class="section-title">✨ DIGITAL COVER (數位封面)</h2>
 
     <div class="post-item">
       <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-azqj6S6/" data-instgrm-version="14"></blockquote>
@@ -356,11 +295,11 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-N61D6yF/" data-instgrm-version="14"></blockquote>
       <div class="translation-box">
         <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉
-由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
-Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
--
-▫️舒特膚三酸煥膚嫩亮潔膚露
--</p>
+          由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
+          Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
+          -
+        ▫️舒特膚三酸煥膚嫩亮潔膚露
+        -</p>
         <div class="outfit-section">
           <div class="photo-tag"> 第三套著裝</div>
           <p class="outfit-text">
@@ -369,7 +308,6 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
         </div>
       </div>
     </div>
-
 
     <h2 class="section-title">✨ PICTORIAL (畫報)</h2>
     
@@ -412,11 +350,20 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       </div>
     </div>
 
+    <div id="tab-video1" class="tab-content">
+      <iframe src="video1.html" class="video-iframe" title="舒特膚專訪一"></iframe>
+    </div>
+
+    <div id="tab-video2" class="tab-content">
+      <iframe src="video2.html" class="video-iframe" title="舒特膚專訪二"></iframe>
+    </div>
+
   </div>
 
   <script async src="//www.instagram.com/embed.js"></script>
 
-  <script>
+ <script>
+    // 主題切換功能
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
       document.getElementById('btn-dark').classList.remove('active');
@@ -427,6 +374,21 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('pageTheme', theme);
       updateButtonUI(theme);
+    }
+
+    // 頁籤切換功能
+    function openTab(tabId, btnElement) {
+      // 隱藏所有內容
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+      
+      // 取消所有按鈕的 active 狀態
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // 顯示目標內容並亮起該按鈕
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
