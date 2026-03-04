@@ -83,11 +83,9 @@
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
-    <div id="barrage-container"></div>
-    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
-    <div id="emoji-drawer"></div>
-    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
-        <svg viewBox="0 0 24 24">
+    
+    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0; position: absolute; top: 10px; right: 10px; z-index: 10; background: rgba(0,0,0,0.5); border: none; padding: 5px; border-radius: 4px;">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
