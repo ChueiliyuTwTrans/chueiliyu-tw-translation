@@ -8,15 +8,16 @@
 <style>
   body {
       margin: 0;
-      background: #000 !important; /* 強制全黑 */
+      background: #000 !important;
       color: #fff;
       font-family: Arial, "Noto Sans TC", sans-serif;
       text-align: center;
       height: 100vh;
       width: 100vw;
+      overflow: hidden; /* 防止出現多餘的捲軸 */
   }
 
-  /* 確保影片外框有高度，才不會黑畫面 */
+  /* 影片外框 */
   #video-wrapper {
       position: relative;
       width: 100%;
@@ -33,28 +34,41 @@
       width: 100%;
       height: 100%;
   }
-</style>
 
-<link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
+  /* 字幕與全螢幕按鈕樣式 */
+  #controls {
+      margin: 15px 0;
+  }
+  .control-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+  }
+  .control-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+  button {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+  }
+  button:hover {
+      background: #555;
+  }
+</style>
 </head>
 
 <body>
 <div id="controls">
     <div class="control-row">
-        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
-        <div class="control-group barrage-control">
-            <span>大小</span>
-            <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
-        </div>
-        <div class="control-group barrage-control">
-            <span>範圍</span>
-            <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
-            <span id="height-val">40%</span>
-        </div>
-        <div class="control-group barrage-control">
-            <span>速度</span>
-            <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
-        </div>
         <div class="control-group">
             <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
             <span>字幕</span>
@@ -80,12 +94,6 @@
     </button>
 </div>
 
-<div class="reaction-section">
-    <p id="reaction-title">覺得這部翻譯影片如何？點個表情吧！</p>
-    <div class="reaction-wall"></div>
-    <br>
-</div>
-
 <script>
   /* 第一部影片ID和SRT文件 */
   const MY_VIDEO_ID = "KPybYGuC8dc"; 
@@ -95,34 +103,18 @@
       if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
   }
 </script>
-    
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-    
-  const firebaseConfig = {
-    apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
-    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
-    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "chueiliyu-tw-translation",
-    storageBucket: "chueiliyu-tw-translation.appspot.com",
-    messagingSenderId: "625769420546",
-    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
-    measurementId: "G-3PM3GTXPHF"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  window.db = getDatabase(app);
-  window.fb_ref = ref;            
-  window.fb_onValue = onValue;    
-  window.fb_runTransaction = runTransaction; 
-</script>
 
 <script src="/chueiliyu-tw-translation/js/core-player.js"></script>
-<script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  window.addEventListener('message', function(event) {
+      if (event.data === 'pauseVideo') {
+          const ytIframe = document.querySelector('iframe');
+          if (ytIframe && ytIframe.contentWindow) {
+              ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+      }
+  });
+</script>
 </body>
 </html>
