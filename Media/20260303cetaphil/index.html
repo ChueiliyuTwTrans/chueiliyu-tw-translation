@@ -35,18 +35,15 @@
       --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
     }
 
-    /* 🌟 解除封印：強迫網頁可以捲動，打敗 reaction.css 的鎖定 */
     html, body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-      background-color: var(--bg-body) !important; color: var(--text-main) !important; 
-      margin: 0 !important; padding: 0 !important; 
+      background-color: var(--bg-body) !important; color: var(--text-main) !important; margin: 0 !important; padding: 0 !important; 
       overflow-y: auto !important; height: auto !important;
       display: flex; justify-content: center; transition: background-color 0.3s ease, color 0.3s ease; 
     }
     
     .content-wrapper { max-width: 800px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; }
     
-    /* 🌟 解除固定：移除 sticky，讓 Header 自然捲上去 */
     .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
     .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     
@@ -86,8 +83,10 @@
         background: #111; padding: 12px; display: flex; justify-content: center; gap: 15px; border-bottom: 1px solid #333;
     }
     .video-controls-bar button {
-        background: #333; color: white; border: 1px solid #555; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem;
+        background: #333; color: white; border: 1px solid #555; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s;
     }
+    .video-controls-bar button:hover { background: #555; }
+    
     .video-responsive-wrapper {
         position: relative;
         width: 100%;
@@ -105,10 +104,28 @@
         text-shadow: 2px 2px 4px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
 
-    /* 隱藏從 reaction.css 跑出來的多餘彈幕按鈕 */
+    /* 🌟 隱藏從 reaction.css 跑出來的多餘彈幕按鈕 */
     #barrage-toggle-btn, .barrage-control, #barrage-container, #emoji-trigger-btn, #emoji-drawer { display: none !important; }
-    .unified-reaction-box { padding: 20px; text-align: center; }
-    .unified-reaction-box p, .reaction-section { color: var(--text-main) !important; font-size: 1.05rem; }
+    
+    /* 🌟 完美修復表情牆的白底問題，加上漂亮的圓角藍灰底色 */
+    .unified-reaction-box { 
+        background-color: var(--section-bg); 
+        border-radius: 12px; 
+        margin: 20px; 
+        padding: 20px; 
+        text-align: center; 
+        border: 1px solid var(--intro-border);
+    }
+    .unified-reaction-box p, 
+    .unified-reaction-box span,
+    .reaction-section { 
+        color: var(--text-main) !important; 
+        font-size: 1.05rem; 
+    }
+    #reaction-title { 
+        color: var(--text-main) !important; 
+        font-weight: bold; 
+    }
   </style>
 </head>
 <body>
@@ -286,7 +303,7 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
   
   <script>
     // 影片資料
-    const videoData = {
+   const videoData = {
         'tab-video1': { id: 'KPybYGuC8dc', srt: '20260302cetaphil.srt', player: null, subEl: 'subtitle-1' },
         'tab-video2': { id: 'HCuShe8LqKU', srt: '20260303cetaphil.srt', player: null, subEl: 'subtitle-2' }
     };
@@ -306,36 +323,46 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     // 頁籤切換與動態生成影片
     function openTab(tabId, btnElement) {
-      // 1. 強制暫停所有正在播放的影片
+      // 暫停所有正在播放的影片
       Object.keys(videoData).forEach(key => {
           if (videoData[key].player && typeof videoData[key].player.pauseVideo === 'function') {
               videoData[key].player.pauseVideo();
           }
       });
 
-      // 2. 切換 UI 顯示
+      // 切換 UI 顯示
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
 
-      // 3. 如果點擊影片頁籤，才建立 YouTube 播放器 (絕對不會提早偷播)
+      // 載入影片 (只在點擊時載入)
       if (tabId === 'tab-video1' || tabId === 'tab-video2') {
-          const vData = videoData[tabId];
-          const containerId = tabId.replace('tab-', 'player-container-');
-          
-          if (!vData.player && window.YT && window.YT.Player) {
-              vData.player = new YT.Player(containerId, {
-                  videoId: vData.id,
-                  playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 },
-                  events: {
-                      'onReady': function(event) {
-                          loadSRT(vData.srt, vData.subEl, event.target);
-                      }
-                  }
-              });
-          }
+          initVideo(tabId);
       }
+    }
+
+    // 🌟 2. 自動重試機制：確保 YouTube API 載入完畢才產生影片，絕對不失敗！
+    function initVideo(tabId) {
+        const vData = videoData[tabId];
+        if (vData.player) return; // 已經載入過就不重複建立
+
+        if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+            // 如果 YouTube 還沒準備好，等 100 毫秒再試一次
+            setTimeout(() => initVideo(tabId), 100);
+            return;
+        }
+
+        const containerId = tabId.replace('tab-', 'player-container-');
+        vData.player = new YT.Player(containerId, {
+            videoId: vData.id,
+            playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 }, // 絕對禁止自動播放
+            events: {
+                'onReady': function(event) {
+                    loadSRT(vData.srt, vData.subEl, event.target);
+                }
+            }
+        });
     }
 
     // SRT 字幕解析與同步
