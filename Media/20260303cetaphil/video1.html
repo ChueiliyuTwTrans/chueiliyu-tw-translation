@@ -8,15 +8,15 @@
 <style>
   body {
       margin: 0;
-      background: #000 !important;
+      background: #000 !important; /* 強制全黑 */
       color: #fff;
       font-family: Arial, "Noto Sans TC", sans-serif;
       text-align: center;
       height: 100vh;
       width: 100vw;
-      overflow: hidden;
   }
 
+  /* 確保影片外框有高度，才不會黑畫面 */
   #video-wrapper {
       position: relative;
       width: 100%;
@@ -33,19 +33,8 @@
       width: 100%;
       height: 100%;
   }
-
-  #controls { margin: 15px 0; }
-  .control-row { display: flex; justify-content: center; align-items: center; gap: 20px; }
-  .control-group { display: flex; align-items: center; gap: 10px; }
-  button { background: #333; color: white; border: 1px solid #555; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-  button:hover { background: #555; }
-
-  /* 隱藏從 reaction.css 跑出來的多餘表情區塊 (因為我們已經把它移到首頁了) */
-  .reaction-section { display: none !important; }
-  #emoji-trigger-btn { display: none !important; }
-  .barrage-control { display: none !important; }
-  #barrage-toggle-btn { display: none !important; }
 </style>
+
 </head>
 
 <body>
@@ -65,9 +54,11 @@
 <div id="video-wrapper">
     <div id="player"></div>
     <div id="subtitle">字幕載入中...</div>
-    
-    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0; position: absolute; top: 10px; right: 10px; z-index: 10; background: rgba(0,0,0,0.5); border: none; padding: 5px; border-radius: 4px;">
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none">
+    <div id="barrage-container"></div>
+    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
+    <div id="emoji-drawer"></div>
+    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
+        <svg viewBox="0 0 24 24">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -83,11 +74,12 @@
       if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
   }
 </script>
-
+    
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    
   const firebaseConfig = {
     apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
     authDomain: "chueiliyu-tw-translation.firebaseapp.com",
@@ -95,10 +87,13 @@
     projectId: "chueiliyu-tw-translation",
     storageBucket: "chueiliyu-tw-translation.appspot.com",
     messagingSenderId: "625769420546",
-    appId: "1:625769420546:web:6d25889d1c66a091fe941b"
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+    measurementId: "G-3PM3GTXPHF"
   };
 
   const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
   window.db = getDatabase(app);
   window.fb_ref = ref;            
   window.fb_onValue = onValue;    
@@ -106,16 +101,7 @@
 </script>
 
 <script src="/chueiliyu-tw-translation/js/core-player.js"></script>
+<script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
-<script>
-  window.addEventListener('message', function(event) {
-      if (event.data === 'pauseVideo') {
-          const ytIframe = document.querySelector('iframe');
-          if (ytIframe && ytIframe.contentWindow) {
-              ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-          }
-      }
-  });
-</script>
 </body>
 </html>
