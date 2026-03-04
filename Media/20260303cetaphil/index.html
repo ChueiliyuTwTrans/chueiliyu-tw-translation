@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>cetaphil廣告贊助-崔立于 x Esquire Korea</title>
+
+  <link rel="stylesheet" href="../../css/reaction.css">
+  
   <script>
     const savedTheme = localStorage.getItem('pageTheme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -74,16 +77,45 @@
     }
 
     /* 基本版面 */
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: var(--bg-body);
-      color: var(--text-main);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; transition: background-color 0.3s ease, color 0.3s ease; }
+    .content-wrapper { max-width: 500px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 40px; transition: background-color 0.3s ease; }
+    
+    /* 頂部 Header */
+    .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; position: sticky; top: 0; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
+    .header h1 { font-size: 1.1rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
+    .header p { font-size: 0.85rem; color: var(--text-sub); margin: 4px 0 16px 0; }
+    .theme-toggle-group { display: inline-flex; background-color: var(--theme-btn-bg); border-radius: 20px; padding: 4px; margin-bottom: 16px; }
+    .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.8rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
+    .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    /* 頁籤切換列設計 */
+    .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); overflow-x: auto; white-space: nowrap; }
+    .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 0.95rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
+    .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .video-iframe { width: 100%; height: 85vh; border: none; background: #000; }
+    .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
+    .intro-text { font-size: 0.95rem; line-height: 1.7; color: var(--intro-text); white-space: pre-line; padding: 16px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
+    .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
+    .post-item { margin-bottom: 12px; border-bottom: 8px solid var(--item-divider); padding-bottom: 16px; }
+    .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 100% !important; }
+    .translation-box { padding: 16px 20px; }
+    .caption-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 16px 0; white-space: pre-line; }
+    .outfit-section { background-color: var(--outfit-bg); padding: 14px 16px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
+    .photo-tag { display: inline-block; font-weight: 600; color: var(--section-text); font-size: 0.85rem; margin-bottom: 8px; }
+    .outfit-text { font-size: 0.9rem; line-height: 1.6; margin: 0; }
+    .carousel-list { list-style: none; padding: 0; margin: 0; }
+    .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--list-divider); }
+    .carousel-list li:last-child { border-bottom: none; }
+    .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+    
+    /* 統一表情區塊的外觀調整 */
+    .unified-reaction-box { padding: 20px; background-color: var(--bg-content); border-top: 2px dashed var(--border-line); margin-top: 20px; }
+    #reaction-title { color: var(--text-main); font-weight: bold; }
 
     .content-wrapper {
       max-width: 500px;
@@ -357,12 +389,42 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       <iframe src="video2.html" class="video-iframe" title="舒特膚專訪二" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>
     </div>
 
+    <div class="unified-reaction-box">
+      <div class="reaction-section">
+          <p id="reaction-title">覺得這次的專訪翻譯如何？點個表情吧！</p>
+          <div class="reaction-wall"></div>
+      </div>
+    </div>
   </div>
 
   <script async src="//www.instagram.com/embed.js"></script>
 
- <script>
-    // 主題切換功能
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+      
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
+      authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+      databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "chueiliyu-tw-translation",
+      storageBucket: "chueiliyu-tw-translation.appspot.com",
+      messagingSenderId: "625769420546",
+      appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+      measurementId: "G-3PM3GTXPHF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    window.db = getDatabase(app);
+    window.fb_ref = ref;            
+    window.fb_onValue = onValue;    
+    window.fb_runTransaction = runTransaction; 
+  </script>
+  <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
+  <script>
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
       document.getElementById('btn-dark').classList.remove('active');
@@ -375,19 +437,30 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       updateButtonUI(theme);
     }
 
-    // 頁籤切換功能
+    // ========== 頁籤切換與影片控制核心邏輯 ==========
     function openTab(tabId, btnElement) {
-      // 隱藏所有內容
+      // 1. 廣播「暫停指令」給所有的 iframe (防止背景繼續播放)
+      document.querySelectorAll('.video-iframe').forEach(iframe => {
+        if(iframe.contentWindow) {
+          iframe.contentWindow.postMessage('pauseVideo', '*');
+        }
+      });
+
+      // 2. 切換頁籤的 UI 顯示
       const contents = document.querySelectorAll('.tab-content');
       contents.forEach(content => content.classList.remove('active'));
-      
-      // 取消所有按鈕的 active 狀態
       const buttons = document.querySelectorAll('.tab-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
 
-      // 顯示目標內容並亮起該按鈕
-      document.getElementById(tabId).classList.add('active');
+      const targetContent = document.getElementById(tabId);
+      targetContent.classList.add('active');
       btnElement.classList.add('active');
+
+      // 3. 延遲載入 (Lazy Load) - 點擊到了才把 data-src 塞進 src 裡
+      const iframe = targetContent.querySelector('iframe');
+      if (iframe && !iframe.src) {
+          iframe.src = iframe.getAttribute('data-src');
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
