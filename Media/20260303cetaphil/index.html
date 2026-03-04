@@ -31,8 +31,8 @@
       --emoji-btn-active-text: #262626; 
       --emoji-btn-bg-hover: rgba(0, 0, 0, 0.05); /* 淺色模式下懸停時的微弱背景 */
       /* 定義按鈕的「預設未選中」狀態 (淺色) */
-      --emoji-btn-default-bg: transparent;
-      --emoji-btn-default-border: #dbdbdb;
+      --emoji-btn-default-bg: rgba(0, 0, 0, 0.03); /* 微弱的淺灰色，看起來乾淨 */
+      --emoji-btn-default-border: #e1e8ed;
       --emoji-btn-default-text: #8e8e8e;
     }
 
@@ -50,9 +50,9 @@
       --emoji-btn-active-text: #e4e6eb;
       --emoji-btn-bg-hover: rgba(255, 255, 255, 0.1); /* 深色模式下懸停時的微弱背景 */
       /* 定義按鈕的「預設未選中」狀態 (深色) */
-      --emoji-btn-default-bg: transparent;
-      --emoji-btn-default-border: #3a3b3c;
-      --emoji-btn-default-text: #b0b3b8;
+      --emoji-btn-default-bg: rgba(255, 255, 255, 0.08); /* 保留原本 reaction.css 的微透白質感 */
+      --emoji-btn-default-border: #444;
+      --emoji-btn-default-text: #aaa;
     }
 
     html, body { 
@@ -133,6 +133,57 @@
     /* =========================================
        4. 全螢幕與偽全螢幕專屬樣式 (極致移植) 
        ========================================= */
+    /* [A] 電腦版 (滑鼠操作) 全螢幕：字幕保持在底部，避免擋臉 */
+    @media (pointer: fine) {
+        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
+            font-size: min(4vw, 36px) !important; 
+            bottom: 8% !important; 
+        }
+        :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
+            width: 100vw; height: 100vh; max-width: none; margin: 0; padding-bottom: 0;
+        }
+    }
+
+    /* [B] 手機版 (觸控操作) 全螢幕：字幕拉高，避免被螢幕邊緣或黑邊切掉 */
+    @media (pointer: coarse) {
+        /* 原生全螢幕 */
+        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
+            font-size: min(5.5vw, 32px) !important; 
+            bottom: calc(15% + env(safe-area-inset-bottom)) !important;
+        }
+        :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
+            width: 100vw; height: 100vh; max-width: none; margin: 0; padding-bottom: 0;
+        }
+        
+        /* 偽全螢幕 (iPhone Safari) */
+        .pseudo-fullscreen {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important; height: 100dvh !important;
+            z-index: 2147483647 !important; background: #000 !important; margin: 0 !important; padding: 0 !important;
+            display: flex !important; align-items: center; justify-content: center;
+            padding-left: env(safe-area-inset-left) !important; padding-right: env(safe-area-inset-right) !important;
+        }
+        .pseudo-fullscreen iframe { width: 100vw !important; height: 100dvh !important; object-fit: contain; }
+        .pseudo-fullscreen .subtitle-overlay { 
+            font-size: min(5.5vw, 32px) !important; 
+            bottom: calc(15% + env(safe-area-inset-bottom)) !important; 
+        }
+
+        /* 橫向模式再加強 */
+        @media screen and (orientation: landscape) {
+            :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay, .pseudo-fullscreen .subtitle-overlay {
+                bottom: calc(18% + env(safe-area-inset-bottom)) !important; /* 橫向時拉得更高 */
+            }
+        }
+    }
+
+    /* 鎖死背景 */
+    body.is-in-fullscreen {
+        overflow: hidden !important; position: fixed; width: 100vw; height: 100vh; height: -webkit-fill-available;
+        background: #000 !important; touch-action: none; overscroll-behavior: none;
+    }
+    
+    /* 退出按鈕 */
     .exit-fs-btn-global {
         display: none; opacity: 0; position: fixed !important; 
         top: calc(20px + env(safe-area-inset-top)) !important; right: 20px !important; 
@@ -142,40 +193,7 @@
     }
     .exit-fs-btn-global svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 2.5; fill: none; }
     .exit-fs-btn-global:hover { background: rgba(50, 50, 50, 0.9) !important; transform: scale(1.1); }
-
-    /* 系統級全螢幕 */
-    :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
-        width: 100vw; height: 100vh; max-width: none; margin: 0; padding-bottom: 0;
-    }
-    :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-        font-size: min(5.5vw, 36px) !important; bottom: calc(8% + env(safe-area-inset-bottom)) !important;
-    }
-
-    /* 偽全螢幕 (針對 iOS Safari) */
-    .pseudo-fullscreen {
-        position: fixed !important; top: 0 !important; left: 0 !important;
-        width: 100vw !important; height: 100vh !important; height: 100dvh !important;
-        z-index: 2147483647 !important; background: #000 !important; margin: 0 !important; padding: 0 !important;
-        display: flex !important; align-items: center; justify-content: center;
-        padding-left: env(safe-area-inset-left) !important; padding-right: env(safe-area-inset-right) !important;
-    }
-    .pseudo-fullscreen iframe { width: 100vw !important; height: 100dvh !important; object-fit: contain; }
-    .pseudo-fullscreen .subtitle-overlay { font-size: min(5.5vw, 36px) !important; bottom: calc(15% + env(safe-area-inset-bottom)) !important; }
-    
-    /* 鎖死背景 */
-    body.is-in-fullscreen {
-        overflow: hidden !important; position: fixed; width: 100vw; height: 100vh; height: -webkit-fill-available;
-        background: #000 !important; touch-action: none; overscroll-behavior: none;
-    }
-
-    /* 橫向模式全螢幕，因為螢幕變扁，字幕需拉更高以防裁切 */
-    @media screen and (orientation: landscape) {
-        .exit-fs-btn-global { right: calc(45px + env(safe-area-inset-right)) !important; top: 15px !important; }
-        
-        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay, .pseudo-fullscreen .subtitle-overlay {
-            bottom: calc(18% + env(safe-area-inset-bottom)) !important; /* 橫向時拉高到 18% */
-        }
-    }
+    @media screen and (orientation: landscape) { .exit-fs-btn-global { right: calc(45px + env(safe-area-inset-right)) !important; top: 15px !important; } }
 
     /* ==================== 
        5. 完美修復表情牆
