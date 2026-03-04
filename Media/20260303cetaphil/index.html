@@ -34,6 +34,9 @@
       --emoji-btn-default-bg: rgba(0, 0, 0, 0.03); /* 微弱的淺灰色，看起來乾淨 */
       --emoji-btn-default-border: #e1e8ed;
       --emoji-btn-default-text: #8e8e8e;
+
+      /* 🌟 字幕縮放的 CSS 變數，預設為 1 */
+      --sub-scale: 1;
     }
 
     [data-theme="dark"] {
@@ -123,10 +126,16 @@
     /* 字幕精緻陰影版 (自 core-player.css 移植) */
     .subtitle-overlay {
         position: absolute;
-        bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%;
-        color: white; font-size: 22px; font-weight: 500; line-height: 1.6; text-align: center;
+        bottom: 8%; left: 50%; width: 90%;
+        color: white; font-weight: 500; line-height: 1.6; text-align: center;
         z-index: 100; pointer-events: none; box-sizing: border-box; word-break: break-word;
         text-shadow: 2px 2px 4px rgba(0,0,0,1), -2px 2px 4px rgba(0,0,0,1), 2px -2px 4px rgba(0,0,0,1), -2px -2px 4px rgba(0,0,0,1);
+        
+        /* 基本字體大小 * 縮放比例，且以底部中心為縮放原點 */
+        font-size: 22px;
+        transform: translateX(-50%) scale(var(--sub-scale));
+        transform-origin: center bottom;
+        transition: transform 0.2s ease-out; /* 縮放時更滑順 */
     }
     @media (min-width: 1024px) { .subtitle-overlay { font-size: 28px; line-height: 1.7; } }
 
@@ -455,11 +464,14 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
   <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
   
   <script>
-    // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
+    // 影片資料
     const videoData = {
         'tab-video1': { id: 'KPybYGuC8dc', srt: '20260302cetaphil.srt', player: null, subEl: 'subtitle-video1', container: 'player-container-video1' },
         'tab-video2': { id: 'HCuShe8LqKU', srt: '20260303cetaphil.srt', player: null, subEl: 'subtitle-video2', container: 'player-container-video2' }
     };
+
+    //  初始化全域字幕縮放比例 (讀取 localStorage 記憶)
+    let globalSubtitleScale = parseFloat(localStorage.getItem('subtitle-scale-v2')) || 1;
 
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
@@ -550,14 +562,28 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
         return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]) + parseInt(parts[3]) / 1000;
     }
 
-    function changeSubtitleSize(delta, subtitleId) {
+    // 改變字幕縮放的核心邏輯
+    function changeSubtitleScale(delta, subtitleId) {
+        // 限制縮放範圍在 0.5 到 2.5 之間
+        globalSubtitleScale = Math.max(0.5, Math.min(2.5, globalSubtitleScale + delta));
+        localStorage.setItem('subtitle-scale-v2', globalSubtitleScale);
+        
+        // 更新當前頁籤的字幕
         const subDiv = document.getElementById(subtitleId);
-        let currentSize = parseFloat(window.getComputedStyle(subDiv).fontSize);
-        subDiv.style.fontSize = (currentSize + (delta * 20)) + 'px';
+        if (subDiv) {
+            subDiv.style.setProperty('--sub-scale', globalSubtitleScale);
+        }
+        
+        // 同步更新另一部影片的字幕 (保持體驗一致)
+        const otherSubId = subtitleId === 'subtitle-video1' ? 'subtitle-video2' : 'subtitle-video1';
+        const otherSubDiv = document.getElementById(otherSubId);
+        if (otherSubDiv) {
+            otherSubDiv.style.setProperty('--sub-scale', globalSubtitleScale);
+        }
     }
 
     // =====================================
-    // 🌟 全螢幕與偽全螢幕邏輯 (完全移植)
+    // 全螢幕與偽全螢幕邏輯 (完全移植)
     // =====================================
     function triggerFullscreen(wrapperId) {
         const wrapper = document.getElementById(wrapperId);
