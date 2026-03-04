@@ -24,12 +24,16 @@
       --tab-bg: #ffffff; --tab-border: #e1e8ed; --tab-text: #8e8e8e; --tab-active-text: #73A5C6; --tab-active-border: #73A5C6;
       --home-btn-bg: #e1e8ed; --home-btn-hover: #d1dbe3;
       --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
-      /* 🌟 淺色模式下，移除陰影讓數字清晰 */
+      /* 淺色模式下，移除陰影讓數字清晰 */
       --reaction-text-shadow: none; 
-      /* 🌟 新增：表情按鈕選中時的框線與數字顏色 (淺色模式) */
+      /* 表情按鈕選中時的框線與數字顏色 (淺色模式) */
       --emoji-btn-active-border: #73A5C6; 
       --emoji-btn-active-text: #262626; 
       --emoji-btn-bg-hover: rgba(0, 0, 0, 0.05); /* 淺色模式下懸停時的微弱背景 */
+      /* 定義按鈕的「預設未選中」狀態 (淺色) */
+      --emoji-btn-default-bg: transparent;
+      --emoji-btn-default-border: #dbdbdb;
+      --emoji-btn-default-text: #8e8e8e;
     }
 
     [data-theme="dark"] {
@@ -39,12 +43,16 @@
       --tab-bg: #1e1e1e; --tab-border: #3a3b3c; --tab-text: #888888; --tab-active-text: #8ebfec; --tab-active-border: #4A7A9B;
       --home-btn-bg: #3a3b3c; --home-btn-hover: #4a4b4c;
       --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
-      /* 🌟 深色模式下，保留微弱的立體感 */
+      /* 深色模式下，保留微弱的立體感 */
       --reaction-text-shadow: 0px 1px 3px rgba(0,0,0,0.8);
-      /* 🌟 新增：表情按鈕選中時的框線與數字顏色 (深色模式) */
+      /* 表情按鈕選中時的框線與數字顏色 (深色模式) */
       --emoji-btn-active-border: #8ebfec; 
       --emoji-btn-active-text: #e4e6eb;
       --emoji-btn-bg-hover: rgba(255, 255, 255, 0.1); /* 深色模式下懸停時的微弱背景 */
+      /* 定義按鈕的「預設未選中」狀態 (深色) */
+      --emoji-btn-default-bg: transparent;
+      --emoji-btn-default-border: #3a3b3c;
+      --emoji-btn-default-text: #b0b3b8;
     }
 
     html, body { 
@@ -123,7 +131,7 @@
     @media (min-width: 1024px) { .subtitle-overlay { font-size: 28px; line-height: 1.7; } }
 
     /* =========================================
-       🌟 4. 全螢幕與偽全螢幕專屬樣式 (極致移植) 
+       4. 全螢幕與偽全螢幕專屬樣式 (極致移植) 
        ========================================= */
     .exit-fs-btn-global {
         display: none; opacity: 0; position: fixed !important; 
@@ -152,7 +160,7 @@
         padding-left: env(safe-area-inset-left) !important; padding-right: env(safe-area-inset-right) !important;
     }
     .pseudo-fullscreen iframe { width: 100vw !important; height: 100dvh !important; object-fit: contain; }
-    .pseudo-fullscreen .subtitle-overlay { font-size: min(5.5vw, 36px) !important; bottom: calc(8% + env(safe-area-inset-bottom)) !important; }
+    .pseudo-fullscreen .subtitle-overlay { font-size: min(5.5vw, 36px) !important; bottom: calc(15% + env(safe-area-inset-bottom)) !important; }
     
     /* 鎖死背景 */
     body.is-in-fullscreen {
@@ -160,13 +168,12 @@
         background: #000 !important; touch-action: none; overscroll-behavior: none;
     }
 
-    /* 橫向模式 */
+    /* 橫向模式全螢幕，因為螢幕變扁，字幕需拉更高以防裁切 */
     @media screen and (orientation: landscape) {
         .exit-fs-btn-global { right: calc(45px + env(safe-area-inset-right)) !important; top: 15px !important; }
         
-        /* 橫向模式時，螢幕變寬變扁，字幕如果太低會被切掉，所以強制拉高 */
         :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay, .pseudo-fullscreen .subtitle-overlay {
-            bottom: calc(12% + env(safe-area-inset-bottom)) !important; 
+            bottom: calc(18% + env(safe-area-inset-bottom)) !important; /* 橫向時拉高到 18% */
         }
     }
 
@@ -192,7 +199,7 @@
         height: auto !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important;
     }
 
-    /* 🌟 根據主題切換陰影，淺色清晰、深色立體 */
+    /* 根據主題切換陰影，淺色清晰、深色立體 */
     .unified-reaction-box p, 
     .unified-reaction-box span, 
     .reaction-section { 
@@ -201,7 +208,7 @@
         text-shadow: var(--reaction-text-shadow) !important; 
         box-shadow: none !important;
     }
-    /* 🌟 重新定義表情按鈕的外觀，避免背景變純黑/純白 */
+    /* 重新定義表情按鈕的外觀，避免背景變純黑/純白 */
     .unified-reaction-box .emoji-btn {
         background-color: transparent !important; /* 預設透明 */
         border: 1px solid var(--border-line) !important; /* 預設細框 */
@@ -217,7 +224,7 @@
         background-color: var(--emoji-btn-bg-hover) !important; /* 懸停時微亮/微暗 */
     }
 
-    /* 🌟 按下(選中)時的狀態：不改背景色，只凸顯框線和數字！ */
+    /* 按下(選中)時的狀態：不改背景色，只凸顯框線和數字！ */
     .unified-reaction-box .emoji-btn.active {
         background-color: transparent !important; /* 保持透明！ */
         border: 2px solid var(--emoji-btn-active-border) !important; /* 凸顯框線 */
