@@ -281,17 +281,28 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     // 頁籤切換功能
     function openTab(tabId, btnElement) {
-      // 隱藏所有內容
+      // 廣播「暫停指令」給所有的 iframe (防止背景繼續播放)
+      document.querySelectorAll('.video-iframe').forEach(iframe => {
+        if(iframe.contentWindow) {
+          iframe.contentWindow.postMessage('pauseVideo', '*');
+        }
+      });
+
       const contents = document.querySelectorAll('.tab-content');
       contents.forEach(content => content.classList.remove('active'));
 
-      // 取消所有按鈕的 active 狀態
       const buttons = document.querySelectorAll('.tab-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
 
-      // 顯示目標內容並亮起該按鈕
-      document.getElementById(tabId).classList.add('active');
+      const targetContent = document.getElementById(tabId);
+      targetContent.classList.add('active');
       btnElement.classList.add('active');
+
+      // 延遲載入 (Lazy Load)
+      const iframe = targetContent.querySelector('iframe');
+      if (iframe && !iframe.src) {
+          iframe.src = iframe.getAttribute('data-src');
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
