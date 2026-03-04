@@ -104,6 +104,12 @@
         text-shadow: 2px 2px 4px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
 
+    /* 全螢幕模式下的 CSS 修正，確保 100% 撐滿且字幕變大 */
+    .video-responsive-wrapper:fullscreen { padding-bottom: 0 !important; height: 100vh !important; }
+    .video-responsive-wrapper:-webkit-full-screen { padding-bottom: 0 !important; height: 100vh !important; }
+    .video-responsive-wrapper:fullscreen .subtitle-overlay { bottom: 5%; font-size: 2rem; }
+    .video-responsive-wrapper:-webkit-full-screen .subtitle-overlay { bottom: 5%; font-size: 2rem; }
+
     /* ==================== 
        🌟 完美修復表情牆：解決黑底與版面過大的問題
        ==================== */
@@ -112,11 +118,12 @@
     .unified-reaction-box { 
         background-color: var(--section-bg) !important; 
         border-radius: 12px; 
-        margin: 20px auto; 
-        padding: 15px; 
+        /* 🌟 取消 width 限制，直接用 20px 的外邊界，完美與畫報區塊對齊！ */
+        margin: 20px; 
+        padding: 20px; 
         text-align: center; 
         border: 1px solid var(--intro-border);
-        width: 90%; /* 限制寬度，避免過大 */
+        box-sizing: border-box;
     }
     
     /* 強制打敗 reaction.css 寫死的高度與黑底 */
@@ -275,27 +282,29 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     </div>
     </div>
     <div id="tab-video1" class="tab-content">
-        <div class="video-controls-bar">
-            <button onclick="changeSubtitleSize(-0.1, 'subtitle-video1')">A−</button>
-            <span style="color:white; line-height:30px;">字幕</span>
-            <button onclick="changeSubtitleSize(0.1, 'subtitle-video1')">A＋</button>
-        </div>
-        <div class="video-responsive-wrapper">
-            <div id="player-container-video1"></div> 
-            <div id="subtitle-video1" class="subtitle-overlay"></div>
-        </div>
+      <div class="video-controls-bar">
+          <button onclick="changeSubtitleSize(-0.1, 'subtitle-video1')">A−</button>
+          <span style="color:white; line-height:30px;">字幕</span>
+          <button onclick="changeSubtitleSize(0.1, 'subtitle-video1')">A＋</button>
+          <button onclick="toggleFullScreen('fullscreen-wrap-1')">全螢幕</button>
+      </div>
+      <div id="fullscreen-wrap-1" class="video-responsive-wrapper">
+          <div id="player-container-video1"></div> 
+          <div id="subtitle-video1" class="subtitle-overlay"></div>
+      </div>
     </div>
 
     <div id="tab-video2" class="tab-content">
-        <div class="video-controls-bar">
-            <button onclick="changeSubtitleSize(-0.1, 'subtitle-video2')">A−</button>
-            <span style="color:white; line-height:30px;">字幕</span>
-            <button onclick="changeSubtitleSize(0.1, 'subtitle-video2')">A＋</button>
-        </div>
-        <div class="video-responsive-wrapper">
-            <div id="player-container-video2"></div>
-            <div id="subtitle-video2" class="subtitle-overlay"></div>
-        </div>
+      <div class="video-controls-bar">
+          <button onclick="changeSubtitleSize(-0.1, 'subtitle-video2')">A−</button>
+          <span style="color:white; line-height:30px;">字幕</span>
+          <button onclick="changeSubtitleSize(0.1, 'subtitle-video2')">A＋</button>
+          <button onclick="toggleFullScreen('fullscreen-wrap-2')">全螢幕</button>
+      </div>
+      <div id="fullscreen-wrap-2" class="video-responsive-wrapper">
+          <div id="player-container-video2"></div>
+          <div id="subtitle-video2" class="subtitle-overlay"></div>
+      </div>
     </div>
 
     <div class="unified-reaction-box">
@@ -419,6 +428,24 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
         const subDiv = document.getElementById(subtitleId);
         let currentSize = parseFloat(window.getComputedStyle(subDiv).fontSize);
         subDiv.style.fontSize = (currentSize + (delta * 20)) + 'px';
+    }
+
+    // 🌟 全螢幕控制功能腳本
+    function toggleFullScreen(containerId) {
+        const elem = document.getElementById(containerId);
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            }
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
