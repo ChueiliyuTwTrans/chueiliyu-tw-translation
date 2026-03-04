@@ -8,15 +8,15 @@
     /* 基礎重置與背景設定 */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: #fafafa; /* IG 喜歡的淺灰背景 */
-      color: #262626; /* IG 官方深灰字體 */
+      background-color: #fafafa;
+      color: #262626;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
     }
 
-    /* 主要內容容器，限制最大寬度以貼合手機與 IG 嵌入尺寸 */
+    /* 主要內容容器 */
     .content-wrapper {
       max-width: 500px;
       width: 100%;
@@ -49,14 +49,14 @@
       margin: 6px 0 0 0;
     }
 
-    /* 單一項目區塊 (包含一個 IG 嵌入 + 一個翻譯) */
+    /* 單一項目區塊 */
     .post-item {
       margin-bottom: 24px;
-      border-bottom: 8px solid #fafafa; /* 區塊之間的視覺分隔 */
+      border-bottom: 8px solid #fafafa;
       padding-bottom: 16px;
     }
 
-    /* 隱藏 IG 嵌入自帶的外框，讓版面更融為一體 */
+    /* 隱藏 IG 嵌入自帶的外框 */
     .instagram-media {
       margin: 0 auto !important;
       border: none !important;
@@ -64,26 +64,43 @@
       max-width: 100% !important;
     }
 
-    /* 翻譯卡片區塊 */
+    /* 翻譯總區塊 */
     .translation-box {
       padding: 16px 20px;
       background-color: #ffffff;
     }
 
+    /* 貼文內文翻譯 (支援自然換行) */
+    .caption-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #262626;
+      margin: 0 0 16px 0;
+      white-space: pre-line; /* 這個屬性可以讓 HTML 裡的換行直接生效 */
+    }
+
+    /* 著裝資訊專屬小區塊 */
+    .outfit-section {
+      background-color: #f8f9fa;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border-left: 4px solid #e1306c; /* IG 代表色邊條 */
+    }
+
     .photo-tag {
       display: inline-block;
       font-weight: 600;
-      color: #e1306c; /* IG 漸層紅的代表色 */
+      color: #e1306c;
       font-size: 0.85rem;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .translation-text {
-      font-size: 0.95rem;
+    .outfit-text {
+      font-size: 0.9rem;
       line-height: 1.6;
-      color: #262626;
+      color: #444;
       margin: 0;
     }
   </style>
@@ -93,7 +110,7 @@
   <div class="content-wrapper">
     
     <header class="header">
-      <h1>[數位封面] 著裝資訊</h1>
+      <h1>[數位封面] 畫報與著裝資訊</h1>
       <p>Esquire Korea x 崔立于</p>
     </header>
 
@@ -102,10 +119,14 @@
         <a href="https://www.instagram.com/p/DVX-azqj6S6/" target="_blank">在 Instagram 查看這則貼文</a>
       </blockquote>
       <div class="translation-box">
-        <div class="photo-tag">✨ 第一套著裝</div>
-        <p class="translation-text">
-          背心 SHORT SENTENCE。<br>T恤 Our Legacy。
-        </p>
+        <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。</p>
+        
+        <div class="outfit-section">
+          <div class="photo-tag">✨ 第一套著裝</div>
+          <p class="outfit-text">
+            背心 SHORT SENTENCE。<br>T恤 Our Legacy。
+          </p>
+        </div>
       </div>
     </div>
 
@@ -114,10 +135,19 @@
         <a href="https://www.instagram.com/p/DVX-TtJj4-D/" target="_blank">在 Instagram 查看這則貼文</a>
       </blockquote>
       <div class="translation-box">
-        <div class="photo-tag">✨ 第二套著裝</div>
-        <p class="translation-text">
-          T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。
-        </p>
+        <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉
+由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
+Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
+-
+▫️舒特膚舒新雪潤B5安心霜
+-</p>
+
+        <div class="outfit-section">
+          <div class="photo-tag">✨ 第二套著裝</div>
+          <p class="outfit-text">
+            T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。
+          </p>
+        </div>
       </div>
     </div>
 
@@ -126,10 +156,19 @@
         <a href="https://www.instagram.com/p/DVX-N61D6yF/" target="_blank">在 Instagram 查看這則貼文</a>
       </blockquote>
       <div class="translation-box">
-        <div class="photo-tag">✨ 第三套著裝</div>
-        <p class="translation-text">
-          針織衫 SHORT SENTENCE。<br>丹寧褲 Levi's。<br>皮帶 Our Legacy。
-        </p>
+        <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉
+由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
+Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
+-
+▫️舒特膚三酸煥膚嫩亮潔膚露
+-</p>
+
+        <div class="outfit-section">
+          <div class="photo-tag">✨ 第三套著裝</div>
+          <p class="outfit-text">
+            針織衫 SHORT SENTENCE。<br>丹寧褲 Levi's。<br>皮帶 Our Legacy。
+          </p>
+        </div>
       </div>
     </div>
 
