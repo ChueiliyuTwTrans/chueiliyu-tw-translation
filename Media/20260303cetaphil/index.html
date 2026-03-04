@@ -35,7 +35,7 @@
       --emoji-btn-default-border: #e1e8ed;
       --emoji-btn-default-text: #8e8e8e;
 
-      /* 🌟 字幕縮放的 CSS 變數，預設為 1 */
+      /* 字幕縮放的 CSS 變數，預設為 1 */
       --sub-scale: 1;
     }
 
@@ -131,7 +131,7 @@
         text-shadow: 2px 2px 4px rgba(0,0,0,1), -2px 2px 4px rgba(0,0,0,1), 2px -2px 4px rgba(0,0,0,1), -2px -2px 4px rgba(0,0,0,1);
         
         /* 使用變數並設定基準大小，解決全螢幕失效問題 */
-        font-size: calc(20px * var(--sub-scale)); 
+        font-size: calc(20px * var(--sub-scale, 1)); 
         transform: translateX(-50%);
         transition: font-size 0.2s ease-out;
     }
@@ -143,9 +143,9 @@
     /* [A] 電腦版 (滑鼠操作) 全螢幕：字幕保持在底部，避免擋臉 */
     @media (pointer: fine) {
         :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-            font-size: calc(30px * var(--sub-scale)) !important; 
+            font-size: calc(32px * var(--sub-scale, 1)) !important; 
             bottom: 8% !important; 
-        }
+        }}
         :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
             width: 100vw; height: 100vh; max-width: none; margin: 0; padding-bottom: 0;
         }
@@ -470,7 +470,13 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     //  初始化全域字幕縮放比例 (讀取 localStorage 記憶)
     let globalSubtitleScale = parseFloat(localStorage.getItem('subtitle-scale-v2')) || 1;
-    document.documentElement.style.setProperty('--sub-scale', globalSubtitleScale);
+    function applyScale() {
+        // 強制將縮放比例寫入根節點與每個字幕元素
+        document.documentElement.style.setProperty('--sub-scale', globalSubtitleScale);
+        document.querySelectorAll('.subtitle-overlay').forEach(el => {
+            el.style.setProperty('--sub-scale', globalSubtitleScale);
+        });
+    }
 
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
@@ -564,35 +570,23 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     // 改變字幕縮放的核心邏輯
     function changeSubtitleScale(delta) {
         globalSubtitleScale = Math.max(0.6, Math.min(2.0, globalSubtitleScale + delta));
-        localStorage.setItem('subtitle-scale-v3', globalSubtitleScale);
-        document.documentElement.style.setProperty('--sub-scale', globalSubtitleScale);
+        localStorage.setItem('subtitle-scale-v4', globalSubtitleScale);
+        applyScale();
     }
 
     // =====================================
     // 全螢幕與偽全螢幕邏輯 (完全移植)
     // =====================================
-    function triggerFullscreen(wrapperId) {
-        const wrapper = document.getElementById(wrapperId);
-        const exitBtn = wrapper.querySelector('.exit-fs-btn-global');
-        
-        const isFS = document.fullscreenElement || document.webkitFullscreenElement;
-        const isPseudo = wrapper.classList.contains("pseudo-fullscreen");
-
-        if (isFS || isPseudo) {
-            exitFullscreenMode(wrapperId);
+    function triggerFullscreen(id) {
+        const wrap = document.getElementById(id);
+        const exit = wrap.querySelector('.exit-fs-btn-global');
+        if (document.fullscreenElement || wrap.classList.contains("pseudo-fullscreen")) {
+            exitFullscreenMode(id);
         } else {
-            const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
-            const req = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
-
-            if (req && !isIPhone) {
-                req.call(wrapper).then(() => {
-                    setTimeout(() => showExitBtn(exitBtn), 100);
-                }).catch(() => {
-                    enterPseudoFullscreen(wrapper, exitBtn);
-                });
-            } else {
-                enterPseudoFullscreen(wrapper, exitBtn);
-            }
+            const req = wrap.requestFullscreen || wrap.webkitRequestFullscreen;
+            if (req && !/iPhone|iPod/.test(navigator.userAgent)) {
+                req.call(wrap).then(() => showExitBtn(exit));
+            } else { wrap.classList.add("pseudo-fullscreen"); document.body.classList.add("is-in-fullscreen"); showExitBtn(exit); }
         }
     }
 
