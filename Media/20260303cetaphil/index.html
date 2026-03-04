@@ -41,7 +41,8 @@
     
     .content-wrapper { max-width: 800px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; transition: background-color 0.3s ease; }
     
-    .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; position: sticky; top: 0; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
+    /* 🌟 修改：移除 position: sticky; top: 0; 讓 Header 跟著頁面捲動 */
+    .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
     .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     .header p { font-size: 0.95rem; color: var(--text-sub); margin: 4px 0 16px 0; }
     
@@ -56,12 +57,14 @@
     .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); overflow-x: auto; white-space: nowrap; }
     .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 1rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
     .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
+    
     .tab-content { display: none; animation: fadeIn 0.3s ease; }
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 🌟 給 iframe 完美的比例，並移除了死板的高度限制 */
-    .video-iframe { width: 100%; aspect-ratio: 16 / 9; border: none; background: #000; display: block; }
+    /* 🌟 給 iframe 完美的比例，適用於電腦版放大 */
+    .video-container { width: 100%; aspect-ratio: 16 / 9; background: #000; }
+    .video-iframe { width: 100%; height: 100%; border: none; display: block; }
     
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.05rem;}
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
