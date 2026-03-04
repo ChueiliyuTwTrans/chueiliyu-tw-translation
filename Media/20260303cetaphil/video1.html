@@ -35,11 +35,26 @@
   }
 </style>
 
+<link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
 </head>
 
 <body>
 <div id="controls">
     <div class="control-row">
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
+        <div class="control-group barrage-control">
+            <span>大小</span>
+            <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
+        </div>
+        <div class="control-group barrage-control">
+            <span>範圍</span>
+            <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
+            <span id="height-val">40%</span>
+        </div>
+        <div class="control-group barrage-control">
+            <span>速度</span>
+            <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
+        </div>
         <div class="control-group">
             <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
             <span>字幕</span>
@@ -63,6 +78,12 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
     </button>
+</div>
+
+<div class="reaction-section">
+    <p id="reaction-title">覺得這部翻譯影片如何？點個表情吧！</p>
+    <div class="reaction-wall"></div>
+    <br>
 </div>
 
 <script>
