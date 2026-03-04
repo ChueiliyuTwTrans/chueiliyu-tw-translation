@@ -125,19 +125,17 @@
     
     /* 字幕精緻陰影版 (自 core-player.css 移植) */
     .subtitle-overlay {
-        position: absolute;
-        bottom: 8%; left: 50%; width: 90%;
-        color: white; font-weight: 500; line-height: 1.6; text-align: center;
+        position: absolute; bottom: 8%; left: 50%; width: 90%;
+        color: white; font-weight: 500; line-height: 1.4; text-align: center;
         z-index: 100; pointer-events: none; box-sizing: border-box; word-break: break-word;
         text-shadow: 2px 2px 4px rgba(0,0,0,1), -2px 2px 4px rgba(0,0,0,1), 2px -2px 4px rgba(0,0,0,1), -2px -2px 4px rgba(0,0,0,1);
         
-        /* 基本字體大小 * 縮放比例，且以底部中心為縮放原點 */
-        font-size: 22px;
-        transform: translateX(-50%) scale(var(--sub-scale));
-        transform-origin: center bottom;
-        transition: transform 0.2s ease-out; /* 縮放時更滑順 */
+        /* 使用變數並設定基準大小，解決全螢幕失效問題 */
+        font-size: calc(20px * var(--sub-scale)); 
+        transform: translateX(-50%);
+        transition: font-size 0.2s ease-out;
     }
-    @media (min-width: 1024px) { .subtitle-overlay { font-size: 28px; line-height: 1.7; } }
+    @media (min-width: 1024px) { .subtitle-overlay { font-size: calc(28px * var(--sub-scale)); } }
 
     /* =========================================
        4. 全螢幕與偽全螢幕專屬樣式 (極致移植) 
@@ -145,7 +143,7 @@
     /* [A] 電腦版 (滑鼠操作) 全螢幕：字幕保持在底部，避免擋臉 */
     @media (pointer: fine) {
         :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-            font-size: min(4vw, 36px) !important; 
+            font-size: calc(30px * var(--sub-scale)) !important; 
             bottom: 8% !important; 
         }
         :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
@@ -156,8 +154,8 @@
     /* [B] 手機版 (觸控操作) 全螢幕：字幕拉高，避免被螢幕邊緣或黑邊切掉 */
     @media (pointer: coarse) {
         /* 原生全螢幕 */
-        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-            font-size: min(5.5vw, 32px) !important; 
+        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay, .pseudo-fullscreen .subtitle-overlay {
+            font-size: calc(24px * var(--sub-scale)) !important; 
             bottom: calc(15% + env(safe-area-inset-bottom)) !important;
         }
         :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
@@ -472,6 +470,7 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     //  初始化全域字幕縮放比例 (讀取 localStorage 記憶)
     let globalSubtitleScale = parseFloat(localStorage.getItem('subtitle-scale-v2')) || 1;
+    document.documentElement.style.setProperty('--sub-scale', globalSubtitleScale);
 
     function updateButtonUI(theme) {
       document.getElementById('btn-light').classList.remove('active');
@@ -563,23 +562,10 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     }
 
     // 改變字幕縮放的核心邏輯
-    function changeSubtitleScale(delta, subtitleId) {
-        // 限制縮放範圍在 0.5 到 2.5 之間
-        globalSubtitleScale = Math.max(0.5, Math.min(2.5, globalSubtitleScale + delta));
-        localStorage.setItem('subtitle-scale-v2', globalSubtitleScale);
-        
-        // 更新當前頁籤的字幕
-        const subDiv = document.getElementById(subtitleId);
-        if (subDiv) {
-            subDiv.style.setProperty('--sub-scale', globalSubtitleScale);
-        }
-        
-        // 同步更新另一部影片的字幕 (保持體驗一致)
-        const otherSubId = subtitleId === 'subtitle-video1' ? 'subtitle-video2' : 'subtitle-video1';
-        const otherSubDiv = document.getElementById(otherSubId);
-        if (otherSubDiv) {
-            otherSubDiv.style.setProperty('--sub-scale', globalSubtitleScale);
-        }
+    function changeSubtitleScale(delta) {
+        globalSubtitleScale = Math.max(0.6, Math.min(2.0, globalSubtitleScale + delta));
+        localStorage.setItem('subtitle-scale-v3', globalSubtitleScale);
+        document.documentElement.style.setProperty('--sub-scale', globalSubtitleScale);
     }
 
     // =====================================
