@@ -23,6 +23,7 @@
       background: #ffffff;
       min-height: 100vh;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding-bottom: 40px;
     }
 
     /* 頂部標題列 */
@@ -49,9 +50,21 @@
       margin: 6px 0 0 0;
     }
 
+    /* 區塊大標題 (數位封面 / 畫報) */
+    .section-title {
+      background-color: #f0f4f8; /* 非常淡的藍灰色背景 */
+      padding: 16px 20px;
+      margin: 0;
+      font-size: 1rem;
+      color: #5A8BB8; /* 質感水藍色 */
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #e1e8ed;
+    }
+
     /* 單一項目區塊 */
     .post-item {
-      margin-bottom: 24px;
+      margin-bottom: 12px;
       border-bottom: 8px solid #fafafa;
       padding-bottom: 16px;
     }
@@ -70,38 +83,67 @@
       background-color: #ffffff;
     }
 
-    /* 貼文內文翻譯 (支援自然換行) */
+    /* 貼文內文翻譯 */
     .caption-text {
       font-size: 0.95rem;
       line-height: 1.6;
       color: #262626;
       margin: 0 0 16px 0;
-      white-space: pre-line; /* 這個屬性可以讓 HTML 裡的換行直接生效 */
+      white-space: pre-line;
     }
 
     /* 著裝資訊專屬小區塊 */
     .outfit-section {
-      background-color: #f8f9fa;
+      background-color: #f4f8fb; /* 配合水藍色的淡底色 */
       padding: 14px 16px;
       border-radius: 8px;
-      border-left: 4px solid #e1306c; /* IG 代表色邊條 */
+      border-left: 4px solid #73A5C6; /* 改為質感水藍色 */
     }
 
     .photo-tag {
       display: inline-block;
       font-weight: 600;
-      color: #e1306c;
+      color: #73A5C6; /* 改為質感水藍色 */
       font-size: 0.85rem;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
+    
     .outfit-text {
       font-size: 0.9rem;
       line-height: 1.6;
       color: #444;
       margin: 0;
+    }
+
+    /* 針對畫報多圖的清單樣式 */
+    .carousel-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .carousel-list li {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed #d1dbe3;
+    }
+
+    .carousel-list li:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .ig-index-badge {
+      background-color: #73A5C6;
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      font-weight: normal;
     }
   </style>
 </head>
@@ -110,19 +152,18 @@
   <div class="content-wrapper">
     
     <header class="header">
-      <h1>[數位封面] 畫報與著裝資訊</h1>
+      <h1>[中字翻譯] 著裝資訊</h1>
       <p>Esquire Korea x 崔立于</p>
     </header>
 
+    <h2 class="section-title">✨ DIGITAL COVER (數位封面)</h2>
+
     <div class="post-item">
-      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-azqj6S6/" data-instgrm-version="14">
-        <a href="https://www.instagram.com/p/DVX-azqj6S6/" target="_blank">在 Instagram 查看這則貼文</a>
-      </blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-azqj6S6/" data-instgrm-version="14"></blockquote>
       <div class="translation-box">
         <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。</p>
-        
         <div class="outfit-section">
-          <div class="photo-tag">✨ 第一套著裝</div>
+          <div class="photo-tag"> 第一套著裝</div>
           <p class="outfit-text">
             背心 SHORT SENTENCE。<br>T恤 Our Legacy。
           </p>
@@ -131,9 +172,7 @@
     </div>
 
     <div class="post-item">
-      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-TtJj4-D/" data-instgrm-version="14">
-        <a href="https://www.instagram.com/p/DVX-TtJj4-D/" target="_blank">在 Instagram 查看這則貼文</a>
-      </blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-TtJj4-D/" data-instgrm-version="14"></blockquote>
       <div class="translation-box">
         <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉
 由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
@@ -141,9 +180,8 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 -
 ▫️舒特膚舒新雪潤B5安心霜
 -</p>
-
         <div class="outfit-section">
-          <div class="photo-tag">✨ 第二套著裝</div>
+          <div class="photo-tag"> 第二套著裝</div>
           <p class="outfit-text">
             T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。
           </p>
@@ -152,9 +190,7 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     </div>
 
     <div class="post-item">
-      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-N61D6yF/" data-instgrm-version="14">
-        <a href="https://www.instagram.com/p/DVX-N61D6yF/" target="_blank">在 Instagram 查看這則貼文</a>
-      </blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-N61D6yF/" data-instgrm-version="14"></blockquote>
       <div class="translation-box">
         <p class="caption-text">#企劃贊助 〈ESQUIRE KOREA DIGITAL COVER〉
 由崔立于與舒特膚 (Cetaphil) 共同宣告春天的序幕。
@@ -162,12 +198,53 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 -
 ▫️舒特膚三酸煥膚嫩亮潔膚露
 -</p>
-
         <div class="outfit-section">
-          <div class="photo-tag">✨ 第三套著裝</div>
+          <div class="photo-tag"> 第三套著裝</div>
           <p class="outfit-text">
             針織衫 SHORT SENTENCE。<br>丹寧褲 Levi's。<br>皮帶 Our Legacy。
           </p>
+        </div>
+      </div>
+    </div>
+
+
+    <h2 class="section-title">✨ PICTORIAL (畫報)</h2>
+    
+    <div class="post-item">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-2_zD-Ko/" data-instgrm-version="14"></blockquote>
+      
+      <div class="translation-box">
+        <div class="outfit-section">
+          <ul class="carousel-list">
+            <li>
+              <div class="photo-tag">第一張照片 <span class="ig-index-badge">對應 IG 第 3 張</span></div>
+              <p class="outfit-text">針織衫 SHORT SENTENCE。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第二張照片 <span class="ig-index-badge">對應 IG 第 2 張</span></div>
+              <p class="outfit-text">針織衫 SHORT SENTENCE。<br>項鍊 造型師私物。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第三張照片 <span class="ig-index-badge">對應 IG 第 5 張</span></div>
+              <p class="outfit-text">上衣 Our Legacy。<br>手鍊 Sophie Buhai。<br>項鍊 造型師私物。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第四張照片 <span class="ig-index-badge">對應 IG 第 6 張</span></div>
+              <p class="outfit-text">T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第五張照片 <span class="ig-index-badge">對應 IG 第 8 張</span></div>
+              <p class="outfit-text">上衣 Our Legacy。<br>項鍊 造型師私物。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第六張照片 <span class="ig-index-badge">對應 IG 第 1 張</span></div>
+              <p class="outfit-text">T恤 ZARA。<br>長褲 R13。<br>項鍊 造型師私物。</p>
+            </li>
+            <li>
+              <div class="photo-tag">第七張照片 <span class="ig-index-badge">對應 IG 第 7 張</span></div>
+              <p class="outfit-text">背心 SHORT SENTENCE。<br>上衣 Our Legacy。<br>長褲 造型師私物。</p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
