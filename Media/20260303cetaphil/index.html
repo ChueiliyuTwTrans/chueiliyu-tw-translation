@@ -26,6 +26,10 @@
       --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
       /* 🌟 淺色模式下，移除陰影讓數字清晰 */
       --reaction-text-shadow: none; 
+      /* 🌟 新增：表情按鈕選中時的框線與數字顏色 (淺色模式) */
+      --emoji-btn-active-border: #73A5C6; 
+      --emoji-btn-active-text: #262626; 
+      --emoji-btn-bg-hover: rgba(0, 0, 0, 0.05); /* 淺色模式下懸停時的微弱背景 */
     }
 
     [data-theme="dark"] {
@@ -37,6 +41,10 @@
       --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
       /* 🌟 深色模式下，保留微弱的立體感 */
       --reaction-text-shadow: 0px 1px 3px rgba(0,0,0,0.8);
+      /* 🌟 新增：表情按鈕選中時的框線與數字顏色 (深色模式) */
+      --emoji-btn-active-border: #8ebfec; 
+      --emoji-btn-active-text: #e4e6eb;
+      --emoji-btn-bg-hover: rgba(255, 255, 255, 0.1); /* 深色模式下懸停時的微弱背景 */
     }
 
     html, body { 
@@ -152,9 +160,14 @@
         background: #000 !important; touch-action: none; overscroll-behavior: none;
     }
 
-    /* 橫向模式微調 */
+    /* 橫向模式 */
     @media screen and (orientation: landscape) {
-        .exit-fs-btn-global { right: calc(45px + env(safe-area-inset-right)) !important; top: 20px !important; }
+        .exit-fs-btn-global { right: calc(45px + env(safe-area-inset-right)) !important; top: 15px !important; }
+        
+        /* 橫向模式時，螢幕變寬變扁，字幕如果太低會被切掉，所以強制拉高 */
+        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay, .pseudo-fullscreen .subtitle-overlay {
+            bottom: calc(12% + env(safe-area-inset-bottom)) !important; 
+        }
     }
 
     /* ==================== 
@@ -188,6 +201,35 @@
         text-shadow: var(--reaction-text-shadow) !important; 
         box-shadow: none !important;
     }
+    /* 🌟 重新定義表情按鈕的外觀，避免背景變純黑/純白 */
+    .unified-reaction-box .emoji-btn {
+        background-color: transparent !important; /* 預設透明 */
+        border: 1px solid var(--border-line) !important; /* 預設細框 */
+        transition: all 0.2s ease;
+    }
+
+    .unified-reaction-box .emoji-btn span {
+        color: var(--text-sub) !important; /* 預設數字顏色稍淺 */
+        text-shadow: none !important;
+    }
+
+    .unified-reaction-box .emoji-btn:hover {
+        background-color: var(--emoji-btn-bg-hover) !important; /* 懸停時微亮/微暗 */
+    }
+
+    /* 🌟 按下(選中)時的狀態：不改背景色，只凸顯框線和數字！ */
+    .unified-reaction-box .emoji-btn.active {
+        background-color: transparent !important; /* 保持透明！ */
+        border: 2px solid var(--emoji-btn-active-border) !important; /* 凸顯框線 */
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; /* 輕微陰影 */
+    }
+
+    .unified-reaction-box .emoji-btn.active span {
+        color: var(--emoji-btn-active-text) !important; /* 數字顏色變深/變亮 */
+        font-weight: bold !important; /* 加粗數字 */
+    }
+
     #reaction-title { 
         color: var(--text-main) !important; 
         font-weight: bold !important; 
