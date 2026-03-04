@@ -4,37 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>崔立于 x Esquire Korea | 畫報中字翻譯</title>
+  <script>
+    const savedTheme = localStorage.getItem('pageTheme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
   <style>
-    /* 基礎重置與背景設定 */
+    /* ==================== 
+       2. 定義淺色與深色的色彩變數
+       ==================== */
+    :root {
+      --bg-body: #fafafa;
+      --bg-content: #ffffff;
+      --text-main: #262626;
+      --text-sub: #8e8e8e;
+      --border-line: #dbdbdb;
+      --btn-bg: #73A5C6;
+      --btn-hover: #5A8BB8;
+      --btn-text: #ffffff;
+      --intro-bg: #f8f9fa;
+      --intro-border: #eef2f5;
+      --intro-text: #444444;
+      --section-bg: #f0f4f8;
+      --section-text: #5A8BB8;
+      --outfit-bg: #f4f8fb;
+      --outfit-border: #73A5C6;
+      --item-divider: #fafafa;
+      --list-divider: #d1dbe3;
+      --theme-btn-bg: #f0f0f0;
+      --theme-btn-text: #666;
+      --theme-btn-active: #ffffff;
+    }
+
+    /* 深色模式變數 */
+    [data-theme="dark"] {
+      --bg-body: #121212;
+      --bg-content: #1e1e1e;
+      --text-main: #e4e6eb;
+      --text-sub: #b0b3b8;
+      --border-line: #3a3b3c;
+      --btn-bg: #4A7A9B;
+      --btn-hover: #3A6A8B;
+      --btn-text: #ffffff;
+      --intro-bg: #242526;
+      --intro-border: #3a3b3c;
+      --intro-text: #e4e6eb;
+      --section-bg: #2a333c;
+      --section-text: #8ebfec;
+      --outfit-bg: #242526;
+      --outfit-border: #4A7A9B;
+      --item-divider: #121212;
+      --list-divider: #3a3b3c;
+      --theme-btn-bg: #333333;
+      --theme-btn-text: #aaaaaa;
+      --theme-btn-active: #1e1e1e;
+    }
+
+    /* ==================== 
+       3. 頁面排版與樣式 (套用變數)
+       ==================== */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: #fafafa;
-      color: #262626;
+      background-color: var(--bg-body);
+      color: var(--text-main);
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
+      transition: background-color 0.3s ease, color 0.3s ease; /* 讓切換時有柔和的漸變動畫 */
     }
 
-    /* 主要內容容器 */
     .content-wrapper {
       max-width: 500px;
       width: 100%;
-      background: #ffffff;
+      background: var(--bg-content);
       min-height: 100vh;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       padding-bottom: 40px;
+      transition: background-color 0.3s ease;
     }
 
-    /* 頂部標題列 */
+    /* 頂部標題列與主題切換區 */
     .header {
-      background-color: #ffffff;
+      background-color: var(--bg-content);
       padding: 20px;
       text-align: center;
-      border-bottom: 1px solid #dbdbdb;
+      border-bottom: 1px solid var(--border-line);
       position: sticky;
       top: 0;
       z-index: 10;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
     .header h1 {
@@ -42,19 +108,48 @@
       margin: 0;
       font-weight: 600;
       letter-spacing: 1px;
+      color: var(--text-main);
     }
 
     .header p {
       font-size: 0.85rem;
-      color: #8e8e8e;
-      margin: 6px 0 0 0;
+      color: var(--text-sub);
+      margin: 0;
+      text-align: left;
+    }
+
+    /* 主題切換按鈕群組 */
+    .theme-toggle-group {
+      display: flex;
+      background-color: var(--theme-btn-bg);
+      border-radius: 20px;
+      padding: 4px;
+    }
+
+    .theme-btn {
+      background: none;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      color: var(--theme-btn-text);
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    /* 當前啟用的按鈕樣式 */
+    .theme-btn.active {
+      background-color: var(--theme-btn-active);
+      color: var(--text-main);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     /* 官方原文傳送門按鈕 */
     .btn-article {
       display: block;
-      background-color: #73A5C6;
-      color: #ffffff;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
       text-align: center;
       padding: 14px 20px;
       margin: 20px 20px 0 20px;
@@ -63,16 +158,16 @@
       font-weight: bold;
       letter-spacing: 1px;
       transition: background-color 0.2s ease;
-      box-shadow: 0 4px 8px rgba(115, 165, 198, 0.3);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .btn-article:hover {
-      background-color: #5A8BB8;
+      background-color: var(--btn-hover);
     }
 
     /* 文章前言卡片 */
     .intro-box {
-      background-color: #ffffff;
+      background-color: var(--bg-content);
       padding: 0 20px 24px 20px;
       margin-top: 16px;
     }
@@ -80,36 +175,38 @@
     .intro-text {
       font-size: 0.95rem;
       line-height: 1.7;
-      color: #444;
+      color: var(--intro-text);
       margin: 0;
-      white-space: pre-line; /* 支援自然換行 */
+      white-space: pre-line;
       padding: 16px;
-      background-color: #f8f9fa;
+      background-color: var(--intro-bg);
       border-radius: 12px;
-      border: 1px solid #eef2f5;
+      border: 1px solid var(--intro-border);
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
-    /* 區塊大標題 (數位封面 / 畫報) */
+    /* 區塊大標題 */
     .section-title {
-      background-color: #f0f4f8; 
+      background-color: var(--section-bg);
       padding: 16px 20px;
       margin: 0;
       font-size: 1rem;
-      color: #5A8BB8; 
+      color: var(--section-text);
       font-weight: bold;
       letter-spacing: 2px;
-      border-bottom: 1px solid #e1e8ed;
-      border-top: 1px solid #e1e8ed;
+      border-bottom: 1px solid var(--intro-border);
+      border-top: 1px solid var(--intro-border);
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* 單一項目區塊 */
     .post-item {
       margin-bottom: 12px;
-      border-bottom: 8px solid #fafafa;
+      border-bottom: 8px solid var(--item-divider);
       padding-bottom: 16px;
+      transition: border-color 0.3s ease;
     }
 
-    /* 隱藏 IG 嵌入自帶的外框 */
     .instagram-media {
       margin: 0 auto !important;
       border: none !important;
@@ -120,44 +217,47 @@
     /* 翻譯總區塊 */
     .translation-box {
       padding: 16px 20px;
-      background-color: #ffffff;
+      background-color: var(--bg-content);
+      transition: background-color 0.3s ease;
     }
 
-    /* 貼文內文翻譯 */
     .caption-text {
       font-size: 0.95rem;
       line-height: 1.6;
-      color: #262626;
+      color: var(--text-main);
       margin: 0 0 16px 0;
       white-space: pre-line;
+      transition: color 0.3s ease;
     }
 
     /* 著裝資訊專屬小區塊 */
     .outfit-section {
-      background-color: #f4f8fb; 
+      background-color: var(--outfit-bg);
       padding: 14px 16px;
       border-radius: 8px;
-      border-left: 4px solid #73A5C6; 
+      border-left: 4px solid var(--outfit-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .photo-tag {
       display: inline-block;
       font-weight: 600;
-      color: #73A5C6; 
-      font-size: 0.95rem;
+      color: var(--section-text);
+      font-size: 0.85rem;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      transition: color 0.3s ease;
     }
     
     .outfit-text {
       font-size: 0.9rem;
       line-height: 1.6;
-      color: #444;
+      color: var(--text-main);
       margin: 0;
+      transition: color 0.3s ease;
     }
 
-    /* 針對畫報多圖的清單樣式 */
     .carousel-list {
       list-style: none;
       padding: 0;
@@ -167,7 +267,8 @@
     .carousel-list li {
       margin-bottom: 16px;
       padding-bottom: 16px;
-      border-bottom: 1px dashed #d1dbe3;
+      border-bottom: 1px dashed var(--list-divider);
+      transition: border-color 0.3s ease;
     }
 
     .carousel-list li:last-child {
@@ -177,13 +278,14 @@
     }
 
     .ig-index-badge {
-      background-color: #73A5C6;
-      color: white;
+      background-color: var(--outfit-border);
+      color: var(--btn-text);
       font-size: 0.75rem;
       padding: 2px 6px;
       border-radius: 4px;
       margin-left: 8px;
       font-weight: normal;
+      transition: background-color 0.3s ease;
     }
   </style>
 </head>
@@ -192,7 +294,14 @@
   <div class="content-wrapper">
     
     <header class="header">
-      <h1>2026.03.02 Esquire Korea文章翻譯</h1>
+      <div class="header-top-row">
+        <h1>2026.03.02 Esquire Korea文章翻譯</h1>
+        
+        <div class="theme-toggle-group">
+          <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
+          <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
+        </div>
+      </div>
       <p>Esquire Korea x 崔立于</p>
     </header>
 
@@ -307,6 +416,34 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
   </div>
 
   <script async src="//www.instagram.com/embed.js"></script>
+
+  <script>
+    function updateButtonUI(theme) {
+      document.getElementById('btn-light').classList.remove('active');
+      document.getElementById('btn-dark').classList.remove('active');
+      document.getElementById('btn-' + theme).classList.add('active');
+    }
+
+    // 當點擊按鈕時觸發
+    function switchTheme(theme) {
+      // 1. 更改網頁標籤屬性
+      document.documentElement.setAttribute('data-theme', theme);
+      // 2. 存入瀏覽器記憶體
+      localStorage.setItem('pageTheme', theme);
+      // 3. 更新按鈕樣式
+      updateButtonUI(theme);
+      
+      // 補充說明：Instagram 的嵌入外掛本身有內建判定系統，
+      // 如果使用者的手機系統本身就是深色模式，IG 貼文就會自動轉為深色版。
+      // 因此我們只需專注於處理網站外框的深淺色切換即可！
+    }
+
+    // 網頁剛載入時，初始化按鈕狀態
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialTheme = localStorage.getItem('pageTheme') || 'light';
+      updateButtonUI(initialTheme);
+    });
+  </script>
 
 </body>
 </html>
