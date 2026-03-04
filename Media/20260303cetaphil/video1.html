@@ -8,46 +8,60 @@
 <link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
 
 <style>
-  body {
-      margin: 0;
+  /* 🌟 終極彈性排版魔法：不釘死，讓它自然填滿！ */
+  html, body {
+      margin: 0 !important;
+      padding: 0 !important;
       background: #000 !important;
-      color: #fff;
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      text-align: center;
-      height: 100vh;
-      width: 100vw;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      display: flex;
+      flex-direction: column; /* 讓控制列和影片上下排列 */
   }
 
+  /* 上方控制列 */
+  #controls {
+      width: 100%;
+      height: 50px;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0; /* 防止它被壓縮 */
+      margin: 0;
+  }
+
+  /* 下方影片區塊，自動填滿剩餘所有空間 */
   #video-wrapper {
       position: relative;
       width: 100% !important;
+      flex-grow: 1; /* 🌟 這是滿版的關鍵：把剩下的空間全部佔走！ */
       max-width: 100% !important;
-      height: 85vh !important; /* 留一點空間給上方的按鈕 */
-      margin: 0 auto;
-      background-color: #000;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #000 !important;
   }
 
+  /* YouTube 播放器 100% 貼合 Wrapper */
   #player {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
   }
 
-  #controls { margin: 15px 0; }
-  .control-row { display: flex; justify-content: center; align-items: center; gap: 20px; }
-  .control-group { display: flex; align-items: center; gap: 10px; }
-  button { background: #333; color: white; border: 1px solid #555; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-  button:hover { background: #555; }
+  h2 { display: none !important; }
 
-  /* 把不需要的表情與彈幕介面全部藏起來！ */
-  #barrage-toggle-btn,
-  .barrage-control,
-  #barrage-container,
-  #emoji-trigger-btn,
-  #emoji-drawer,
-  .reaction-section {
+  /* 隱藏不需要的表情與彈幕介面 */
+  #barrage-toggle-btn, .barrage-control, #barrage-container, 
+  #emoji-trigger-btn, #emoji-drawer, .reaction-section {
       display: none !important;
   }
+
+  /* 微調按鈕美觀 */
+  .control-row { display: flex; align-items: center; gap: 20px; }
+  .control-group { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.95rem; }
+  button { background: #333; color: white; border: 1px solid #555; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+  button:hover { background: #555; }
 </style>
 </head>
 
