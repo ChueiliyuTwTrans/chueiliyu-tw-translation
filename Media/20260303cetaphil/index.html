@@ -71,7 +71,7 @@
       padding: 0;
       display: flex;
       justify-content: center;
-      transition: background-color 0.3s ease, color 0.3s ease; /* 讓切換時有柔和的漸變動畫 */
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .content-wrapper {
@@ -84,7 +84,7 @@
       transition: background-color 0.3s ease;
     }
 
-    /* 頂部標題列與主題切換區 */
+    /* 頂部標題列：改為垂直排列並置中 */
     .header {
       background-color: var(--bg-content);
       padding: 20px;
@@ -94,13 +94,9 @@
       top: 0;
       z-index: 10;
       transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .header-top-row {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 12px;
     }
 
     .header h1 {
@@ -109,18 +105,22 @@
       font-weight: 600;
       letter-spacing: 1px;
       color: var(--text-main);
+      line-height: 1.4;
     }
 
     .header p {
       font-size: 0.85rem;
       color: var(--text-sub);
-      margin: 0;
-      text-align: left;
+      margin: 4px 0 0 0;
     }
 
-    /* 主題切換按鈕群組 */
+    /* 獨立的主題切換按鈕區塊 */
+    .theme-toggle-wrapper {
+      margin-top: 14px;
+    }
+
     .theme-toggle-group {
-      display: flex;
+      display: inline-flex;
       background-color: var(--theme-btn-bg);
       border-radius: 20px;
       padding: 4px;
@@ -129,7 +129,7 @@
     .theme-btn {
       background: none;
       border: none;
-      padding: 6px 12px;
+      padding: 6px 16px;
       border-radius: 16px;
       font-size: 0.8rem;
       color: var(--theme-btn-text);
@@ -138,7 +138,6 @@
       transition: all 0.2s ease;
     }
 
-    /* 當前啟用的按鈕樣式 */
     .theme-btn.active {
       background-color: var(--theme-btn-active);
       color: var(--text-main);
@@ -294,15 +293,15 @@
   <div class="content-wrapper">
     
     <header class="header">
-      <div class="header-top-row">
-        <h1>2026.03.02 Esquire Korea文章翻譯</h1>
-        
+      <h1>2026.03.02 Esquire Korea文章翻譯</h1>
+      <p>Esquire Korea x 崔立于</p>
+      
+      <div class="theme-toggle-wrapper">
         <div class="theme-toggle-group">
           <button class="theme-btn" id="btn-light" onclick="switchTheme('light')">☀️ 淺色</button>
           <button class="theme-btn" id="btn-dark" onclick="switchTheme('dark')">🌙 深色</button>
         </div>
       </div>
-      <p>Esquire Korea x 崔立于</p>
     </header>
 
     <a href="https://www.esquirekorea.co.kr/article/1898009" target="_blank" rel="noopener noreferrer" class="btn-article">
@@ -424,21 +423,12 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       document.getElementById('btn-' + theme).classList.add('active');
     }
 
-    // 當點擊按鈕時觸發
     function switchTheme(theme) {
-      // 1. 更改網頁標籤屬性
       document.documentElement.setAttribute('data-theme', theme);
-      // 2. 存入瀏覽器記憶體
       localStorage.setItem('pageTheme', theme);
-      // 3. 更新按鈕樣式
       updateButtonUI(theme);
-      
-      // 補充說明：Instagram 的嵌入外掛本身有內建判定系統，
-      // 如果使用者的手機系統本身就是深色模式，IG 貼文就會自動轉為深色版。
-      // 因此我們只需專注於處理網站外框的深淺色切換即可！
     }
 
-    // 網頁剛載入時，初始化按鈕狀態
     document.addEventListener('DOMContentLoaded', () => {
       const initialTheme = localStorage.getItem('pageTheme') || 'light';
       updateButtonUI(initialTheme);
