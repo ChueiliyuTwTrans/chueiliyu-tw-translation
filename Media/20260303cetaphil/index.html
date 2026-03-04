@@ -15,117 +15,73 @@
        色彩變數 (包含深淺色)
        ==================== */
     :root {
-      --bg-body: #fafafa;
-      --bg-content: #ffffff;
-      --text-main: #262626;
-      --text-sub: #8e8e8e;
-      --border-line: #dbdbdb;
-      --btn-bg: #73A5C6;
-      --btn-hover: #5A8BB8;
-      --btn-text: #ffffff;
-      --intro-bg: #f8f9fa;
-      --intro-border: #eef2f5;
-      --intro-text: #444444;
-      --section-bg: #f0f4f8;
-      --section-text: #5A8BB8;
-      --outfit-bg: #f4f8fb;
-      --outfit-border: #73A5C6;
-      --item-divider: #fafafa;
-      --list-divider: #d1dbe3;
-      --theme-btn-bg: #f0f0f0;
-      --theme-btn-text: #666;
-      --theme-btn-active: #ffffff;
-      
-      /* 頁籤專用變數 */
-      --tab-bg: #ffffff;
-      --tab-border: #e1e8ed;
-      --tab-text: #8e8e8e;
-      --tab-active-text: #73A5C6;
-      --tab-active-border: #73A5C6;
+      --bg-body: #fafafa; --bg-content: #ffffff; --text-main: #262626; --text-sub: #8e8e8e; --border-line: #dbdbdb;
+      --btn-bg: #73A5C6; --btn-hover: #5A8BB8; --btn-text: #ffffff; --intro-bg: #f8f9fa; --intro-border: #eef2f5;
+      --intro-text: #444444; --section-bg: #f0f4f8; --section-text: #5A8BB8; --outfit-bg: #f4f8fb; --outfit-border: #73A5C6;
+      --item-divider: #fafafa; --list-divider: #d1dbe3; --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
+      --tab-bg: #ffffff; --tab-border: #e1e8ed; --tab-text: #8e8e8e; --tab-active-text: #73A5C6; --tab-active-border: #73A5C6;
     }
 
     [data-theme="dark"] {
-      --bg-body: #121212;
-      --bg-content: #1e1e1e;
-      --text-main: #e4e6eb;
-      --text-sub: #b0b3b8;
-      --border-line: #3a3b3c;
-      --btn-bg: #4A7A9B;
-      --btn-hover: #3A6A8B;
-      --btn-text: #ffffff;
-      --intro-bg: #242526;
-      --intro-border: #3a3b3c;
-      --intro-text: #e4e6eb;
-      --section-bg: #2a333c;
-      --section-text: #8ebfec;
-      --outfit-bg: #242526;
-      --outfit-border: #4A7A9B;
-      --item-divider: #121212;
-      --list-divider: #3a3b3c;
-      --theme-btn-bg: #333333;
-      --theme-btn-text: #aaaaaa;
-      --theme-btn-active: #1e1e1e;
-      
-      /* 深色模式下的頁籤 */
-      --tab-bg: #1e1e1e;
-      --tab-border: #3a3b3c;
-      --tab-text: #888888;
-      --tab-active-text: #8ebfec;
-      --tab-active-border: #4A7A9B;
+      --bg-body: #121212; --bg-content: #1e1e1e; --text-main: #e4e6eb; --text-sub: #b0b3b8; --border-line: #3a3b3c;
+      --btn-bg: #4A7A9B; --btn-hover: #3A6A8B; --btn-text: #ffffff; --intro-bg: #242526; --intro-border: #3a3b3c;
+      --intro-text: #e4e6eb; --section-bg: #2a333c; --section-text: #8ebfec; --outfit-bg: #242526; --outfit-border: #4A7A9B;
+      --item-divider: #121212; --list-divider: #3a3b3c; --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
+      --tab-bg: #1e1e1e; --tab-border: #3a3b3c; --tab-text: #888888; --tab-active-text: #8ebfec; --tab-active-border: #4A7A9B;
     }
 
-    /* 基本版面 */
     html, body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
       background-color: var(--bg-body) !important; 
       color: var(--text-main) !important; 
-      margin: 0; 
-      padding: 0; 
-      display: flex; 
-      justify-content: center; 
-      transition: background-color 0.3s ease, color 0.3s ease; 
+      margin: 0; padding: 0; display: flex; justify-content: center; transition: background-color 0.3s ease, color 0.3s ease; 
     }
     
-    /* 修改：將原本的 padding-bottom: 40px 拿掉，解決底部白邊問題 */
-    .content-wrapper { max-width: 500px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; transition: background-color 0.3s ease; }
+    /* 🌟 解放電腦版寬度：從 500px 放大到 800px */
+    .content-wrapper { max-width: 800px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 0px; transition: background-color 0.3s ease; }
     
     .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; position: sticky; top: 0; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
-    .header h1 { font-size: 1.1rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
-    .header p { font-size: 0.85rem; color: var(--text-sub); margin: 4px 0 16px 0; }
+    .header h1 { font-size: 1.3rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
+    .header p { font-size: 0.95rem; color: var(--text-sub); margin: 4px 0 16px 0; }
     .theme-toggle-group { display: inline-flex; background-color: var(--theme-btn-bg); border-radius: 20px; padding: 4px; margin-bottom: 16px; }
-    .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.8rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
+    .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.9rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
     .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
     .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); overflow-x: auto; white-space: nowrap; }
-    .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 0.95rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
+    .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 1rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
     .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
     .tab-content { display: none; animation: fadeIn 0.3s ease; }
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .video-iframe { width: 100%; height: 85vh; border: none; background: #000; }
-    .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    /* 🌟 優化影片高度，讓電腦和手機都能完美顯示比例 */
+    .video-iframe { width: 100%; aspect-ratio: 16 / 12; min-height: 350px; max-height: 650px; border: none; background: #000; }
+    
+    .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.05rem;}
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
-    .intro-text { font-size: 0.95rem; line-height: 1.7; color: var(--intro-text); white-space: pre-line; padding: 16px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
-    .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
+    .intro-text { font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 20px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
+    .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1.1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
     
     .post-item { margin-bottom: 12px; border-bottom: 8px solid var(--item-divider); padding-bottom: 16px; }
-    /* 修改：讓最後一個 post-item 不要再有底線跟下間距，徹底消除白邊 */
     .post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-    .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 100% !important; }
-    .translation-box { padding: 16px 20px; }
-    .caption-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 16px 0; white-space: pre-line; }
-    .outfit-section { background-color: var(--outfit-bg); padding: 14px 16px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
+    /* 🌟 限制 IG 貼文最大寬度，避免在電腦上大到變形 */
+    .instagram-media { margin: 0 auto !important; border: none !important; box-shadow: none !important; max-width: 500px !important; }
     
-    /* 修改：將字體大小從 0.85rem 放大為 1.1rem */
+    .translation-box { padding: 16px 20px; max-width: 600px; margin: 0 auto; /* 讓文字在電腦版置中對齊 */ }
+    .caption-text { font-size: 1rem; line-height: 1.7; margin: 0 0 16px 0; white-space: pre-line; }
+    .outfit-section { background-color: var(--outfit-bg); padding: 16px 20px; border-radius: 8px; border-left: 4px solid var(--outfit-border); }
     .photo-tag { display: inline-block; font-weight: 600; color: var(--section-text); font-size: 1.1rem; margin-bottom: 8px; letter-spacing: 1px; }
-    
-    .outfit-text { font-size: 0.9rem; line-height: 1.6; margin: 0; }
+    .outfit-text { font-size: 0.95rem; line-height: 1.6; margin: 0; }
     .carousel-list { list-style: none; padding: 0; margin: 0; }
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--list-divider); }
     .carousel-list li:last-child { border-bottom: none; }
-    .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle;}
+    .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.8rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle;}
+    
+    /* 統一表情區塊 */
+    .unified-reaction-box { padding: 20px; background-color: var(--bg-content); border-top: 2px dashed var(--border-line); margin-top: 20px; text-align: center; }
+    .unified-reaction-box p, .reaction-section { color: var(--text-main) !important; font-size: 1.05rem; }
+    #reaction-title { color: var(--text-main) !important; font-weight: bold; }
   </style>
 </head>
 <body>
