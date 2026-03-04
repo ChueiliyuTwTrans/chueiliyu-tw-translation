@@ -77,10 +77,19 @@
     }
 
     /* 基本版面 */
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; transition: background-color 0.3s ease, color 0.3s ease; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+      background-color: var(--bg-body) !important; 
+      color: var(--text-main) !important; 
+      margin: 0; 
+      padding: 0; 
+      display: flex; 
+      justify-content: center; 
+      transition: background-color 0.3s ease, color 0.3s ease; 
+    }
+    
     .content-wrapper { max-width: 500px; width: 100%; background: var(--bg-content); min-height: 100vh; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding-bottom: 40px; transition: background-color 0.3s ease; }
     
-    /* 頂部 Header */
     .header { background-color: var(--bg-content); padding: 20px 20px 0 20px; text-align: center; position: sticky; top: 0; z-index: 10; transition: background-color 0.3s ease; display: flex; flex-direction: column; align-items: center; }
     .header h1 { font-size: 1.1rem; margin: 0; font-weight: 600; color: var(--text-main); line-height: 1.4; }
     .header p { font-size: 0.85rem; color: var(--text-sub); margin: 4px 0 16px 0; }
@@ -88,7 +97,6 @@
     .theme-btn { background: none; border: none; padding: 6px 16px; border-radius: 16px; font-size: 0.8rem; color: var(--theme-btn-text); cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
     .theme-btn.active { background-color: var(--theme-btn-active); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-    /* 頁籤切換列設計 */
     .tabs-container { display: flex; width: 100%; border-bottom: 2px solid var(--tab-border); background-color: var(--tab-bg); overflow-x: auto; white-space: nowrap; }
     .tab-btn { flex: 1; background: none; border: none; padding: 14px 10px; font-size: 0.95rem; font-weight: bold; color: var(--tab-text); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
     .tab-btn.active { color: var(--tab-active-text); border-bottom: 3px solid var(--tab-active-border); }
@@ -113,9 +121,13 @@
     .carousel-list li:last-child { border-bottom: none; }
     .ig-index-badge { background-color: var(--outfit-border); color: var(--btn-text); font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
     
-    /* 統一表情區塊的外觀調整 */
+    /* 🛡️ 統一表情區塊：強制覆蓋字體顏色，確保在淺色模式下看得見 */
     .unified-reaction-box { padding: 20px; background-color: var(--bg-content); border-top: 2px dashed var(--border-line); margin-top: 20px; }
-    #reaction-title { color: var(--text-main); font-weight: bold; }
+    .unified-reaction-box p, 
+    .reaction-section { 
+      color: var(--text-main) !important; 
+    }
+    #reaction-title { color: var(--text-main) !important; font-weight: bold; }
 
     .content-wrapper {
       max-width: 500px;
@@ -391,7 +403,7 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
     <div class="unified-reaction-box">
       <div class="reaction-section">
-          <p id="reaction-title">覺得這次的專訪翻譯如何？點個表情吧！</p>
+          <p id="reaction-title">覺得這次的翻譯作品如何？點個表情吧！</p>
           <div class="reaction-wall"></div>
       </div>
     </div>
