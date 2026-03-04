@@ -199,6 +199,15 @@
         height: auto !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important;
     }
 
+    /* 強制規範沒有active的預設按鈕狀態 */
+    .unified-reaction-box .emoji-btn:not(.active) {
+        background-color: var(--emoji-btn-default-bg) !important; 
+        border: 1px solid var(--emoji-btn-default-border) !important; 
+        transition: all 0.2s ease;
+        transform: scale(1) translateY(0) !important;
+        box-shadow: none !important;
+    }
+
     /* 根據主題切換陰影，淺色清晰、深色立體 */
     .unified-reaction-box p, 
     .unified-reaction-box span, 
