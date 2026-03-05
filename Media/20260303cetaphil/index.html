@@ -34,6 +34,8 @@
       --emoji-btn-default-bg: rgba(0, 0, 0, 0.03); /* 微弱的淺灰色，看起來乾淨 */
       --emoji-btn-default-border: #e1e8ed;
       --emoji-btn-default-text: #8e8e8e;
+      /* 預設字幕大小 */
+      --subtitle-size: 22px; 
     }
 
     [data-theme="dark"] {
@@ -124,7 +126,8 @@
     .subtitle-overlay {
         position: absolute;
         bottom: 8%; left: 50%; transform: translateX(-50%); width: 90%;
-        color: white; font-size: 22px; font-weight: 500; line-height: 1.6; text-align: center;
+        color: white; 
+        font-size: var(--subtitle-size) !important; font-weight: 500; line-height: 1.6; text-align: center;
         z-index: 100; pointer-events: none; box-sizing: border-box; word-break: break-word;
         text-shadow: 2px 2px 4px rgba(0,0,0,1), -2px 2px 4px rgba(0,0,0,1), 2px -2px 4px rgba(0,0,0,1), -2px -2px 4px rgba(0,0,0,1);
     }
@@ -136,7 +139,6 @@
     /* [A] 電腦版 (滑鼠操作) 全螢幕：字幕保持在底部，避免擋臉 */
     @media (pointer: fine) {
         :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-            font-size: min(4vw, 36px) !important; 
             bottom: 8% !important; 
         }
         :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
@@ -147,8 +149,7 @@
     /* [B] 手機版 (觸控操作) 全螢幕：字幕拉高，避免被螢幕邊緣或黑邊切掉 */
     @media (pointer: coarse) {
         /* 原生全螢幕 */
-        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay {
-            font-size: min(5.5vw, 32px) !important; 
+        :fullscreen .subtitle-overlay, :-webkit-full-screen .subtitle-overlay { 
             bottom: calc(15% + env(safe-area-inset-bottom)) !important;
         }
         :fullscreen .video-responsive-wrapper, :-webkit-full-screen .video-responsive-wrapper {
@@ -551,10 +552,20 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
     }
 
     function changeSubtitleSize(delta, subtitleId) {
-        const subDiv = document.getElementById(subtitleId);
-        let currentSize = parseFloat(window.getComputedStyle(subDiv).fontSize);
-        subDiv.style.fontSize = (currentSize + (delta * 20)) + 'px';
-    }
+      // 取得目前的變數數值（如果沒有則預設 22）
+      const root = document.documentElement;
+      const currentSize = parseFloat(getComputedStyle(root).getPropertyValue('--subtitle-size')) || 22;
+    
+      // 計算新大小 (delta 0.1 * 20 = 2px)
+      let newSize = currentSize + (delta * 20);
+    
+      // 設定範圍限制 (最小 12px，最大 80px)
+      if (newSize < 12) newSize = 12;
+      if (newSize > 80) newSize = 80;
+
+      // 更新 CSS 變數，這會同時影響到全螢幕與非全螢幕的所有字幕
+      root.style.setProperty('--subtitle-size', newSize + 'px');
+  }
 
     // =====================================
     // 🌟 全螢幕與偽全螢幕邏輯 (完全移植)
