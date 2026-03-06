@@ -16,6 +16,34 @@ html, body {
     -webkit-text-size-adjust: 100%;
 }
 
+/* 首頁按鈕：特別顏色樣式 */
+#home-btn {
+    background: #e67e22 !important; /* 鮮明的橘色，區別於其他按鈕 */
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 6px 18px;
+    border-radius: 30px !important;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 14px;
+    outline: none;
+    min-width: 80px; /* 根據需求調整寬度 */
+    height: 34px;    /* 與其他按鈕高度統一 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#home-btn:hover {
+    background: #d35400 !important; /* 懸停時變深橘色 */
+    transform: translateY(-2px) scale(1.03);
+}
+
+#home-btn:active {
+    transform: translateY(0px) scale(0.95);
+}
+
 /* 影片容器 */
 #video-wrapper {
     position: relative;
