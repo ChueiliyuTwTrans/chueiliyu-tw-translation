@@ -73,7 +73,8 @@ function syncWallCounts() {
         const type = item.type;
         
         // 1. 監聽雲端數字變化
-        const countRef = window.fb_ref(window.db, `video_reactions/${MY_VIDEO_ID}/${type}`);
+        const pathId = (typeof DATA_SOURCE_ID !== 'undefined') ? DATA_SOURCE_ID : MY_VIDEO_ID;
+        const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/${type}`);
         window.fb_onValue(countRef, (snapshot) => {
             const data = snapshot.val() || 0;
             const el = document.getElementById(`count-${type}`);
@@ -81,7 +82,7 @@ function syncWallCounts() {
         });
 
         // 2. 檢查本地是否點過 (決定按鈕是否亮起)
-        const storageKey = `reacted-${MY_VIDEO_ID}-${type}`;
+        const storageKey = `reacted-${pathId}-${type}`;
         if (localStorage.getItem(storageKey) === 'true') {
             const btn = document.querySelector(`.reaction-wall button[data-type="${type}"]`);
             if (btn) btn.classList.add('active');
@@ -103,12 +104,13 @@ window.toggleReaction = function(type, event) {
         return;
     }
 
-    const storageKey = `reacted-${MY_VIDEO_ID}-${type}`;
+    const pathId = (typeof DATA_SOURCE_ID !== 'undefined') ? DATA_SOURCE_ID : MY_VIDEO_ID;
+    const storageKey = `reacted-${pathId}-${type}`;
     const isReacted = localStorage.getItem(storageKey) === 'true';
     const btn = document.querySelector(`.reaction-wall button[data-type="${type}"]`);
     
     // 執行資料庫交易
-    const countRef = window.fb_ref(window.db, `video_reactions/${MY_VIDEO_ID}/${type}`);
+    const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/${type}`);
     window.fb_runTransaction(countRef, (currentCount) => {
         let val = (currentCount === null) ? 0 : currentCount;
         if (isReacted) {
@@ -172,7 +174,8 @@ window.sendInstantBarrage = function(type, event) {
 
         // 檢查 Firebase 是否連接成功
         if (window.db && window.fb_ref && window.fb_runTransaction) {
-            const barrageRef = window.fb_ref(window.db, `barrages/${MY_VIDEO_ID}/${currentTime}/${type}`);
+            const pathId = (typeof DATA_SOURCE_ID !== 'undefined') ? DATA_SOURCE_ID : MY_VIDEO_ID;
+            const barrageRef = window.fb_ref(window.db, `barrages/${pathId}/${currentTime}/${type}`);
             window.fb_runTransaction(barrageRef, (count) => (count || 0) + 1)
                 .catch(err => console.error("Firebase 寫入失敗:", err));
         } else {
@@ -265,7 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // 讀取這一秒的彈幕資料
             if (window.db && window.fb_ref) {
-                const secondRef = window.fb_ref(window.db, `barrages/${MY_VIDEO_ID}/${now}`);
+                const pathId = (typeof DATA_SOURCE_ID !== 'undefined') ? DATA_SOURCE_ID : MY_VIDEO_ID;
+                const secondRef = window.fb_ref(window.db, `barrages/${pathId}/${now}`);
                 window.fb_onValue(secondRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
