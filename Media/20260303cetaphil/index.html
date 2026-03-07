@@ -101,6 +101,10 @@
     .carousel-list { list-style: none; padding: 0; margin: 0; }
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-line); }
 
+    .outfit-pagination { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .page-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-line); background: var(--bg-content); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .page-btn.active { background: var(--btn-bg); color: white; border-color: var(--btn-bg);}
+
     /* ==================== 
        3. 影片區塊與字幕樣式
        ==================== */
@@ -369,40 +373,26 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
       <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVX-2_zD-Ko/" data-instgrm-version="14"></blockquote>
 
       <div class="translation-box">
-        <div class="outfit-section">
-          <ul class="carousel-list">          
-            <li>
-              <div class="photo-tag">圖一</div>
-              <p class="outfit-text">T恤 ZARA。<br>長褲 R13。<br>項鍊 造型師私物。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖二</div>
-              <p class="outfit-text">針織衫 SHORT SENTENCE。<br>項鍊 造型師私物。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖三</div>
-              <p class="outfit-text">針織衫 SHORT SENTENCE。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖五</div>
-              <p class="outfit-text">上衣 Our Legacy。<br>手鍊 Sophie Buhai。<br>項鍊 造型師私物。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖六</div>
-              <p class="outfit-text">T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖七</div>
-              <p class="outfit-text">背心 SHORT SENTENCE。<br>上衣 Our Legacy。<br>長褲 造型師私物。</p>
-            </li>
-            <li>
-              <div class="photo-tag">圖八</div>
-              <p class="outfit-text">上衣 Our Legacy。<br>項鍊 造型師私物。</p>
-            </li>            
-          </ul>
+        <p style="text-align:center; color:var(--text-sub); font-size:0.9rem;">
+            💡 請滑動上方圖片，並對應下方頁籤查看內容
+        </p>
+        
+        <div class="outfit-pagination">
+            <button class="page-btn active" onclick="showOutfit(0, this)">1</button>
+            <button class="page-btn" onclick="showOutfit(1, this)">2</button>
+            <button class="page-btn" onclick="showOutfit(2, this)">3</button>
+            <button class="page-btn" onclick="showOutfit(4, this)">5</button>
+            <button class="page-btn" onclick="showOutfit(5, this)">6</button>
+            <button class="page-btn" onclick="showOutfit(6, this)">7</button>
+            <button class="page-btn" onclick="showOutfit(7, this)">8</button>
         </div>
-      </div>
+
+        <div class="outfit-section" id="active-outfit-box">
+            <div class="photo-tag" id="outfit-tag">圖一</div>
+            <p class="outfit-text" id="outfit-desc">T恤 ZARA。<br>長褲 R13。<br>項鍊 造型師私物。</p>
+        </div>
     </div>
+</div>
     </div>
     <div id="tab-video1" class="tab-content">
       <div class="video-controls-bar">
@@ -458,6 +448,30 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
   <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
 
   <script>
+    // 畫報
+    .outfit-pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-line);
+      background: var(--bg-content);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .page-btn.active {
+      background: var(--btn-bg);
+      color: white;
+      border-color: var(--btn-bg);
+    }
+    
     // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
     const videoData = {
         'tab-video1': { id: 'KPybYGuC8dc', srt: '20260302cetaphil.srt', player: null, subEl: 'subtitle-video1', container: 'player-container-video1' },
