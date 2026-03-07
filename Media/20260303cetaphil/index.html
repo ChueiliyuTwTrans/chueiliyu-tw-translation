@@ -449,27 +449,25 @@ Esquire 再次捕捉到了，蘊含在他那清透臉龐中的滿滿少年感。
 
   <script>
     // 畫報
-    .outfit-pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .page-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border-line);
-      background: var(--bg-content);
-      color: var(--text-main);
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    .page-btn.active {
-      background: var(--btn-bg);
-      color: white;
-      border-color: var(--btn-bg);
+    const outfitData = [
+      { tag: "圖一", desc: "T恤 ZARA。<br>長褲 R13。<br>項鍊 造型師私物。" },
+      { tag: "圖二", desc: "針織衫 SHORT SENTENCE。<br>項鍊 造型師私物。" },
+      { tag: "圖三", desc: "針織衫 SHORT SENTENCE。" },
+      { tag: "暫無說明", desc: "此張圖片無特定著裝標註。" }, // 對應圖四
+      { tag: "圖五", desc: "上衣 Our Legacy。<br>手鍊 Sophie Buhai。<br>項鍊 造型師私物。" },
+      { tag: "圖六", desc: "T恤 ERL。<br>上衣 Double RL。<br>針織帽 Vivienne Westwood。" },
+      { tag: "圖七", desc: "背心 SHORT SENTENCE。<br>上衣 Our Legacy。<br>長褲 造型師私物。" },
+      { tag: "圖八", desc: "上衣 Our Legacy。<br>項鍊 造型師私物。" }
+    ];
+
+    function showOutfit(index, btn) {
+      // 更新按鈕狀態
+      document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // 更新內容
+      document.getElementById('outfit-tag').innerText = outfitData[index].tag;
+      document.getElementById('outfit-desc').innerHTML = outfitData[index].desc;
     }
     
     // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
