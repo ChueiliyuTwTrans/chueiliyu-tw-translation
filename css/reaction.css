@@ -58,7 +58,12 @@ html, body {
     width: 100%;
     aspect-ratio: 16 / 9;
     display: block;
-    z-index: 10;
+    pointer-events: auto !important; /* 確保播放器自身能接收點擊 */
+    z-index: 10 !important;          /* 低於你的 UI 按鈕，但高於背景 */
+}
+
+#emoji-trigger-btn {
+    pointer-events: auto !important;
 }
 
 /* ===== 字幕 (精緻多重陰影版) ===== */
@@ -541,6 +546,12 @@ body #emoji-trigger-btn.force-hide {
     transition: height 0.3s ease; /* 加入一點過渡效果，調整時會比較滑順 */
     /* 確保容器內容不會換行 */
     white-space: nowrap;
+}
+
+#subtitle, #barrage-container {
+    /* 如果字幕層導致無法點擊，確保此層完全沒有互動屬性 */
+    pointer-events: none !important;
+    touch-action: none !important;
 }
 
 /* 彈幕本體樣式 */
