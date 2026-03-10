@@ -5,14 +5,14 @@ let player;
 let subtitles = [];
 let subtitleTimer = null;
 let saveTimer = null;
-let subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
 
 // 安全讀取 subtitle-scale
 let subtitleScale = 1;
 try {
-    subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
+    const savedScale = localStorage.getItem("subtitle-scale");
+    if (savedScale) subtitleScale = parseFloat(savedScale);
 } catch (e) {
-    console.warn("無痕模式：無法讀取 subtitle-scale");
+    console.warn("無法存取 localStorage，將使用預設字體大小");
 }
 
 // 抓取 DOM
