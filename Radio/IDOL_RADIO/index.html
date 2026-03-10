@@ -1,1 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>IDOL RADIO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://chueiliyutwtrans.github.io/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="https://chueiliyutwtrans.github.io/favicon.png">
 
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* ===== Header ===== */
+header {
+    padding: 40px 20px;
+    text-align: center;
+    background: #111;
+    color: #fff;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* ===== Content ===== */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ===== Grid ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* ===== Card ===== */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.card-body {
+    padding: 12px;
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.card-desc {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.card-credit {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.5;
+}
+
+/* ===== Back Link ===== */
+.back {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>IDOL RADIO</h1>
+    <p>節目系列整理</p>
+</header>
+
+<div class="container">
+
+    <a class="back" href="../../index.html">← 回到首頁</a>
+
+    <div class="grid">
+
+    <!-- EP.1 -->
+    <a class="card" href="ep173/" target="_blank">
+        <img src="../../images/20251112_idol_radio_ep173.webp" alt="">
+        <div class="card-body">
+            <div class="card-title">
+            IDOL RADIO EP.173
+            </div>
+            <div class="card-desc">
+            完整電台｜中文翻譯
+            </div>
+            <div class="card-credit">
+            翻譯：西卡<br>
+            字幕製作：西卡<br>
+            </div>
+        </div>
+    </a>
+    <!-- EP.2 -->
+    <a class="card" href="ep173_behind/" target="_blank">
+        <img src="../../images/20251123_idol_radio_behind_ep173.webp" alt="">
+        <div class="card-body">
+            <div class="card-title">
+            IDOL RADIO EP.173 BEHIND
+            </div>
+            <div class="card-desc">
+            Behind 片段｜中文翻譯
+            </div>
+            <div class="card-credit">
+            翻譯：西卡<br>
+            字幕製作：西卡<br>
+            </div>
+        </div>
+    </a>
+    </div>
+
+</div>
+
+</body>
+</html>
