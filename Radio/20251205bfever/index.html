@@ -91,12 +91,12 @@ const MY_VIDEO_ID = "cIzXj7NbBQ4";
 const MY_SRT_FILE = "20251205bfever.srt";
 
 /* 設定立于出場時間：13分44秒 = 824秒 */
-const MY_VIDEO_START = 824;
+const MY_VIDEO_START_BTN = 824;
 
 /* 點擊按鈕跳轉功能 */
 function jumpToLiyu() {
     if (window.player && window.player.seekTo) {
-        window.player.seekTo(MY_VIDEO_START, true);
+        window.player.seekTo(MY_VIDEO_START_BTN, true);
         window.player.playVideo(); // 跳轉後自動播放
     }
 }
