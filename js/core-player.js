@@ -71,20 +71,28 @@ function onYouTubeIframeAPIReady() {
 function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
-    
-    // 優先判斷是否有設定強制起始時間 (MY_VIDEO_START)
-    if (typeof MY_VIDEO_START !== 'undefined') {
-        player.seekTo(MY_VIDEO_START, true); // 強制跳轉到指定時間
-    } else {
-        // 如果沒有設定強制時間，才讀取歷史觀看紀錄
-        const savedTime = localStorage.getItem("yt-played-time");
-        if (savedTime !== null) player.seekTo(parseFloat(savedTime), true);
-    }
 
-    const savedVolume = localStorage.getItem("yt-volume");
-    if (savedVolume !== null) {
-        setTimeout(() => { if (player && player.setVolume) player.setVolume(parseInt(savedVolume)); }, 500);
-    }
+    // 增加一個「互動解鎖」的監聽器
+    const unlockAndResume = () => {
+        // 使用者點擊任何地方時，才去恢復上次的紀錄
+        const savedTime = localStorage.getItem("yt-played-time");
+        const savedVolume = localStorage.getItem("yt-volume");
+
+        if (savedTime !== null) {
+            player.seekTo(parseFloat(savedTime), true);
+        }
+        if (savedVolume !== null) {
+            player.setVolume(parseInt(savedVolume));
+        }
+
+        // 恢復完後，移除監聽，避免一直觸發
+        document.removeEventListener('click', unlockAndResume);
+        document.removeEventListener('touchstart', unlockAndResume);
+    };
+
+    // 只要使用者有任何點擊動作，就自動恢復進度
+    document.addEventListener('click', unlockAndResume);
+    document.addEventListener('touchstart', unlockAndResume);
 }
 
 function onStateChange(e) {
