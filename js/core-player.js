@@ -50,37 +50,47 @@ function coreChangeSubtitleSize(delta) {
 
 // --- 核心功能：YouTube API 邏輯 ---
 function onYouTubeIframeAPIReady() {
-    // 如果因為載入太快沒抓到 ID，就等 100 毫秒再試一次
     if (typeof MY_VIDEO_ID === 'undefined' || !MY_VIDEO_ID) {
         setTimeout(onYouTubeIframeAPIReady, 100);
         return;
     }
-    // 檢查是否有設定 MY_VIDEO_START，如果沒有則預設從 1 秒開始
-    const startTime = typeof MY_VIDEO_START !== 'undefined' ? MY_VIDEO_START : 1;
+
+    // 在建立播放器之前，先計算出最後要從哪一秒開始播放
+    let initStartTime = 1; 
+    
+    // 優先順序 1：如果網頁有指定立于出場時間 (MY_VIDEO_START)
+    if (typeof MY_VIDEO_START !== 'undefined') {
+        initStartTime = MY_VIDEO_START;
+    } 
+    // 優先順序 2：如果沒有指定，就去撈 localStorage 的歷史觀看紀錄
+    else {
+        const savedTime = localStorage.getItem("yt-played-time");
+        if (savedTime !== null) {
+            initStartTime = parseFloat(savedTime);
+        }
+    }
+
     player = new YT.Player("player", {
         videoId: MY_VIDEO_ID,
         playerVars: {
-            start: startTime, rel: 0, playsinline: 1, modestbranding: 1, fs: 0, controls: 1
+            start: Math.floor(initStartTime), // 直接把時間塞進 start 參數 (必須用整數)
+            rel: 0, 
+            playsinline: 1, 
+            modestbranding: 1, 
+            fs: 0, 
+            controls: 1
         },
         events: { onReady, onStateChange }
     });
 
-    window.player = player; // 將 player 明確掛載到 window，讓 reaction-core.js 讀得到
+    window.player = player;
 }
 
 function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
 
-    // 優先判斷是否有設定強制起始時間 (MY_VIDEO_START)
-    if (typeof MY_VIDEO_START !== 'undefined') {
-        player.seekTo(MY_VIDEO_START, true); // 強制跳轉到指定時間
-    } else {
-        // 如果沒有設定強制時間，才讀取歷史觀看紀錄
-        const savedTime = localStorage.getItem("yt-played-time");
-        if (savedTime !== null) player.seekTo(parseFloat(savedTime), true);
-    }
-
+    // 恢復音量的指令不涉及影片時間流動，所以保留在 onReady 不會引發死鎖
     const savedVolume = localStorage.getItem("yt-volume");
     if (savedVolume !== null) {
         setTimeout(() => { if (player && player.setVolume) player.setVolume(parseInt(savedVolume)); }, 500);
