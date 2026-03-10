@@ -141,6 +141,19 @@ function stopAutoSave() { clearInterval(saveTimer); saveTimer = null; }
 
 function resetProgress() { localStorage.removeItem("yt-played-time"); location.reload(); }
 
+function forcePlay() {
+    if (window.player && typeof window.player.playVideo === 'function') {
+        // 1. 強制播放
+        window.player.playVideo();
+        
+        // 2. 加上 class 隱藏遮罩
+        document.getElementById('video-wrapper').classList.add('is-playing');
+        
+        // 3. 確保音量開啟 (有時手機靜音會被視為未互動)
+        window.player.unMute();
+    }
+}
+
 // --- 核心功能：全螢幕管理 ---
 function showExitBtn() {
     if (!exitFsBtn || !wrapper) return;
