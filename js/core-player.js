@@ -7,6 +7,14 @@ let subtitleTimer = null;
 let saveTimer = null;
 let subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
 
+// 安全讀取 subtitle-scale
+let subtitleScale = 1;
+try {
+    subtitleScale = parseFloat(localStorage.getItem("subtitle-scale")) || 1;
+} catch (e) {
+    console.warn("無痕模式：無法讀取 subtitle-scale");
+}
+
 // 抓取 DOM
 const subtitleEl = document.getElementById("subtitle");
 const wrapper = document.getElementById("video-wrapper");
@@ -44,7 +52,11 @@ function parseSRT(data) {
 
 function coreChangeSubtitleSize(delta) {
     subtitleScale = Math.min(2, Math.max(0.6, subtitleScale + delta));
-    localStorage.setItem("subtitle-scale", subtitleScale);
+    // 安全寫入 subtitle-scale
+    try {
+        localStorage.setItem("subtitle-scale", subtitleScale);
+    } catch (e) {}
+    
     if (subtitleEl) subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
 }
 
@@ -64,9 +76,14 @@ function onYouTubeIframeAPIReady() {
     } 
     // 優先順序 2：如果沒有指定，就去撈 localStorage 的歷史觀看紀錄
     else {
-        const savedTime = localStorage.getItem("yt-played-time");
-        if (savedTime !== null) {
-            initStartTime = parseFloat(savedTime);
+        // 安全讀取歷史觀看紀錄
+        try {
+            const savedTime = localStorage.getItem("yt-played-time");
+            if (savedTime !== null) {
+                initStartTime = parseFloat(savedTime);
+            }
+        } catch (e) {
+            console.warn("無痕模式：無法讀取播放進度");
         }
     }
 
@@ -90,11 +107,13 @@ function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
 
-    // 恢復音量的指令不涉及影片時間流動，所以保留在 onReady 不會引發死鎖
-    const savedVolume = localStorage.getItem("yt-volume");
-    if (savedVolume !== null) {
-        setTimeout(() => { if (player && player.setVolume) player.setVolume(parseInt(savedVolume)); }, 500);
-    }
+    // 安全讀取音量設定
+    try {
+        const savedVolume = localStorage.getItem("yt-volume");
+        if (savedVolume !== null) {
+            setTimeout(() => { if (player && player.setVolume) player.setVolume(parseInt(savedVolume)); }, 500);
+        }
+    } catch (e) {}
 }
 
 function onStateChange(e) {
@@ -126,8 +145,11 @@ function startAutoSave() {
     if (saveTimer) clearInterval(saveTimer);
     saveTimer = setInterval(() => {
         if (player && player.getVideoData && player.getVideoData().video_id === MY_VIDEO_ID) {
-            localStorage.setItem("yt-played-time", player.getCurrentTime());
-            localStorage.setItem("yt-volume", player.getVolume());
+            // 安全寫入播放進度與音量
+            try {
+                localStorage.setItem("yt-played-time", player.getCurrentTime());
+                localStorage.setItem("yt-volume", player.getVolume());
+            } catch (e) {}
         }
     }, 5000);
 }
