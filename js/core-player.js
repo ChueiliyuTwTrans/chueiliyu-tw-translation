@@ -71,35 +71,20 @@ function onYouTubeIframeAPIReady() {
 function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
-    
-    // 解決 Focus 問題：YouTube 需要播放器成為焦點才能運作
-    iframe.contentWindow.focus();
 
-    // 增加一個「互動解鎖」的監聽器
-    const unlockAndResume = () => {
-        // 使用者點擊任何地方時，才去恢復上次的紀錄
+    // 優先判斷是否有設定強制起始時間 (MY_VIDEO_START)
+    if (typeof MY_VIDEO_START !== 'undefined') {
+        player.seekTo(MY_VIDEO_START, true); // 強制跳轉到指定時間
+    } else {
+        // 如果沒有設定強制時間，才讀取歷史觀看紀錄
         const savedTime = localStorage.getItem("yt-played-time");
-        const savedVolume = localStorage.getItem("yt-volume");
+        if (savedTime !== null) player.seekTo(parseFloat(savedTime), true);
+    }
 
-        if (savedTime !== null) {
-            player.seekTo(parseFloat(savedTime), true);
-        }
-        if (savedVolume !== null) {
-            player.setVolume(parseInt(savedVolume));
-        }
-        
-        // 強制對播放器進行一次「主動連線」
-        player.playVideo();
-        setTimeout(() => player.pauseVideo(), 50); // 瞬間播放再暫停，誘發瀏覽器建立有效連線
-        
-        // 恢復完後，移除監聽，避免一直觸發
-        document.removeEventListener('click', unlockAndResume);
-        document.removeEventListener('touchstart', unlockAndResume);
-    };
-
-    // 只要使用者有任何點擊動作，就自動恢復進度
-    document.addEventListener('click', unlockAndResume);
-    document.addEventListener('touchstart', unlockAndResume);
+    const savedVolume = localStorage.getItem("yt-volume");
+    if (savedVolume !== null) {
+        setTimeout(() => { if (player && player.setVolume) player.setVolume(parseInt(savedVolume)); }, 500);
+    }
 }
 
 function onStateChange(e) {
@@ -141,19 +126,6 @@ function stopAutoSave() { clearInterval(saveTimer); saveTimer = null; }
 
 function resetProgress() { localStorage.removeItem("yt-played-time"); location.reload(); }
 
-function forcePlay() {
-    if (window.player && typeof window.player.playVideo === 'function') {
-        // 1. 強制播放
-        window.player.playVideo();
-        
-        // 2. 加上 class 隱藏遮罩
-        document.getElementById('video-wrapper').classList.add('is-playing');
-        
-        // 3. 確保音量開啟 (有時手機靜音會被視為未互動)
-        window.player.unMute();
-    }
-}
-
 // --- 核心功能：全螢幕管理 ---
 function showExitBtn() {
     if (!exitFsBtn || !wrapper) return;
@@ -181,21 +153,21 @@ function toggleFullscreen() {
             const exit = document.exitFullscreen || document.webkitExitFullscreen;
             if (exit) exit.call(document);
         }
-        
+
         // 移除偽全螢幕樣式
         wrapper.classList.remove("pseudo-fullscreen");
         document.body.classList.remove("is-in-fullscreen", "has-fullscreen");
-        
+
         // 恢復背景捲動
         document.body.style.overflow = "";
         document.body.style.position = "";
-        
+
         if (fsBtn) fsBtn.innerText = "進入全螢幕";
         if (exitFsBtn) {
             exitFsBtn.style.opacity = "0";
             exitFsBtn.style.display = "none";
         }
-        
+
         // 針對 iOS 轉向處理
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
              setTimeout(() => window.scrollTo(0, 0), 100);
@@ -223,15 +195,15 @@ function toggleFullscreen() {
 function enterPseudoFullscreen() {
     wrapper.classList.add("pseudo-fullscreen");
     document.body.classList.add("is-in-fullscreen");
-    
+
     if (fsBtn) fsBtn.innerText = "退出全螢幕";
-    
+
     // 嘗試隱藏網址列 (Hack)：先捲動到最上方
     window.scrollTo(0, 0);
-    
+
     // 鎖死 Body 防止背景滑動，這對 iOS Safari 隱藏 UI 很重要
     document.body.style.overflow = "hidden"; 
-    
+
     // 進入時「立刻」呼叫顯示，並多呼叫幾次確保出現
     showExitBtn();
     setTimeout(showExitBtn, 300); // 300ms 後再確認一次，防止轉向延遲
