@@ -71,6 +71,9 @@ function onYouTubeIframeAPIReady() {
 function onReady(e) {
     const iframe = e.target.getIframe();
     iframe.setAttribute("allowfullscreen", "");
+    
+    // 解決 Focus 問題：YouTube 需要播放器成為焦點才能運作
+    iframe.contentWindow.focus();
 
     // 增加一個「互動解鎖」的監聽器
     const unlockAndResume = () => {
@@ -84,7 +87,11 @@ function onReady(e) {
         if (savedVolume !== null) {
             player.setVolume(parseInt(savedVolume));
         }
-
+        
+        // 強制對播放器進行一次「主動連線」
+        player.playVideo();
+        setTimeout(() => player.pauseVideo(), 50); // 瞬間播放再暫停，誘發瀏覽器建立有效連線
+        
         // 恢復完後，移除監聽，避免一直觸發
         document.removeEventListener('click', unlockAndResume);
         document.removeEventListener('touchstart', unlockAndResume);
