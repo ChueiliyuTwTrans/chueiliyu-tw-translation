@@ -1205,17 +1205,26 @@ function createCardHTML(item) {
 }
 
 function renderAllCards(data) {
+    // 1. 在這裡執行排序：根據 ID 中的數字進行降序 (大的在前)
+    // 使用 [...data] 建立一個副本，避免改動到原始陣列
+    const sortedData = [...data].sort((a, b) => {
+        const numA = parseInt(a.id.match(/\d+/)[0]);
+        const numB = parseInt(b.id.match(/\d+/)[0]);
+        return numB - numA; // 降序排列：由大到小
+    });
+
     const liveContainer = document.getElementById('live-grid');
     const programContainer = document.getElementById('program-grid');
     const radioContainer = document.getElementById('radio-grid');
     const mediaContainer = document.getElementById('media-grid');
 
-    liveContainer.innerHTML = data.filter(i => i.category === 'live').map(createCardHTML).join('');
-    programContainer.innerHTML = data.filter(i => i.category === 'program').map(createCardHTML).join('');
-    radioContainer.innerHTML = data.filter(i => i.category === 'radio').map(createCardHTML).join('');
+    // 2. 使用排序後的 sortedData 來渲染
+    liveContainer.innerHTML = sortedData.filter(i => i.category === 'live').map(createCardHTML).join('');
+    programContainer.innerHTML = sortedData.filter(i => i.category === 'program').map(createCardHTML).join('');
+    radioContainer.innerHTML = sortedData.filter(i => i.category === 'radio').map(createCardHTML).join('');
 
     if(mediaContainer) {
-        mediaContainer.innerHTML = data.filter(i => i.category === 'media').map(createCardHTML).join('');
+        mediaContainer.innerHTML = sortedData.filter(i => i.category === 'media').map(createCardHTML).join('');
     }
 }
 
@@ -1442,6 +1451,7 @@ function initBackToTop() {
 </script>
 </body>
 </html>
+
 
 
 
