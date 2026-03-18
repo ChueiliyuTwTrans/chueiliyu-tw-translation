@@ -54,8 +54,9 @@ html, body {
             <button class="sub-btn" onclick="changeSubtitleSize(0.1)">A＋</button>
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
-        <button id="fs-btn">進入全螢幕</button>
-        <button onclick="jumpToLiyu()">立于出場時間</button>
+        <button id="fs-btn">全螢幕</button>
+        <button onclick="jumpToLiyu1()">立于出場1</button>
+        <button onclick="jumpToLiyu2()">立于出場2</button>
     </div>
 </div>
 
@@ -90,13 +91,17 @@ html, body {
 const MY_VIDEO_ID = "lpMIuk_NoAA"; 
 const MY_SRT_FILE = "20251210IDOL RADIO EP182.srt";
 
-/* 設定立于出場時間：04分00秒 = 240秒 */
-const MY_VIDEO_START = 240;
-
 /* 點擊按鈕跳轉功能 */
-function jumpToLiyu() {
+function jumpToLiyu1() {
     if (window.player && window.player.seekTo) {
-        window.player.seekTo(MY_VIDEO_START, true);
+        window.player.seekTo(240, true);
+        window.player.playVideo(); // 跳轉後自動播放
+    }
+}
+
+function jumpToLiyu2() {
+    if (window.player && window.player.seekTo) {
+        window.player.seekTo(3199, true);
         window.player.playVideo(); // 跳轉後自動播放
     }
 }
