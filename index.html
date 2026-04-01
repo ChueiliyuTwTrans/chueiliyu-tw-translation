@@ -1238,6 +1238,15 @@ function createCardHTML(item) {
     `;
 }
 
+// 統一的排序邏輯 (依照 ID 數字由大到小)
+function getSortedData(data) {
+    return [...data].sort((a, b) => {
+        const numA = parseInt(a.id.match(/\d+/)[0]);
+        const numB = parseInt(b.id.match(/\d+/)[0]);
+        return numB - numA; 
+    });
+}
+
 function renderAllCards(data) {
     // 1. 在這裡執行排序：根據 ID 中的數字進行降序 (大的在前)
     // 使用 [...data] 建立一個副本，避免改動到原始陣列
@@ -1325,11 +1334,12 @@ function filterCategory(category, cast, btnElement) {
 
     // 從 videoData 重新過濾並渲染
     const targetData = videoData.filter(i => i.category === category);
-    const filteredData = (cast === 'all') 
+    const filtered = (cast === 'all') 
         ? targetData 
         : targetData.filter(item => item.cast.includes(cast));
+     const finalSortedData = getSortedData(filtered);
         
-    grid.innerHTML = filteredData.map(createCardHTML).join('');
+    grid.innerHTML = finalSortedData.map(createCardHTML).join('');
 }
 
 /* =========================================
