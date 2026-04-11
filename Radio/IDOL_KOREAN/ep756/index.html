@@ -55,10 +55,12 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">進入全螢幕</button>
+        <button onclick="jumpToLiyu()">立于出場時間</button>
     </div>
 </div>
 
 <h2>偶像韓語 EP#756</h2>
+<a>若載入網頁時沒有自動跳到立于出場時間，請點擊立于出場時間按鈕</a>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -86,7 +88,10 @@ html, body {
 <script>
 /* 影片ID和SRT文件 */
 const MY_VIDEO_ID = "6NV8GgBfTWY"; 
-const MY_SRT_FILE = "20260223Let's Learn Korean ep.756.srt";
+const MY_SRT_FILE = "20260223_IDOL_KOREAN_ep.756.srt";
+
+/* 設定立于出場時間：00分18秒 = 18秒 */
+const MY_VIDEO_START = 18;
 
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
