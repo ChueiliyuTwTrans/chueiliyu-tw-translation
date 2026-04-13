@@ -12,56 +12,58 @@
   </div>
 
   <script>
-  // 確保 Firebase 已經初始化完成後執行
   window.addEventListener('load', () => {
     const container = document.getElementById('guestbook-container');
-    const loadingText = document.getElementById('loading-text');
+    
+    if (!window.db) return;
 
-    // 1. 設定指向 Realtime Database 中的 "test" 節點
     const testRef = window.fb_ref(window.db, 'test');
 
-    // 2. 使用 onValue 實時監聽資料變動
     window.fb_onValue(testRef, (snapshot) => {
       const data = snapshot.val();
-      
-      // 清空容器
       container.innerHTML = '';
 
       if (!data) {
-        container.innerHTML = '<p>目前尚無留言。</p>';
+        container.innerHTML = '<p>尚無留言資料。</p>';
         return;
       }
 
-      // 3. 處理資料 (假設資料是以物件形式存放，例如推送到 Firebase 的亂碼 ID)
-      // 如果你的資料是陣列，Object.values 一樣適用
-      const messages = Object.values(data);
+      // --- 核心修正：判斷資料結構 ---
+      let messages = [];
 
-      // 4. 渲染每一筆留言 (只顯示 nickname 和 message)
+      // 如果 data 直接包含 message，代表是「單筆留言」結構
+      if (data.message) {
+        messages = [data]; 
+      } else {
+        // 如果 data 下面還有子節點，代表是「多筆留言」結構
+        messages = Object.values(data);
+      }
+
+      // 渲染畫面
       messages.forEach(item => {
-        const messageBox = document.createElement('div');
-        
-        // 這裡可以根據你的 CSS 調整樣式
-        messageBox.style.padding = '12px';
-        messageBox.style.borderBottom = '1px solid #eee';
-        messageBox.style.background = 'rgba(255, 255, 255, 0.5)';
-        messageBox.style.borderRadius = '8px';
+        // 確保至少有內容才顯示
+        if (item.message) {
+          const messageBox = document.createElement('div');
+          messageBox.style.cssText = `
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #60a5fa;
+          `;
 
-        messageBox.innerHTML = `
-          <div style="font-weight: bold; color: var(--primary-color, #60a5fa); margin-bottom: 5px;">
-            ${item.nickname || '匿名網友'}
-          </div>
-          <div style="font-size: 14px; line-height: 1.5;">
-            ${item.message}
-          </div>
-        `;
-        
-        // 最新的留言放在最上面
-        container.prepend(messageBox);
+          messageBox.innerHTML = `
+            <div style="font-weight: bold; font-size: 0.9em; color: #444;">
+              ${item.nickname || '匿名網友'}
+            </div>
+            <div style="margin-top: 5px; color: #222;">
+              ${item.message}
+            </div>
+          `;
+          container.prepend(messageBox);
+        }
       });
-    }, (error) => {
-      console.error("讀取失敗:", error);
-      container.innerHTML = '<p>留言讀取失敗，請稍後再試。</p>';
     });
   });
-  </script>
+</script>
 </html>
