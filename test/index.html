@@ -11,66 +11,76 @@
     <p id="loading-text">留言讀取中...</p>
   </div>
 
-  <script>
-  // 將功能封裝成一個函數
-  function initGuestbook() {
-    const container = document.getElementById('guestbook-container');
+  <script type="module">
+  // 1. 載入 Firebase 核心功能
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
     
-    // 檢查 Firebase 全域變數是否存在
-    if (!window.db || !window.fb_ref) {
-      console.warn("⚠️ Firebase 尚未準備好，0.5秒後重試...");
-      setTimeout(initGuestbook, 500); // 如果還沒好，半秒後再跑一次
-      return;
-    }
+  // 2. Firebase 設定
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
+    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chueiliyu-tw-translation",
+    storageBucket: "chueiliyu-tw-translation.appspot.com",
+    messagingSenderId: "625769420546",
+    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+    measurementId: "G-3PM3GTXPHF"
+  };
 
-    console.log("🚀 開始連接資料庫路徑: 'test'");
-    const testRef = window.fb_ref(window.db, 'test');
+  // 3. 啟動連線
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
 
-    window.fb_onValue(testRef, (snapshot) => {
+  // 借給外部 JS 使用 (保留你原本的需求)
+  window.db = db;
+  window.fb_ref = ref;            
+  window.fb_onValue = onValue;    
+  window.fb_runTransaction = runTransaction; 
+
+  // --- 關鍵修正：直接在這裡執行讀取邏輯 ---
+  const container = document.getElementById('guestbook-container');
+  if (container) {
+    console.log("🚀 Firebase 模組已就緒，開始讀取留言...");
+    const testRef = ref(db, 'test');
+
+    onValue(testRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("📥 資料接收成功:", data);
-
-      if (!container) return;
+      console.log("📥 收到資料:", data);
+      
       container.innerHTML = '';
 
       if (!data) {
-        container.innerHTML = '<p>資料庫目前是空的 (null)。</p>';
+        container.innerHTML = '<p>目前沒有留言。</p>';
         return;
       }
 
-      // 結構相容處理
-      let messages = [];
-      if (data.message) {
-        messages = [data]; // 單筆格式
-      } else {
-        messages = Object.values(data); // 多筆格式
-      }
+      // 自動判斷單筆或多筆
+      let messages = data.message ? [data] : Object.values(data);
 
       messages.forEach(item => {
         if (item.message) {
-          const messageBox = document.createElement('div');
-          messageBox.style.cssText = `
+          const div = document.createElement('div');
+          div.style.cssText = `
             padding: 12px;
             margin-bottom: 10px;
             background: rgba(255, 255, 255, 0.6);
             border-radius: 8px;
             border-left: 4px solid #60a5fa;
-            text-align: left;
           `;
-          messageBox.innerHTML = `
+          div.innerHTML = `
             <div style="font-weight: bold; font-size: 0.85em; color: #555;">${item.nickname || '匿名'}</div>
             <div style="margin-top: 4px; color: #111;">${item.message}</div>
           `;
-          container.prepend(messageBox);
+          container.prepend(div);
         }
       });
     }, (error) => {
-      console.error("❌ 讀取發生錯誤:", error);
-      if(container) container.innerHTML = `<p>讀取出錯: ${error.message}</p>`;
+      console.error("❌ 讀取失敗:", error);
+      container.innerHTML = `<p>讀取出錯: ${error.message}</p>`;
     });
   }
-
-  // 直接執行，不等待 load 事件 (因為你的 Firebase script 可能已經跑完了)
-  initGuestbook();
 </script>
 </html>
