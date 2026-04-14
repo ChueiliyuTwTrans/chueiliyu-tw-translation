@@ -7,80 +7,130 @@
   <link rel="apple-touch-icon" href="https://chueiliyutwtrans.github.io/favicon.png">
   <title>測試</title>
 
-  <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px;">
+  <style>
+    /* 簡單的分頁按鈕樣式 */
+    .pagination {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 20px;
+      justify-content: center;
+      padding-bottom: 30px;
+    }
+    .page-btn {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .page-btn.active {
+      background: #60a5fa;
+      color: white;
+      border-color: #60a5fa;
+    }
+    .page-btn:hover:not(.active) {
+      background: #f0f7ff;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
     <p id="loading-text">留言讀取中...</p>
   </div>
 
+  <div id="pagination-controls" class="pagination"></div>
+
   <script type="module">
-  // 1. 載入 Firebase 核心功能
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-    
-  // 2. Firebase 設定
-  const firebaseConfig = {
-    apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
-    authDomain: "chueiliyu-tw-translation.firebaseapp.com",
-    databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "chueiliyu-tw-translation",
-    storageBucket: "chueiliyu-tw-translation.appspot.com",
-    messagingSenderId: "625769420546",
-    appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
-    measurementId: "G-3PM3GTXPHF"
-  };
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+      
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
+      authDomain: "chueiliyu-tw-translation.firebaseapp.com",
+      databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "chueiliyu-tw-translation",
+      storageBucket: "chueiliyu-tw-translation.appspot.com",
+      messagingSenderId: "625769420546",
+      appId: "1:625769420546:web:6d25889d1c66a091fe941b", 
+      measurementId: "G-3PM3GTXPHF"
+    };
 
-  // 3. 啟動連線
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const container = document.getElementById('guestbook-container');
+    const paginationBox = document.getElementById('pagination-controls');
 
-  // 借給外部 JS 使用 (保留你原本的需求)
-  window.db = db;
-  window.fb_ref = ref;            
-  window.fb_onValue = onValue;    
-  window.fb_runTransaction = runTransaction; 
+    // --- 分頁設定 ---
+    let allMessages = [];
+    const itemsPerPage = 100;
+    let currentPage = 1;
 
-  // --- 關鍵修正：直接在這裡執行讀取邏輯 ---
-  const container = document.getElementById('guestbook-container');
-  if (container) {
-    console.log("🚀 Firebase 模組已就緒，開始讀取留言...");
+    // 讀取資料
     const testRef = ref(db, 'test');
-
     onValue(testRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("📥 收到資料:", data);
-      
-      container.innerHTML = '';
-
       if (!data) {
         container.innerHTML = '<p>目前沒有留言。</p>';
         return;
       }
 
-      // 自動判斷單筆或多筆
-      let messages = data.message ? [data] : Object.values(data);
+      // 轉換資料並排序 (假設你想讓最新的留言在前面，如果匯入時已有順序可調整)
+      allMessages = data.message ? [data] : Object.values(data);
+      // 如果需要反轉順序（最新在前）：allMessages.reverse();
 
-      messages.forEach(item => {
+      renderPage(1); // 初始化顯示第一頁
+    });
+
+    // 渲染特定頁數的函數
+    function renderPage(page) {
+      currentPage = page;
+      container.innerHTML = '';
+      
+      // 計算起始與結束索引
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pageData = allMessages.slice(startIndex, endIndex);
+
+      // 顯示留言內容
+      pageData.forEach(item => {
         if (item.message) {
           const div = document.createElement('div');
           div.style.cssText = `
             padding: 12px;
-            margin-bottom: 10px;
             background: rgba(255, 255, 255, 0.6);
             border-radius: 8px;
             border-left: 4px solid #60a5fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
           `;
           div.innerHTML = `
             <div style="font-weight: bold; font-size: 0.85em; color: #555;">${item.nickname || '匿名'}</div>
-            <div style="margin-top: 4px; color: #111;">${item.message}</div>
+            <div style="margin-top: 4px; color: #111; line-height: 1.5;">${item.message}</div>
           `;
-          container.prepend(div);
+          container.appendChild(div); // 使用 appendChild 依序排列
         }
       });
-    }, (error) => {
-      console.error("❌ 讀取失敗:", error);
-      container.innerHTML = `<p>讀取出錯: ${error.message}</p>`;
-    });
-  }
-</script>
+
+      renderPagination();
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // 換頁後自動回到頂端
+    }
+
+    // 產生分頁按鈕
+    function renderPagination() {
+      paginationBox.innerHTML = '';
+      const totalPages = Math.ceil(allMessages.length / itemsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.onclick = () => renderPage(i);
+        paginationBox.appendChild(btn);
+      }
+    }
+  </script>
+</body>
 </html>
