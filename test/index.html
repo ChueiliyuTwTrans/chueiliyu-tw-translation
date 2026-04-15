@@ -130,25 +130,27 @@
   <div class="section-title">
     <span>✨ 精選推薦留言</span>
     <div class="layout-switcher">
-      <button class="switch-btn active" id="btn-grid">留言牆</button>
-      <button class="switch-btn" id="btn-list">橫向留言</button>
+      <button class="switch-btn active" id="btn-grid">靈感牆模式</button>
+      <button class="switch-btn" id="btn-list">應援清單模式</button>
     </div>
   </div>
+
+  <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
   
-  <div id="random-container">
-    <p>隨機挑選中...</p>
+  <div id="random-container" class="grid-layout">
+    <p>正在佈置牆面...</p>
   </div>
 
-  <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 30px 0;">
+  <hr>
 
-  <div class="section-title">📋 顯示全部留言</div>
+  <div class="section-title">📋 全部應援存檔</div>
   <div class="controls">
-    <input type="text" id="search-input" class="search-input" placeholder="搜尋留言關鍵字...">
-    <button id="sort-btn" class="sort-btn">目前排序：新 → 舊</button>
+    <input type="text" id="search-input" class="search-input" placeholder="搜尋關鍵字...">
+    <button id="sort-btn" class="switch-btn" style="background:#eee; color:#666; border-radius:8px;">目前排序：新 → 舊</button>
   </div>
 
-  <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px;">
-    <p id="loading-text">資料載入中...</p>
+  <div id="guestbook-container" class="list-layout">
+    <p id="loading-text">載入中...</p>
   </div>
 
   <div id="pagination-controls" class="pagination"></div>
@@ -177,8 +179,8 @@
     const itemsPerPage = 100;
     const charLimit = 100;
 
-    const container = document.getElementById('guestbook-container');
     const randomContainer = document.getElementById('random-container');
+    const container = document.getElementById('guestbook-container');
     const paginationBox = document.getElementById('pagination-controls');
     const searchInput = document.getElementById('search-input');
     const sortBtn = document.getElementById('sort-btn');
@@ -208,28 +210,20 @@
       btnList.classList.add('active');
       btnGrid.classList.remove('active');
     });
-    
+
     function displayRandom() {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 10);
-
       selected.forEach((item, idx) => {
-        const div = createMessageCard(item, true, 'rand-' + idx, idx); 
-        randomContainer.appendChild(div);
+        randomContainer.appendChild(createMessageCard(item, true, 'rand-' + idx, idx));
       });
     }
 
     function applyFilters() {
       const keyword = searchInput.value.toLowerCase();
-      let result = rawMessages.filter(item => 
-        item.message.toLowerCase().includes(keyword)
-      );
-
-      if (isDescending) {
-        result = [...result].reverse();
-      }
-
+      let result = rawMessages.filter(item => item.message.toLowerCase().includes(keyword));
+      if (isDescending) result = [...result].reverse();
       filteredMessages = result;
       renderPage(1);
     }
@@ -238,48 +232,32 @@
       container.innerHTML = '';
       const start = (page - 1) * itemsPerPage;
       const pagedData = filteredMessages.slice(start, start + itemsPerPage);
-
-      if (pagedData.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">沒有找到符合的留言。</p>';
-        paginationBox.innerHTML = '';
-        return;
-      }
-
       pagedData.forEach((item, idx) => {
         container.appendChild(createMessageCard(item, true, 'all-' + idx, idx));
       });
-
       renderPagination(page);
     }
 
-    // --- 加入 colorIndex 讓顏色循環 ---
     function createMessageCard(item, allowFold, uniqueId, colorIndex) {
       const card = document.createElement('div');
-      // 使用餘數運算確保主題類名在 theme-0 到 theme-5 之間循環
-      const themeNum = colorIndex % 6;
-      card.className = `message-card theme-${themeNum}`;
-      
+      card.className = `message-card theme-${colorIndex % 6}`;
       const isLong = allowFold && item.message.length > charLimit;
       const shortText = isLong ? item.message.substring(0, charLimit) + "..." : item.message;
-
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
         <div class="content" id="text-${uniqueId}">${shortText}</div>
         ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">顯示更多</button>` : ''}
       `;
-
       if (isLong) {
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
           const contentDiv = document.getElementById(`text-${uniqueId}`);
           let expanded = false;
-          if (btn) {
-            btn.onclick = () => {
-              expanded = !expanded;
-              contentDiv.innerText = expanded ? item.message : shortText;
-              btn.innerText = expanded ? '收起' : '顯示更多';
-            };
-          }
+          if (btn) btn.onclick = () => {
+            expanded = !expanded;
+            contentDiv.innerText = expanded ? item.message : shortText;
+            btn.innerText = expanded ? '收起' : '顯示更多';
+          };
         }, 0);
       }
       return card;
@@ -289,7 +267,6 @@
       paginationBox.innerHTML = '';
       const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
       if (totalPages <= 1) return;
-
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
@@ -303,13 +280,11 @@
     }
 
     searchInput.oninput = () => applyFilters();
-    
     sortBtn.onclick = () => {
       isDescending = !isDescending;
       sortBtn.innerText = isDescending ? '目前排序：新 → 舊' : '目前排序：舊 → 新';
       applyFilters();
     };
-
     refreshRandomBtn.onclick = () => displayRandom();
   </script>
 </body>
