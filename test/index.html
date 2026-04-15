@@ -7,17 +7,6 @@
   <link rel="apple-touch-icon" href="https://chueiliyutwtrans.github.io/favicon.png">
   <title>測試</title>
 
-  <div id="danmu-container" style="
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    pointer-events: none; /* 確保不會擋到按鈕點擊 */
-    z-index: -1;          /* 放在所有內容後方作為背景 */
-    overflow: hidden;">   
-  </div>
-  
   <style>
     body { 
       font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif; 
@@ -31,9 +20,9 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(249, 247, 245, 0.9);
+      background: rgba(249, 247, 245, 0.95);
       backdrop-filter: blur(10px);
-      padding: 10px 0;
+      padding: 8px 0 12px 0;
       margin-bottom: 20px;
       display: flex;
       justify-content: center;
@@ -47,15 +36,14 @@
       border-radius: 12px;
       gap: 2px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
     }
     
     .switch-btn {
-      padding: 8px 16px;
+      padding: 8px 12px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       background: transparent;
       color: #666;
       font-weight: bold;
@@ -77,17 +65,16 @@
       padding-left: 10px;
     }
 
-    /* --- 版面佈局核心核心 --- */
+    /* --- 區域佈局樣式 --- */
     
-    /* 留言牆模式 (Grid) */
+    /* 1. 留言牆 (Grid) */
     .grid-layout {
       display: grid;
-      /* 電腦版 3 欄以上 */
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 15px;
     }
 
-    /* 留言清單模式 (List) */
+    /* 2. 留言清單 (List) */
     .list-layout {
       display: flex;
       flex-direction: column;
@@ -99,50 +86,62 @@
       width: 100%;
     }
 
-    /* 手機版特殊處理：當寬度小於 600px 時 */
+    /* 3. 流動留言區域 (Flow) */
+    #random-container.flow-layout {
+      display: block;
+      position: relative;
+      height: 350px; /* 固定高度讓彈幕游動 */
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+    }
+
+    /* 彈幕氣泡本體 */
+    .danmu-item {
+      position: absolute;
+      white-space: nowrap;
+      padding: 10px 18px;
+      border-radius: 25px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+      user-select: none;
+      pointer-events: none;
+      animation: moveDanmu linear forwards;
+      border-left: 4px solid #a89080;
+      z-index: 10;
+    }
+
+    @keyframes moveDanmu {
+      from { left: 100%; }
+      to { left: -150%; }
+    }
+
+    /* 手機版雙欄/正方形優化 */
     @media (max-width: 600px) {
       .grid-layout {
-        /* 手機版強制雙欄 */
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
-
-      /* 讓留言牆模式下的卡片變成正方形 */
       .grid-layout .message-card {
-        padding: 12px;
-        aspect-ratio: 1 / 1; /* 強制長寬比為 1:1 */
+        aspect-ratio: 1 / 1;
         display: flex;
         flex-direction: column;
-        overflow: hidden; /* 防止內容溢出 */
+        overflow: hidden;
       }
-
-      .grid-layout .nickname {
-        font-size: 0.85em;
-        margin-bottom: 4px;
-        flex-shrink: 0; /* 暱稱不縮小 */
-      }
-
       .grid-layout .content {
         font-size: 13px;
-        line-height: 1.4;
-        overflow-y: auto; /* 如果文字太長，可以在正方形內滾動 */
-        flex-grow: 1;    /* 佔滿剩餘空間 */
+        overflow-y: auto;
       }
-
-      /* 在正方形模式下，展開按鈕可能會破壞視覺，建議隱藏或調整 */
-      .grid-layout .toggle-btn {
-        display: none; 
-      }
+      .grid-layout .toggle-btn { display: none; }
+      #random-container.flow-layout { height: 250px; }
     }
 
-    /* 留言卡片樣式 */
-    .theme-0 { --theme-color: #f8b1b1; }
-    .theme-1 { --theme-color: #fbc79a; }
-    .theme-2 { --theme-color: #a7d7c5; }
-    .theme-3 { --theme-color: #b1c1f8; }
-    .theme-4 { --theme-color: #d1b1f8; }
-    .theme-5 { --theme-color: #e8ca8a; }
-
+    /* 卡片樣式 */
     .message-card { 
       padding: 20px; 
       background: white; 
@@ -151,12 +150,17 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
       box-sizing: border-box;
     }
+    .theme-0 { --theme-color: #f8b1b1; }
+    .theme-1 { --theme-color: #fbc79a; }
+    .theme-2 { --theme-color: #a7d7c5; }
+    .theme-3 { --theme-color: #b1c1f8; }
+    .theme-4 { --theme-color: #d1b1f8; }
+    .theme-5 { --theme-color: #e8ca8a; }
 
     .nickname { font-weight: bold; color: var(--theme-color); filter: brightness(0.8); margin-bottom: 5px; }
     .content { line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; }
     .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
-    /* 控制與隨機按鈕 */
     .random-btn { 
       padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; 
       background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); color: white; margin-bottom: 15px;
@@ -168,27 +172,6 @@
     .page-btn { padding: 8px 14px; border: none; background: white; cursor: pointer; border-radius: 8px; color: #888; }
     .page-btn.active { background: #a89080; color: white; }
     hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
-
-    /* 2. 彈幕氣泡樣式 */
-    .danmu-item {
-        position: absolute;
-        white-space: nowrap;
-        padding: 8px 15px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(2px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        color: #666;
-        font-size: 14px;
-        user-select: none;
-        animation: moveDanmu linear forwards;
-    }
-
-    /* 3. 飄移動畫：從右到左 */
-    @keyframes moveDanmu {
-        from { transform: translateX(100vw); }
-        to { transform: translateX(-150%); }
-    }
   </style>
 </head>
 
@@ -198,6 +181,7 @@
     <div class="layout-switcher">
       <button class="switch-btn active" id="btn-grid">留言牆</button>
       <button class="switch-btn" id="btn-list">留言清單</button>
+      <button class="switch-btn" id="btn-flow">流動留言</button>
     </div>
   </div>
 
@@ -205,7 +189,7 @@
   <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
   
   <div id="random-container" class="grid-layout">
-    <p>佈置中...</p>
+    <p>載入中...</p>
   </div>
 
   <hr>
@@ -217,7 +201,7 @@
   </div>
 
   <div id="guestbook-container" class="grid-layout">
-    <p id="loading-text">載入中...</p>
+    <p>載入中...</p>
   </div>
 
   <div id="pagination-controls" class="pagination"></div>
@@ -241,11 +225,8 @@
     const db = getDatabase(app);
     
     let rawMessages = []; 
-    let filteredMessages = []; 
-    let isDescending = true; 
-    let currentLayout = 'grid-layout'; // 追蹤當前佈局
-    const itemsPerPage = 100;
-    const charLimit = 100;
+    let currentLayout = 'grid-layout';
+    let danmuTimer = null; // 儲存彈幕定時器
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
@@ -254,6 +235,7 @@
     const sortBtn = document.getElementById('sort-btn');
     const btnGrid = document.getElementById('btn-grid');
     const btnList = document.getElementById('btn-list');
+    const btnFlow = document.getElementById('btn-flow');
 
     onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
@@ -261,32 +243,44 @@
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
       applyFilters(); 
       displayRandom(); 
-
-      // --- 啟動彈幕 ---
-      startDanmu(rawMessages);
     });
 
-    // 版面切換邏輯：同時改變兩個容器
-    function updateLayout(newLayout) {
-      currentLayout = newLayout;
-      randomContainer.className = newLayout;
-      container.className = newLayout;
+    // --- 切換邏輯 ---
+    function updateLayout(mode) {
+      currentLayout = mode;
       
-      if (newLayout === 'grid-layout') {
+      // 停止所有彈幕活動
+      clearInterval(danmuTimer);
+      randomContainer.innerHTML = '';
+
+      // 清除按鈕狀態
+      [btnGrid, btnList, btnFlow].forEach(btn => btn.classList.remove('active'));
+
+      if (mode === 'grid-layout') {
         btnGrid.classList.add('active');
-        btnList.classList.remove('active');
-      } else {
+        randomContainer.className = 'grid-layout';
+        container.className = 'grid-layout';
+        displayRandom();
+      } else if (mode === 'list-layout') {
         btnList.classList.add('active');
-        btnGrid.classList.remove('active');
+        randomContainer.className = 'list-layout';
+        container.className = 'list-layout';
+        displayRandom();
+      } else if (mode === 'flow-layout') {
+        btnFlow.classList.add('active');
+        randomContainer.className = 'flow-layout';
+        container.className = 'grid-layout'; // 全部留言區維持網格
+        startDanmu(rawMessages);
       }
-      // 重新渲染當前頁面以確保 ID 不會衝突
       renderPage(1);
     }
 
     btnGrid.onclick = () => updateLayout('grid-layout');
     btnList.onclick = () => updateLayout('list-layout');
+    btnFlow.onclick = () => updateLayout('flow-layout');
 
     function displayRandom() {
+      if (currentLayout === 'flow-layout') return;
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
       shuffled.slice(0, 10).forEach((item, idx) => {
@@ -294,29 +288,54 @@
       });
     }
 
-    function applyFilters() {
-      const keyword = searchInput.value.toLowerCase();
-      let result = rawMessages.filter(item => item.message.toLowerCase().includes(keyword));
-      if (isDescending) result = [...result].reverse();
-      filteredMessages = result;
-      renderPage(1);
+    // --- 彈幕核心 ---
+    function startDanmu(messages) {
+      if (!messages || messages.length === 0) return;
+      // 立即發射三條，之後每 2 秒發射一條
+      for(let i=0; i<3; i++) {
+        setTimeout(() => createDanmu(messages), i * 500);
+      }
+      danmuTimer = setInterval(() => {
+        createDanmu(messages);
+      }, 2000);
     }
 
+    function createDanmu(messages) {
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      const danmu = document.createElement('div');
+      danmu.className = 'danmu-item';
+      danmu.innerText = `${msg.nickname || '匿名'}: ${msg.message.substring(0, 30)}`;
+      
+      const topPos = Math.random() * 80 + 5; // 5% ~ 85%
+      danmu.style.top = `${topPos}%`;
+      danmu.style.animationDuration = `${Math.random() * 8 + 10}s`;
+      
+      // 隨機顏色邊框增加變化
+      const colors = ['#f8b1b1', '#fbc79a', '#a7d7c5', '#b1c1f8', '#d1b1f8'];
+      danmu.style.borderLeftColor = colors[Math.floor(Math.random() * colors.length)];
+
+      randomContainer.appendChild(danmu);
+      danmu.addEventListener('animationend', () => danmu.remove());
+    }
+
+    // --- 其他原有功能 ---
     function renderPage(page) {
       container.innerHTML = '';
-      const start = (page - 1) * itemsPerPage;
-      const pagedData = filteredMessages.slice(start, start + itemsPerPage);
-      pagedData.forEach((item, idx) => {
+      const start = (page - 1) * 100;
+      const pagedData = rawMessages.filter(m => m.message.toLowerCase().includes(searchInput.value.toLowerCase()));
+      if (document.getElementById('sort-btn').innerText.includes('新')) pagedData.reverse();
+      
+      pagedData.slice(start, start + 100).forEach((item, idx) => {
         container.appendChild(createMessageCard(item, true, 'all-' + idx, idx));
       });
-      renderPagination(page);
+      renderPagination(pagedData.length, page);
     }
 
     function createMessageCard(item, allowFold, uniqueId, colorIndex) {
       const card = document.createElement('div');
       card.className = `message-card theme-${colorIndex % 6}`;
-      const isLong = allowFold && item.message.length > charLimit;
-      const shortText = isLong ? item.message.substring(0, charLimit) + "..." : item.message;
+      const isLong = allowFold && item.message.length > 100;
+      const shortText = isLong ? item.message.substring(0, 100) + "..." : item.message;
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
         <div class="content" id="text-${uniqueId}">${shortText}</div>
@@ -325,85 +344,37 @@
       if (isLong) {
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
-          const contentDiv = document.getElementById(`text-${uniqueId}`);
-          let expanded = false;
           if (btn) btn.onclick = () => {
-            expanded = !expanded;
-            contentDiv.innerText = expanded ? item.message : shortText;
-            btn.innerText = expanded ? '收起' : '展開';
+            const contentDiv = document.getElementById(`text-${uniqueId}`);
+            const isExpanded = btn.innerText === '收起';
+            contentDiv.innerText = isExpanded ? shortText : item.message;
+            btn.innerText = isExpanded ? '展開' : '收起';
           };
         }, 0);
       }
       return card;
     }
 
-    function renderPagination(current) {
+    function renderPagination(total, current) {
       paginationBox.innerHTML = '';
-      const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
-      if (totalPages <= 1) return;
-      for (let i = 1; i <= totalPages; i++) {
+      const pages = Math.ceil(total / 100);
+      if (pages <= 1) return;
+      for (let i = 1; i <= pages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
-        btn.onclick = () => {
-          renderPage(i);
-          window.scrollTo({ top: container.offsetTop - 150, behavior: 'smooth' });
-        };
+        btn.onclick = () => renderPage(i);
         paginationBox.appendChild(btn);
       }
     }
 
-    searchInput.oninput = () => applyFilters();
+    searchInput.oninput = () => renderPage(1);
     sortBtn.onclick = () => {
-      isDescending = !isDescending;
-      sortBtn.innerText = isDescending ? '排序：新 → 舊' : '排序：舊 → 新';
-      applyFilters();
+      sortBtn.innerText = sortBtn.innerText.includes('新') ? '排序：舊 → 新' : '排序：新 → 舊';
+      renderPage(1);
     };
     document.getElementById('refresh-random').onclick = () => displayRandom();
+
   </script>
-  <script>
-    // 4. 彈幕邏輯控制器
-    function startDanmu(messages) {
-        const container = document.getElementById('danmu-container');
-        if (!messages || messages.length === 0) return;
-
-        // 每隔 3~5 秒發射一條彈幕
-        setInterval(() => {
-            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-            createDanmu(randomMsg.message, container);
-        }, 3000);
-    }
-
-    function createDanmu(text, parent) {
-        const danmu = document.createElement('div');
-        danmu.className = 'danmu-item';
-        
-        // 隨機內容過濾（避免太長）
-        danmu.innerText = text.length > 20 ? text.substring(0, 20) + '...' : text;
-
-        // 隨機垂直位置 (10% ~ 90%)
-        const topPos = Math.random() * 80 + 10;
-        danmu.style.top = `${topPos}%`;
-
-        // 隨機漂浮速度 (15s ~ 25s)
-        const duration = Math.random() * 10 + 15;
-        danmu.style.animationDuration = `${duration}s`;
-
-        // 隨機透明度
-        danmu.style.opacity = Math.random() * 0.5 + 0.3;
-
-        parent.appendChild(danmu);
-
-        // 動畫結束後自動移除，節省效能
-        danmu.addEventListener('animationend', () => {
-            danmu.remove();
-        });
-    }
-
-    /* 整合建議：
-       請在你的原本 Firebase onValue 回呼函式中加入這行：
-       startDanmu(rawMessages); 
-    */
-</script>
 </body>
 </html>
