@@ -70,50 +70,63 @@
       perspective: 1200px; /* 增加 3D 深度 */
     }
 
-    /* 階段一：20秒開始的慢慢柔軟捲起 (Curling) */
-    .curling {
-      animation: softPaperCurl 9s forwards ease-in-out;
-      transform-origin: top center;
-    }
-
-    @keyframes softPaperCurl {
-      0% { transform: rotateX(0deg) rotateY(0deg) translateY(0); border-bottom-right-radius: 2px; }
-      100% { 
-        transform: rotateX(12deg) rotateY(-8deg) translateY(-4px) skewX(1deg); 
-        border-bottom-right-radius: 65px; /* 右下角捲起 */
-        box-shadow: -5px 15px 20px rgba(0,0,0,0.12); /* 底部產生懸空陰影 */
-      }
-    }
-
-    /* 階段二：30秒一到的猝不及防快速撕掉 */
-    .peel-off-fast {
-      animation: fastRealPeel 0.4s forwards cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    /* 撕除動畫：放慢速度，先翹起一角再撕掉 */
+    .peel-off-slow {
+      animation: slowRealPeel 0.8s forwards ease-in;
       transform-origin: top center;
       pointer-events: none;
     }
 
-    @keyframes fastRealPeel {
+    @keyframes slowRealPeel {
       0% { 
-        transform: rotateX(12deg) rotateY(-8deg) translateY(-4px) skewX(1deg); 
+        transform: rotateX(0deg) translateY(0); 
         opacity: 1; 
+        border-bottom-right-radius: 2px; 
+      }
+      40% { 
+        /* 撕除前先微微翹起右下角 */
+        transform: rotateX(15deg) rotateY(-8deg) translateY(-2px) skewX(2deg); 
+        border-bottom-right-radius: 40px; 
+        box-shadow: -5px 15px 20px rgba(0,0,0,0.1); 
+        opacity: 1;
       }
       100% { 
-        transform: rotateX(100deg) translateY(-100px) skewX(15deg); 
+        transform: rotateX(90deg) translateY(-80px) skewX(10deg); 
         opacity: 0; 
       }
     }
 
-    /* 階段三：新便利貼貼上 (帶有紙張回彈感) */
-    .stick-on-soft {
-      animation: realStickBounce 0.7s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* 貼上動畫：像紙張一樣從捲曲狀態慢慢鋪平 (Unroll) */
+    .stick-on-unroll {
+      animation: paperUnroll 1.1s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
       transform-origin: top center;
     }
 
-    @keyframes realStickBounce {
-      0% { transform: rotateX(-80deg) translateY(30px); opacity: 0; }
-      50% { transform: rotateX(15deg) translateY(0); opacity: 1; }
-      75% { transform: rotateX(-5deg); }
-      100% { transform: rotateX(0deg); opacity: 1; }
+    @keyframes paperUnroll {
+      0% {
+        transform: rotateX(-70deg) translateY(40px);
+        opacity: 0;
+        /* 剛貼上時底部是捲起來的 */
+        border-bottom-left-radius: 80px;
+        border-bottom-right-radius: 80px;
+        box-shadow: 0 30px 20px rgba(0,0,0,0.15);
+      }
+      60% {
+        transform: rotateX(5deg) translateY(0);
+        opacity: 1;
+        /* 紙張快要貼平 */
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+      }
+      100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+        /* 完全貼平，恢復正常直角/微圓角 */
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
+      }
     }
 
     /* --- 基礎版面與卡片佈局 --- */
@@ -138,7 +151,7 @@
 
     .message-card { 
       padding: 20px; 
-      background: #fffdf8; /* 稍微帶點紙張暖白 */
+      background: #ffffff; /* 改回純白背景 */
       border-radius: 2px;
       border-left: 5px solid var(--theme-color); 
       box-shadow: 2px 2px 8px rgba(0,0,0,0.06); 
@@ -160,13 +173,11 @@
 
     /* 按鈕樣式 */
     .btn-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-    .random-btn, .pause-btn { 
+    .random-btn { 
       padding: 10px 22px; border: none; border-radius: 50px; cursor: pointer; 
       color: white; font-weight: bold; transition: 0.3s; font-size: 14px;
+      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); 
     }
-    .random-btn { background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); }
-    .pause-btn { background: #999; }
-    .pause-btn.active { background: #e67e22; } 
 
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
@@ -187,10 +198,9 @@
     </div>
   </div>
 
-  <div class="section-title">✨ 隨機抽選留言 (30秒自動更新)</div>
+  <div class="section-title">✨ 隨機抽選留言</div>
   <div class="btn-group">
     <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
-    <button class="pause-btn" id="pause-auto">暫停自動更新</button>
   </div>
 
   <div id="random-container" class="grid-layout">
@@ -232,19 +242,14 @@
     let rawMessages = []; 
     let filteredMessages = []; 
     let isDescending = true; 
-    let isPaused = false;
-    
-    // 定時器變數
-    let curlTimer = null;
-    let peelTimer = null;
     let initialLoaded = false;
+    let isAnimating = false; // 防止連續點擊按鈕造成動畫重疊
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
     const paginationBox = document.getElementById('pagination-controls');
     const searchInput = document.getElementById('search-input');
     const sortBtn = document.getElementById('sort-btn');
-    const pauseBtn = document.getElementById('pause-auto');
     const btnGrid = document.getElementById('btn-grid');
     const btnList = document.getElementById('btn-list');
 
@@ -255,57 +260,37 @@
       
       applyFilters(); 
       
-      // 修復：一抓到資料，如果還沒載入過，就立刻顯示，不要等 30 秒
+      // 一抓到資料立刻顯示，只執行一次
       if (!initialLoaded) {
         initialLoaded = true;
         displayRandom(true);
-        startAnimationCycle();
       }
     });
 
-    // --- 核心更新循環邏輯 ---
-    function startAnimationCycle() {
-      clearTimeout(curlTimer);
-      clearTimeout(peelTimer);
-      if (isPaused) return;
+    // --- 手動重新整理：撕下舊的，貼上新的 ---
+    function refreshRandomMessages() {
+      if (isAnimating) return; // 動畫執行中不允許重複點擊
+      isAnimating = true;
 
-      // 1. 排定 20 秒後開始慢慢捲起 (交錯進行)
-      curlTimer = setTimeout(() => {
-        const cards = randomContainer.querySelectorAll('.message-card');
-        cards.forEach((card, index) => {
-          setTimeout(() => {
-            card.classList.add('curling');
-          }, index * 200); // 每一張晚 0.2 秒開始捲，營造層次感
-        });
-      }, 20000);
-
-      // 2. 排定 30 秒一到立刻撕掉並更新
-      peelTimer = setTimeout(() => {
-        executePeelTransition();
-      }, 30000);
-    }
-
-    function executePeelTransition() {
       const cards = randomContainer.querySelectorAll('.message-card');
       if (cards.length === 0) { 
         displayRandom(true); 
-        if (!isPaused) startAnimationCycle();
+        isAnimating = false;
         return; 
       }
 
-      // 撕掉：快速交錯
+      // 撕掉：放慢交錯時間，看起來更有次序感
       cards.forEach((card, index) => {
         setTimeout(() => {
-          card.classList.remove('curling'); // 移除捲曲動畫
-          card.classList.add('peel-off-fast'); // 加入快速撕除動畫
-        }, index * 60); // 撕掉的速度比捲起更快更突然
+          card.classList.add('peel-off-slow');
+        }, index * 100); 
       });
 
-      // 等所有卡片撕完後 (大約 0.6 秒)，換上新的並重新開始循環
+      // 等所有卡片撕完後，換上新的
       setTimeout(() => {
         displayRandom(true);
-        if (!isPaused) startAnimationCycle();
-      }, (cards.length * 60) + 500);
+        isAnimating = false;
+      }, (cards.length * 100) + 800);
     }
 
     // 負責渲染 10 筆隨機留言
@@ -317,35 +302,17 @@
         const card = createMessageCard(item, true, 'rand-' + idx, idx);
         if (withAnimation) {
           card.style.opacity = '0';
-          card.classList.add('stick-on-soft');
-          card.style.animationDelay = `${idx * 0.08}s`; 
+          card.classList.add('stick-on-unroll');
+          // 貼上的交錯時間也稍微拉長，更有鋪陳感
+          card.style.animationDelay = `${idx * 0.12}s`; 
         }
         randomContainer.appendChild(card);
       });
     }
 
-    // --- 暫停/播放功能 ---
-    pauseBtn.onclick = () => {
-      isPaused = !isPaused;
-      pauseBtn.innerText = isPaused ? '再次自動更新' : '暫停自動更新';
-      pauseBtn.classList.toggle('active', isPaused);
-      
-      if (isPaused) {
-        clearTimeout(curlTimer);
-        clearTimeout(peelTimer);
-        // 暫停時把正在捲的紙撫平
-        randomContainer.querySelectorAll('.message-card').forEach(c => c.classList.remove('curling'));
-      } else {
-        // 恢復時，立刻更新一批新的並重新計時
-        executePeelTransition();
-      }
-    };
-
-    // --- 手動重新整理按鈕 ---
+    // --- 綁定按鈕事件 ---
     document.getElementById('refresh-random').onclick = () => {
-      clearTimeout(curlTimer);
-      clearTimeout(peelTimer);
-      executePeelTransition();
+      refreshRandomMessages();
     };
 
     // --- 版面渲染 (維持原本功能) ---
