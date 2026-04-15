@@ -65,35 +65,58 @@
       padding-left: 10px;
     }
 
-    /* --- 便利貼撕除與貼上動畫 --- */
+    /* --- 真實便利貼紙張特效 --- */
     #random-container {
-      perspective: 1500px;
+      perspective: 1200px; /* 增加 3D 深度 */
     }
 
-    /* 撕掉：由下往上捲起消失 */
-    .peel-off {
-      animation: peelEffect 0.8s forwards ease-in;
-      transform-origin: top;
+    /* 階段一：20秒開始的慢慢柔軟捲起 (Curling) */
+    .curling {
+      animation: softPaperCurl 9s forwards ease-in-out;
+      transform-origin: top center;
+    }
+
+    @keyframes softPaperCurl {
+      0% { transform: rotateX(0deg) rotateY(0deg) translateY(0); border-bottom-right-radius: 2px; }
+      100% { 
+        transform: rotateX(12deg) rotateY(-8deg) translateY(-4px) skewX(1deg); 
+        border-bottom-right-radius: 65px; /* 右下角捲起 */
+        box-shadow: -5px 15px 20px rgba(0,0,0,0.12); /* 底部產生懸空陰影 */
+      }
+    }
+
+    /* 階段二：30秒一到的猝不及防快速撕掉 */
+    .peel-off-fast {
+      animation: fastRealPeel 0.4s forwards cubic-bezier(0.55, 0.085, 0.68, 0.53);
+      transform-origin: top center;
       pointer-events: none;
     }
 
-    /* 貼上：由上往下翻落貼平 (不變淡，直接顯示) */
-    .stick-on {
-      animation: stickEffect 0.6s forwards ease-out;
-      transform-origin: top;
+    @keyframes fastRealPeel {
+      0% { 
+        transform: rotateX(12deg) rotateY(-8deg) translateY(-4px) skewX(1deg); 
+        opacity: 1; 
+      }
+      100% { 
+        transform: rotateX(100deg) translateY(-100px) skewX(15deg); 
+        opacity: 0; 
+      }
     }
 
-    @keyframes peelEffect {
-      0% { transform: rotateX(0deg); opacity: 1; }
-      100% { transform: rotateX(110deg); opacity: 0; filter: brightness(1.2); }
+    /* 階段三：新便利貼貼上 (帶有紙張回彈感) */
+    .stick-on-soft {
+      animation: realStickBounce 0.7s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: top center;
     }
 
-    @keyframes stickEffect {
-      0% { transform: rotateX(-90deg); opacity: 0; }
+    @keyframes realStickBounce {
+      0% { transform: rotateX(-80deg) translateY(30px); opacity: 0; }
+      50% { transform: rotateX(15deg) translateY(0); opacity: 1; }
+      75% { transform: rotateX(-5deg); }
       100% { transform: rotateX(0deg); opacity: 1; }
     }
 
-    /* --- 版面佈局 --- */
+    /* --- 基礎版面與卡片佈局 --- */
     .grid-layout {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -114,9 +137,11 @@
     }
 
     .message-card { 
-      padding: 20px; background: white; border-radius: 2px;
+      padding: 20px; 
+      background: #fffdf8; /* 稍微帶點紙張暖白 */
+      border-radius: 2px;
       border-left: 5px solid var(--theme-color); 
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.06); 
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.06); 
       box-sizing: border-box;
       backface-visibility: hidden;
       position: relative;
@@ -141,7 +166,7 @@
     }
     .random-btn { background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); }
     .pause-btn { background: #999; }
-    .pause-btn.active { background: #e67e22; } /* 暫停時顯示比較顯眼的顏色 */
+    .pause-btn.active { background: #e67e22; } 
 
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
@@ -169,7 +194,7 @@
   </div>
 
   <div id="random-container" class="grid-layout">
-    <p>布置中...</p>
+    <p>載入中...</p> 
   </div>
 
   <hr>
@@ -208,7 +233,11 @@
     let filteredMessages = []; 
     let isDescending = true; 
     let isPaused = false;
-    let slideTimer = null;
+    
+    // 定時器變數
+    let curlTimer = null;
+    let peelTimer = null;
+    let initialLoaded = false;
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
@@ -223,40 +252,63 @@
       const data = snapshot.val();
       if (!data) return;
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
+      
       applyFilters(); 
-      resetTimer(); 
+      
+      // 修復：一抓到資料，如果還沒載入過，就立刻顯示，不要等 30 秒
+      if (!initialLoaded) {
+        initialLoaded = true;
+        displayRandom(true);
+        startAnimationCycle();
+      }
     });
 
-    // --- 核心更新邏輯 ---
-    function resetTimer() {
-      if (slideTimer) clearInterval(slideTimer);
+    // --- 核心更新循環邏輯 ---
+    function startAnimationCycle() {
+      clearTimeout(curlTimer);
+      clearTimeout(peelTimer);
       if (isPaused) return;
 
-      slideTimer = setInterval(() => {
-        performPeelAndStick();
+      // 1. 排定 20 秒後開始慢慢捲起 (交錯進行)
+      curlTimer = setTimeout(() => {
+        const cards = randomContainer.querySelectorAll('.message-card');
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.classList.add('curling');
+          }, index * 200); // 每一張晚 0.2 秒開始捲，營造層次感
+        });
+      }, 20000);
+
+      // 2. 排定 30 秒一到立刻撕掉並更新
+      peelTimer = setTimeout(() => {
+        executePeelTransition();
       }, 30000);
     }
 
-    function performPeelAndStick() {
+    function executePeelTransition() {
       const cards = randomContainer.querySelectorAll('.message-card');
       if (cards.length === 0) { 
         displayRandom(true); 
+        if (!isPaused) startAnimationCycle();
         return; 
       }
 
-      // 撕掉：交錯延遲
+      // 撕掉：快速交錯
       cards.forEach((card, index) => {
         setTimeout(() => {
-          card.classList.add('peel-off');
-        }, index * 80); 
+          card.classList.remove('curling'); // 移除捲曲動畫
+          card.classList.add('peel-off-fast'); // 加入快速撕除動畫
+        }, index * 60); // 撕掉的速度比捲起更快更突然
       });
 
-      // 撕完後 1 秒，換上新的
+      // 等所有卡片撕完後 (大約 0.6 秒)，換上新的並重新開始循環
       setTimeout(() => {
         displayRandom(true);
-      }, (cards.length * 80) + 600);
+        if (!isPaused) startAnimationCycle();
+      }, (cards.length * 60) + 500);
     }
 
+    // 負責渲染 10 筆隨機留言
     function displayRandom(withAnimation = false) {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 10);
@@ -265,8 +317,8 @@
         const card = createMessageCard(item, true, 'rand-' + idx, idx);
         if (withAnimation) {
           card.style.opacity = '0';
-          card.classList.add('stick-on');
-          card.style.animationDelay = `${idx * 0.1}s`; 
+          card.classList.add('stick-on-soft');
+          card.style.animationDelay = `${idx * 0.08}s`; 
         }
         randomContainer.appendChild(card);
       });
@@ -279,19 +331,24 @@
       pauseBtn.classList.toggle('active', isPaused);
       
       if (isPaused) {
-        clearInterval(slideTimer);
+        clearTimeout(curlTimer);
+        clearTimeout(peelTimer);
+        // 暫停時把正在捲的紙撫平
+        randomContainer.querySelectorAll('.message-card').forEach(c => c.classList.remove('curling'));
       } else {
-        performPeelAndStick(); // 恢復時先更新一次
-        resetTimer();
+        // 恢復時，立刻更新一批新的並重新計時
+        executePeelTransition();
       }
     };
 
+    // --- 手動重新整理按鈕 ---
     document.getElementById('refresh-random').onclick = () => {
-      performPeelAndStick();
-      if (!isPaused) resetTimer(); // 重置 30 秒倒數
+      clearTimeout(curlTimer);
+      clearTimeout(peelTimer);
+      executePeelTransition();
     };
 
-    // --- 版面渲染 ---
+    // --- 版面渲染 (維持原本功能) ---
     function applyFilters() {
       const keyword = searchInput.value.toLowerCase();
       let result = rawMessages.filter(item => item.message.toLowerCase().includes(keyword));
