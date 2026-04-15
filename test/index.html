@@ -36,7 +36,6 @@
       border-radius: 12px;
       gap: 2px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
     }
 
     .switch-btn {
@@ -66,35 +65,31 @@
       padding-left: 10px;
     }
 
-    /* --- 隨機抽選區專屬：幻燈片動畫 --- */
+    /* --- 便利貼動畫特效 --- */
     #random-container {
-      transition: opacity 10s ease-in-out; /* 用於最後10秒的漸淡 */
-      perspective: 1000px; /* 3D 效果必要設定 */
+      perspective: 1200px; /* 增強 3D 深度感 */
     }
 
-    /* 準備切換時的漸淡狀態 */
-    #random-container.fading {
-      opacity: 0.3;
-    }
-
-    /* 相片被掀起的動畫 */
+    /* 撕掉動畫：由下往上翻捲消失 */
     .peel-off {
-      animation: peelOff 0.8s forwards ease-in;
+      animation: peelOffEffect 0.7s forwards ease-in;
+      transform-origin: top; /* 以頂部為固定點 */
     }
 
-    /* 相片被貼上的動畫 */
+    /* 貼上動畫：從上方翻落貼平 */
     .stick-on {
-      animation: stickOn 0.8s forwards ease-out;
+      animation: stickOnEffect 0.7s forwards ease-out;
+      transform-origin: top;
     }
 
-    @keyframes peelOff {
-      0% { transform: rotateX(0deg); opacity: 1; transform-origin: top; }
-      100% { transform: rotateX(-90deg); opacity: 0; transform-origin: top; }
+    @keyframes peelOffEffect {
+      0% { transform: rotateX(0deg); opacity: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+      100% { transform: rotateX(100deg); opacity: 0; box-shadow: 0 20px 30px rgba(0,0,0,0.1); }
     }
 
-    @keyframes stickOn {
-      0% { transform: rotateX(90deg); opacity: 0; transform-origin: bottom; }
-      100% { transform: rotateX(0deg); opacity: 1; transform-origin: bottom; }
+    @keyframes stickOnEffect {
+      0% { transform: rotateX(-100deg); opacity: 0; }
+      100% { transform: rotateX(0deg); opacity: 1; }
     }
 
     /* --- 版面佈局 --- */
@@ -113,18 +108,17 @@
     @media (max-width: 600px) {
       .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .grid-layout .message-card { padding: 12px; aspect-ratio: 1 / 1; display: flex; flex-direction: column; overflow: hidden; }
-      .grid-layout .nickname { font-size: 0.85em; margin-bottom: 4px; flex-shrink: 0; }
       .grid-layout .content { font-size: 13px; line-height: 1.4; overflow-y: auto; flex-grow: 1; }
       .grid-layout .toggle-btn { display: none; }
     }
 
-    /* 留言卡片樣式 */
     .message-card { 
-      padding: 20px; background: white; border-radius: 15px; 
+      padding: 20px; background: white; border-radius: 4px; /* 更像便利貼的微直角 */
       border-left: 5px solid var(--theme-color); 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.05); 
       box-sizing: border-box;
-      backface-visibility: hidden; /* 旋轉時隱藏背面 */
+      backface-visibility: hidden;
+      position: relative;
     }
 
     .theme-0 { --theme-color: #f8b1b1; }
@@ -138,10 +132,16 @@
     .content { line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; }
     .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
-    .random-btn { 
+    /* 按鈕樣式 */
+    .btn-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .random-btn, .pause-btn { 
       padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; 
-      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); color: white; margin-bottom: 15px;
+      color: white; font-weight: bold; transition: 0.3s;
     }
+    .random-btn { background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); }
+    .pause-btn { background: #666; }
+    .pause-btn.active { background: #a89080; }
+
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
     .sort-btn { padding: 8px 15px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; }
@@ -161,8 +161,11 @@
     </div>
   </div>
 
-  <div class="section-title">✨ 隨機抽選留言 (每 30 秒自動更新)</div>
-  <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
+  <div class="section-title">✨ 隨機抽選留言 (30秒自動更新)</div>
+  <div class="btn-group">
+    <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
+    <button class="pause-btn" id="pause-auto">暫停自動更新</button>
+  </div>
 
   <div id="random-container" class="grid-layout">
     <p>佈置中...</p>
@@ -203,84 +206,88 @@
     let rawMessages = []; 
     let filteredMessages = []; 
     let isDescending = true; 
-    let currentLayout = 'grid-layout';
-    const itemsPerPage = 100;
-    const charLimit = 100;
+    let isPaused = false;
+    let slideTimer = null;
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
     const paginationBox = document.getElementById('pagination-controls');
     const searchInput = document.getElementById('search-input');
     const sortBtn = document.getElementById('sort-btn');
+    const pauseBtn = document.getElementById('pause-auto');
     const btnGrid = document.getElementById('btn-grid');
     const btnList = document.getElementById('btn-list');
-
-    // 幻燈片計時器變數
-    let slideInterval;
-    let fadeTimeout;
 
     onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
       if (!data) return;
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
       applyFilters(); 
-      startSlideShow(); // 啟動自動循環
+      resetTimer(); 
     });
 
-    // --- 幻燈片核心邏輯 ---
-    function startSlideShow() {
-      // 清除舊的計時器
-      clearInterval(slideInterval);
-      clearTimeout(fadeTimeout);
+    // --- 核心定時邏輯 ---
+    function resetTimer() {
+      if (slideTimer) clearInterval(slideTimer);
+      if (isPaused) return;
 
-      // 首次載入
-      displayRandom();
-
-      // 每 30 秒執行一次主邏輯
-      slideInterval = setInterval(() => {
-        refreshWithAnimation();
+      slideTimer = setInterval(() => {
+        triggerPeelAnimation();
       }, 30000);
-
-      // 核心計時：在第 20 秒時開始漸淡 (剩餘 10 秒)
-      const scheduleFade = () => {
-        fadeTimeout = setTimeout(() => {
-          randomContainer.classList.add('fading');
-        }, 20000);
-      };
-      
-      scheduleFade();
-      // 每次 interval 重新安排淡入淡出
-      setInterval(scheduleFade, 30000);
     }
 
-    function refreshWithAnimation() {
+    function triggerPeelAnimation() {
       const cards = randomContainer.querySelectorAll('.message-card');
-      
-      // 1. 加上「掀起」特效
-      cards.forEach(card => card.classList.add('peel-off'));
+      if (cards.length === 0) { displayRandom(true); return; }
 
-      // 2. 動畫結束後(約0.8s) 重新生成內容並加上「貼上」特效
+      // 撕掉效果：由下往上，帶有 stagger (交錯)
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('peel-off');
+        }, index * 100); // 每張卡片延遲 0.1s
+      });
+
+      // 等最後一張撕完後重新生成內容
       setTimeout(() => {
-        randomContainer.classList.remove('fading'); // 恢復不透明度
-        displayRandom(true); // 帶入動畫標記
-      }, 800);
+        displayRandom(true);
+      }, (cards.length * 100) + 700);
     }
 
-    function displayRandom(withStickAnimation = false) {
+    function displayRandom(withAnimation = false) {
       randomContainer.innerHTML = '';
-      const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
-      shuffled.slice(0, 10).forEach((item, idx) => {
+      const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 10);
+      
+      shuffled.forEach((item, idx) => {
         const card = createMessageCard(item, true, 'rand-' + idx, idx);
-        if (withStickAnimation) {
+        if (withAnimation) {
+          card.style.opacity = '0';
           card.classList.add('stick-on');
+          card.style.animationDelay = `${idx * 0.1}s`; // 一個個貼上
         }
         randomContainer.appendChild(card);
       });
     }
 
-    // --- 版面與過濾邏輯 ---
+    // --- 按鈕事件 ---
+    pauseBtn.onclick = () => {
+      isPaused = !isPaused;
+      pauseBtn.innerText = isPaused ? '再次自動更新' : '暫停自動更新';
+      pauseBtn.classList.toggle('active', isPaused);
+      if (!isPaused) {
+        triggerPeelAnimation(); // 恢復後立即更新一次
+        resetTimer();
+      } else {
+        clearInterval(slideTimer);
+      }
+    };
+
+    document.getElementById('refresh-random').onclick = () => {
+      triggerPeelAnimation();
+      if (!isPaused) resetTimer();
+    };
+
+    // --- 其他版面邏輯 ---
     function updateLayout(newLayout) {
-      currentLayout = newLayout;
       randomContainer.className = newLayout;
       container.className = newLayout;
       btnGrid.classList.toggle('active', newLayout === 'grid-layout');
@@ -301,9 +308,8 @@
 
     function renderPage(page) {
       container.innerHTML = '';
-      const start = (page - 1) * itemsPerPage;
-      const pagedData = filteredMessages.slice(start, start + itemsPerPage);
-      pagedData.forEach((item, idx) => {
+      const start = (page - 1) * 100;
+      filteredMessages.slice(start, start + 100).forEach((item, idx) => {
         container.appendChild(createMessageCard(item, true, 'all-' + idx, idx));
       });
       renderPagination(page);
@@ -312,24 +318,23 @@
     function createMessageCard(item, allowFold, uniqueId, colorIndex) {
       const card = document.createElement('div');
       card.className = `message-card theme-${colorIndex % 6}`;
-      const isLong = allowFold && item.message.length > charLimit;
-      const shortText = isLong ? item.message.substring(0, charLimit) + "..." : item.message;
+      const shortText = item.message.length > 100 ? item.message.substring(0, 100) + "..." : item.message;
       
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
         <div class="content" id="text-${uniqueId}">${shortText}</div>
-        ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}
+        ${item.message.length > 100 ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}
       `;
 
-      if (isLong) {
+      if (item.message.length > 100) {
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
           if (btn) btn.onclick = (e) => {
             e.stopPropagation();
             const contentDiv = document.getElementById(`text-${uniqueId}`);
-            const isExpanding = btn.innerText === '展開';
-            contentDiv.innerText = isExpanding ? item.message : shortText;
-            btn.innerText = isExpanding ? '收起' : '展開';
+            const isExp = btn.innerText === '展開';
+            contentDiv.innerText = isExp ? item.message : shortText;
+            btn.innerText = isExp ? '收起' : '展開';
           };
         }, 0);
       }
@@ -338,16 +343,13 @@
 
     function renderPagination(current) {
       paginationBox.innerHTML = '';
-      const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
-      if (totalPages <= 1) return;
-      for (let i = 1; i <= totalPages; i++) {
+      const total = Math.ceil(filteredMessages.length / 100);
+      if (total <= 1) return;
+      for (let i = 1; i <= total; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
-        btn.onclick = () => {
-          renderPage(i);
-          window.scrollTo({ top: container.offsetTop - 150, behavior: 'smooth' });
-        };
+        btn.onclick = () => { renderPage(i); window.scrollTo({top: container.offsetTop - 150, behavior: 'smooth'}); };
         paginationBox.appendChild(btn);
       }
     }
@@ -358,10 +360,6 @@
       sortBtn.innerText = isDescending ? '排序：新 → 舊' : '排序：舊 → 新';
       applyFilters();
     };
-    
-    // 手動更新按鈕也會重置計時器，避免點完後馬上又自動更新
-    document.getElementById('refresh-random').onclick = () => startSlideShow();
-
   </script>
 </body>
 </html>
