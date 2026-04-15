@@ -8,82 +8,50 @@
   <title>測試</title>
 
   <style>
-    body { font-family: sans-serif; background-color: #f4f7f6; padding: 20px; }
+    body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f0f4f8; padding: 20px; color: #333; }
     
-    /* 分頁按鈕樣式 */
-    .pagination {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 20px;
-      justify-content: center;
-      padding-bottom: 30px;
-    }
-    .page-btn {
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .page-btn.active {
-      background: #60a5fa;
-      color: white;
-      border-color: #60a5fa;
-    }
-    .page-btn:hover:not(.active) {
-      background: #f0f7ff;
-    }
+    /* 區塊容器 */
+    .section-title { font-size: 1.2em; font-weight: bold; margin: 20px 0 10px; color: #1e40af; border-left: 5px solid #60a5fa; padding-left: 10px; }
+    
+    /* 搜尋與控制區 */
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .search-input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
+    .sort-btn, .random-btn { padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; background: #60a5fa; color: white; transition: 0.3s; }
+    .sort-btn:hover, .random-btn:hover { background: #3b82f6; }
+
+    /* 隨機區塊樣式 */
+    #random-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 30px; background: #e0f2fe; padding: 15px; border-radius: 12px; }
 
     /* 留言框樣式 */
-    .message-card {
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 8px;
-      border-left: 4px solid #60a5fa;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      position: relative;
-    }
+    .message-card { padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #60a5fa; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; }
+    .nickname { font-weight: bold; color: #555; font-size: 0.9em; margin-bottom: 5px; }
+    .content { font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
+    .toggle-btn { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 12px; display: block; margin-top: 5px; margin-left: auto; }
 
-    .message-nickname {
-      font-weight: bold;
-      font-size: 0.85em;
-      color: #555;
-      margin-bottom: 6px;
-    }
-
-    /* 內容折疊邏輯 */
-    .message-content {
-      color: #111;
-      line-height: 1.6;
-      font-size: 15px;
-      word-break: break-all;
-      white-space: pre-wrap; /* 保留換行 */
-    }
-
-    /* 展開/收起按鈕樣式 */
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: #60a5fa;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: bold;
-      padding: 0;
-      margin-top: 8px;
-      display: block;
-      margin-left: auto; /* 靠右下角 */
-    }
-    .toggle-btn:hover {
-      text-decoration: underline;
-    }
+    /* 分頁樣式 */
+    .pagination { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 20px; justify-content: center; }
+    .page-btn { padding: 8px 12px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 4px; }
+    .page-btn.active { background: #60a5fa; color: white; border-color: #60a5fa; }
   </style>
 </head>
 
 <body>
-  <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
-    <p id="loading-text">留言讀取中...</p>
+
+  <div class="section-title">✨ 隨機精選留言 (10則) <button class="random-btn" id="refresh-random" style="font-size: 12px; margin-left: 10px;">換一換</button></div>
+  <div id="random-container">
+    <p>隨機挑選中...</p>
+  </div>
+
+  <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 30px 0;">
+
+  <div class="section-title">📂 全部留言存檔</div>
+  <div class="controls">
+    <input type="text" id="search-input" class="search-input" placeholder="搜尋留言內容...">
+    <button id="sort-btn" class="sort-btn">切換為：正序 (舊→新)</button>
+  </div>
+
+  <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px;">
+    <p id="loading-text">資料載入中...</p>
   </div>
 
   <div id="pagination-controls" class="pagination"></div>
@@ -91,7 +59,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-      
+
     const firebaseConfig = {
       apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
       authDomain: "chueiliyu-tw-translation.firebaseapp.com",
@@ -105,84 +73,141 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const container = document.getElementById('guestbook-container');
-    const paginationBox = document.getElementById('pagination-controls');
-
-    let allMessages = [];
+    
+    // 全域變數
+    let rawMessages = []; // 原始資料
+    let filteredMessages = []; // 搜尋或排序後的資料
+    let isDescending = true; // 預設倒序 (新到舊)
     const itemsPerPage = 100;
-    const charLimit = 100; // 設定超過多少字要縮起來
-    let currentPage = 1;
+    const charLimit = 100;
 
-    const testRef = ref(db, 'test');
-    onValue(testRef, (snapshot) => {
+    // DOM 元素
+    const container = document.getElementById('guestbook-container');
+    const randomContainer = document.getElementById('random-container');
+    const paginationBox = document.getElementById('pagination-controls');
+    const searchInput = document.getElementById('search-input');
+    const sortBtn = document.getElementById('sort-btn');
+    const refreshRandomBtn = document.getElementById('refresh-random');
+
+    // 監聽 Firebase
+    onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
-        container.innerHTML = '<p>目前沒有留言。</p>';
+        container.innerHTML = '目前尚無留言。';
         return;
       }
-      allMessages = data.message ? [data] : Object.values(data);
-      // allMessages.reverse(); // 如果需要最新在前請開啟這行
-      renderPage(1);
+      
+      // 處理資料：轉為陣列並過濾無效內容
+      rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
+      
+      applyFilters(); // 初次執行排序與顯示
+      displayRandom(); // 執行隨機選取
     });
 
-    function renderPage(page) {
-      currentPage = page;
-      container.innerHTML = '';
-      const startIndex = (page - 1) * itemsPerPage;
-      const pageData = allMessages.slice(startIndex, startIndex + itemsPerPage);
+    // --- 隨機選取邏輯 ---
+    function displayRandom() {
+      randomContainer.innerHTML = '';
+      const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 10);
 
-      pageData.forEach((item, index) => {
-        if (item.message) {
-          const isLongText = item.message.length > charLimit;
-          const displayContent = isLongText ? item.message.substring(0, charLimit) + "..." : item.message;
-
-          const card = document.createElement('div');
-          card.className = 'message-card';
-          
-          card.innerHTML = `
-            <div class="message-nickname">${item.nickname || '匿名'}</div>
-            <div class="message-content" id="content-${index}">${displayContent}</div>
-            ${isLongText ? `<button class="toggle-btn" id="btn-${index}">顯示更多</button>` : ''}
-          `;
-
-          container.appendChild(card);
-
-          // 綁定點擊事件
-          if (isLongText) {
-            const btn = card.querySelector(`#btn-${index}`);
-            const contentDiv = card.querySelector(`#content-${index}`);
-            let isExpanded = false;
-
-            btn.onclick = () => {
-              if (!isExpanded) {
-                contentDiv.innerText = item.message; // 顯示全部
-                btn.innerText = '收起';
-                isExpanded = true;
-              } else {
-                contentDiv.innerText = item.message.substring(0, charLimit) + "..."; // 縮回
-                btn.innerText = '顯示更多';
-                isExpanded = false;
-              }
-            };
-          }
-        }
+      selected.forEach(item => {
+        const div = createMessageCard(item, false); // 隨機區不顯示摺疊
+        randomContainer.appendChild(div);
       });
-
-      renderPagination();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function renderPagination() {
+    // --- 搜尋與排序處理 ---
+    function applyFilters() {
+      const keyword = searchInput.value.toLowerCase();
+      
+      // 1. 搜尋篩選
+      filteredMessages = rawMessages.filter(item => 
+        item.message.toLowerCase().includes(keyword)
+      );
+
+      // 2. 排序處理
+      if (isDescending) {
+        filteredMessages.reverse(); // 假設原始資料是舊到新，reverse 變新到舊
+      }
+
+      renderPage(1);
+    }
+
+    // --- 渲染分頁功能 ---
+    function renderPage(page) {
+      container.innerHTML = '';
+      const start = (page - 1) * itemsPerPage;
+      const pagedData = filteredMessages.slice(start, start + itemsPerPage);
+
+      if (pagedData.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:20px;">找不到符合搜尋條件的留言。</p>';
+        paginationBox.innerHTML = '';
+        return;
+      }
+
+      pagedData.forEach((item, idx) => {
+        container.appendChild(createMessageCard(item, true, idx));
+      });
+
+      renderPagination(page);
+    }
+
+    // --- 建立留言卡片組件 ---
+    function createMessageCard(item, allowFold, idSuffix = '') {
+      const card = document.createElement('div');
+      card.className = 'message-card';
+      
+      const isLong = allowFold && item.message.length > charLimit;
+      const shortText = isLong ? item.message.substring(0, charLimit) + "..." : item.message;
+
+      card.innerHTML = `
+        <div class="nickname">${item.nickname || '匿名'}</div>
+        <div class="content">${shortText}</div>
+        ${isLong ? `<button class="toggle-btn">顯示更多</button>` : ''}
+      `;
+
+      if (isLong) {
+        const btn = card.querySelector('.toggle-btn');
+        const contentDiv = card.querySelector('.content');
+        let expanded = false;
+        btn.onclick = () => {
+          expanded = !expanded;
+          contentDiv.innerText = expanded ? item.message : shortText;
+          btn.innerText = expanded ? '收起' : '顯示更多';
+        };
+      }
+      return card;
+    }
+
+    // --- 分頁按鈕 ---
+    function renderPagination(current) {
       paginationBox.innerHTML = '';
-      const totalPages = Math.ceil(allMessages.length / itemsPerPage);
+      const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
+      if (totalPages <= 1) return;
+
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
-        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-        btn.onclick = () => renderPage(i);
+        btn.className = `page-btn ${i === current ? 'active' : ''}`;
+        btn.onclick = () => {
+          renderPage(i);
+          window.scrollTo({ top: container.offsetTop - 50, behavior: 'smooth' });
+        };
         paginationBox.appendChild(btn);
       }
     }
+
+    // --- 事件監聽 ---
+    searchInput.oninput = () => applyFilters();
+    
+    sortBtn.onclick = () => {
+      isDescending = !isDescending;
+      sortBtn.innerText = isDescending ? '切換為：正序 (舊→新)' : '切換為：倒序 (新→舊)';
+      applyFilters();
+    };
+
+    refreshRandomBtn.onclick = () => displayRandom();
+
   </script>
 </body>
 </html>
