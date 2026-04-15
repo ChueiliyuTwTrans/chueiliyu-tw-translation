@@ -8,63 +8,143 @@
   <title>測試</title>
 
   <style>
-    body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f0f4f8; padding: 20px; color: #333; }
-    
-    /* 區塊標題 */
+    /* 全域背景設定為暖灰色 */
+    body { 
+      font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif; 
+      background-color: #f9f7f5; 
+      padding: 20px; 
+      color: #4a4a4a; 
+      line-height: 1.6;
+    }
+
+    /* 區塊標題樣式 */
     .section-title { 
-      font-size: 1.3em; 
-      font-weight: bold; 
-      margin: 25px 0 15px; 
-      color: #1e40af; 
-      border-left: 5px solid #60a5fa; 
-      padding-left: 10px;
+      font-size: 1.4em; 
+      font-weight: 700; 
+      margin: 30px 0 15px; 
+      color: #5d5d5d; 
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
-    
-    /* 隨機按鈕加大並增加間距 */
+
+    /* 隨機按鈕 - 暖咖啡色調 */
     .random-btn { 
-      padding: 10px 20px; 
-      font-size: 16px; /* 字體加大 */
+      padding: 12px 24px; 
+      font-size: 16px; 
       border: none; 
+      border-radius: 50px; /* 圓角更顯柔和 */
+      cursor: pointer; 
+      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%);
+      color: white; 
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(142, 115, 91, 0.2);
+      margin-bottom: 15px;
+    }
+    .random-btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(142, 115, 91, 0.3);
+    }
+
+    /* 搜尋與控制區 - 白底陰影 */
+    .controls { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 12px; 
+      margin-bottom: 25px; 
+      background: white; 
+      padding: 18px; 
+      border-radius: 15px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.03); 
+    }
+    .search-input { 
+      flex: 1; 
+      min-width: 200px; 
+      padding: 12px; 
+      border: 1px solid #e5e5e5; 
+      border-radius: 8px; 
+      font-size: 16px;
+      outline-color: #a89080;
+    }
+    .sort-btn { 
+      padding: 10px 20px; 
+      border: 1px solid #d1d1d1; 
       border-radius: 8px; 
       cursor: pointer; 
-      background: #3b82f6; 
-      color: white; 
+      background: white; 
+      color: #666; 
+      font-size: 14px;
       transition: 0.3s;
-      margin-bottom: 10px; /* 增加與下方內容的距離 */
     }
-    .random-btn:hover { background: #2563eb; }
+    .sort-btn:hover { background: #f5f5f5; }
 
-    /* 搜尋與控制區 */
-    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .search-input { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
-    .sort-btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; background: #60a5fa; color: white; font-size: 14px; }
-
-    /* 隨機區塊容器 */
+    /* 隨機區塊容器 - 點狀邊框或淺灰 */
     #random-container { 
       display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      gap: 15px; 
-      margin-top: 10px; /* 與按鈕保持距離 */
-      margin-bottom: 30px; 
-      background: #e0f2fe; 
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+      gap: 20px; 
+      margin-top: 5px;
+      margin-bottom: 40px; 
       padding: 20px; 
-      border-radius: 12px; 
+      border-radius: 15px; 
+      border: 1px dashed #dcdcdc; /* 虛線 */
     }
 
-    /* 留言框樣式 */
-    .message-card { padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #60a5fa; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; }
-    .nickname { font-weight: bold; color: #555; font-size: 0.95em; margin-bottom: 8px; }
-    .content { font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #222; }
-    .toggle-btn { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 13px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
+    /* 留言框多色系定義 (溫暖莫蘭迪色) */
+    .theme-0 { --theme-color: #f8b1b1; } /* 粉紅 */
+    .theme-1 { --theme-color: #fbc79a; } /* 粉橘 */
+    .theme-2 { --theme-color: #a7d7c5; } /* 粉綠 */
+    .theme-3 { --theme-color: #b1c1f8; } /* 粉藍 */
+    .theme-4 { --theme-color: #d1b1f8; } /* 粉紫 */
+    .theme-5 { --theme-color: #e8ca8a; } /* 淺金 */
+
+    .message-card { 
+      padding: 20px; 
+      background: white; 
+      border-radius: 15px; 
+      border-left: 6px solid var(--theme-color); 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.04); 
+      position: relative; 
+      transition: transform 0.2s;
+    }
+    .message-card:hover { transform: scale(1.02); }
+
+    .nickname { font-weight: bold; color: var(--theme-color); font-size: 1em; margin-bottom: 10px; filter: brightness(0.8); }
+    .content { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-break: break-all; color: #444; }
+    
+    /* 展開按鈕顏色也跟隨主題 */
+    .toggle-btn { 
+      background: none; 
+      border: none; 
+      color: var(--theme-color); 
+      filter: brightness(0.7);
+      cursor: pointer; 
+      font-size: 13px; 
+      font-weight: bold; 
+      display: block; 
+      margin-top: 15px; 
+      margin-left: auto; 
+    }
 
     /* 分頁樣式 */
-    .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; justify-content: center; padding-bottom: 40px; }
-    .page-btn { padding: 10px 15px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 6px; }
-    .page-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+    .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; justify-content: center; padding-bottom: 50px; }
+    .page-btn { 
+      padding: 10px 18px; 
+      border: none; 
+      background: white; 
+      cursor: pointer; 
+      border-radius: 8px; 
+      color: #888;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .page-btn.active { 
+      background: #a89080; 
+      color: white; 
+      box-shadow: 0 4px 10px rgba(168, 144, 128, 0.3);
+    }
+
+    hr { border: 0; border-top: 1px solid #e0e0e0; margin: 40px 0; }
   </style>
 </head>
 
@@ -111,7 +191,7 @@
     
     let rawMessages = []; 
     let filteredMessages = []; 
-    let isDescending = true; // 預設新到舊
+    let isDescending = true; 
     const itemsPerPage = 100;
     const charLimit = 100;
 
@@ -125,7 +205,7 @@
     onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
-        container.innerHTML = '目前尚無留言。';
+        container.innerHTML = '尚無留言資料。';
         return;
       }
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
@@ -134,30 +214,23 @@
       displayRandom(); 
     });
 
-    // --- 隨機選取（加入摺疊功能） ---
     function displayRandom() {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 10);
 
       selected.forEach((item, idx) => {
-        // 第二個參數設為 true，啟動摺疊
-        const div = createMessageCard(item, true, 'rand-' + idx); 
+        const div = createMessageCard(item, true, 'rand-' + idx, idx); 
         randomContainer.appendChild(div);
       });
     }
 
-    // --- 搜尋與排序核心邏輯 ---
     function applyFilters() {
       const keyword = searchInput.value.toLowerCase();
-      
-      // 先篩選搜尋關鍵字
       let result = rawMessages.filter(item => 
         item.message.toLowerCase().includes(keyword)
       );
 
-      // 排序邏輯：Firebase 匯入通常是按順序的(舊→新)
-      // 如果要「新到舊」(Descending)，就反轉陣列
       if (isDescending) {
         result = [...result].reverse();
       }
@@ -172,22 +245,24 @@
       const pagedData = filteredMessages.slice(start, start + itemsPerPage);
 
       if (pagedData.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding:20px; color:#666;">找不到符合搜尋條件的留言。</p>';
+        container.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">沒有找到符合的留言。</p>';
         paginationBox.innerHTML = '';
         return;
       }
 
       pagedData.forEach((item, idx) => {
-        container.appendChild(createMessageCard(item, true, 'all-' + idx));
+        container.appendChild(createMessageCard(item, true, 'all-' + idx, idx));
       });
 
       renderPagination(page);
     }
 
-    // --- 通用留言卡片建立函數 ---
-    function createMessageCard(item, allowFold, uniqueId) {
+    // --- 加入 colorIndex 讓顏色循環 ---
+    function createMessageCard(item, allowFold, uniqueId, colorIndex) {
       const card = document.createElement('div');
-      card.className = 'message-card';
+      // 使用餘數運算確保主題類名在 theme-0 到 theme-5 之間循環
+      const themeNum = colorIndex % 6;
+      card.className = `message-card theme-${themeNum}`;
       
       const isLong = allowFold && item.message.length > charLimit;
       const shortText = isLong ? item.message.substring(0, charLimit) + "..." : item.message;
@@ -199,7 +274,6 @@
       `;
 
       if (isLong) {
-        // 使用延遲綁定確保元素已存在於 DOM
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
           const contentDiv = document.getElementById(`text-${uniqueId}`);
@@ -233,21 +307,15 @@
       }
     }
 
-    // --- 監聽事件 ---
     searchInput.oninput = () => applyFilters();
     
     sortBtn.onclick = () => {
       isDescending = !isDescending;
-      sortBtn.innerText = isDescending ? '切換排序：目前為 倒序 (新→舊)' : '切換排序：目前為 正序 (舊→新)';
+      sortBtn.innerText = isDescending ? '目前排序：新 → 舊' : '目前排序：舊 → 新';
       applyFilters();
     };
 
-    refreshRandomBtn.onclick = () => {
-      displayRandom();
-      // 點擊隨機時，不影響下方的存檔區，但給個回饋
-      refreshRandomBtn.style.opacity = '0.7';
-      setTimeout(() => refreshRandomBtn.style.opacity = '1', 100);
-    };
+    refreshRandomBtn.onclick = () => displayRandom();
   </script>
 </body>
 </html>
