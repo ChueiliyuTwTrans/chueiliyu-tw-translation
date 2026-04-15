@@ -8,43 +8,45 @@
   <title>測試</title>
 
   <style>
-    /* 全域美化 */
     body { 
       font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif; 
       background-color: #f9f7f5; 
-      padding: 20px; 
+      padding: 15px; 
       color: #4a4a4a; 
-      transition: background-color 0.3s;
     }
 
-    .section-title { 
-      font-size: 1.4em; 
-      font-weight: 700; 
-      margin: 30px 0 15px; 
-      color: #5d5d5d; 
+    /* --- 最頂端切換區 --- */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(249, 247, 245, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      margin-bottom: 20px;
       display: flex;
-      align-items: center;
-      justify-content: space-between; /* 讓標題和切換按鈕分開 */
-      flex-wrap: wrap;
+      justify-content: center;
+      border-bottom: 1px solid #eee;
     }
 
-    /* 切換按鈕組樣式 */
     .layout-switcher {
       display: flex;
-      background: #eee;
+      background: #e5e5e5;
       padding: 4px;
-      border-radius: 10px;
+      border-radius: 12px;
       gap: 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .switch-btn {
-      padding: 6px 12px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
       background: transparent;
-      color: #777;
-      transition: 0.2s;
+      color: #666;
+      font-weight: bold;
+      transition: 0.3s;
     }
     .switch-btn.active {
       background: white;
@@ -52,29 +54,26 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* 隨機按鈕 */
-    .random-btn { 
-      padding: 10px 20px; 
-      font-size: 15px; 
-      border: none; 
-      border-radius: 50px; 
-      cursor: pointer; 
-      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%);
-      color: white; 
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(142, 115, 91, 0.2);
+    .section-title { 
+      font-size: 1.3em; 
+      font-weight: 700; 
+      margin: 20px 0 15px; 
+      color: #5d5d5d; 
+      border-left: 5px solid #a89080;
+      padding-left: 10px;
     }
 
-    /* --- 重點：版面佈局切換 --- */
+    /* --- 版面佈局核心核心 --- */
     
-    /* 1. 靈感牆模式 (Grid) */
+    /* 靈感牆模式 (Grid) */
     .grid-layout {
       display: grid;
+      /* 電腦版 3 欄以上 */
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 15px;
     }
 
-    /* 2. 應援清單模式 (List) */
+    /* 應援清單模式 (List) */
     .list-layout {
       display: flex;
       flex-direction: column;
@@ -82,19 +81,29 @@
     }
     .list-layout .message-card {
       max-width: 800px;
-      margin: 0 auto; /* 置中 */
+      margin: 0 auto;
       width: 100%;
     }
 
-    /* 容器基本樣式 */
-    #random-container {
-      padding: 20px;
-      border-radius: 15px;
-      border: 1px dashed #dcdcdc;
-      transition: all 0.4s ease;
+    /* 手機版特殊處理：當寬度小於 600px 時 */
+    @media (max-width: 600px) {
+      .grid-layout {
+        /* 手機版強制雙欄 */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .grid-layout .message-card {
+        padding: 12px; /* 縮小內距 */
+      }
+      .grid-layout .nickname {
+        font-size: 0.85em;
+      }
+      .grid-layout .content {
+        font-size: 13px; /* 縮小字體以便容納內容 */
+      }
     }
 
-    /* 留言卡片主題配色 */
+    /* 留言卡片樣式 */
     .theme-0 { --theme-color: #f8b1b1; }
     .theme-1 { --theme-color: #fbc79a; }
     .theme-2 { --theme-color: #a7d7c5; }
@@ -106,50 +115,55 @@
       padding: 20px; 
       background: white; 
       border-radius: 15px; 
-      border-left: 6px solid var(--theme-color); 
-      box-shadow: 0 5px 15px rgba(0,0,0,0.04); 
+      border-left: 5px solid var(--theme-color); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
       box-sizing: border-box;
     }
 
-    .nickname { font-weight: bold; color: var(--theme-color); filter: brightness(0.8); margin-bottom: 8px; }
-    .content { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-break: break-all; color: #444; }
-    .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 13px; font-weight: bold; display: block; margin-top: 15px; margin-left: auto; }
+    .nickname { font-weight: bold; color: var(--theme-color); filter: brightness(0.8); margin-bottom: 5px; }
+    .content { line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; }
+    .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
-    /* 其他輔助樣式 */
-    .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 25px; background: white; padding: 18px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
-    .search-input { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; }
+    /* 控制與隨機按鈕 */
+    .random-btn { 
+      padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; 
+      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); color: white; margin-bottom: 15px;
+    }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
+    .sort-btn { padding: 8px 15px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; }
     .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; justify-content: center; padding-bottom: 50px; }
-    .page-btn { padding: 10px 18px; border: none; background: white; cursor: pointer; border-radius: 8px; color: #888; }
+    .page-btn { padding: 8px 14px; border: none; background: white; cursor: pointer; border-radius: 8px; color: #888; }
     .page-btn.active { background: #a89080; color: white; }
-    hr { border: 0; border-top: 1px solid #e0e0e0; margin: 40px 0; }
+    hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
   </style>
 </head>
 
 <body>
 
-  <div class="section-title">
-    <span>✨ 精選推薦留言</span>
+  <div class="top-bar">
     <div class="layout-switcher">
-      <button class="switch-btn active" id="btn-grid">靈感牆模式</button>
-      <button class="switch-btn" id="btn-list">應援清單模式</button>
+      <button class="switch-btn active" id="btn-grid">留言牆</button>
+      <button class="switch-btn" id="btn-list">留言清單</button>
     </div>
   </div>
 
+  <div class="section-title">✨ 精選推薦留言</div>
   <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
   
   <div id="random-container" class="grid-layout">
-    <p>正在佈置牆面...</p>
+    <p>佈置中...</p>
   </div>
 
   <hr>
 
-  <div class="section-title">📋 全部應援存檔</div>
+  <div class="section-title">📋 顯示全部留言</div>
   <div class="controls">
     <input type="text" id="search-input" class="search-input" placeholder="搜尋關鍵字...">
-    <button id="sort-btn" class="switch-btn" style="background:#eee; color:#666; border-radius:8px;">目前排序：新 → 舊</button>
+    <button id="sort-btn" class="sort-btn">排序：新 → 舊</button>
   </div>
 
-  <div id="guestbook-container" class="list-layout">
+  <div id="guestbook-container" class="grid-layout">
     <p id="loading-text">載入中...</p>
   </div>
 
@@ -176,6 +190,7 @@
     let rawMessages = []; 
     let filteredMessages = []; 
     let isDescending = true; 
+    let currentLayout = 'grid-layout'; // 追蹤當前佈局
     const itemsPerPage = 100;
     const charLimit = 100;
 
@@ -184,9 +199,6 @@
     const paginationBox = document.getElementById('pagination-controls');
     const searchInput = document.getElementById('search-input');
     const sortBtn = document.getElementById('sort-btn');
-    const refreshRandomBtn = document.getElementById('refresh-random');
-
-    // 版面切換按鈕
     const btnGrid = document.getElementById('btn-grid');
     const btnList = document.getElementById('btn-list');
 
@@ -198,24 +210,30 @@
       displayRandom(); 
     });
 
-    // 版面切換邏輯
-    btnGrid.addEventListener('click', () => {
-      randomContainer.className = 'grid-layout';
-      btnGrid.classList.add('active');
-      btnList.classList.remove('active');
-    });
+    // 版面切換邏輯：同時改變兩個容器
+    function updateLayout(newLayout) {
+      currentLayout = newLayout;
+      randomContainer.className = newLayout;
+      container.className = newLayout;
+      
+      if (newLayout === 'grid-layout') {
+        btnGrid.classList.add('active');
+        btnList.classList.remove('active');
+      } else {
+        btnList.classList.add('active');
+        btnGrid.classList.remove('active');
+      }
+      // 重新渲染當前頁面以確保 ID 不會衝突
+      renderPage(1);
+    }
 
-    btnList.addEventListener('click', () => {
-      randomContainer.className = 'list-layout';
-      btnList.classList.add('active');
-      btnGrid.classList.remove('active');
-    });
+    btnGrid.onclick = () => updateLayout('grid-layout');
+    btnList.onclick = () => updateLayout('list-layout');
 
     function displayRandom() {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, 10);
-      selected.forEach((item, idx) => {
+      shuffled.slice(0, 10).forEach((item, idx) => {
         randomContainer.appendChild(createMessageCard(item, true, 'rand-' + idx, idx));
       });
     }
@@ -246,7 +264,7 @@
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
         <div class="content" id="text-${uniqueId}">${shortText}</div>
-        ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">顯示更多</button>` : ''}
+        ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}
       `;
       if (isLong) {
         setTimeout(() => {
@@ -256,7 +274,7 @@
           if (btn) btn.onclick = () => {
             expanded = !expanded;
             contentDiv.innerText = expanded ? item.message : shortText;
-            btn.innerText = expanded ? '收起' : '顯示更多';
+            btn.innerText = expanded ? '收起' : '展開';
           };
         }, 0);
       }
@@ -273,7 +291,7 @@
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
         btn.onclick = () => {
           renderPage(i);
-          window.scrollTo({ top: container.offsetTop - 100, behavior: 'smooth' });
+          window.scrollTo({ top: container.offsetTop - 150, behavior: 'smooth' });
         };
         paginationBox.appendChild(btn);
       }
@@ -282,10 +300,10 @@
     searchInput.oninput = () => applyFilters();
     sortBtn.onclick = () => {
       isDescending = !isDescending;
-      sortBtn.innerText = isDescending ? '目前排序：新 → 舊' : '目前排序：舊 → 新';
+      sortBtn.innerText = isDescending ? '排序：新 → 舊' : '排序：舊 → 新';
       applyFilters();
     };
-    refreshRandomBtn.onclick = () => displayRandom();
+    document.getElementById('refresh-random').onclick = () => displayRandom();
   </script>
 </body>
 </html>
