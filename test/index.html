@@ -8,16 +8,15 @@
   <title>測試</title>
 
   <style>
-    /* 全域背景設定為暖灰色 */
+    /* 全域美化 */
     body { 
       font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif; 
       background-color: #f9f7f5; 
       padding: 20px; 
       color: #4a4a4a; 
-      line-height: 1.6;
+      transition: background-color 0.3s;
     }
 
-    /* 區塊標題樣式 */
     .section-title { 
       font-size: 1.4em; 
       font-weight: 700; 
@@ -25,79 +24,83 @@
       color: #5d5d5d; 
       display: flex;
       align-items: center;
+      justify-content: space-between; /* 讓標題和切換按鈕分開 */
       flex-wrap: wrap;
-      gap: 12px;
     }
 
-    /* 隨機按鈕 - 暖咖啡色調 */
+    /* 切換按鈕組樣式 */
+    .layout-switcher {
+      display: flex;
+      background: #eee;
+      padding: 4px;
+      border-radius: 10px;
+      gap: 2px;
+    }
+    .switch-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      background: transparent;
+      color: #777;
+      transition: 0.2s;
+    }
+    .switch-btn.active {
+      background: white;
+      color: #a89080;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* 隨機按鈕 */
     .random-btn { 
-      padding: 12px 24px; 
-      font-size: 16px; 
+      padding: 10px 20px; 
+      font-size: 15px; 
       border: none; 
-      border-radius: 50px; /* 圓角更顯柔和 */
+      border-radius: 50px; 
       cursor: pointer; 
       background: linear-gradient(135deg, #a89080 0%, #8e735b 100%);
       color: white; 
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(142, 115, 91, 0.2);
       margin-bottom: 15px;
-    }
-    .random-btn:hover { 
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(142, 115, 91, 0.3);
+      box-shadow: 0 4px 10px rgba(142, 115, 91, 0.2);
     }
 
-    /* 搜尋與控制區 - 白底陰影 */
-    .controls { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 12px; 
-      margin-bottom: 25px; 
-      background: white; 
-      padding: 18px; 
-      border-radius: 15px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.03); 
-    }
-    .search-input { 
-      flex: 1; 
-      min-width: 200px; 
-      padding: 12px; 
-      border: 1px solid #e5e5e5; 
-      border-radius: 8px; 
-      font-size: 16px;
-      outline-color: #a89080;
-    }
-    .sort-btn { 
-      padding: 10px 20px; 
-      border: 1px solid #d1d1d1; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      background: white; 
-      color: #666; 
-      font-size: 14px;
-      transition: 0.3s;
-    }
-    .sort-btn:hover { background: #f5f5f5; }
-
-    /* 隨機區塊容器 - 點狀邊框或淺灰 */
-    #random-container { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-      gap: 20px; 
-      margin-top: 5px;
-      margin-bottom: 40px; 
-      padding: 20px; 
-      border-radius: 15px; 
-      border: 1px dashed #dcdcdc; /* 虛線 */
+    /* --- 重點：版面佈局切換 --- */
+    
+    /* 1. 靈感牆模式 (Grid) */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
     }
 
-    /* 留言框多色系定義 (溫暖莫蘭迪色) */
-    .theme-0 { --theme-color: #f8b1b1; } /* 粉紅 */
-    .theme-1 { --theme-color: #fbc79a; } /* 粉橘 */
-    .theme-2 { --theme-color: #a7d7c5; } /* 粉綠 */
-    .theme-3 { --theme-color: #b1c1f8; } /* 粉藍 */
-    .theme-4 { --theme-color: #d1b1f8; } /* 粉紫 */
-    .theme-5 { --theme-color: #e8ca8a; } /* 淺金 */
+    /* 2. 應援清單模式 (List) */
+    .list-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .list-layout .message-card {
+      max-width: 800px;
+      margin: 0 auto; /* 置中 */
+      width: 100%;
+    }
+
+    /* 容器基本樣式 */
+    #random-container {
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px dashed #dcdcdc;
+      transition: all 0.4s ease;
+    }
+
+    /* 留言卡片主題配色 */
+    .theme-0 { --theme-color: #f8b1b1; }
+    .theme-1 { --theme-color: #fbc79a; }
+    .theme-2 { --theme-color: #a7d7c5; }
+    .theme-3 { --theme-color: #b1c1f8; }
+    .theme-4 { --theme-color: #d1b1f8; }
+    .theme-5 { --theme-color: #e8ca8a; }
 
     .message-card { 
       padding: 20px; 
@@ -105,53 +108,32 @@
       border-radius: 15px; 
       border-left: 6px solid var(--theme-color); 
       box-shadow: 0 5px 15px rgba(0,0,0,0.04); 
-      position: relative; 
-      transition: transform 0.2s;
+      box-sizing: border-box;
     }
-    .message-card:hover { transform: scale(1.02); }
 
-    .nickname { font-weight: bold; color: var(--theme-color); font-size: 1em; margin-bottom: 10px; filter: brightness(0.8); }
+    .nickname { font-weight: bold; color: var(--theme-color); filter: brightness(0.8); margin-bottom: 8px; }
     .content { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-break: break-all; color: #444; }
-    
-    /* 展開按鈕顏色也跟隨主題 */
-    .toggle-btn { 
-      background: none; 
-      border: none; 
-      color: var(--theme-color); 
-      filter: brightness(0.7);
-      cursor: pointer; 
-      font-size: 13px; 
-      font-weight: bold; 
-      display: block; 
-      margin-top: 15px; 
-      margin-left: auto; 
-    }
+    .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 13px; font-weight: bold; display: block; margin-top: 15px; margin-left: auto; }
 
-    /* 分頁樣式 */
+    /* 其他輔助樣式 */
+    .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 25px; background: white; padding: 18px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+    .search-input { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; }
     .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; justify-content: center; padding-bottom: 50px; }
-    .page-btn { 
-      padding: 10px 18px; 
-      border: none; 
-      background: white; 
-      cursor: pointer; 
-      border-radius: 8px; 
-      color: #888;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .page-btn.active { 
-      background: #a89080; 
-      color: white; 
-      box-shadow: 0 4px 10px rgba(168, 144, 128, 0.3);
-    }
-
+    .page-btn { padding: 10px 18px; border: none; background: white; cursor: pointer; border-radius: 8px; color: #888; }
+    .page-btn.active { background: #a89080; color: white; }
     hr { border: 0; border-top: 1px solid #e0e0e0; margin: 40px 0; }
   </style>
 </head>
 
 <body>
 
-  <div class="section-title">✨ 隨機精選留言 (10則)</div>
-  <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
+  <div class="section-title">
+    <span>✨ 精選推薦留言</span>
+    <div class="layout-switcher">
+      <button class="switch-btn active" id="btn-grid">留言牆</button>
+      <button class="switch-btn" id="btn-list">橫向留言</button>
+    </div>
+  </div>
   
   <div id="random-container">
     <p>隨機挑選中...</p>
@@ -202,18 +184,31 @@
     const sortBtn = document.getElementById('sort-btn');
     const refreshRandomBtn = document.getElementById('refresh-random');
 
+    // 版面切換按鈕
+    const btnGrid = document.getElementById('btn-grid');
+    const btnList = document.getElementById('btn-list');
+
     onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
-      if (!data) {
-        container.innerHTML = '尚無留言資料。';
-        return;
-      }
+      if (!data) return;
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
-      
       applyFilters(); 
       displayRandom(); 
     });
 
+    // 版面切換邏輯
+    btnGrid.addEventListener('click', () => {
+      randomContainer.className = 'grid-layout';
+      btnGrid.classList.add('active');
+      btnList.classList.remove('active');
+    });
+
+    btnList.addEventListener('click', () => {
+      randomContainer.className = 'list-layout';
+      btnList.classList.add('active');
+      btnGrid.classList.remove('active');
+    });
+    
     function displayRandom() {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
