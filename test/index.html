@@ -10,44 +10,79 @@
   <style>
     body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f0f4f8; padding: 20px; color: #333; }
     
-    /* 區塊容器 */
-    .section-title { font-size: 1.2em; font-weight: bold; margin: 20px 0 10px; color: #1e40af; border-left: 5px solid #60a5fa; padding-left: 10px; }
+    /* 區塊標題 */
+    .section-title { 
+      font-size: 1.3em; 
+      font-weight: bold; 
+      margin: 25px 0 15px; 
+      color: #1e40af; 
+      border-left: 5px solid #60a5fa; 
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
     
+    /* 隨機按鈕加大並增加間距 */
+    .random-btn { 
+      padding: 10px 20px; 
+      font-size: 16px; /* 字體加大 */
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      background: #3b82f6; 
+      color: white; 
+      transition: 0.3s;
+      margin-bottom: 10px; /* 增加與下方內容的距離 */
+    }
+    .random-btn:hover { background: #2563eb; }
+
     /* 搜尋與控制區 */
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .search-input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
-    .sort-btn, .random-btn { padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; background: #60a5fa; color: white; transition: 0.3s; }
-    .sort-btn:hover, .random-btn:hover { background: #3b82f6; }
+    .search-input { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+    .sort-btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; background: #60a5fa; color: white; font-size: 14px; }
 
-    /* 隨機區塊樣式 */
-    #random-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 30px; background: #e0f2fe; padding: 15px; border-radius: 12px; }
+    /* 隨機區塊容器 */
+    #random-container { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 15px; 
+      margin-top: 10px; /* 與按鈕保持距離 */
+      margin-bottom: 30px; 
+      background: #e0f2fe; 
+      padding: 20px; 
+      border-radius: 12px; 
+    }
 
     /* 留言框樣式 */
     .message-card { padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #60a5fa; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; }
-    .nickname { font-weight: bold; color: #555; font-size: 0.9em; margin-bottom: 5px; }
-    .content { font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
-    .toggle-btn { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 12px; display: block; margin-top: 5px; margin-left: auto; }
+    .nickname { font-weight: bold; color: #555; font-size: 0.95em; margin-bottom: 8px; }
+    .content { font-size: 15px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #222; }
+    .toggle-btn { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 13px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
     /* 分頁樣式 */
-    .pagination { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 20px; justify-content: center; }
-    .page-btn { padding: 8px 12px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 4px; }
-    .page-btn.active { background: #60a5fa; color: white; border-color: #60a5fa; }
+    .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; justify-content: center; padding-bottom: 40px; }
+    .page-btn { padding: 10px 15px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 6px; }
+    .page-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
   </style>
 </head>
 
 <body>
 
-  <div class="section-title">✨ 隨機精選留言 (10則) <button class="random-btn" id="refresh-random" style="font-size: 12px; margin-left: 10px;">再次隨機抽選留言</button></div>
+  <div class="section-title">✨ 隨機精選留言 (10則)</div>
+  <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
+  
   <div id="random-container">
     <p>隨機挑選中...</p>
   </div>
 
   <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 30px 0;">
 
-  <div class="section-title">顯示全部留言</div>
+  <div class="section-title">📋 顯示全部留言</div>
   <div class="controls">
-    <input type="text" id="search-input" class="search-input" placeholder="搜尋留言內容...">
-    <button id="sort-btn" class="sort-btn">切換為：正序 (舊→新)</button>
+    <input type="text" id="search-input" class="search-input" placeholder="搜尋留言關鍵字...">
+    <button id="sort-btn" class="sort-btn">切換排序：目前為 倒序 (新→舊)</button>
   </div>
 
   <div id="guestbook-container" style="display: flex; flex-direction: column; gap: 15px;">
@@ -74,14 +109,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     
-    // 全域變數
-    let rawMessages = []; // 原始資料
-    let filteredMessages = []; // 搜尋或排序後的資料
-    let isDescending = true; // 預設倒序 (新到舊)
+    let rawMessages = []; 
+    let filteredMessages = []; 
+    let isDescending = true; // 預設新到舊
     const itemsPerPage = 100;
     const charLimit = 100;
 
-    // DOM 元素
     const container = document.getElementById('guestbook-container');
     const randomContainer = document.getElementById('random-container');
     const paginationBox = document.getElementById('pagination-controls');
@@ -89,71 +122,70 @@
     const sortBtn = document.getElementById('sort-btn');
     const refreshRandomBtn = document.getElementById('refresh-random');
 
-    // 監聽 Firebase
     onValue(ref(db, 'test'), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
         container.innerHTML = '目前尚無留言。';
         return;
       }
-      
-      // 處理資料：轉為陣列並過濾無效內容
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
       
-      applyFilters(); // 初次執行排序與顯示
-      displayRandom(); // 執行隨機選取
+      applyFilters(); 
+      displayRandom(); 
     });
 
-    // --- 隨機選取邏輯 ---
+    // --- 隨機選取（加入摺疊功能） ---
     function displayRandom() {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 10);
 
-      selected.forEach(item => {
-        const div = createMessageCard(item, false); // 隨機區不顯示摺疊
+      selected.forEach((item, idx) => {
+        // 第二個參數設為 true，啟動摺疊
+        const div = createMessageCard(item, true, 'rand-' + idx); 
         randomContainer.appendChild(div);
       });
     }
 
-    // --- 搜尋與排序處理 ---
+    // --- 搜尋與排序核心邏輯 ---
     function applyFilters() {
       const keyword = searchInput.value.toLowerCase();
       
-      // 1. 搜尋篩選
-      filteredMessages = rawMessages.filter(item => 
+      // 先篩選搜尋關鍵字
+      let result = rawMessages.filter(item => 
         item.message.toLowerCase().includes(keyword)
       );
 
-      // 2. 排序處理
+      // 排序邏輯：Firebase 匯入通常是按順序的(舊→新)
+      // 如果要「新到舊」(Descending)，就反轉陣列
       if (isDescending) {
-        filteredMessages.reverse(); // 假設原始資料是舊到新，reverse 變新到舊
+        result = [...result].reverse();
       }
 
+      filteredMessages = result;
       renderPage(1);
     }
 
-    // --- 渲染分頁功能 ---
     function renderPage(page) {
       container.innerHTML = '';
       const start = (page - 1) * itemsPerPage;
       const pagedData = filteredMessages.slice(start, start + itemsPerPage);
 
       if (pagedData.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding:20px;">找不到符合搜尋條件的留言。</p>';
+        container.innerHTML = '<p style="text-align:center; padding:20px; color:#666;">找不到符合搜尋條件的留言。</p>';
         paginationBox.innerHTML = '';
         return;
       }
 
       pagedData.forEach((item, idx) => {
-        container.appendChild(createMessageCard(item, true, idx));
+        container.appendChild(createMessageCard(item, true, 'all-' + idx));
       });
 
       renderPagination(page);
     }
 
-    // --- 建立留言卡片組件 ---
-    function createMessageCard(item, allowFold, idSuffix = '') {
+    // --- 通用留言卡片建立函數 ---
+    function createMessageCard(item, allowFold, uniqueId) {
       const card = document.createElement('div');
       card.className = 'message-card';
       
@@ -162,24 +194,28 @@
 
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
-        <div class="content">${shortText}</div>
-        ${isLong ? `<button class="toggle-btn">顯示更多</button>` : ''}
+        <div class="content" id="text-${uniqueId}">${shortText}</div>
+        ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">顯示更多</button>` : ''}
       `;
 
       if (isLong) {
-        const btn = card.querySelector('.toggle-btn');
-        const contentDiv = card.querySelector('.content');
-        let expanded = false;
-        btn.onclick = () => {
-          expanded = !expanded;
-          contentDiv.innerText = expanded ? item.message : shortText;
-          btn.innerText = expanded ? '收起' : '顯示更多';
-        };
+        // 使用延遲綁定確保元素已存在於 DOM
+        setTimeout(() => {
+          const btn = document.getElementById(`btn-${uniqueId}`);
+          const contentDiv = document.getElementById(`text-${uniqueId}`);
+          let expanded = false;
+          if (btn) {
+            btn.onclick = () => {
+              expanded = !expanded;
+              contentDiv.innerText = expanded ? item.message : shortText;
+              btn.innerText = expanded ? '收起' : '顯示更多';
+            };
+          }
+        }, 0);
       }
       return card;
     }
 
-    // --- 分頁按鈕 ---
     function renderPagination(current) {
       paginationBox.innerHTML = '';
       const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
@@ -191,23 +227,27 @@
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
         btn.onclick = () => {
           renderPage(i);
-          window.scrollTo({ top: container.offsetTop - 50, behavior: 'smooth' });
+          window.scrollTo({ top: container.offsetTop - 100, behavior: 'smooth' });
         };
         paginationBox.appendChild(btn);
       }
     }
 
-    // --- 事件監聽 ---
+    // --- 監聽事件 ---
     searchInput.oninput = () => applyFilters();
     
     sortBtn.onclick = () => {
       isDescending = !isDescending;
-      sortBtn.innerText = isDescending ? '切換為：正序 (舊→新)' : '切換為：倒序 (新→舊)';
+      sortBtn.innerText = isDescending ? '切換排序：目前為 倒序 (新→舊)' : '切換排序：目前為 正序 (舊→新)';
       applyFilters();
     };
 
-    refreshRandomBtn.onclick = () => displayRandom();
-
+    refreshRandomBtn.onclick = () => {
+      displayRandom();
+      // 點擊隨機時，不影響下方的存檔區，但給個回饋
+      refreshRandomBtn.style.opacity = '0.7';
+      setTimeout(() => refreshRandomBtn.style.opacity = '1', 100);
+    };
   </script>
 </body>
 </html>
