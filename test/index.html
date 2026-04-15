@@ -20,9 +20,12 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(249, 247, 245, 0.9);
+      background: rgba(249, 247, 245, 0.95);
       backdrop-filter: blur(10px);
-      height: 50px;
+      
+      /* 移除固定高度，改用對稱的 padding 確保上下絕對等距 */
+      padding: 10px 0; 
+      
       display: flex;
       align-items: center;
       justify-content: center;
@@ -38,7 +41,11 @@
       gap: 2px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       margin: 0;
+      
+      /* 關鍵：消除內部行高造成的視覺下沉 */
+      line-height: 0; 
     }
+
     .switch-btn {
       padding: 8px 16px;
       border: none;
@@ -49,6 +56,9 @@
       color: #666;
       font-weight: bold;
       transition: 0.3s;
+      
+      /* 確保文字不會因為 line-height: 0 消失 */
+      line-height: 1.2; 
     }
     .switch-btn.active {
       background: white;
