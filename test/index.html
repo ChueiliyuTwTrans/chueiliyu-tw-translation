@@ -65,16 +65,13 @@
       padding-left: 10px;
     }
 
-    /* --- 區域佈局樣式 --- */
-    
-    /* 1. 留言牆 (Grid) */
+    /* --- 區域佈局 --- */
     .grid-layout {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 15px;
     }
 
-    /* 2. 留言清單 (List) */
     .list-layout {
       display: flex;
       flex-direction: column;
@@ -86,33 +83,30 @@
       width: 100%;
     }
 
-    /* 3. 流動留言區域 (Flow) */
+    /* 流動模式區域容器 */
     #random-container.flow-layout {
       display: block;
       position: relative;
-      height: 350px; /* 固定高度讓彈幕游動 */
+      height: 300px;
       background: #fff;
       border-radius: 20px;
       overflow: hidden;
       border: 1px solid #eee;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
     }
 
-    /* 彈幕氣泡本體 */
+    /* 彈幕樣式升級 */
     .danmu-item {
       position: absolute;
       white-space: nowrap;
-      padding: 10px 18px;
-      border-radius: 25px;
-      background: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      color: #555;
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: #444;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       user-select: none;
       pointer-events: none;
       animation: moveDanmu linear forwards;
-      border-left: 4px solid #a89080;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       z-index: 10;
     }
 
@@ -121,50 +115,30 @@
       to { left: -150%; }
     }
 
-    /* 手機版雙欄/正方形優化 */
+    /* 手機版優化 */
     @media (max-width: 600px) {
-      .grid-layout {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .grid-layout .message-card {
-        aspect-ratio: 1 / 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      .grid-layout .content {
-        font-size: 13px;
-        overflow-y: auto;
-      }
+      .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .grid-layout .message-card { aspect-ratio: 1 / 1; display: flex; flex-direction: column; overflow: hidden; }
+      .grid-layout .content { font-size: 13px; overflow-y: auto; }
       .grid-layout .toggle-btn { display: none; }
-      #random-container.flow-layout { height: 250px; }
+      #random-container.flow-layout { height: 220px; }
+      .danmu-item { font-size: 12px; padding: 8px 16px; }
     }
 
-    /* 卡片樣式 */
-    .message-card { 
-      padding: 20px; 
-      background: white; 
-      border-radius: 15px; 
-      border-left: 5px solid var(--theme-color); 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-      box-sizing: border-box;
-    }
-    .theme-0 { --theme-color: #f8b1b1; }
-    .theme-1 { --theme-color: #fbc79a; }
-    .theme-2 { --theme-color: #a7d7c5; }
-    .theme-3 { --theme-color: #b1c1f8; }
-    .theme-4 { --theme-color: #d1b1f8; }
-    .theme-5 { --theme-color: #e8ca8a; }
+    /* 卡片配色 */
+    .message-card { padding: 20px; background: white; border-radius: 15px; border-left: 5px solid var(--theme-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); box-sizing: border-box; }
+    .theme-0 { --theme-color: #f8b1b1; --bg-color: rgba(248, 177, 177, 0.3); }
+    .theme-1 { --theme-color: #fbc79a; --bg-color: rgba(251, 199, 154, 0.3); }
+    .theme-2 { --theme-color: #a7d7c5; --bg-color: rgba(167, 215, 197, 0.3); }
+    .theme-3 { --theme-color: #b1c1f8; --bg-color: rgba(177, 193, 248, 0.3); }
+    .theme-4 { --theme-color: #d1b1f8; --bg-color: rgba(209, 177, 248, 0.3); }
+    .theme-5 { --theme-color: #e8ca8a; --bg-color: rgba(232, 202, 138, 0.3); }
 
     .nickname { font-weight: bold; color: var(--theme-color); filter: brightness(0.8); margin-bottom: 5px; }
     .content { line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; }
     .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
-    .random-btn { 
-      padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; 
-      background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); color: white; margin-bottom: 15px;
-    }
+    .random-btn { padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); color: white; margin-bottom: 15px; }
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
     .sort-btn { padding: 8px 15px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; }
@@ -225,14 +199,16 @@
     const db = getDatabase(app);
     
     let rawMessages = []; 
-    let currentLayout = 'grid-layout';
-    let danmuTimer = null; // 儲存彈幕定時器
+    let danmuTimer = null;
+    let lastLane = -1; // 記錄上一個軌道
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
     const paginationBox = document.getElementById('pagination-controls');
     const searchInput = document.getElementById('search-input');
     const sortBtn = document.getElementById('sort-btn');
+    const refreshRandomBtn = document.getElementById('refresh-random');
+    
     const btnGrid = document.getElementById('btn-grid');
     const btnList = document.getElementById('btn-list');
     const btnFlow = document.getElementById('btn-flow');
@@ -241,36 +217,33 @@
       const data = snapshot.val();
       if (!data) return;
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
-      applyFilters(); 
-      displayRandom(); 
+      
+      // 修正：初始進入頁面自動觸發顯示
+      updateLayout('grid-layout');
     });
 
-    // --- 切換邏輯 ---
     function updateLayout(mode) {
-      currentLayout = mode;
-      
-      // 停止所有彈幕活動
       clearInterval(danmuTimer);
       randomContainer.innerHTML = '';
-
-      // 清除按鈕狀態
       [btnGrid, btnList, btnFlow].forEach(btn => btn.classList.remove('active'));
 
-      if (mode === 'grid-layout') {
-        btnGrid.classList.add('active');
-        randomContainer.className = 'grid-layout';
-        container.className = 'grid-layout';
-        displayRandom();
-      } else if (mode === 'list-layout') {
-        btnList.classList.add('active');
-        randomContainer.className = 'list-layout';
-        container.className = 'list-layout';
-        displayRandom();
-      } else if (mode === 'flow-layout') {
+      if (mode === 'flow-layout') {
         btnFlow.classList.add('active');
         randomContainer.className = 'flow-layout';
-        container.className = 'grid-layout'; // 全部留言區維持網格
-        startDanmu(rawMessages);
+        refreshRandomBtn.style.display = 'none'; // 隱藏按鈕
+        startDanmu();
+      } else {
+        refreshRandomBtn.style.display = 'inline-block'; // 顯示按鈕
+        if (mode === 'grid-layout') {
+          btnGrid.classList.add('active');
+          randomContainer.className = 'grid-layout';
+          container.className = 'grid-layout';
+        } else {
+          btnList.classList.add('active');
+          randomContainer.className = 'list-layout';
+          container.className = 'list-layout';
+        }
+        displayRandom();
       }
       renderPage(1);
     }
@@ -280,55 +253,60 @@
     btnFlow.onclick = () => updateLayout('flow-layout');
 
     function displayRandom() {
-      if (currentLayout === 'flow-layout') return;
       randomContainer.innerHTML = '';
-      const shuffled = [...rawMessages].sort(() => 0.5 - Math.random());
-      shuffled.slice(0, 10).forEach((item, idx) => {
+      const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 10);
+      shuffled.forEach((item, idx) => {
         randomContainer.appendChild(createMessageCard(item, true, 'rand-' + idx, idx));
       });
     }
 
-    // --- 彈幕核心 ---
-    function startDanmu(messages) {
-      if (!messages || messages.length === 0) return;
-      // 立即發射三條，之後每 2 秒發射一條
-      for(let i=0; i<3; i++) {
-        setTimeout(() => createDanmu(messages), i * 500);
-      }
-      danmuTimer = setInterval(() => {
-        createDanmu(messages);
-      }, 2000);
+    // --- 彈幕優化版 ---
+    function startDanmu() {
+      if (rawMessages.length === 0) return;
+      createDanmu(); // 立即發射
+      danmuTimer = setInterval(createDanmu, 3500); // 手機/電腦統一頻率，減少密集感
     }
 
-    function createDanmu(messages) {
-      const msg = messages[Math.floor(Math.random() * messages.length)];
+    function createDanmu() {
+      const msg = rawMessages[Math.floor(Math.random() * rawMessages.length)];
       const danmu = document.createElement('div');
       danmu.className = 'danmu-item';
-      danmu.innerText = `${msg.nickname || '匿名'}: ${msg.message.substring(0, 30)}`;
       
-      const topPos = Math.random() * 80 + 5; // 5% ~ 85%
-      danmu.style.top = `${topPos}%`;
-      danmu.style.animationDuration = `${Math.random() * 8 + 10}s`;
+      // 顏色隨機
+      const themeIdx = Math.floor(Math.random() * 6);
+      danmu.style.backgroundColor = `var(--theme-color)`;
+      danmu.className += ` theme-${themeIdx}`;
+      danmu.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--bg-color`).trim();
+      danmu.style.border = `1.5px solid var(--theme-color)`;
+
+      danmu.innerText = `${msg.nickname || '匿名'}: ${msg.message.substring(0, 25)}`;
       
-      // 隨機顏色邊框增加變化
-      const colors = ['#f8b1b1', '#fbc79a', '#a7d7c5', '#b1c1f8', '#d1b1f8'];
-      danmu.style.borderLeftColor = colors[Math.floor(Math.random() * colors.length)];
+      // 軌道避讓系統：將高度分為 8 個軌道
+      let lane;
+      do { lane = Math.floor(Math.random() * 8); } while (lane === lastLane);
+      lastLane = lane;
+      danmu.style.top = `${(lane * 11) + 5}%`;
+
+      // 速度優化：電腦版寬度大，需增加秒數讓視覺速度變慢
+      const isMobile = window.innerWidth <= 600;
+      const speed = isMobile ? (Math.random() * 5 + 8) : (Math.random() * 10 + 20); 
+      danmu.style.animationDuration = `${speed}s`;
 
       randomContainer.appendChild(danmu);
       danmu.addEventListener('animationend', () => danmu.remove());
     }
 
-    // --- 其他原有功能 ---
     function renderPage(page) {
       container.innerHTML = '';
-      const start = (page - 1) * 100;
-      const pagedData = rawMessages.filter(m => m.message.toLowerCase().includes(searchInput.value.toLowerCase()));
-      if (document.getElementById('sort-btn').innerText.includes('新')) pagedData.reverse();
+      const keyword = searchInput.value.toLowerCase();
+      let filtered = rawMessages.filter(m => m.message.toLowerCase().includes(keyword));
+      if (sortBtn.innerText.includes('新')) filtered.reverse();
       
-      pagedData.slice(start, start + 100).forEach((item, idx) => {
+      const paged = filtered.slice((page - 1) * 100, page * 100);
+      paged.forEach((item, idx) => {
         container.appendChild(createMessageCard(item, true, 'all-' + idx, idx));
       });
-      renderPagination(pagedData.length, page);
+      renderPagination(filtered.length, page);
     }
 
     function createMessageCard(item, allowFold, uniqueId, colorIndex) {
@@ -336,19 +314,16 @@
       card.className = `message-card theme-${colorIndex % 6}`;
       const isLong = allowFold && item.message.length > 100;
       const shortText = isLong ? item.message.substring(0, 100) + "..." : item.message;
-      card.innerHTML = `
-        <div class="nickname">${item.nickname || '匿名'}</div>
-        <div class="content" id="text-${uniqueId}">${shortText}</div>
-        ${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}
-      `;
+      card.innerHTML = `<div class="nickname">${item.nickname || '匿名'}</div><div class="content" id="text-${uniqueId}">${shortText}</div>${isLong ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}`;
+      
       if (isLong) {
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
           if (btn) btn.onclick = () => {
             const contentDiv = document.getElementById(`text-${uniqueId}`);
-            const isExpanded = btn.innerText === '收起';
-            contentDiv.innerText = isExpanded ? shortText : item.message;
-            btn.innerText = isExpanded ? '展開' : '收起';
+            const isExp = btn.innerText === '收起';
+            contentDiv.innerText = isExp ? shortText : item.message;
+            btn.innerText = isExp ? '展開' : '收起';
           };
         }, 0);
       }
@@ -363,7 +338,7 @@
         const btn = document.createElement('button');
         btn.innerText = i;
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
-        btn.onclick = () => renderPage(i);
+        btn.onclick = () => { renderPage(i); window.scrollTo({top: container.offsetTop - 120, behavior: 'smooth'}); };
         paginationBox.appendChild(btn);
       }
     }
@@ -374,7 +349,6 @@
       renderPage(1);
     };
     document.getElementById('refresh-random').onclick = () => displayRandom();
-
   </script>
 </body>
 </html>
