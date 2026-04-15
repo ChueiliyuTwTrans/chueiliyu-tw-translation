@@ -95,16 +95,33 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
+
+      /* 讓留言牆模式下的卡片變成正方形 */
       .grid-layout .message-card {
-        padding: 12px; /* 縮小內距 */
+        padding: 12px;
+        aspect-ratio: 1 / 1; /* 強制長寬比為 1:1 */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* 防止內容溢出 */
       }
+
       .grid-layout .nickname {
         font-size: 0.85em;
+        margin-bottom: 4px;
+        flex-shrink: 0; /* 暱稱不縮小 */
       }
+
       .grid-layout .content {
-        font-size: 13px; /* 縮小字體以便容納內容 */
+        font-size: 13px;
+        line-height: 1.4;
+        overflow-y: auto; /* 如果文字太長，可以在正方形內滾動 */
+        flex-grow: 1;    /* 佔滿剩餘空間 */
       }
-    }
+
+      /* 在正方形模式下，展開按鈕可能會破壞視覺，建議隱藏或調整 */
+      .grid-layout .toggle-btn {
+        display: none; 
+      }
 
     /* 留言卡片樣式 */
     .theme-0 { --theme-color: #f8b1b1; }
