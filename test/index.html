@@ -8,7 +8,9 @@
   <title>測試</title>
 
   <style>
-    /* 簡單的分頁按鈕樣式 */
+    body { font-family: sans-serif; background-color: #f4f7f6; padding: 20px; }
+    
+    /* 分頁按鈕樣式 */
     .pagination {
       display: flex;
       flex-wrap: wrap;
@@ -33,6 +35,49 @@
     .page-btn:hover:not(.active) {
       background: #f0f7ff;
     }
+
+    /* 留言框樣式 */
+    .message-card {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      border-left: 4px solid #60a5fa;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .message-nickname {
+      font-weight: bold;
+      font-size: 0.85em;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    /* 內容折疊邏輯 */
+    .message-content {
+      color: #111;
+      line-height: 1.6;
+      font-size: 15px;
+      word-break: break-all;
+      white-space: pre-wrap; /* 保留換行 */
+    }
+
+    /* 展開/收起按鈕樣式 */
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: #60a5fa;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 0;
+      margin-top: 8px;
+      display: block;
+      margin-left: auto; /* 靠右下角 */
+    }
+    .toggle-btn:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
@@ -46,7 +91,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
       
     const firebaseConfig = {
       apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
@@ -64,12 +108,11 @@
     const container = document.getElementById('guestbook-container');
     const paginationBox = document.getElementById('pagination-controls');
 
-    // --- 分頁設定 ---
     let allMessages = [];
     const itemsPerPage = 100;
+    const charLimit = 100; // 設定超過多少字要縮起來
     let currentPage = 1;
 
-    // 讀取資料
     const testRef = ref(db, 'test');
     onValue(testRef, (snapshot) => {
       const data = snapshot.val();
@@ -77,52 +120,61 @@
         container.innerHTML = '<p>目前沒有留言。</p>';
         return;
       }
-
-      // 轉換資料並排序 (假設你想讓最新的留言在前面，如果匯入時已有順序可調整)
       allMessages = data.message ? [data] : Object.values(data);
-      // 如果需要反轉順序（最新在前）：allMessages.reverse();
-
-      renderPage(1); // 初始化顯示第一頁
+      // allMessages.reverse(); // 如果需要最新在前請開啟這行
+      renderPage(1);
     });
 
-    // 渲染特定頁數的函數
     function renderPage(page) {
       currentPage = page;
       container.innerHTML = '';
-      
-      // 計算起始與結束索引
       const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const pageData = allMessages.slice(startIndex, endIndex);
+      const pageData = allMessages.slice(startIndex, startIndex + itemsPerPage);
 
-      // 顯示留言內容
-      pageData.forEach(item => {
+      pageData.forEach((item, index) => {
         if (item.message) {
-          const div = document.createElement('div');
-          div.style.cssText = `
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 8px;
-            border-left: 4px solid #60a5fa;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+          const isLongText = item.message.length > charLimit;
+          const displayContent = isLongText ? item.message.substring(0, charLimit) + "..." : item.message;
+
+          const card = document.createElement('div');
+          card.className = 'message-card';
+          
+          card.innerHTML = `
+            <div class="message-nickname">${item.nickname || '匿名'}</div>
+            <div class="message-content" id="content-${index}">${displayContent}</div>
+            ${isLongText ? `<button class="toggle-btn" id="btn-${index}">顯示更多</button>` : ''}
           `;
-          div.innerHTML = `
-            <div style="font-weight: bold; font-size: 0.85em; color: #555;">${item.nickname || '匿名'}</div>
-            <div style="margin-top: 4px; color: #111; line-height: 1.5;">${item.message}</div>
-          `;
-          container.appendChild(div); // 使用 appendChild 依序排列
+
+          container.appendChild(card);
+
+          // 綁定點擊事件
+          if (isLongText) {
+            const btn = card.querySelector(`#btn-${index}`);
+            const contentDiv = card.querySelector(`#content-${index}`);
+            let isExpanded = false;
+
+            btn.onclick = () => {
+              if (!isExpanded) {
+                contentDiv.innerText = item.message; // 顯示全部
+                btn.innerText = '收起';
+                isExpanded = true;
+              } else {
+                contentDiv.innerText = item.message.substring(0, charLimit) + "..."; // 縮回
+                btn.innerText = '顯示更多';
+                isExpanded = false;
+              }
+            };
+          }
         }
       });
 
       renderPagination();
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // 換頁後自動回到頂端
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 產生分頁按鈕
     function renderPagination() {
       paginationBox.innerHTML = '';
       const totalPages = Math.ceil(allMessages.length / itemsPerPage);
-
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
