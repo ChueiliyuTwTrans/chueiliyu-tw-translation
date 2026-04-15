@@ -65,7 +65,7 @@
       padding-left: 10px;
     }
 
-    /* --- 真實便利貼紙張特效 --- */
+    /* --- 便利貼紙張特效 --- */
     #random-container {
       perspective: 1200px; /* 增加 3D 深度 */
     }
@@ -81,12 +81,12 @@
       0% { 
         transform: rotateX(0deg) translateY(0); 
         opacity: 1; 
-        border-bottom-right-radius: 2px; 
+        border-bottom-right-radius: 12px; 
       }
       40% { 
         /* 撕除前先微微翹起右下角 */
         transform: rotateX(15deg) rotateY(-8deg) translateY(-2px) skewX(2deg); 
-        border-bottom-right-radius: 40px; 
+        border-bottom-right-radius: 50px; 
         box-shadow: -5px 15px 20px rgba(0,0,0,0.1); 
         opacity: 1;
       }
@@ -107,24 +107,24 @@
         transform: rotateX(-70deg) translateY(40px);
         opacity: 0;
         /* 剛貼上時底部是捲起來的 */
-        border-bottom-left-radius: 80px;
-        border-bottom-right-radius: 80px;
+        border-bottom-left-radius: 100px;
+        border-bottom-right-radius: 100px;
         box-shadow: 0 30px 20px rgba(0,0,0,0.15);
       }
       60% {
         transform: rotateX(5deg) translateY(0);
         opacity: 1;
         /* 紙張快要貼平 */
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
         box-shadow: 0 5px 10px rgba(0,0,0,0.05);
       }
       100% {
         transform: rotateX(0deg);
         opacity: 1;
-        /* 完全貼平，恢復正常直角/微圓角 */
-        border-bottom-left-radius: 2px;
-        border-bottom-right-radius: 2px;
+        /* 完全貼平，恢復正常圓潤角 */
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
         box-shadow: 2px 2px 8px rgba(0,0,0,0.06);
       }
     }
@@ -151,13 +151,14 @@
 
     .message-card { 
       padding: 20px; 
-      background: #ffffff; /* 改回純白背景 */
-      border-radius: 2px;
-      border-left: 5px solid var(--theme-color); 
+      background: #ffffff; /* 純白背景 */
+      border-radius: 12px; /* 增加圓潤度 */
+      border-left: 6px solid var(--theme-color); 
       box-shadow: 2px 2px 8px rgba(0,0,0,0.06); 
       box-sizing: border-box;
       backface-visibility: hidden;
       position: relative;
+      overflow: hidden; /* 確保內容不會超出圓角 */
     }
 
     .theme-0 { --theme-color: #f8b1b1; }
