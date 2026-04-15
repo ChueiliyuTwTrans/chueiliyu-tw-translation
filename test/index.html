@@ -35,6 +35,7 @@
       padding: 4px;
       border-radius: 12px;
       gap: 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .switch-btn {
@@ -64,58 +65,61 @@
       padding-left: 10px;
     }
 
-    /* --- 真實便利貼紙張特效 --- */
+    /* --- 便利貼撕除與貼上動畫 --- */
     #random-container {
-      perspective: 2000px;
+      perspective: 1500px;
     }
 
-    /* 階段一：20秒開始的慢慢捲起 (Curling) */
-    .curling {
-      animation: paperCurl 10s forwards linear;
+    /* 撕掉：由下往上捲起消失 */
+    .peel-off {
+      animation: peelEffect 0.8s forwards ease-in;
+      transform-origin: top;
+      pointer-events: none;
+    }
+
+    /* 貼上：由上往下翻落貼平 (不變淡，直接顯示) */
+    .stick-on {
+      animation: stickEffect 0.6s forwards ease-out;
       transform-origin: top;
     }
 
-    @keyframes paperCurl {
-      0% { transform: rotateX(0deg) skewX(0deg); border-bottom-right-radius: 2px; }
-      30% { transform: rotateX(5deg) skewX(1deg); border-bottom-right-radius: 20px; }
-      60% { transform: rotateX(15deg) skewX(2deg); border-bottom-right-radius: 50px; }
-      100% { transform: rotateX(25deg) skewX(3deg); border-bottom-right-radius: 80px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    @keyframes peelEffect {
+      0% { transform: rotateX(0deg); opacity: 1; }
+      100% { transform: rotateX(110deg); opacity: 0; filter: brightness(1.2); }
     }
 
-    /* 階段二：30秒一到的猝不及防撕掉 */
-    .peel-off-fast {
-      animation: realPeel 0.6s forwards ease-in;
-      transform-origin: top;
-    }
-
-    @keyframes realPeel {
-      0% { transform: rotateX(25deg) skewX(3deg); opacity: 1; }
-      100% { transform: rotateX(120deg) translateY(-100px) skewX(10deg); opacity: 0; }
-    }
-
-    /* 階段三：貼上新的便利貼 (帶有紙張回彈感) */
-    .stick-on-soft {
-      animation: realStick 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transform-origin: top;
-    }
-
-    @keyframes realStick {
-      0% { transform: rotateX(-100deg); opacity: 0; }
-      50% { transform: rotateX(20deg); opacity: 1; }
-      75% { transform: rotateX(-10deg); }
+    @keyframes stickEffect {
+      0% { transform: rotateX(-90deg); opacity: 0; }
       100% { transform: rotateX(0deg); opacity: 1; }
     }
 
-    /* --- 基礎卡片樣式 --- */
+    /* --- 版面佈局 --- */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .list-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .grid-layout { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .grid-layout .message-card { padding: 12px; aspect-ratio: 1 / 1; display: flex; flex-direction: column; overflow: hidden; }
+      .grid-layout .content { font-size: 13px; line-height: 1.4; overflow-y: auto; flex-grow: 1; }
+      .grid-layout .toggle-btn { display: none; }
+    }
+
     .message-card { 
-      padding: 20px; background: #fffdf2; /* 稍微帶點便利貼黃 */
-      border-radius: 2px;
-      border-left: 6px solid var(--theme-color); 
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.05); 
+      padding: 20px; background: white; border-radius: 2px;
+      border-left: 5px solid var(--theme-color); 
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.06); 
       box-sizing: border-box;
       backface-visibility: hidden;
       position: relative;
-      transition: box-shadow 0.3s;
     }
 
     .theme-0 { --theme-color: #f8b1b1; }
@@ -129,12 +133,15 @@
     .content { line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; }
     .toggle-btn { background: none; border: none; color: var(--theme-color); filter: brightness(0.7); cursor: pointer; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; margin-left: auto; }
 
-    /* 按鈕 */
+    /* 按鈕樣式 */
     .btn-group { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-    .random-btn, .pause-btn { padding: 10px 20px; border: none; border-radius: 50px; cursor: pointer; color: white; font-weight: bold; transition: 0.3s; }
+    .random-btn, .pause-btn { 
+      padding: 10px 22px; border: none; border-radius: 50px; cursor: pointer; 
+      color: white; font-weight: bold; transition: 0.3s; font-size: 14px;
+    }
     .random-btn { background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); }
-    .pause-btn { background: #666; }
-    .pause-btn.active { background: #d9534f; }
+    .pause-btn { background: #999; }
+    .pause-btn.active { background: #e67e22; } /* 暫停時顯示比較顯眼的顏色 */
 
     .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; font-size: 15px; }
@@ -155,19 +162,19 @@
     </div>
   </div>
 
-  <div class="section-title">✨ 應援留言 (30秒更新，剩餘10秒開始捲動)</div>
+  <div class="section-title">✨ 隨機抽選留言 (30秒自動更新)</div>
   <div class="btn-group">
-    <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+    <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
     <button class="pause-btn" id="pause-auto">暫停自動更新</button>
   </div>
 
   <div id="random-container" class="grid-layout">
-    <p>佈置中...</p>
+    <p>布置中...</p>
   </div>
 
   <hr>
 
-  <div class="section-title">📋 全部留言清單</div>
+  <div class="section-title">📋 顯示全部留言</div>
   <div class="controls">
     <input type="text" id="search-input" class="search-input" placeholder="搜尋關鍵字...">
     <button id="sort-btn" class="sort-btn">排序：新 → 舊</button>
@@ -201,8 +208,7 @@
     let filteredMessages = []; 
     let isDescending = true; 
     let isPaused = false;
-    let mainTimer = null;
-    let curlTimer = null;
+    let slideTimer = null;
 
     const randomContainer = document.getElementById('random-container');
     const container = document.getElementById('guestbook-container');
@@ -218,106 +224,79 @@
       if (!data) return;
       rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
       applyFilters(); 
-      resetAutoSlide(); 
+      resetTimer(); 
     });
 
-    // --- 自動循環邏輯 ---
-    function resetAutoSlide() {
-      clearInterval(mainTimer);
-      clearTimeout(curlTimer);
+    // --- 核心更新邏輯 ---
+    function resetTimer() {
+      if (slideTimer) clearInterval(slideTimer);
       if (isPaused) return;
 
-      displayRandom(false);
-
-      // 第 20 秒時，觸發慢慢捲起動畫
-      curlTimer = setTimeout(() => {
-        const cards = randomContainer.querySelectorAll('.message-card');
-        cards.forEach((card, idx) => {
-          setTimeout(() => {
-            card.classList.add('curling');
-          }, idx * 200); // 每個卡片交錯開始捲起
-        });
-      }, 20000);
-
-      // 第 30 秒時，觸發快速撕掉並更新
-      mainTimer = setInterval(() => {
-        executePeelTransition();
+      slideTimer = setInterval(() => {
+        performPeelAndStick();
       }, 30000);
     }
 
-    function executePeelTransition() {
+    function performPeelAndStick() {
       const cards = randomContainer.querySelectorAll('.message-card');
-      if (cards.length === 0) { displayRandom(true); return; }
+      if (cards.length === 0) { 
+        displayRandom(true); 
+        return; 
+      }
 
-      cards.forEach((card, idx) => {
+      // 撕掉：交錯延遲
+      cards.forEach((card, index) => {
         setTimeout(() => {
-          card.classList.remove('curling');
-          card.classList.add('peel-off-fast');
-        }, idx * 80);
+          card.classList.add('peel-off');
+        }, index * 80); 
       });
 
-      // 撕完後重新佈置
+      // 撕完後 1 秒，換上新的
       setTimeout(() => {
         displayRandom(true);
-        // 重新排定下一次的 20 秒捲動
-        clearTimeout(curlTimer);
-        curlTimer = setTimeout(() => {
-          const newCards = randomContainer.querySelectorAll('.message-card');
-          newCards.forEach((c, i) => setTimeout(() => c.classList.add('curling'), i * 200));
-        }, 20000);
       }, (cards.length * 80) + 600);
     }
 
-    function displayRandom(animateIn = false) {
+    function displayRandom(withAnimation = false) {
       randomContainer.innerHTML = '';
       const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 10);
+      
       shuffled.forEach((item, idx) => {
         const card = createMessageCard(item, true, 'rand-' + idx, idx);
-        if (animateIn) {
+        if (withAnimation) {
           card.style.opacity = '0';
-          card.classList.add('stick-on-soft');
-          card.style.animationDelay = `${idx * 0.1}s`;
+          card.classList.add('stick-on');
+          card.style.animationDelay = `${idx * 0.1}s`; 
         }
         randomContainer.appendChild(card);
       });
     }
 
-    // --- 按鈕事件 ---
+    // --- 暫停/播放功能 ---
     pauseBtn.onclick = () => {
       isPaused = !isPaused;
       pauseBtn.innerText = isPaused ? '再次自動更新' : '暫停自動更新';
       pauseBtn.classList.toggle('active', isPaused);
+      
       if (isPaused) {
-        clearInterval(mainTimer);
-        clearTimeout(curlTimer);
-        const cards = randomContainer.querySelectorAll('.message-card');
-        cards.forEach(c => c.classList.remove('curling'));
+        clearInterval(slideTimer);
       } else {
-        executePeelTransition();
-        resetAutoSlide();
+        performPeelAndStick(); // 恢復時先更新一次
+        resetTimer();
       }
     };
 
     document.getElementById('refresh-random').onclick = () => {
-      executePeelTransition();
-      if (!isPaused) resetAutoSlide();
+      performPeelAndStick();
+      if (!isPaused) resetTimer(); // 重置 30 秒倒數
     };
 
-    // --- 基礎渲染邏輯 (維持站長原本的功能) ---
-    function updateLayout(layout) {
-      randomContainer.className = layout;
-      container.className = layout;
-      btnGrid.classList.toggle('active', layout === 'grid-layout');
-      btnList.classList.toggle('active', layout === 'list-layout');
-      renderPage(1);
-    }
-    btnGrid.onclick = () => updateLayout('grid-layout');
-    btnList.onclick = () => updateLayout('list-layout');
-
+    // --- 版面渲染 ---
     function applyFilters() {
-      const kw = searchInput.value.toLowerCase();
-      filteredMessages = rawMessages.filter(m => m.message.toLowerCase().includes(kw));
-      if (isDescending) filteredMessages.reverse();
+      const keyword = searchInput.value.toLowerCase();
+      let result = rawMessages.filter(item => item.message.toLowerCase().includes(keyword));
+      if (isDescending) result = [...result].reverse();
+      filteredMessages = result;
       renderPage(1);
     }
 
@@ -334,19 +313,21 @@
       const card = document.createElement('div');
       card.className = `message-card theme-${colorIndex % 6}`;
       const shortText = item.message.length > 100 ? item.message.substring(0, 100) + "..." : item.message;
+      
       card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
         <div class="content" id="text-${uniqueId}">${shortText}</div>
         ${item.message.length > 100 ? `<button class="toggle-btn" id="btn-${uniqueId}">展開</button>` : ''}
       `;
+
       if (item.message.length > 100) {
         setTimeout(() => {
           const btn = document.getElementById(`btn-${uniqueId}`);
           if (btn) btn.onclick = (e) => {
             e.stopPropagation();
-            const div = document.getElementById(`text-${uniqueId}`);
+            const contentDiv = document.getElementById(`text-${uniqueId}`);
             const isExp = btn.innerText === '展開';
-            div.innerText = isExp ? item.message : shortText;
+            contentDiv.innerText = isExp ? item.message : shortText;
             btn.innerText = isExp ? '收起' : '展開';
           };
         }, 0);
@@ -362,7 +343,10 @@
         const btn = document.createElement('button');
         btn.innerText = i;
         btn.className = `page-btn ${i === current ? 'active' : ''}`;
-        btn.onclick = () => { renderPage(i); window.scrollTo({top: container.offsetTop - 150, behavior: 'smooth'}); };
+        btn.onclick = () => { 
+          renderPage(i); 
+          window.scrollTo({top: container.offsetTop - 150, behavior: 'smooth'}); 
+        };
         paginationBox.appendChild(btn);
       }
     }
@@ -372,6 +356,22 @@
       isDescending = !isDescending;
       sortBtn.innerText = isDescending ? '排序：新 → 舊' : '排序：舊 → 新';
       applyFilters();
+    };
+
+    btnGrid.onclick = () => {
+      randomContainer.className = 'grid-layout';
+      container.className = 'grid-layout';
+      btnGrid.classList.add('active');
+      btnList.classList.remove('active');
+      renderPage(1);
+    };
+
+    btnList.onclick = () => {
+      randomContainer.className = 'list-layout';
+      container.className = 'list-layout';
+      btnList.classList.add('active');
+      btnGrid.classList.remove('active');
+      renderPage(1);
     };
 
   </script>
