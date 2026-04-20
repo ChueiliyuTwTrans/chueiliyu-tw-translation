@@ -1525,7 +1525,6 @@ function initBackToTop() {
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
   import { initGuestbookWidget } from "/js/guestbook/widget.js";
   import { initGuestbook, toggleModal } from "../js/guestbook/guestbook.js";
-  initGuestbookWidget();
     
   const firebaseConfig = {
     apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
@@ -1545,17 +1544,38 @@ function initBackToTop() {
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 
-  // 初始化隨機模式
-  initGuestbook('random');
+  try {
+    // 1. 同時初始化兩種模式（因為你現在把兩者放在同一個測試頁面）
+    // 如果你只想跑隨機，就維持 'random'
+    initGuestbook('full'); 
+    initGuestbook('random');
 
-  // 綁定彈窗開關
-  document.getElementById('open-gb').onclick = () => toggleModal(true);
-  document.getElementById('close-gb').onclick = () => toggleModal(false);
-  
-  // 點擊背景也可關閉
-  document.getElementById('guestbook-modal').onclick = (e) => {
-    if(e.target.id === 'guestbook-modal') toggleModal(false);
-  };
+    // 2. 綁定按鈕事件
+    const openBtn = document.getElementById('open-gb');
+    const closeBtn = document.getElementById('close-gb');
+    const modal = document.getElementById('guestbook-modal');
+
+    if (openBtn) {
+      openBtn.onclick = () => {
+        console.log("按鈕被點擊了"); // 除錯用
+        toggleModal(true);
+      };
+    }
+
+    if (closeBtn) {
+      closeBtn.onclick = () => toggleModal(false);
+    }
+    
+    if (modal) {
+      modal.onclick = (e) => {
+        if(e.target.id === 'guestbook-modal') toggleModal(false);
+      };
+    }
+
+    console.log("留言板模組載入成功");
+  } catch (error) {
+    console.error("載入失敗，請檢查檔案路徑：", error);
+  }
 </script>
 </body>
 </html>
