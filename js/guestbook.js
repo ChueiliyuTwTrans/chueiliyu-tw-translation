@@ -191,16 +191,69 @@ function renderPagination(current) {
     const el = getElements();
     if (!el.paginationBox) return;
     el.paginationBox.innerHTML = '';
+    
     const total = Math.ceil(filteredMessages.length / 100);
     if (total <= 1) return;
-    for (let i = 1; i <= total; i++) {
-        const btn = document.createElement('button');
-        btn.innerText = i;
-        btn.className = `page-btn ${i === current ? 'active' : ''}`;
-        btn.onclick = () => {
-            renderPage(i);
-            window.scrollTo({top: el.container.offsetTop - 150, behavior: 'smooth'});
-        };
-        el.paginationBox.appendChild(btn);
+
+    const pages = [];
+    // 複雜的分頁演算法：始終保持約 6 個按鈕
+    if (total <= 6) {
+        for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+        if (current <= 4) {
+            // 靠近開頭：1, 2, 3, 4, 5, ..., total
+            pages.push(1, 2, 3, 4, 5, '...', total);
+        } else if (current >= total - 3) {
+            // 靠近結尾：1, ..., total-4, total-3, total-2, total-1, total
+            pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
+        } else {
+            // 在中間：1, ..., current-1, current, current+1, ..., total
+            pages.push(1, '...', current - 1, current, current + 1, '...', total);
+        }
     }
+
+    pages.forEach(p => {
+        if (p === '...') {
+            const span = document.createElement('span');
+            span.innerText = '...';
+            span.style.color = '#a89080';
+            span.style.padding = '0 5px';
+            el.paginationBox.appendChild(span);
+        } else {
+            const btn = document.createElement('button');
+            btn.innerText = p;
+            btn.className = `page-btn ${p === current ? 'active' : ''}`;
+            btn.onclick = () => {
+                renderPage(p);
+                window.scrollTo({ top: el.container.offsetTop - 150, behavior: 'smooth' });
+            };
+            el.paginationBox.appendChild(btn);
+        }
+    });
 }
+
+// --- 字體切換邏輯 (全域釋放) ---
+const sizes = ['font-size-small', 'font-size-medium', 'font-size-large'];
+let currentIdx = 0;
+
+window.cycleFontSize = () => {
+    // 取得當前頁面所有的 body 或特定的容器
+    const body = document.body;
+    body.classList.remove(...sizes);
+    currentIdx = (currentIdx + 1) % sizes.length;
+    body.classList.add(sizes[currentIdx]);
+    
+    // 儲存設定到本地，讓切換頁面後依然生效 (選用)
+    localStorage.setItem('gb-font-size', sizes[currentIdx]);
+};
+
+// 初始化時檢查本地儲存
+document.addEventListener('DOMContentLoaded', () => {
+    const savedSize = localStorage.getItem('gb-font-size');
+    if (savedSize) {
+        document.body.classList.add(savedSize);
+        currentIdx = sizes.indexOf(savedSize);
+    } else {
+        document.body.classList.add('font-size-small');
+    }
+});
