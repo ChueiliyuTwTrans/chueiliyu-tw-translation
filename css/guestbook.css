@@ -225,3 +225,90 @@
     transition: 0.3s;
 }
 .random-btn:hover { background: #8e735b; }
+
+/* --- 按鈕尺寸與風格統一 --- */
+/* 讓 再次隨機、字體大小、收回、排序按鈕 擁有相同的高度與內距 */
+.random-btn, .font-toggle-btn, .close-modal, .sort-btn {
+    height: 42px; /* 固定高度確保一致 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 25px !important;
+    border-radius: 21px !important; /* 高度的一半，形成膠囊狀 */
+    font-size: 14px !important;
+    font-weight: bold !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    white-space: nowrap;
+}
+
+/* 再次隨機 & 排序按鈕 (原色：暖木棕) */
+.random-btn, .sort-btn {
+    background: #a89080 !important;
+    color: white !important;
+}
+
+/* 字體切換按鈕 (新色：高級豆沙粉棕) */
+.font-toggle-btn {
+    background: #c39797 !important; /* 溫暖且與主色調和 */
+    color: white !important;
+}
+
+/* 收回按鈕 (原色：淺暖灰，但尺寸與別人一致) */
+.close-modal {
+    background: #e0ddd9 !important;
+    color: #5a5552 !important;
+}
+
+/* 懸浮效果 */
+.random-btn:hover, .sort-btn:hover, .font-toggle-btn:hover, .close-modal:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.95);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+/* --- 分頁按鈕樣式 (高級溫暖感) --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 60px; /* 增加與上方留言框的距離 */
+    margin-bottom: 40px;
+}
+
+.page-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* 圓形分頁 */
+    border: 1px solid #e0ddd9;
+    background: white;
+    color: #a89080;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.page-btn.active {
+    background: #a89080 !important;
+    color: white !important;
+    border-color: #a89080;
+}
+
+.page-btn:hover:not(.active) {
+    background: #f4f1ee;
+}
+
+/* --- 彈窗內的佈局微調 --- */
+.modal-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 10px;
+}
