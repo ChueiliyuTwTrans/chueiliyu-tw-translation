@@ -7,7 +7,6 @@
 <link rel="icon" href="https://chueiliyutwtrans.github.io/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="images/favicon.png">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="https://chueiliyutwtrans.github.io/sitemap.xml" />
-<link rel="stylesheet" href="js/guestbook/guestbook.css">
 <meta name="google-site-verification" content="7PIMmC4U7ysESFC3XZsVfbBhYHZghon76UDH7Orv1gI" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -866,25 +865,6 @@ body.theme-dark .sns-divider { color: #334155; }
     </main>
 </div>
     
-<button class="floating-gb-btn" id="open-gb">✉️</button>
-
-<div class="gb-modal" id="guestbook-modal">
-  <div class="gb-modal-content">
-    <div class="gb-modal-header">
-      <div class="section-title">✨ 隨機抽選留言</div>
-      <button class="close-modal" id="close-gb">收回</button>
-    </div>
-    
-    <div class="btn-group">
-      <button class="random-btn" id="refresh-random">再次隨機抽選</button>
-    </div>
-
-    <div id="random-container" class="grid-layout"></div>
-
-    <a href="index.html" class="view-all-link">點擊前往觀看全部留言</a>
-  </div>
-</div>
-    
 <footer>
     <div class="footer-sns">
         <a href="https://www.instagram.com/chueiliyu_tw_trans" target="_blank" class="sns-btn text-link" aria-label="Instagram">
@@ -1520,7 +1500,6 @@ function initBackToTop() {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-  import { initGuestbook, toggleModal } from "./js/guestbook/guestbook.js";
     
   const firebaseConfig = {
     apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
@@ -1540,96 +1519,6 @@ function initBackToTop() {
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 
-  // 初始化隨機模式
-  initGuestbook('random');
-
-  // 綁定彈窗開關
-  document.getElementById('open-gb').onclick = () => toggleModal(true);
-  document.getElementById('close-gb').onclick = () => toggleModal(false);
-  
-  // 點擊背景也可關閉
-  document.getElementById('guestbook-modal').onclick = (e) => {
-    if(e.target.id === 'guestbook-modal') toggleModal(false);
-  };
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
