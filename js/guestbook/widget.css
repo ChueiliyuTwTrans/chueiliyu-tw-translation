@@ -1,0 +1,102 @@
+#gb-widget {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 330px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* header */
+#gb-header {
+  background: #ffdce5;
+  padding: 10px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+/* grid */
+#gb-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+
+/* 撕貼紙效果 */
+.gb-card {
+  background: #fffdf7;
+  padding: 6px;
+  font-size: 12px;
+  border-radius: 6px;
+  position: relative;
+
+  transform: rotate(var(--r));
+  animation: tearIn 0.5s ease forwards;
+  animation-delay: var(--delay);
+
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.15),
+    inset 0 -2px 0 rgba(0,0,0,0.05);
+}
+
+/* 不規則邊（撕裂感） */
+.gb-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #fffdf7,
+    #fffdf7 2px,
+    #f2eee6 2px,
+    #f2eee6 4px
+  );
+}
+
+/* 撕出動畫 */
+@keyframes tearIn {
+  0% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(var(--r));
+    opacity: 1;
+  }
+}
+
+.gb-name {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.gb-msg {
+  word-break: break-all;
+}
+
+/* iframe */
+#gb-iframe {
+  width: 100%;
+  height: 320px;
+  border: none;
+  display: none;
+}
+
+/* 按鈕 */
+#gb-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
