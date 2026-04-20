@@ -258,4 +258,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('gb-font-size-pref') || 'font-size-small';
     document.body.classList.add(saved);
     currentIdx = sizes.indexOf(saved);
+
+    const btnUp = document.getElementById('scroll-up');
+    const btnDown = document.getElementById('scroll-down');
+
+    // 一鍵往上
+    if (btnUp) {
+        btnUp.onclick = () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // 平滑滾動
+            });
+        };
+    }
+
+    // 一鍵往下
+    if (btnDown) {
+        btnDown.onclick = () => {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        };
+    }
+    
+    // (進階功能) 滾動到最頂端時隱藏「往上」按鈕，最底端時隱藏「往下」按鈕
+    window.onscroll = () => {
+        const scrolledToTop = window.scrollY === 0;
+        const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10;
+        
+        btnUp.style.opacity = scrolledToTop ? "0.3" : "1";
+        btnUp.style.pointerEvents = scrolledToTop ? "none" : "auto";
+        
+        btnDown.style.opacity = scrolledToBottom ? "0.3" : "1";
+        btnDown.style.pointerEvents = scrolledToBottom ? "none" : "auto";
+    };
 });
