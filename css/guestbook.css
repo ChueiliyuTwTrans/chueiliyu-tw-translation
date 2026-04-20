@@ -79,13 +79,29 @@ body {
 .gb-modal-content {
     background: #f9f7f5;
     width: 90%;
-    max-width: 600px; /* 彈窗不需要太寬 */
-    max-height: 85vh;
+    max-width: 500px; /* 縮小寬度，讓卡片比例恢復正常 */
     border-radius: 20px;
-    padding: 25px;
+    padding: 30px;
     position: relative;
-    overflow-y: auto;
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* 彈窗頂部佈局：使用 Grid 劃分左右 */
+.gb-modal-header {
+    display: grid !important;
+    grid-template-columns: 1fr auto; /* 左側標題區域，右側按鈕區域 */
+    grid-template-rows: auto auto;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: start;
+}
+
+.gb-modal-title {
+    grid-column: 1;
+    grid-row: 1;
+    font-weight: bold;
+    color: var(--primary-brown);
+    font-size: 1.25rem;
 }
 
 /* 彈窗內的 Grid 必須強制單欄，否則按鈕會縮小 */
@@ -103,6 +119,34 @@ body {
     align-items: center !important;
     gap: 10px !important;
     margin: 20px 0 !important;
+}
+
+/* 再次隨機按鈕：放在標題正下方 */
+.random-btn {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start; /* 靠左對齊 */
+}
+
+/* 右側按鈕群組：字體大小在上面，收回在下面 */
+.modal-right-controls {
+    grid-column: 2;
+    grid-row: 1 / span 2; /* 跨兩列 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 彈窗內的留言容器 (恢復原樣) */
+#random-container {
+    margin: 20px 0;
+    width: 100%;
+}
+
+#random-container .gb-message-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
 }
 
 /* 前往全部留言按鈕 */
@@ -190,8 +234,49 @@ body:not(.modal-open) .gb-grid-layout {
     letter-spacing: 0.5px;
 }
 
+/* 展開/收起按鈕樣式 */
+.gb-toggle-btn {
+    background: none !important;
+    border: none !important;
+    color: var(--gb-theme-color) !important;
+    filter: brightness(0.7);
+    cursor: pointer;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    padding: 5px 0 !important;
+    margin-top: 10px !important;
+    display: block !important;
+    text-align: right !important;
+    width: 100%;
+}
+
+.gb-toggle-btn:hover {
+    text-decoration: underline;
+}
+
 /* =========================================
-   6. 統一按鈕與元件樣式
+   6. 搜尋框樣式回歸
+   ========================================= */
+.search-input {
+    padding: 10px 25px !important;
+    border: 2px solid #e0ddd9 !important;
+    border-radius: 25px !important;
+    outline: none !important;
+    transition: 0.3s !important;
+    width: 250px !important;
+    background: white !important;
+    font-size: 14px !important;
+    color: var(--text-dark) !important;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+.search-input:focus {
+    border-color: var(--primary-brown) !important;
+    box-shadow: 0 0 8px rgba(168, 144, 128, 0.2) !important;
+}
+
+/* =========================================
+   7. 統一按鈕與元件樣式
    ========================================= */
 .random-btn, .font-toggle-btn, .close-modal, .sort-btn, .gb-btn-primary {
     height: 42px !important;
@@ -220,7 +305,7 @@ body:not(.modal-open) .gb-grid-layout {
 }
 
 /* =========================================
-   7. 分頁與滾動控制 (保持美觀)
+   8. 分頁與滾動控制 (保持美觀)
    ========================================= */
 .pagination {
     display: flex; justify-content: center; align-items: center;
