@@ -227,7 +227,8 @@ function renderPagination(current) {
             const btn = document.createElement('button');
             btn.innerText = p;
             btn.className = `page-btn ${p === current ? 'active' : ''}`;
-            btn.onclick = () => {
+            btn.onclick = (e) => {
+                e.preventDefault(); // 防止預設行為
                 renderPage(p);
             };
             el.paginationBox.appendChild(btn);
