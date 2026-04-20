@@ -1,15 +1,17 @@
 /* --- 佈局與通用 --- */
-/* 使用 gb- 前綴避免衝突 */
 .gb-grid-layout { 
-    display: grid; 
+    display: grid !important; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 15px; 
     width: 100% !important;
 }
 
 @media (max-width: 600px) {
-    .gb-grid-layout { grid-template-columns: 1fr; gap: 10px; }
-    .gb-message-card { padding: 12px !important; height: auto !important; aspect-ratio: unset !important; }
+    .gb-grid-layout { 
+        grid-template-columns: 1fr !important; /* 手機版強迫單欄避免擠壓 */
+        gap: 10px; 
+    }
+    .gb-message-card { padding: 15px !important; }
 }
 
 /* --- 留言卡片 --- */
@@ -22,12 +24,15 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    height: auto !important; /* 核心修正：防止被主頁 card 樣式拉長 */
+    height: auto !important; 
     display: block !important;
     text-align: left !important;
+    /* 確保動畫初始狀態正確 */
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-/* 主題顏色變數 */
+/* 主題顏色變數 (這裡要統一用 --gb-theme-color) */
 .gb-theme-0 { --gb-theme-color: #f8b1b1; }
 .gb-theme-1 { --gb-theme-color: #fbc79a; }
 .gb-theme-2 { --gb-theme-color: #a7d7c5; }
@@ -90,15 +95,47 @@
     transition: 0.3s;
 }
 
+/* --- 彈出模態框核心修正 --- */
 .gb-modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); display: none;
-    align-items: center; justify-content: center;
-    z-index: 10000; backdrop-filter: blur(5px);
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: rgba(0,0,0,0.6) !important; /* 稍微加深背景 */
+    display: none; /* 預設隱藏 */
+    align-items: center; 
+    justify-content: center;
+    z-index: 99999 !important; /* 提高層級 */
+    backdrop-filter: blur(5px);
 }
-.gb-modal.active { display: flex; }
+
+/* 強烈建議加上 !important 確保 JS 加上 class 後一定顯示 */
+.gb-modal.active { 
+    display: flex !important; 
+}
+
 .gb-modal-content {
-    background: #f9f7f5; width: 90%; max-width: 600px;
-    max-height: 80vh; border-radius: 20px; padding: 25px;
-    position: relative; overflow-y: auto;
+    background: #f9f7f5; 
+    width: 90%; 
+    max-width: 650px; /* 稍微加寬一點點 */
+    max-height: 85vh; 
+    border-radius: 20px; 
+    padding: 25px;
+    position: relative; 
+    overflow-y: auto;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
 }
+
+/* 再次抽選按鈕樣式 */
+.random-btn {
+    background: #a89080;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.random-btn:hover { background: #8e735b; }
