@@ -22,15 +22,20 @@ let initialLoaded = false;
 let isAnimating = false;
 
 // 取得 DOM 元素
-const randomContainer = document.getElementById('random-container');
-const container = document.getElementById('guestbook-container');
-const paginationBox = document.getElementById('pagination-controls');
-const searchInput = document.getElementById('search-input');
-const sortBtn = document.getElementById('sort-btn');
-const refreshBtn = document.getElementById('refresh-random');
-const modal = document.getElementById('guestbook-modal');
+function getElements() {
+    return {
+        randomContainer: document.getElementById('random-container'),
+        container: document.getElementById('guestbook-container'),
+        paginationBox: document.getElementById('pagination-controls'),
+        searchInput: document.getElementById('search-input'),
+        sortBtn: document.getElementById('sort-btn'),
+        modal: document.getElementById('guestbook-modal'),
+        refreshBtn: document.getElementById('refresh-random')
+    };
+}
 
 export function initGuestbook(mode = 'full') {
+    const el = getElements();
     onValue(ref(db, 'test'), (snapshot) => {
         const data = snapshot.val();
         if (!data) return;
@@ -65,9 +70,11 @@ export function toggleModal(show) {
 }
 
 function refreshRandomMessages() {
+    const el = getElements();
     if (isAnimating || !randomContainer) return;
     isAnimating = true;
-    const cards = randomContainer.querySelectorAll('.message-card');
+    // 對應 CSS 的 .gb-message-card
+    const cards = el.randomContainer.querySelectorAll('.gb-message-card');
     cards.forEach((card, index) => {
         setTimeout(() => card.classList.add('peel-off-slow'), index * 50);
     });
@@ -78,9 +85,10 @@ function refreshRandomMessages() {
 }
 
 function displayRandom(withAnimation = false) {
+    const el = getElements();
     if (!randomContainer) return;
     randomContainer.innerHTML = '';
-    randomContainer.className = 'gb-grid-layout';
+    el.randomContainer.className = 'gb-grid-layout';
     const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 5); // 彈窗內顯示 5 筆較合適
     shuffled.forEach((item, idx) => {
         const card = createMessageCard(item, 'rand-' + idx, idx);
