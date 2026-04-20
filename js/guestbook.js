@@ -229,9 +229,6 @@ function renderPagination(current) {
             btn.className = `page-btn ${p === current ? 'active' : ''}`;
             btn.onclick = () => {
                 renderPage(p);
-                // 點擊後平滑滾動回留言區頂部，提升體驗
-                const targetTop = el.container.offsetTop - 150;
-                window.scrollTo({ top: targetTop, behavior: 'smooth' });
             };
             el.paginationBox.appendChild(btn);
         }
@@ -250,7 +247,7 @@ window.cycleFontSize = () => {
     body.classList.add(sizes[currentIdx]);
     
     // 儲存設定到本地，讓切換頁面後依然生效 (選用)
-    localStorage.setItem('gb-font-size', sizes[currentIdx]);
+    localStorage.setItem('gb-font-size-pref', sizes[currentIdx]);
 };
 
 // 頁面載入時自動套用上次的設定
