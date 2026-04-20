@@ -196,19 +196,24 @@ function renderPagination(current) {
     if (total <= 1) return;
 
     const pages = [];
-    // 複雜的分頁演算法：始終保持約 6 個按鈕
-    if (total <= 6) {
+    
+    if (total <= 9) {
         for (let i = 1; i <= total; i++) pages.push(i);
     } else {
-        if (current <= 4) {
-            // 靠近開頭：1, 2, 3, 4, 5, ..., total
-            pages.push(1, 2, 3, 4, 5, '...', total);
-        } else if (current >= total - 3) {
-            // 靠近結尾：1, ..., total-4, total-3, total-2, total-1, total
-            pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
+        // 核心邏輯：維持 第一頁 + [中間五頁] + 最後一頁
+        if (current <= 5) {
+            // 靠近開頭：1, 2, 3, 4, 5, 6, ..., total
+            for (let i = 1; i <= 6; i++) pages.push(i);
+            pages.push('...', total);
+        } else if (current >= total - 4) {
+            // 靠近結尾：1, ..., total-5, total-4, total-3, total-2, total-1, total
+            pages.push(1, '...');
+            for (let i = total - 5; i <= total; i++) pages.push(i);
         } else {
-            // 在中間：1, ..., current-1, current, current+1, ..., total
-            pages.push(1, '...', current - 1, current, current + 1, '...', total);
+            // 在中間：1, ..., current-2, current-1, current, current+1, current+2, ..., total
+            pages.push(1, '...');
+            for (let i = current - 2; i <= current + 2; i++) pages.push(i);
+            pages.push('...', total);
         }
     }
 
@@ -216,8 +221,7 @@ function renderPagination(current) {
         if (p === '...') {
             const span = document.createElement('span');
             span.innerText = '...';
-            span.style.color = '#a89080';
-            span.style.padding = '0 5px';
+            span.className = 'pagination-ellipsis';
             el.paginationBox.appendChild(span);
         } else {
             const btn = document.createElement('button');
@@ -225,7 +229,9 @@ function renderPagination(current) {
             btn.className = `page-btn ${p === current ? 'active' : ''}`;
             btn.onclick = () => {
                 renderPage(p);
-                window.scrollTo({ top: el.container.offsetTop - 150, behavior: 'smooth' });
+                // 點擊後平滑滾動回留言區頂部，提升體驗
+                const targetTop = el.container.offsetTop - 150;
+                window.scrollTo({ top: targetTop, behavior: 'smooth' });
             };
             el.paginationBox.appendChild(btn);
         }
