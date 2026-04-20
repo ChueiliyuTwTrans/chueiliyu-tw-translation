@@ -253,13 +253,9 @@ window.cycleFontSize = () => {
     localStorage.setItem('gb-font-size', sizes[currentIdx]);
 };
 
-// 初始化時檢查本地儲存
+// 頁面載入時自動套用上次的設定
 document.addEventListener('DOMContentLoaded', () => {
-    const savedSize = localStorage.getItem('gb-font-size');
-    if (savedSize) {
-        document.body.classList.add(savedSize);
-        currentIdx = sizes.indexOf(savedSize);
-    } else {
-        document.body.classList.add('font-size-small');
-    }
+    const saved = localStorage.getItem('gb-font-size-pref') || 'font-size-small';
+    document.body.classList.add(saved);
+    currentIdx = sizes.indexOf(saved);
 });
