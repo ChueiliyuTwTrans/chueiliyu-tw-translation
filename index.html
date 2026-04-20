@@ -884,7 +884,28 @@ body.theme-dark .sns-divider { color: #334155; }
         © 崔立于台灣翻譯站 ｜ 網站架設與設計：西卡
     </div>
 </footer>
-    
+
+<button class="floating-gb-btn" id="open-gb" title="查看隨機留言">✉️</button>
+
+<div class="gb-modal" id="guestbook-modal">
+    <div class="gb-modal-content">
+        <div class="gb-modal-header">
+            <div class="gb-modal-title" style="font-weight: bold; color: #a89080; font-size: 1.2rem;">隨機抽選留言</div>
+            <button class="font-toggle-btn" style="padding: 5px 12px !important; font-size: 12px;" onclick="cycleFontSize()">字體大小</button>
+        </div>
+        
+        <div class="modal-action-bar">
+            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+            <button class="close-modal" id="close-gb">收回</button>
+        </div>
+
+        <div id="random-container" class="gb-grid-layout">
+            <p>載入中...</p>
+        </div>
+
+        <a href="Guestbook" class="view-all-link">點擊前往觀看全部留言</a>
+    </div>
+</div>
     
 <button id="backToTop" title="回到頂端">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
