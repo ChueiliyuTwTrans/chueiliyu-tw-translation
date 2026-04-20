@@ -1,1 +1,56 @@
+#gb-widget {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 320px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
 
+#gb-header {
+  background: #ffccdd;
+  padding: 10px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+}
+
+#gb-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 8px;
+}
+
+/* 撕貼動畫 */
+.gb-card {
+  background: #fff8f8;
+  padding: 6px;
+  border-radius: 6px;
+  transform: rotate(-2deg);
+  animation: tearIn 0.4s ease;
+}
+
+.gb-card:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+@keyframes tearIn {
+  from {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+#gb-iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  display: none;
+}
