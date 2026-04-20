@@ -12,6 +12,48 @@
 .font-size-medium { --gb-font-size: 16px; }
 .font-size-large { --gb-font-size: 20px; }
 
+/* 留言牆按鈕 */
+.floating-gb-btn {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+
+    width: 65px;          /* ← 放大 */
+    height: 65px;
+
+    border-radius: 50%;
+    background: var(--primary-brown);
+    color: white;
+    border: none;
+
+    font-size: 26px;      /* ← icon 放大 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+
+    z-index: 9999;
+    transition: 0.3s;
+}
+
+.floating-gb-btn:hover {
+    background: var(--hover-brown);
+    transform: translateY(-3px);
+}
+
+/* 手機再放大一點（避免看不到） */
+@media (max-width: 480px) {
+    .floating-gb-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 28px;
+        bottom: 20px;
+        left: 20px;
+    }
+}
+
 /* 按鈕 */
 .gb-btn-primary,
 .random-btn,
@@ -43,6 +85,28 @@
 /* 字體切換 */
 .font-toggle-btn {
     background: #c39797;
+    color: white;
+}
+
+/* 前往觀看全部留言按鈕 */
+.view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+
+    color: var(--primary-brown);
+    text-decoration: none;
+    font-weight: bold;
+
+    padding: 12px;
+    border: 2px solid var(--primary-brown);
+    border-radius: 12px;
+
+    transition: 0.3s;
+}
+
+.view-all-link:hover {
+    background: var(--primary-brown);
     color: white;
 }
 
@@ -214,9 +278,10 @@
 ========================= */
 .scroll-controls {
     position: fixed;
-    bottom: 30px;
+    top: 50%;
     right: 30px;
     display: flex;
+    transform: translateY(-50%);
     flex-direction: column;
     gap: 12px;
     z-index: 9998;
@@ -240,8 +305,9 @@
 /* 手機 */
 @media (max-width: 480px) {
     .scroll-controls {
-        bottom: 20px;
-        right: 20px;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
     }
     .scroll-btn {
         width: 40px;
