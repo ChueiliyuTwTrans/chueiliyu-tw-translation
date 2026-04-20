@@ -21,23 +21,24 @@ let isDescending = true;
 let initialLoaded = false;
 let isAnimating = false;
 
+// 取得 DOM 元素
 const randomContainer = document.getElementById('random-container');
 const container = document.getElementById('guestbook-container');
 const paginationBox = document.getElementById('pagination-controls');
 const searchInput = document.getElementById('search-input');
 const sortBtn = document.getElementById('sort-btn');
-const btnGrid = document.getElementById('btn-grid');
-const btnList = document.getElementById('btn-list');
 const refreshBtn = document.getElementById('refresh-random');
+const modal = document.getElementById('guestbook-modal');
 
-// 初始化資料監聽
-export function initGuestbook() {
+export function initGuestbook(mode = 'full') {
     onValue(ref(db, 'test'), (snapshot) => {
         const data = snapshot.val();
         if (!data) return;
         rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
-        applyFilters();
-        if (!initialLoaded) {
+        
+        if (mode === 'full') {
+            applyFilters();
+        } else if (mode === 'random' && !initialLoaded) {
             initialLoaded = true;
             displayRandom(true);
         }
@@ -47,43 +48,52 @@ export function initGuestbook() {
     if (refreshBtn) refreshBtn.onclick = () => refreshRandomMessages();
     if (searchInput) searchInput.oninput = () => applyFilters();
     if (sortBtn) sortBtn.onclick = () => toggleSort();
-    if (btnGrid) btnGrid.onclick = () => switchLayout('grid');
-    if (btnList) btnList.onclick = () => switchLayout('list');
+}
+
+// 彈窗控制
+export function toggleModal(show) {
+    if (!modal) return;
+    if (show) {
+        modal.classList.add('active');
+        if (!initialLoaded && rawMessages.length > 0) {
+            initialLoaded = true;
+            displayRandom(true);
+        }
+    } else {
+        modal.classList.remove('active');
+    }
 }
 
 function refreshRandomMessages() {
-    if (isAnimating) return;
+    if (isAnimating || !randomContainer) return;
     isAnimating = true;
     const cards = randomContainer.querySelectorAll('.message-card');
-    if (cards.length === 0) {
-        displayRandom(true);
-        isAnimating = false;
-        return;
-    }
     cards.forEach((card, index) => {
-        setTimeout(() => card.classList.add('peel-off-slow'), index * 100);
+        setTimeout(() => card.classList.add('peel-off-slow'), index * 50);
     });
     setTimeout(() => {
         displayRandom(true);
         isAnimating = false;
-    }, (cards.length * 100) + 800);
+    }, (cards.length * 50) + 800);
 }
 
 function displayRandom(withAnimation = false) {
+    if (!randomContainer) return;
     randomContainer.innerHTML = '';
-    const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 10);
+    const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 5); // 彈窗內顯示 5 筆較合適
     shuffled.forEach((item, idx) => {
         const card = createMessageCard(item, 'rand-' + idx, idx);
         if (withAnimation) {
             card.style.opacity = '0';
             card.classList.add('stick-on-unroll');
-            card.style.animationDelay = `${idx * 0.12}s`;
+            card.style.animationDelay = `${idx * 0.1}s`;
         }
         randomContainer.appendChild(card);
     });
 }
 
 function applyFilters() {
+    if (!container) return;
     const keyword = searchInput.value.toLowerCase();
     let result = rawMessages.filter(item => item.message.toLowerCase().includes(keyword));
     if (isDescending) result = [...result].reverse();
@@ -119,7 +129,6 @@ function createMessageCard(item, uniqueId, colorIndex) {
         setTimeout(() => {
             const btn = document.getElementById(`btn-${uniqueId}`);
             if (btn) btn.onclick = (e) => {
-                e.stopPropagation();
                 const contentDiv = document.getElementById(`text-${uniqueId}`);
                 const isExp = btn.innerText === '展開';
                 contentDiv.innerText = isExp ? item.message : shortText;
@@ -131,6 +140,7 @@ function createMessageCard(item, uniqueId, colorIndex) {
 }
 
 function renderPagination(current) {
+    if (!paginationBox) return;
     paginationBox.innerHTML = '';
     const total = Math.ceil(filteredMessages.length / 100);
     if (total <= 1) return;
@@ -144,13 +154,4 @@ function renderPagination(current) {
         };
         paginationBox.appendChild(btn);
     }
-}
-
-function switchLayout(type) {
-    const isGrid = type === 'grid';
-    randomContainer.className = isGrid ? 'grid-layout' : 'list-layout';
-    container.className = isGrid ? 'grid-layout' : 'list-layout';
-    btnGrid.classList.toggle('active', isGrid);
-    btnList.classList.toggle('active', !isGrid);
-    renderPage(1);
 }
