@@ -878,6 +878,29 @@ body.theme-dark .sns-divider { color: #334155; }
     font-size: 13px;
     border-top: 1px solid #eee;
 }
+/* 撕掉 */
+.peel-off {
+    animation: peel 0.6s forwards;
+}
+
+@keyframes peel {
+    0% { transform: rotate(0); opacity:1; }
+    100% { transform: rotateX(90deg) translateY(-50px); opacity:0; }
+}
+
+/* 貼上 */
+.stick-on {
+    animation: stick 0.6s ease forwards;
+}
+
+@keyframes stick {
+    0% { transform: rotateX(-70deg); opacity:0; }
+    100% { transform: rotateX(0); opacity:1; }
+}
+
+#guestbook-widget {
+    touch-action: none;
+}
 </style>
 </head>
 
@@ -993,9 +1016,14 @@ body.theme-dark .sns-divider { color: #334155; }
 
     <div id="widget-random-container"></div>
 
-    <div class="widget-footer" onclick="goToGuestbookPage()">
-        點選進入全部留言頁面 →
+    <div class="widget-footer" onclick="toggleIframe()">
+        展開完整留言
     </div>
+
+    <iframe id="guestbook-iframe"
+        src="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/test/"
+        style="display:none; width:100%; height:300px; border:none;">
+    </iframe>
 </div>
 
 <script>
@@ -1630,11 +1658,25 @@ function goToGuestbookPage() {
     window.open("https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/test/", "_blank");
 }
 
-function renderWidgetMessages() {
+function refreshWidgetMessages() {
+    const cards = document.querySelectorAll('#widget-random-container .widget-card');
+
+    cards.forEach((card, i) => {
+        setTimeout(() => {
+            card.classList.add('peel-off');
+        }, i * 80);
+    });
+
+    setTimeout(() => {
+        renderWidgetMessages(true);
+    }, 500);
+}
+
+function renderWidgetMessages(withAnim = false) {
     const container = document.getElementById('widget-random-container');
     container.innerHTML = '';
 
-    const shuffled = [...widgetMessages]
+    const shuffled = [...window.widgetMessages]
         .sort(() => 0.5 - Math.random())
         .slice(0, 9);
 
@@ -1642,10 +1684,13 @@ function renderWidgetMessages() {
         const div = document.createElement('div');
         div.className = 'widget-card';
 
+        if (withAnim) {
+            div.classList.add('stick-on');
+            div.style.animationDelay = `${i * 0.1}s`;
+        }
+
         div.innerHTML = `
-            <div style="font-weight:bold; margin-bottom:4px;">
-                ${item.nickname || '匿名'}
-            </div>
+            <div><b>${item.nickname || '匿名'}</b></div>
             <div>${item.message.substring(0, 30)}...</div>
         `;
 
@@ -1656,6 +1701,50 @@ function renderWidgetMessages() {
 /* 再抽一次 */
 function refreshWidgetMessages() {
     renderWidgetMessages();
+}
+
+function toggleIframe() {
+    const iframe = document.getElementById('guestbook-iframe');
+
+    iframe.style.display = iframe.style.display === 'none' ? 'block' : 'none';
+}
+
+let isDragging = false;
+let offsetX, offsetY;
+
+const widget = document.getElementById('guestbook-widget');
+
+widget.addEventListener('mousedown', startDrag);
+widget.addEventListener('touchstart', startDrag);
+
+function startDrag(e) {
+    isDragging = true;
+
+    const rect = widget.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    offsetX = clientX - rect.left;
+    offsetY = clientY - rect.top;
+
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('touchmove', drag);
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
+}
+
+function drag(e) {
+    if (!isDragging) return;
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    widget.style.left = (clientX - offsetX) + 'px';
+    widget.style.top = (clientY - offsetY) + 'px';
+}
+
+function stopDrag() {
+    isDragging = false;
 }
 </script>
     
@@ -1682,8 +1771,8 @@ function refreshWidgetMessages() {
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 
-  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+  window.widgetMessages = [];
+    
   onValue(ref(window.db, 'test'), (snapshot) => {
     const data = snapshot.val();
     if (!data) return;
