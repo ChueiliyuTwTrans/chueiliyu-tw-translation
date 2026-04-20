@@ -100,3 +100,44 @@
   justify-content: space-between;
   padding: 8px;
 }
+
+/* ===== 左下角開啟按鈕 ===== */
+#gb-fab {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 9999;
+
+  background: #ff8fab;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* ===== widget 預設隱藏 ===== */
+#gb-widget {
+  display: none;
+}
+
+/* ===== 放大 overlay ===== */
+#gb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+#gb-overlay .gb-card {
+  transform: scale(1.5) rotate(0deg) !important;
+  max-width: 80%;
+  font-size: 16px;
+}
