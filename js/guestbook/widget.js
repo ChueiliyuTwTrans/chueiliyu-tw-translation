@@ -55,12 +55,29 @@ function render() {
       <div class="gb-msg">${m.message}</div>
     `;
 
+    // 📱 點擊放大
+    div.onclick = () => {
+      const overlay = document.getElementById('gb-overlay');
+      overlay.innerHTML = '';
+      overlay.style.display = 'flex';
+
+      const clone = div.cloneNode(true);
+      overlay.appendChild(clone);
+    };
+
     container.appendChild(div);
   });
 }
 
 /* UI */
 function createUI() {
+  // 🔘 左下角按鈕
+  const fab = document.createElement('button');
+  fab.id = 'gb-fab';
+  fab.innerText = '💬 留言';
+  document.body.appendChild(fab);
+
+  // 📦 widget
   const el = document.createElement('div');
   el.id = 'gb-widget';
 
@@ -82,14 +99,29 @@ function createUI() {
 
   document.body.appendChild(el);
 
-  document.getElementById('gb-refresh').onclick = render;
+  // 📱 放大用 overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'gb-overlay';
+  document.body.appendChild(overlay);
+
+  // ===== 事件 =====
+  fab.onclick = () => {
+    el.style.display = 'block';
+  };
 
   document.getElementById('gb-close').onclick = () => {
     el.style.display = 'none';
   };
 
+  document.getElementById('gb-refresh').onclick = render;
+
   document.getElementById('gb-open').onclick = () => {
     document.getElementById('gb-iframe').style.display = 'block';
+  };
+
+  overlay.onclick = () => {
+    overlay.style.display = 'none';
+    overlay.innerHTML = '';
   };
 }
 
