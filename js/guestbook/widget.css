@@ -1,7 +1,8 @@
 #gb-widget {
   position: fixed;
-  right: 20px;
+  left: 20px;
   bottom: 20px;
+  right: auto;
   width: 330px;
   background: #fff;
   border-radius: 14px;
