@@ -7,6 +7,7 @@
 <link rel="icon" href="https://chueiliyutwtrans.github.io/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="images/favicon.png">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="https://chueiliyutwtrans.github.io/sitemap.xml" />
+<link rel="stylesheet" href="js/guestbook/guestbook.css">
 <meta name="google-site-verification" content="7PIMmC4U7ysESFC3XZsVfbBhYHZghon76UDH7Orv1gI" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -883,6 +884,28 @@ body.theme-dark .sns-divider { color: #334155; }
         © 崔立于台灣翻譯站 ｜ 網站架設與設計：西卡
     </div>
 </footer>
+    
+<button class="floating-gb-btn" id="open-gb" title="查看隨機留言">✉️</button>
+
+<div class="gb-modal" id="guestbook-modal">
+    <div class="gb-modal-content">
+        <div class="gb-modal-header">
+            <div class="section-title" style="margin:0; border-left: 5px solid #a89080; padding-left: 10px;">✨ 隨機抽選留言</div>
+            <button class="close-modal" id="close-gb">收回</button>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+        </div>
+
+        <div id="random-container" class="grid-layout">
+            <p>載入中...</p>
+        </div>
+
+        <a href="tests/index.html" class="view-all-link">點擊前往觀看全部留言</a>
+    </div>
+</div>
+    
 <button id="backToTop" title="回到頂端">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 15l-6-6-6 6"/>
@@ -1500,6 +1523,8 @@ function initBackToTop() {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+  // 引用留言板功能
+  import { initGuestbook, toggleModal } from "./js/guestbook/guestbook.js";
     
   const firebaseConfig = {
     apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
@@ -1518,6 +1543,25 @@ function initBackToTop() {
   window.fb_ref = ref;            
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
+
+  // --- 初始化留言板功能 ---
+  // 1. 初始化隨機留言邏輯
+  initGuestbook('random');
+
+  // 2. 綁定彈窗控制事件
+  const openBtn = document.getElementById('open-gb');
+  const closeBtn = document.getElementById('close-gb');
+  const modal = document.getElementById('guestbook-modal');
+
+  if (openBtn) openBtn.onclick = () => toggleModal(true);
+  if (closeBtn) closeBtn.onclick = () => toggleModal(false);
+  
+  // 點擊彈窗外部背景可關閉
+  if (modal) {
+    modal.onclick = (e) => {
+      if(e.target.id === 'guestbook-modal') toggleModal(false);
+    };
+  }
 </script>
 </body>
 </html>
