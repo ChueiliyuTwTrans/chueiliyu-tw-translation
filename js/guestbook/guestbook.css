@@ -49,3 +49,83 @@
     60% { transform: rotateX(5deg) translateY(0); opacity: 1; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
     100% { transform: rotateX(0deg); opacity: 1; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; box-shadow: 2px 2px 8px rgba(0,0,0,0.06); }
 }
+
+/* --- 懸浮按鈕 --- */
+.floating-gb-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #a89080;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.floating-gb-btn:hover { transform: scale(1.1); background: #8e735b; }
+
+/* --- 彈出模態框 --- */
+.gb-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.gb-modal.active { display: flex; }
+
+.gb-modal-content {
+    background: #f9f7f5;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.gb-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    background: #eee;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #a89080;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px solid #a89080;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.view-all-link:hover { background: #a89080; color: white; }
