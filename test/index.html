@@ -9,60 +9,32 @@
   <title>測試</title>
 
   <style>
-    /* 這裡只保留頁面整體的基礎排版 CSS */
-    body { font-family: sans-serif; background-color: #f9f7f5; padding: 15px; color: #4a4a4a; }
-    .top-bar { position: sticky; top: 0; z-index: 100; background: rgba(249, 247, 245, 0.9); backdrop-filter: blur(10px); padding: 10px 0; margin-bottom: 20px; display: flex; justify-content: center; border-bottom: 1px solid #eee; }
-    .layout-switcher { display: flex; background: #e5e5e5; padding: 4px; border-radius: 12px; gap: 2px; }
-    .switch-btn { padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; background: transparent; color: #666; font-weight: bold; }
-    .switch-btn.active { background: white; color: #a89080; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .section-title { font-size: 1.3em; font-weight: 700; margin: 20px 0 15px; border-left: 5px solid #a89080; padding-left: 10px; }
-    .random-btn { padding: 10px 22px; border: none; border-radius: 50px; cursor: pointer; color: white; font-weight: bold; background: linear-gradient(135deg, #a89080 0%, #8e735b 100%); }
-    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-    .search-input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #eee; border-radius: 8px; }
-    .sort-btn { padding: 8px 15px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; }
-    .pagination { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; justify-content: center; padding-bottom: 50px; }
-    .page-btn { padding: 8px 14px; border: none; background: white; cursor: pointer; border-radius: 8px; color: #888; }
-    .page-btn.active { background: #a89080; color: white; }
-    hr { border: 0; border-top: 1px solid #eee; margin: 40px 0; }
+    body { font-family: "PingFang TC", sans-serif; background-color: #f9f7f5; padding: 20px; }
+    .header-nav { margin-bottom: 30px; text-align: center; }
+    .section-title { font-size: 1.5em; font-weight: 700; margin: 20px 0; border-left: 5px solid #a89080; padding-left: 10px; }
   </style>
 </head>
 
 <body>
-
-  <div class="top-bar">
-    <div class="layout-switcher">
-      <button class="switch-btn active" id="btn-grid">留言牆</button>
-      <button class="switch-btn" id="btn-list">留言清單</button>
-    </div>
+  <div class="header-nav">
+    <h1>📋 全部留言</h1>
+    <a href="../index.html" style="color: #a89080; text-decoration: none;">← 回到首頁</a>
   </div>
 
-  <div class="section-title">✨ 隨機抽選留言</div>
-  <div class="btn-group">
-    <button class="random-btn" id="refresh-random">再次隨機抽選留言</button>
-  </div>
-
-  <div id="random-container" class="grid-layout">
-    <p>載入中...</p> 
-  </div>
-
-  <hr>
-
-  <div class="section-title">📋 顯示全部留言</div>
   <div class="controls">
     <input type="text" id="search-input" class="search-input" placeholder="搜尋關鍵字...">
     <button id="sort-btn" class="sort-btn">排序：新 → 舊</button>
   </div>
 
   <div id="guestbook-container" class="grid-layout">
-    <p id="loading-text">載入中...</p>
+    <p>載入中...</p>
   </div>
 
   <div id="pagination-controls" class="pagination"></div>
 
   <script type="module">
     import { initGuestbook } from "../js/guestbook/guestbook.js";
-    // 執行初始化
-    initGuestbook();
+    initGuestbook('full');
   </script>
 </body>
 </html>
