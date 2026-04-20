@@ -87,11 +87,11 @@
 /* --- 佈局與通用 --- */
 .gb-grid-layout { 
     display: grid !important; 
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    grid-template-columns: repeat(5, 1fr) !important; 
     gap: 25px !important;
     width: 100% !important;
     padding: 20px 0;
-    max-width: 1200px; /* 限制整體最大寬度，避免在大螢幕上太散 */
+    max-width: 1400px; /* 限制整體最大寬度，避免在大螢幕上太散 */
     margin: 0 auto;
 }
 
@@ -101,6 +101,21 @@
         gap: 10px; 
     }
     .gb-message-card { padding: 15px !important; }
+}
+
+@media (max-width: 1200px) {
+    .gb-grid-layout { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+@media (max-width: 800px) {
+    .gb-grid-layout { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 500px) {
+    .gb-grid-layout { 
+        grid-template-columns: 1fr !important; 
+        gap: 15px; 
+    }
 }
 
 /* --- 留言卡片 --- */
@@ -304,6 +319,7 @@
     background: #a89080 !important;
     color: white !important;
     border-color: #a89080;
+    transform: none !important;
 }
 
 .page-btn:hover:not(.active) {
