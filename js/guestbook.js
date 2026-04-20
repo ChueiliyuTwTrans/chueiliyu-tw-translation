@@ -225,10 +225,12 @@ function renderPagination(current) {
             el.paginationBox.appendChild(span);
         } else {
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.innerText = p;
             btn.className = `page-btn ${p === current ? 'active' : ''}`;
             btn.onclick = (e) => {
                 e.preventDefault(); // 防止預設行為
+                e.stopPropagation();
                 renderPage(p);
             };
             el.paginationBox.appendChild(btn);
@@ -256,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('gb-font-size-pref') || 'font-size-small';
     document.body.classList.add(saved);
     currentIdx = sizes.indexOf(saved);
+    if (currentIdx === -1) currentIdx = 0;
 
     const btnUp = document.getElementById('scroll-up');
     const btnDown = document.getElementById('scroll-down');
