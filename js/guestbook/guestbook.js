@@ -80,6 +80,7 @@ function refreshRandomMessages() {
 function displayRandom(withAnimation = false) {
     if (!randomContainer) return;
     randomContainer.innerHTML = '';
+    randomContainer.className = 'gb-grid-layout';
     const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 5); // 彈窗內顯示 5 筆較合適
     shuffled.forEach((item, idx) => {
         const card = createMessageCard(item, 'rand-' + idx, idx);
@@ -118,7 +119,7 @@ function renderPage(page) {
 
 function createMessageCard(item, uniqueId, colorIndex) {
     const card = document.createElement('div');
-    card.className = `message-card theme-${colorIndex % 6}`;
+    card.className = `gb-message-card gb-theme-${colorIndex % 6}`;
     const shortText = item.message.length > 100 ? item.message.substring(0, 100) + "..." : item.message;
     card.innerHTML = `
         <div class="nickname">${item.nickname || '匿名'}</div>
