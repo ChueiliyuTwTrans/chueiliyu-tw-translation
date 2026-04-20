@@ -109,8 +109,8 @@ function displayRandom(withAnimation = false) {
     el.randomContainer.innerHTML = '';
     el.randomContainer.className = 'gb-grid-layout';
     
-    // 隨機抽選 5 筆
-    const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 5);
+    // 隨機抽選 6 筆
+    const shuffled = [...rawMessages].sort(() => 0.5 - Math.random()).slice(0, 6);
     
     if (shuffled.length === 0) {
         el.randomContainer.innerHTML = '<p>目前沒有留言...</p>';
