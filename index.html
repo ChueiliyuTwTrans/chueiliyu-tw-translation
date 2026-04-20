@@ -505,10 +505,27 @@ body.theme-dark #backToTop {
     color: #fff;
     border: 1px solid rgba(255,255,255,0.15);
 }
+    
 body.theme-dark #backToTop:hover {
     background: #334155;
 }
 
+body.modal-open #backToTop {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+}
+
+body.modal-open #backToTop {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+}
+
+/* 防止背景滾動 */
+body.modal-open {
+    overflow: hidden;
+}
 
 /* =========================================
    🎨 THEME SYSTEMS
