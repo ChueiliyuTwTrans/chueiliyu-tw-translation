@@ -90,6 +90,11 @@
     padding: 0 25px !important;
 }
 
+.font-toggle-btn:hover {
+    background: #c39797 !important; /* 固定不變 */
+    filter: brightness(0.95);
+}
+
 /* 前往觀看全部留言按鈕 */
 .view-all-link {
     display: block;
