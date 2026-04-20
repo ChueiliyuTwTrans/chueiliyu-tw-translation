@@ -1,3 +1,89 @@
+/* --- 高級溫暖風格通用樣式 --- */
+:root {
+    --primary-brown: #a89080;
+    --hover-brown: #8e735b;
+    --bg-warm: #f9f7f5;
+    --text-dark: #5a5552;
+    --gb-font-size: 14px; /* 預設字體大小 */
+}
+
+/* 字體大小調整類 */
+.font-size-small { --gb-font-size: 12px; }
+.font-size-medium { --gb-font-size: 16px; }
+.font-size-large { --gb-font-size: 20px; }
+
+/* 統一按鈕樣式 */
+.gb-btn-primary, .random-btn, .sort-btn, .font-toggle-btn {
+    background: var(--primary-brown) !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 25px !important;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+
+.gb-btn-primary:hover, .random-btn:hover, .sort-btn:hover {
+    background: var(--hover-brown) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 搜尋框樣式 */
+.search-input {
+    padding: 10px 20px;
+    border: 2px solid #e0ddd9;
+    border-radius: 25px;
+    outline: none;
+    transition: 0.3s;
+    width: 250px;
+    background: white;
+}
+.search-input:focus { border-color: var(--primary-brown); }
+
+/* 收回按鈕 (次要按鈕) */
+.close-modal {
+    background: #eee !important;
+    color: var(--text-dark) !important;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* --- 彈窗佈局調整 --- */
+.gb-modal-header {
+    display: flex;
+    justify-content: space-between; /* 標題與收回按鈕兩端 */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-action-bar {
+    display: flex;
+    justify-content: space-between; /* 隨機抽選在左，收回在右 */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px; /* 增加與留言框的距離 */
+    color: var(--primary-brown);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 12px;
+    border: 2px solid var(--primary-brown);
+    border-radius: 12px;
+    transition: 0.3s;
+}
+.view-all-link:hover { background: var(--primary-brown); color: white; }
+
 /* --- 佈局與通用 --- */
 .gb-grid-layout { 
     display: grid !important; 
@@ -53,7 +139,7 @@
     white-space: pre-wrap !important; 
     word-break: break-all !important; 
     color: #444 !important; 
-    font-size: 14px !important;
+    font-size: var(--gb-font-size) !important;
 }
 
 .gb-toggle-btn { 
