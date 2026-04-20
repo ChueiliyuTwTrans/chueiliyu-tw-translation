@@ -1544,38 +1544,13 @@ function initBackToTop() {
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 
-  try {
-    // 1. 同時初始化兩種模式（因為你現在把兩者放在同一個測試頁面）
-    // 如果你只想跑隨機，就維持 'random'
-    initGuestbook('full'); 
-    initGuestbook('random');
+  // 初始化
+  initGuestbook('full');   // 顯示下方全部留言
+  initGuestbook('random'); // 準備好彈窗內的隨機留言
 
-    // 2. 綁定按鈕事件
-    const openBtn = document.getElementById('open-gb');
-    const closeBtn = document.getElementById('close-gb');
-    const modal = document.getElementById('guestbook-modal');
-
-    if (openBtn) {
-      openBtn.onclick = () => {
-        console.log("按鈕被點擊了"); // 除錯用
-        toggleModal(true);
-      };
-    }
-
-    if (closeBtn) {
-      closeBtn.onclick = () => toggleModal(false);
-    }
-    
-    if (modal) {
-      modal.onclick = (e) => {
-        if(e.target.id === 'guestbook-modal') toggleModal(false);
-      };
-    }
-
-    console.log("留言板模組載入成功");
-  } catch (error) {
-    console.error("載入失敗，請檢查檔案路徑：", error);
-  }
+  // 綁定按鈕
+  document.getElementById('open-gb').onclick = () => toggleModal(true);
+  document.getElementById('close-gb').onclick = () => toggleModal(false);
 </script>
 </body>
 </html>
