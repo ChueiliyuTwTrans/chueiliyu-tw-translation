@@ -43,12 +43,12 @@
     transform: translateY(-3px);
 }
 
-/* 手機再放大一點（避免看不到） */
+/* 手機 */
 @media (max-width: 480px) {
     .floating-gb-btn {
-        width: 70px;
-        height: 70px;
-        font-size: 28px;
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
         bottom: 20px;
         left: 20px;
     }
@@ -86,6 +86,8 @@
 .font-toggle-btn {
     background: #c39797;
     color: white;
+    height: 42px !important; 
+    padding: 0 25px !important;
 }
 
 /* 前往觀看全部留言按鈕 */
@@ -229,7 +231,7 @@
     border: none;
     color: var(--gb-theme-color);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
     margin-left: auto;
