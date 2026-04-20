@@ -7,6 +7,7 @@
 <link rel="icon" href="https://chueiliyutwtrans.github.io/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="images/favicon.png">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="https://chueiliyutwtrans.github.io/sitemap.xml" />
+<link rel="stylesheet" href="../js/guestbook/guestbook.css">
 <meta name="google-site-verification" content="7PIMmC4U7ysESFC3XZsVfbBhYHZghon76UDH7Orv1gI" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -864,6 +865,22 @@ body.theme-dark .sns-divider { color: #334155; }
         </div>
     </main>
 </div>
+
+<div class="header-nav">
+    <h1>📋 全部留言</h1>
+    <a href="../index.html" style="color: #a89080; text-decoration: none;">← 回到首頁</a>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search-input" class="search-input" placeholder="搜尋關鍵字...">
+    <button id="sort-btn" class="sort-btn">排序：新 → 舊</button>
+  </div>
+
+  <div id="guestbook-container" class="grid-layout">
+    <p>載入中...</p>
+  </div>
+
+  <div id="pagination-controls" class="pagination"></div>
     
 <footer>
     <div class="footer-sns">
@@ -1500,6 +1517,7 @@ function initBackToTop() {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+  import { initGuestbook, toggleModal } from "./js/guestbook/guestbook.js";
     
   const firebaseConfig = {
     apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw",
@@ -1519,6 +1537,18 @@ function initBackToTop() {
   window.fb_onValue = onValue;      
   window.fb_runTransaction = runTransaction; 
 
+  // 留言牆
+  // 初始化隨機模式
+  initGuestbook('random');
+
+  // 綁定彈窗開關
+  document.getElementById('open-gb').onclick = () => toggleModal(true);
+  document.getElementById('close-gb').onclick = () => toggleModal(false);
+  
+  // 點擊背景也可關閉
+  document.getElementById('guestbook-modal').onclick = (e) => {
+    if(e.target.id === 'guestbook-modal') toggleModal(false);
+  };
 </script>
 </body>
 </html>
