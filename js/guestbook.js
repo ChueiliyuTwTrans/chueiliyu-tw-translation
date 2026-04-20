@@ -71,6 +71,9 @@ export function toggleModal(show) {
     
     if (show) {
         el.modal.classList.add('active');
+        // 關閉 backToTop
+        document.body.classList.add('modal-open');
+        
         // 確保打開時如果有數據就顯示
         if (!initialLoaded && rawMessages.length > 0) {
             initialLoaded = true;
@@ -78,6 +81,8 @@ export function toggleModal(show) {
         }
     } else {
         el.modal.classList.remove('active');
+        // 恢復 backToTop
+        document.body.classList.remove('modal-open');
     }
 }
 
