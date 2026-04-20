@@ -274,24 +274,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     margin-top: 60px; /* 增加與上方留言框的距離 */
     margin-bottom: 40px;
 }
 
 .page-btn {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%; /* 圓形分頁 */
+    border-radius: 8px !important;
     border: 1px solid #e0ddd9;
     background: white;
     color: #a89080;
     cursor: pointer;
     transition: 0.3s;
     font-weight: bold;
+    font-size: 16px;
 }
 
 .page-btn.active {
@@ -302,6 +303,12 @@
 
 .page-btn:hover:not(.active) {
     background: #f4f1ee;
+}
+
+.pagination span {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0 5px;
 }
 
 /* --- 彈窗內的佈局微調 --- */
