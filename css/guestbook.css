@@ -18,7 +18,6 @@
 body {
     background-color: var(--bg-warm);
     color: var(--text-dark);
-    transition: background-color 0.3s ease;
 }
 
 /* =========================================
@@ -79,7 +78,7 @@ body {
 .gb-modal-content {
     background: #f9f7f5;
     width: 90%;
-    max-width: 500px; /* 縮小寬度，讓卡片比例恢復正常 */
+    max-width: 500px; 
     border-radius: 20px;
     padding: 30px;
     position: relative;
@@ -93,7 +92,6 @@ body {
     grid-template-rows: auto auto;
     gap: 15px;
     margin-bottom: 20px;
-    align-items: start;
 }
 
 .gb-modal-title {
@@ -104,12 +102,32 @@ body {
     font-size: 1.25rem;
 }
 
+/* 再次隨機按鈕：標題正下方 */
+.random-btn {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: start !important;
+}
+
+/* 右側控制區：垂直排列字體大小與收回 */
+.modal-right-controls {
+    grid-column: 2 !important;
+    grid-row: 1 / span 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
 /* 彈窗內的 Grid 必須強制單欄，否則按鈕會縮小 */
 .gb-modal-content .gb-grid-layout {
-    display: block !important;
+    display: block !important; /* 彈窗內不使用 Grid */
     width: 100% !important;
-    padding: 0 !important;
-    margin: 20px 0 !important;
+}
+
+#random-container .gb-message-card {
+    width: 100% !important;
+    margin: 0 !important;
+    overflow: visible !important; /* 確保文字不被切掉 */
 }
 
 /* 彈窗按鈕列佈局 */
