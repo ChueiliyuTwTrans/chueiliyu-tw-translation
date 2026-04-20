@@ -88,8 +88,11 @@
 .gb-grid-layout { 
     display: grid !important; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 15px; 
+    gap: 25px !important;
     width: 100% !important;
+    padding: 20px 0;
+    max-width: 1200px; /* 限制整體最大寬度，避免在大螢幕上太散 */
+    margin: 0 auto;
 }
 
 @media (max-width: 600px) {
@@ -102,7 +105,7 @@
 
 /* --- 留言卡片 --- */
 .gb-message-card { 
-    padding: 20px; 
+    padding: 25px !important;
     background: #ffffff !important; 
     border-radius: 12px !important; 
     border-left: 6px solid var(--gb-theme-color) !important; 
@@ -130,8 +133,8 @@
     font-weight: bold !important; 
     color: var(--gb-theme-color) !important; 
     filter: brightness(0.8); 
-    margin-bottom: 8px !important; 
-    font-size: 14px !important;
+    margin-bottom: 12px !important; 
+    font-size: 16px !important;
 }
 
 .gb-content { 
@@ -140,6 +143,7 @@
     word-break: break-all !important; 
     color: #444 !important; 
     font-size: var(--gb-font-size) !important;
+    letter-spacing: 0.5px;
 }
 
 .gb-toggle-btn { 
