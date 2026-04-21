@@ -237,19 +237,11 @@ function renderPagination(current) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const container = el.container;
-                const topBefore = container.getBoundingClientRect().top;
-
                 renderPage(p);
 
-                requestAnimationFrame(() => {
-                    const topAfter = container.getBoundingClientRect().top;
-                    const diff = topAfter - topBefore;
-
-                    window.scrollBy({
-                        top: diff,
-                        behavior: 'instant'
-                    });
+                window.scrollTo({
+                    top: el.container.offsetTop - 20,
+                    behavior: 'instant'
                 });
             };
             el.paginationBox.appendChild(btn);
