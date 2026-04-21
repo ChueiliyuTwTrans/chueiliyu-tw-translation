@@ -237,14 +237,19 @@ function renderPagination(current) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const scrollY = window.scrollY;   // 記住位置
+                const container = el.container;
+                const topBefore = container.getBoundingClientRect().top;
 
                 renderPage(p);
 
-                // 強制回到原本位置
-                window.scrollTo({
-                    top: scrollY,
-                    behavior: 'instant'
+                requestAnimationFrame(() => {
+                    const topAfter = container.getBoundingClientRect().top;
+                    const diff = topAfter - topBefore;
+
+                    window.scrollBy({
+                        top: diff,
+                        behavior: 'instant'
+                    });
                 });
             };
             el.paginationBox.appendChild(btn);
@@ -271,9 +276,11 @@ window.cycleFontSize = () => {
 document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('gb-font-size-pref') || 'font-size-small';
 
-    document.body.classList.remove(...sizes);
-    document.body.classList.add(saved);
-
+    requestAnimationFrame(() => {
+        document.body.classList.remove(...sizes);
+        document.body.classList.add(saved);
+    });
+    
     currentIdx = sizes.indexOf(saved);
     if (currentIdx === -1) currentIdx = 0;
 
@@ -300,8 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
-    // (進階功能) 滾動到最頂端時隱藏「往上」按鈕，最底端時隱藏「往下」按鈕
-    window.onscroll = () => {
+    // 滾動到最頂端時隱藏「往上」按鈕，最底端時隱藏「往下」按鈕
+    window.addEventListener('scroll', () => {
         const scrolledToTop = window.scrollY === 0;
         const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10;
         
