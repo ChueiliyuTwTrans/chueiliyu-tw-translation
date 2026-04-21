@@ -195,9 +195,6 @@ function renderPage(page) {
     });
 
     renderPagination(page);
-
-    // 強制維持整體高度（避免壓縮）
-    document.body.style.minHeight = totalHeight + 'px';
 }
 
 function renderPagination(current) {
