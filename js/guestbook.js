@@ -236,12 +236,12 @@ function renderPagination(current) {
             btn.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-
+                // 記住目前 scroll 位置（整頁）
+                const scrollY = window.scrollY;
                 renderPage(p);
-
-                window.scrollTo({
-                    top: el.container.offsetTop - 20,
-                    behavior: 'instant'
+                // 強制還原 scroll
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, scrollY);
                 });
             };
             el.paginationBox.appendChild(btn);
