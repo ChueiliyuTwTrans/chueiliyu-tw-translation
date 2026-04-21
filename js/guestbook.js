@@ -317,5 +317,5 @@ document.addEventListener('DOMContentLoaded', () => {
         
         btnDown.style.opacity = scrolledToBottom ? "0.3" : "1";
         btnDown.style.pointerEvents = scrolledToBottom ? "none" : "auto";
-    };
+    });
 });
