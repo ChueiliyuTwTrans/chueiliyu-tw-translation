@@ -184,18 +184,28 @@ function toggleSort() {
 function renderPage(page) {
     const el = getElements();
     if (!el.container) return;
+    // 記住整個區塊高度（container + pagination）
+    const totalHeight = document.body.scrollHeight;
+
     el.container.innerHTML = '';
     const start = (page - 1) * 100;
+
     filteredMessages.slice(start, start + 100).forEach((item, idx) => {
         el.container.appendChild(createMessageCard(item, 'all-' + idx, idx));
     });
+
     renderPagination(page);
+
+    // 強制維持整體高度（避免壓縮）
+    document.body.style.minHeight = totalHeight + 'px';
 }
 
 function renderPagination(current) {
     const el = getElements();
     if (!el.paginationBox) return;
+    const height = el.paginationBox.offsetHeight;
     el.paginationBox.innerHTML = '';
+    el.paginationBox.style.minHeight = height + 'px';
     
     const total = Math.ceil(filteredMessages.length / 100);
     if (total <= 1) return;
@@ -236,12 +246,13 @@ function renderPagination(current) {
             btn.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // 記住目前 scroll 位置（整頁）
-                const scrollY = window.scrollY;
+                // 記住距離底部
+                const scrollBottom = document.documentElement.scrollHeight - window.scrollY;
                 renderPage(p);
                 // 強制還原 scroll
                 requestAnimationFrame(() => {
-                    window.scrollTo(0, scrollY);
+                    const newScrollY = document.documentElement.scrollHeight - scrollBottom;
+                    window.scrollTo(0, newScrollY);
                 });
             };
             el.paginationBox.appendChild(btn);
