@@ -234,9 +234,18 @@ function renderPagination(current) {
             btn.innerText = p;
             btn.className = `page-btn ${p === current ? 'active' : ''}`;
             btn.onclick = (e) => {
-                e.preventDefault(); // 防止預設行為
+                e.preventDefault();
                 e.stopPropagation();
+
+                const scrollY = window.scrollY;   // 記住位置
+
                 renderPage(p);
+
+                // 強制回到原本位置
+                window.scrollTo({
+                    top: scrollY,
+                    behavior: 'instant'
+                });
             };
             el.paginationBox.appendChild(btn);
         }
@@ -261,7 +270,10 @@ window.cycleFontSize = () => {
 // 頁面載入時自動套用上次的設定
 document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('gb-font-size-pref') || 'font-size-small';
+
+    document.body.classList.remove(...sizes);
     document.body.classList.add(saved);
+
     currentIdx = sizes.indexOf(saved);
     if (currentIdx === -1) currentIdx = 0;
 
