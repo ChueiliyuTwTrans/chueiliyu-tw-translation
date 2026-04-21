@@ -41,15 +41,6 @@
   <script type="module">
     import { initGuestbook } from "../js/guestbook.js";
     initGuestbook('full');
-
-    // 字體切換邏輯
-    const sizes = ['font-size-small', 'font-size-medium', 'font-size-large'];
-    let currentIdx = 0;
-    window.cycleFontSize = () => {
-        document.body.classList.remove(...sizes);
-        currentIdx = (currentIdx + 1) % sizes.length;
-        document.body.classList.add(sizes[currentIdx]);
-    };
   </script>
 </body>
 </html>
