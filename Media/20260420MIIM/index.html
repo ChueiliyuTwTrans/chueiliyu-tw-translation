@@ -90,7 +90,7 @@
 
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
-    .intro-text { text-align: left !important; font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 20px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
+    .intro-text { text-align: left !important; font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 22px; background: linear-gradient( 135deg, var(--intro-bg) 0%, rgba(115,165,198,0.15) 100% ); border-radius: 16px; border: 1px solid var(--intro-border); box-shadow: 0 6px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5); backdrop-filter: blur(6px); }
     .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1.1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
     .post-item { margin-bottom: 12px; padding-bottom: 16px; }
     .instagram-media { margin: 0 auto !important; max-width: 500px !important; }
@@ -115,6 +115,8 @@
         background: #333; color: white; border: 1px solid rgba(255,255,255,0.1); padding: 6px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;
     }
     .video-controls-bar button:hover { background: #444; transform: translateY(-1px); }
+
+    .video-controls-bar p { color: white; font-size: 16px; font-weight: 600; margin: 0; }
 
     .video-responsive-wrapper {
         position: relative;
@@ -304,8 +306,6 @@
 
     <div id="tab-pictorial" class="tab-content active">
 
-    <h2 class="section-title">✨ 立于X玗進照片</h2>
-
     <div class="post-item">
       <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWp8PbbCTNX/" data-instgrm-version="14"></blockquote>
     </div>
@@ -470,31 +470,33 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
             playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 }, // 絕對不偷播
             events: {
                 'onReady': function(event) {
-                    loadSRT(vData.srt, vData.subEl, event.target);
+                  if (vData.srt) {
+                    loadSRT(vData, event.target);
+                  }
                 }
             }
         });
     }
 
-    function loadSRT(filename, subtitleId, player) {
-        fetch(filename)
-            .then(response => response.text())
-            .then(text => {
-                const subs = parseSRT(text);
+    function loadSRT(vData, player) {
+      fetch(vData.srt)
+        .then(r => r.text())
+        .then(text => {
+            const subs = parseSRT(text);
 
-                // 防止重複 interval
-                if (v.interval) clearInterval(v.interval);
-              
-                setInterval(() => {
-                    if (player && player.getPlayerState() === 1) { 
-                        const time = player.getCurrentTime();
-                        const currentSub = subs.find(s => time >= s.start && time <= s.end);
-                        document.getElementById(subtitleId).innerHTML = currentSub ? currentSub.text : '';
-                    } else {
-                        document.getElementById(subtitleId).innerHTML = ''; 
-                    }
-                }, 200);
-            }).catch(e => console.log("字幕載入失敗", e));
+            if (vData.interval) clearInterval(vData.interval);
+
+            vData.interval = setInterval(() => {
+                if (player.getPlayerState() === 1) {
+                    const t = player.getCurrentTime();
+                    const s = subs.find(x => t >= x.start && t <= x.end);
+                    document.getElementById(vData.subEl).innerHTML = s ? s.text : '';
+                } else {
+                    document.getElementById(vData.subEl).innerHTML = '';
+                }
+            }, 200);
+        })
+        .catch(e => console.log("字幕載入失敗:", vData.srt, e));
     }
 
     function parseSRT(srt) {
