@@ -500,14 +500,27 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
     }
 
     function parseSRT(srt) {
-        const regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})\n([\s\S]*?)(?=\n{2}|\n*$)/g;
-        let match, subs = [];
-        while ((match = regex.exec(srt)) !== null) {
+      srt = srt.replace(/\r/g, '').replace(/^\uFEFF/, '');
+
+      const blocks = srt.split('\n\n');
+      const subs = [];
+
+      for (let block of blocks) {
+        const lines = block.split('\n');
+
+        if (lines.length >= 2) {
+            const time = lines[1].split(' --> ');
+            if (!time[0] || !time[1]) continue;
+
             subs.push({
-                start: timeToSeconds(match[2]), end: timeToSeconds(match[3]), text: match[4].replace(/\n/g, '<br>')
+                start: timeToSeconds(time[0]),
+                end: timeToSeconds(time[1]),
+                text: lines.slice(2).join('<br>')
             });
         }
-        return subs;
+      }
+
+      return subs;
     }
 
     function timeToSeconds(timeStr) {
