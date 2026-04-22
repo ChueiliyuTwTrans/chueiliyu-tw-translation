@@ -303,7 +303,14 @@
     </header>
 
     <div id="tab-pictorial" class="tab-content active">
-      <div class="intro-box">
+
+    <h2 class="section-title">✨ 立于X玗進照片</h2>
+
+    <div class="post-item">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWp8PbbCTNX/" data-instgrm-version="14"></blockquote>
+    </div>
+
+    <div class="intro-box">
         <p class="intro-text">[獨家] 捕捉到崔立于 X 姜玗進在聖水洞的早午餐約會 💘<br>
 # 幕後花絮 01：早午餐一上桌就開始看眼色的純真可愛小王子們...
 玗進：「只有...我們要吃嗎？🥺」 
@@ -320,12 +327,6 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
 攝影 | youngwoo
         </p>
       </div>
-
-    <h2 class="section-title">✨ 立于X玗進照片</h2>
-
-    <div class="post-item">
-      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWp8PbbCTNX/" data-instgrm-version="14"></blockquote>
-    </div>
   </div>
     <div id="tab-video1" class="tab-content">
       <div class="video-controls-bar">
@@ -409,10 +410,10 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
   <script>  
     // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
     const videoData = {
-        'tab-video1': { id: '_gqRYc_hix0', srt: '', player: null, subEl: 'subtitle-video1', container: 'player-container-video1' },
-        'tab-video2': { id: 'gH-lIBaSodg', srt: '20260414MIIM.srt', player: null, subEl: 'subtitle-video2', container: 'player-container-video2' },
-        'tab-video3': { id: 'IHWy0CLlOaA', srt: '', player: null, subEl: 'subtitle-video3', container: 'player-container-video3' },
-        'tab-video4': { id: 'WlJQLT0AuYY', srt: '20260420MIIM.srt', player: null, subEl: 'subtitle-video4', container: 'player-container-video4' }
+      'tab-video1': { id: '_gqRYc_hix0', srt: '', player: null, subEl: 'subtitle-video1', container: 'player-container-video1', interval: null },
+      'tab-video2': { id: 'gH-lIBaSodg', srt: './20260414MIIM.srt', player: null, subEl: 'subtitle-video2', container: 'player-container-video2', interval: null },
+      'tab-video3': { id: 'IHWy0CLlOaA', srt: '', player: null, subEl: 'subtitle-video3', container: 'player-container-video3', interval: null },
+      'tab-video4': { id: 'WlJQLT0AuYY', srt: './20260420MIIM.srt', player: null, subEl: 'subtitle-video4', container: 'player-container-video4', interval: null }
     };
 
     function updateButtonUI(theme) {
@@ -439,8 +440,8 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
 
-      if (tabId === 'tab-video1' || tabId === 'tab-video2') {
-          initVideo(tabId);
+      if (videoData[tabId]) {
+        initVideo(tabId);
       }
     }
 
@@ -476,6 +477,10 @@ MIIM：「沒關係，我們等一下再吃！（太可愛了 哈哈）」<br>
             .then(response => response.text())
             .then(text => {
                 const subs = parseSRT(text);
+
+                // 防止重複 interval
+                if (v.interval) clearInterval(v.interval);
+              
                 setInterval(() => {
                     if (player && player.getPlayerState() === 1) { 
                         const time = player.getCurrentTime();
