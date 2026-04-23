@@ -610,6 +610,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       updateButtonUI(localStorage.getItem('pageTheme') || 'light');
+
+      // 預設開啟第一個影片
+      const firstTabBtn = document.querySelector('.tab-btn');
+      openTab('tab-video1', firstTabBtn);
     });
   </script>
 </body>
