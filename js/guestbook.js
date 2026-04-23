@@ -40,7 +40,7 @@ export function initGuestbook(mode = 'full') {
     const el = getElements();
     
     // 監聽 Firebase 數據
-    onValue(ref(db, 'test'), (snapshot) => {
+    onValue(ref(db, 'guestbook'), (snapshot) => {
         const data = snapshot.val();
         if (!data) return;
         rawMessages = (data.message ? [data] : Object.values(data)).filter(m => m && m.message);
