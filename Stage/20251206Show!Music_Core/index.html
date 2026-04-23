@@ -490,7 +490,7 @@
             videoId: vData.id,
             width: '100%',
             height: '100%',
-            playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 }, // 絕對不偷播
+            playerVars: { 'autoplay': 0, 'rel': 0, 'playsinline': 1 , start: tabId === 'tab-video1' ? 189 : 0, end: tabId === 'tab-video1' ? 360 : undefined}, // 第一部影片指定時間
             events: {
                 'onReady': function(event) {
                   if (vData.srt) {
