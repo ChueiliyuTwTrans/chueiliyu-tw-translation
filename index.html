@@ -837,7 +837,7 @@ body.theme-dark .sns-divider { color: #334155; }
         <span class="news-tag tag-new">更新</span> 04/24 [媒體]20260420MIIM 立于x玗進已上傳
     </div>
     <div class="news-item">
-        <span class="news-tag tag-new">更新</span> 04/20 [電台]20260117 偶像韓語 EP.726已上傳
+        <span class="news-tag tag-new">更新</span> 04/25 [舞台]2025年12月份舞台合輯已上傳
     </div>
     <div class="news-item">
         <span class="news-tag tag-note">公告</span> 問卷調查x抽獎x留言牆活動已開放，歡迎大家踴躍參與
@@ -857,6 +857,9 @@ body.theme-dark .sns-divider { color: #334155; }
         </button>
         <button onclick="switchTab('media', this)">
             🎤 媒體
+        </button>
+        <button onclick="switchTab('stage', this)">
+            🎶 舞台
         </button>
     </nav>
 
@@ -879,6 +882,11 @@ body.theme-dark .sns-divider { color: #334155; }
         <div id="media" class="section">
             <div id="media-filters" class="filter-bar"></div>
             <div class="card-grid" id="media-grid"></div>
+        </div>
+
+        <div id="stage" class="section">
+            <div id="stage-filters" class="filter-bar"></div>
+            <div class="card-grid" id="stage-grid"></div>
         </div>
     </main>
 </div>
@@ -1272,6 +1280,50 @@ const videoData = [
         isNew: true,
         cast: ['玗進']
     },
+    {
+        id: 's1',  
+        category: 'stage', 
+        title: '20251205 Music_Bank舞台合輯',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251205Music_Bank/', 
+        img: 'images/20251205Music_Bank.webp',
+        desc: '舞台合輯｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: true,
+        cast: ['']
+    },
+    {
+        id: 's2',  
+        category: 'stage', 
+        title: '20251206-1213 音樂中心 舞台合輯',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251206Show!Music_Core/', 
+        img: 'images/20251206Show!_Music_Core.webp',
+        desc: '舞台合輯｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: true,
+        cast: ['']
+    },
+    {
+        id: 's3',  
+        category: 'stage', 
+        title: '20251207 Inkigayo 舞台合輯',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251207Inkigayo/', 
+        img: 'images/20251207Inkigayo.webp',
+        desc: '舞台合輯',
+        credit: '',
+        isNew: true,
+        cast: ['']
+    },
+    {
+        id: 's4',  
+        category: 'stage', 
+        title: '2025年12月份 其他舞台合輯',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/202512Other_Stage/', 
+        img: 'images/20251210its_Live.webp',
+        desc: '舞台合輯｜中文翻譯',
+        credit: '',
+        isNew: true,
+        cast: ['']
+    },
 ];
 
 /* =========================================
@@ -1338,6 +1390,7 @@ function renderAllCards(data) {
     const programContainer = document.getElementById('program-grid');
     const radioContainer = document.getElementById('radio-grid');
     const mediaContainer = document.getElementById('media-grid');
+    const stageContainer = document.getElementById('stage-grid');
 
     // 2. 使用排序後的 sortedData 來渲染
     liveContainer.innerHTML = sortedData.filter(i => i.category === 'live').map(createCardHTML).join('');
@@ -1346,6 +1399,10 @@ function renderAllCards(data) {
 
     if(mediaContainer) {
         mediaContainer.innerHTML = sortedData.filter(i => i.category === 'media').map(createCardHTML).join('');
+    }
+
+    if(stageContainer) {
+        stageContainer.innerHTML = sortedData.filter(i => i.category === 'stage').map(createCardHTML).join('');
     }
 }
 
@@ -1453,14 +1510,15 @@ function handleSearch(keyword) {
         'live': '📺 直播',
         'program': '🎬 節目',
         'radio': '📻 電台',
-        'media': '🎤 媒體採訪'
+        'media': '🎤 媒體採訪',
+        'stage': '🎶 舞台'
     };
 
     const matched = videoData.filter(item => 
         item.title.toLowerCase().includes(keyword.toLowerCase())
     );
 
-    ['live', 'program', 'radio', 'media'].forEach(cat => {
+    ['live', 'program', 'radio', 'media', 'stage'].forEach(cat => {
         const count = matched.filter(m => m.category === cat).length;
         if (count > 0) {
             const btn = document.createElement('button');
