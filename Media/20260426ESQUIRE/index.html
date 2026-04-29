@@ -205,7 +205,13 @@
         text-align: center; 
         border: 1px solid var(--intro-border);
         box-sizing: border-box; 
+        display: flex; 
+        flex-direction: column;
+        align-items: center; /* 確保按鈕置中 */
     }
+
+    .reaction-section { text-align: center !important; width: 100%; }
+    .reaction-wall { display: flex; justify-content: center; /* 確保按鈕排隊置中 */ flex-wrap: wrap; gap: 10px; margin-top: 15px; }
 
     /* 打敗 reaction.css 裡的黑底 */
     .reaction-section, .reaction-wall, .reaction-container {
@@ -443,7 +449,7 @@ Editor 권혜진 Photographer 이태광 Stylist 김성덕 Hair 홍현승 Makeup 
       btn.classList.add('active');
 
       // 更新內容
-      document.getElementById('outfit-tag').innerText = outfitData[index].tag;
+      document.getElementById('outfit-tag').innerHTML = outfitData[index].tag;
       document.getElementById('outfit-desc').innerHTML = outfitData[index].desc;
     }
     
