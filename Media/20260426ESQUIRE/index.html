@@ -91,7 +91,8 @@
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-line); }
 
     .outfit-pagination { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: nowrap; }
-    .page-btn { width: 45px; height: 45px; font-size: 1.1rem; margin: 0 5px; border-radius: 50%; border: 1px solid var(--border-line); background: var(--bg-content); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .page-btn { width: 40px; height: 40px; font-size: 1.1rem; border-radius: 50%; border: 1px solid var(--border-line); background: var(--bg-content); 
+               color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.3s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
     .page-btn.active { background: var(--btn-bg); color: white; border-color: var(--btn-bg);}
 
     /* ==================== 
@@ -440,41 +441,41 @@ Editor 권혜진 Photographer 이태광 Stylist 김성덕 Hair 홍현승 Makeup 
         if (!container) return;
         container.innerHTML = '';
 
-        const total = validIndices.length;
+        const total = validIndices.length; // 總共有 14 個 (索引 2-15)
         const currentPos = validIndices.indexOf(currentIdx);
+        const displayCount = 7; // 想要顯示的按鈕數量
 
-        // 邏輯：永遠顯示第一、最後一個，以及當前位置前後的按鈕
-        let showSet = new Set();
-        showSet.add(0); // 第一個
-        showSet.add(total - 1); // 最後一個
-    
-        // 當前按鈕及其鄰居 (確保中間有變化)
-        for (let i = currentPos - 2; i <= currentPos + 2; i++) {
-            if (i > 0 && i < total - 1) showSet.add(i);
-        }
-    
-        // 如果點到頭或尾，多補一點按鈕湊滿 5-7 個感覺
-        if (currentPos <= 2) [1, 2, 3].forEach(i => showSet.add(i));
-        if (currentPos >= total - 3) [total - 4, total - 3, total - 2].forEach(i => showSet.add(i));
+        let startPos;
 
-        const sortedPages = Array.from(showSet).sort((a, b) => a - b);
-
-        sortedPages.forEach((pageIdx, i) => {
-            // 檢查是否需要加省略號
-            if (i > 0 && pageIdx - sortedPages[i - 1] > 1) {
-                const dot = document.createElement('span');
-                dot.innerText = '...';
-                dot.style.color = 'var(--text-sub)';
-                container.appendChild(dot);
+        // 計算滑動窗口的起始位置
+        if (total <= displayCount) {
+            // 如果總數小於 7，就從 0 開始
+            startPos = 0;
+        } else {
+            // 儘量讓當前按鈕居中
+            startPos = currentPos - Math.floor(displayCount / 2);
+        
+            // 邊界檢查：不能小於 0
+            if (startPos < 0) {
+                startPos = 0;
             }
+            // 邊界檢查：不能超過最後一個可顯示的起點
+            if (startPos > total - displayCount) {
+                startPos = total - displayCount;
+            }
+        }
 
+        // 根據計算出的 startPos 渲染連續的 7 個按鈕
+        for (let i = 0; i < Math.min(displayCount, total); i++) {
+            const pageIdx = startPos + i;
             const dataIdx = validIndices[pageIdx];
+        
             const btn = document.createElement('button');
             btn.className = `page-btn ${dataIdx === currentIdx ? 'active' : ''}`;
             btn.innerText = dataIdx + 1; // 顯示數字 (3, 4, 5...)
             btn.onclick = () => showOutfit(dataIdx);
             container.appendChild(btn);
-        });
+        }
     }
 
     // 4. 切換內容的函數
