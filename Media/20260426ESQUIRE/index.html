@@ -19,32 +19,20 @@
     /* ==================== 
        1. 色彩變數與基礎設定
        ==================== */
-    :root {
-      --bg-body: #fafafa; --bg-content: #ffffff; --text-main: #262626; --text-sub: #8e8e8e; --border-line: #dbdbdb;
-      --btn-bg: #73A5C6; --btn-hover: #5A8BB8; --btn-text: #ffffff; --intro-bg: #f8f9fa; --intro-border: #eef2f5;
-      --intro-text: #444444; --section-bg: #f0f4f8; --section-text: #5A8BB8; --outfit-bg: #f4f8fb; --outfit-border: #73A5C6;
-      --tab-bg: #ffffff; --tab-border: #e1e8ed; --tab-text: #8e8e8e; --tab-active-text: #73A5C6; --tab-active-border: #73A5C6;
-      --home-btn-bg: #e1e8ed; --home-btn-hover: #d1dbe3;
-      --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
-      /* 淺色模式下，移除陰影讓數字清晰 */
-      --reaction-text-shadow: none; 
-      /* 表情按鈕選中時的框線與數字顏色 (淺色模式) */
-      --emoji-btn-active-border: #73A5C6; 
-      --emoji-btn-active-text: #262626; 
-      --emoji-btn-bg-hover: rgba(0, 0, 0, 0.05); /* 淺色模式下懸停時的微弱背景 */
-      /* 定義按鈕的「預設未選中」狀態 (淺色) */
-      --emoji-btn-default-bg: rgba(0, 0, 0, 0.03); /* 微弱的淺灰色，看起來乾淨 */
-      --emoji-btn-default-border: #e1e8ed;
-      --emoji-btn-default-text: #8e8e8e;
-      /* 預設字幕大小 */
-      --subtitle-size: 22px; 
+    :root { --bg-body: #f8f9f7; --bg-content: #ffffff; --text-main: #2d3436; --text-sub: #7b8a7e; --border-line: #e0e6e0;
+      --btn-bg: #84a98c; --btn-hover: #52796f; --btn-text: #ffffff; --intro-bg: #f1f7f1; --intro-border: #dce4dc; --intro-text: #354f52; 
+      --section-bg: #e9f5e9; --section-text: #354f52; --outfit-bg: #f8faf8; --outfit-border: #84a98c;
+      --tab-bg: #ffffff; --tab-border: #e0e6e0; --tab-text: #7b8a7e; --tab-active-text: #52796f; --tab-active-border: #84a98c;
+      --home-btn-bg: #eef3ee; --home-btn-hover: #dfe7df; --theme-btn-bg: #f0f0f0; --theme-btn-text: #666; --theme-btn-active: #ffffff;
+      --reaction-text-shadow: none; --emoji-btn-active-border: #84a98c; --emoji-btn-active-text: #2d3436; --emoji-btn-bg-hover: rgba(132, 169, 140, 0.1); 
+      --emoji-btn-default-bg: rgba(0, 0, 0, 0.03); --emoji-btn-default-border: #e1e8ed; --emoji-btn-default-text: #8e8e8e; --subtitle-size: 22px; 
     }
 
     [data-theme="dark"] {
-      --bg-body: #121212; --bg-content: #1e1e1e; --text-main: #e4e6eb; --text-sub: #b0b3b8; --border-line: #3a3b3c;
-      --btn-bg: #4A7A9B; --btn-hover: #3A6A8B; --btn-text: #ffffff; --intro-bg: #242526; --intro-border: #3a3b3c;
-      --intro-text: #e4e6eb; --section-bg: #2a333c; --section-text: #8ebfec; --outfit-bg: #242526; --outfit-border: #4A7A9B;
-      --tab-bg: #1e1e1e; --tab-border: #3a3b3c; --tab-text: #888888; --tab-active-text: #8ebfec; --tab-active-border: #4A7A9B;
+      --bg-body: #1a1c1a; --bg-content: #242624; --text-main: #e0e2e0; --text-sub: #a0a8a0; --border-line: #3d403d;
+      --btn-bg: #52796f; --btn-hover: #84a98c; --btn-text: #ffffff; --intro-bg: #2d342d; --intro-border: #3d403d; --intro-text: #e0e2e0; 
+      --section-bg: #353d35; --section-text: #a7c4a7; --outfit-bg: #2d342d; --outfit-border: #52796f;
+      --tab-bg: #242624; --tab-border: #3d403d; --tab-text: #888; --tab-active-text: #a7c4a7; --tab-active-border: #52796f;
       --home-btn-bg: #3a3b3c; --home-btn-hover: #4a4b4c;
       --theme-btn-bg: #333333; --theme-btn-text: #aaaaaa; --theme-btn-active: #1e1e1e;
       /* 深色模式下，保留微弱的立體感 */
@@ -90,7 +78,7 @@
 
     .btn-article { display: block; background-color: var(--btn-bg); color: var(--btn-text); text-align: center; padding: 14px 20px; margin: 20px 20px 0 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
     .intro-box { padding: 0 20px 24px 20px; margin-top: 16px; }
-    .intro-text { font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 20px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); }
+    .intro-text { font-size: 1.05rem; line-height: 1.8; color: var(--intro-text); white-space: pre-line; padding: 25px; background-color: var(--intro-bg); border-radius: 12px; border: 1px solid var(--intro-border); text-align: left !important; word-break: break-all; }
     .section-title { background-color: var(--section-bg); padding: 16px 20px; margin: 0 0 24px 0; font-size: 1.1rem; color: var(--section-text); font-weight: bold; border-bottom: 1px solid var(--intro-border); border-top: 1px solid var(--intro-border); }
     .post-item { margin-bottom: 12px; padding-bottom: 16px; }
     .instagram-media { margin: 0 auto !important; max-width: 500px !important; }
