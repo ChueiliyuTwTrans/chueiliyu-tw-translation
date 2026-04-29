@@ -90,8 +90,8 @@
     .carousel-list { list-style: none; padding: 0; margin: 0; }
     .carousel-list li { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-line); }
 
-    .outfit-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: nowrap; }
-    .page-btn { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; border: 1px solid var(--border-line); background: var(--bg-content); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .outfit-pagination { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .page-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-line); background: var(--bg-content); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.3s; }
     .page-btn.active { background: var(--btn-bg); color: white; border-color: var(--btn-bg);}
 
     /* ==================== 
@@ -289,7 +289,7 @@
       </div>
 
       <div class="tabs-container">
-        <button class="tab-btn active" onclick="openTab('tab-pictorial', this)">📸 文章與IG貼文</button>
+        <button class="tab-btn active" onclick="openTab('tab-pictorial', this)">📸 畫報與文章</button>
         <button class="tab-btn" onclick="openTab('tab-video1', this)">🎬 影片</button>
       </div>
     </header>
@@ -362,7 +362,22 @@ Editor 권혜진 Photographer 이태광 Stylist 김성덕 Hair 홍현승 Makeup 
             💡 請滑動上方圖片，並對應下方頁籤查看內容
         </p>
         
-        <div class="outfit-pagination" id="outfit-pagination"></div>
+        <div class="outfit-pagination">
+            <button class="page-btn active" onclick="showOutfit(2, this)">3</button>
+            <button class="page-btn" onclick="showOutfit(3, this)">4</button>
+            <button class="page-btn" onclick="showOutfit(4, this)">5</button>
+            <button class="page-btn" onclick="showOutfit(5, this)">6</button>
+            <button class="page-btn" onclick="showOutfit(6, this)">7</button>
+            <button class="page-btn" onclick="showOutfit(7, this)">8</button>
+            <button class="page-btn" onclick="showOutfit(8, this)">9</button>
+            <button class="page-btn" onclick="showOutfit(9, this)">10</button>
+            <button class="page-btn" onclick="showOutfit(10, this)">11</button>
+            <button class="page-btn" onclick="showOutfit(11, this)">12</button>
+            <button class="page-btn" onclick="showOutfit(12, this)">13</button>
+            <button class="page-btn" onclick="showOutfit(13, this)">14</button>
+            <button class="page-btn" onclick="showOutfit(14, this)">15</button>
+            <button class="page-btn" onclick="showOutfit(15, this)">16</button>
+        </div>
 
         <div class="outfit-section" id="active-outfit-box">
             <div class="photo-tag" id="outfit-tag">(01)[最有魅力的地方]</div>
@@ -410,7 +425,6 @@ Editor 권혜진 Photographer 이태광 Stylist 김성덕 Hair 홍현승 Makeup 
 
   <script>
     // 畫報
-    // 1. 資料定義
     const outfitData = [
       { tag: "無說明", desc: "" },
       { tag: "無說明", desc: "" },
@@ -432,65 +446,15 @@ Editor 권혜진 Photographer 이태광 Stylist 김성덕 Hair 홍현승 Makeup 
       { tag: "無說明", desc: "" },
     ];
 
-    // 2. 設定有效索引範圍 (從第 3 個到第 16 個，即索引 2 到 15)
-    const validIndices = Array.from({length: 14}, (_, i) => i + 2);
-    let currentIdx = 2; // 預設顯示索引 2
+    function showOutfit(index, btn) {
+      // 更新按鈕狀態
+      document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-    // 3. 渲染按鈕的函數
-    function renderPagination() {
-        const container = document.getElementById('outfit-pagination');
-        if (!container) return;
-        container.innerHTML = '';
-
-        const total = validIndices.length;
-        const currentPos = validIndices.indexOf(currentIdx);
-
-        // 邏輯：永遠顯示第一、最後一個，以及當前位置前後的按鈕
-        let showSet = new Set();
-        showSet.add(0); // 第一個
-        showSet.add(total - 1); // 最後一個
-    
-        // 當前按鈕及其鄰居 (確保中間有變化)
-        for (let i = currentPos - 1; i <= currentPos + 1; i++) {
-          if (i > 0 && i < total - 1) showSet.add(i);
-        }
-    
-        // 如果點到頭或尾，多補一點按鈕湊滿 5-7 個感覺
-        if (currentPos <= 1) [1, 2].forEach(i => showSet.add(i));
-        if (currentPos >= total - 2) [total - 3, total - 2].forEach(i => showSet.add(i));
-
-        const sortedPages = Array.from(showSet).sort((a, b) => a - b);
-
-        sortedPages.forEach((pageIdx, i) => {
-          // 檢查是否需要加省略號
-          if (i > 0 && pageIdx - sortedPages[i - 1] > 1) {
-            const dot = document.createElement('span');
-            dot.innerText = '...';
-            dot.style.color = 'var(--text-sub)';
-            container.appendChild(dot);
-          }
-
-          const dataIdx = validIndices[pageIdx];
-          const btn = document.createElement('button');
-          btn.className = `page-btn ${dataIdx === currentIdx ? 'active' : ''}`;
-          btn.innerText = dataIdx + 1; // 顯示數字 (3, 4, 5...)
-          btn.onclick = () => showOutfit(dataIdx);
-          container.appendChild(btn);
-        });
+      // 更新內容
+      document.getElementById('outfit-tag').innerHTML = outfitData[index].tag;
+      document.getElementById('outfit-desc').innerHTML = outfitData[index].desc;
     }
-
-    // 4. 切換內容的函數
-    function showOutfit(index) {
-        currentIdx = index;
-        document.getElementById('outfit-tag').innerHTML = outfitData[index].tag;
-        document.getElementById('outfit-desc').innerHTML = outfitData[index].desc;
-        renderPagination(); // 每次點擊重新畫按鈕
-    }
-
-    // 5. 初始執行
-    document.addEventListener('DOMContentLoaded', () => {
-        showOutfit(2);
-    });
     
     // 影片資料 - 🌟 ID 必須跟上面的 HTML 一模一樣，影片才生得出來！
     const videoData = {
