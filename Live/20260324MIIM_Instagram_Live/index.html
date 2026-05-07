@@ -36,11 +36,18 @@ html, body {
         <!-- 彈幕開關 -->
         <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
 
-        <!-- 字幕縮放組 (封裝進 control-group 垂直置中) -->
+        <!-- 字幕縮放組 -->
         <div class="control-group">
             <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
-            <span>字幕</span>
+            <span>大小</span>
             <button class="sub-btn" onclick="changeSubtitleSize(0.1)">A＋</button>
+        </div>
+
+        <!-- 字幕位置組 -->
+        <div class="control-group">
+            <button class="sub-btn" onclick="changeSubtitlePosition(-2)">↓</button>
+            <span>高低</span>
+            <button class="sub-btn" onclick="changeSubtitlePosition(2)">↑</button>
         </div>
 
         <!-- 全螢幕按鈕 -->
