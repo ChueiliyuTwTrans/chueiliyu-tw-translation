@@ -51,7 +51,7 @@ function parseSRT(data) {
 }
 
 // --- 全域變數擴充 ---
-let subtitleBottom = 15; // 預設距離底部 15%
+let subtitleBottom = 8; // 預設距離底部 8%
 
 // 安全讀取歷史設定
 try {
@@ -69,7 +69,7 @@ if (subtitleEl) {
 }
 
 /**
- * 調整字體大小：將最小值從 0.6 調降至 0.4，讓字體可以更小
+ * 調整字體大小
  */
 function coreChangeSubtitleSize(delta) {
     // 最小值改為 0.4，最大值 2.0
@@ -81,15 +81,20 @@ function coreChangeSubtitleSize(delta) {
 }
 
 /**
- * 新增功能：調整字幕上下位置
+ * 調整字幕上下位置
  * @param {number} delta - 增加或減少百分比
  */
-function coreChangeSubtitlePosition(delta) {
-    // 限制在 5% 到 60% 之間，避免飛出螢幕或擋住中間視線
-    subtitleBottom = Math.min(60, Math.max(5, subtitleBottom + delta));
+function changeSubtitlePosition(delta) {
+    // 限制範圍在 2% 到 80% 之間，避免跑出畫面
+    subtitleBottom = Math.min(80, Math.max(2, subtitleBottom + delta));
+    
+    // 儲存設定
     try {
         localStorage.setItem("subtitle-bottom", subtitleBottom);
     } catch (e) {}
+
+    // 即時套用 CSS 變數
+    const subtitleEl = document.getElementById('subtitle');
     if (subtitleEl) {
         subtitleEl.style.setProperty("--subtitle-bottom", subtitleBottom + "%");
     }
