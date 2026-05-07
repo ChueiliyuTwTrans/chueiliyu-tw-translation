@@ -63,37 +63,38 @@ html, body {
 /* ===== 字幕 (精緻多重陰影版) ===== */
 #subtitle {
     position: absolute;
-    bottom: 8%; 
+    /* 改用變數控制位置，預設為 8% */
+    bottom: var(--subtitle-bottom, 8%); 
     left: 50%;
     transform: translateX(-50%) scale(var(--subtitle-scale, 1));
     transform-origin: center bottom;
     width: 90%;
-
-    /* 1. 調整字重與大小 */
-    font-weight: 500;           /* 改為中等厚度，不使用 Bold */
-    font-size: 22px;
-    line-height: 1.6;           /* 增加行高，兩行字幕時不會太擠 */
-    color: #fff;
-    text-align: center;
-
-    /* 2. 關鍵：多重柔和陰影 (解決干擾且美觀) */
-    text-shadow: 
-        0px 1px 2px rgba(0, 0, 0, 0.9),  /* 內層輕微描邊 */
-        0px 2px 4px rgba(0, 0, 0, 0.8),  /* 中層加深 */
-        0px 4px 8px rgba(0, 0, 0, 0.5);  /* 外層柔和投影 */
-    
-    /* 3. 極淡的背景襯托
-    background: rgba(0, 0, 0, 0.2); 
-    padding: 4px 12px;
-    border-radius: 4px;
-    
     z-index: 100;
     pointer-events: none;
-    box-sizing: border-box;
-    word-break: break-word;     /* 避免長單字超出範圍 */
-    white-space: pre-wrap;
+    text-align: center;
+    transition: bottom 0.2s ease; /* 讓移動位置時有平滑感 */
+}
 
-    /* 防止選取文字干擾觀看 */
+/* 針對內部 span 進行精緻化包裝 */
+#subtitle span {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    /* 核心：半透明深色背景，能壓住底下的原始白字 */
+    background-color: rgba(0, 0, 0, 0.55); 
+    color: #fff;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+    
+    /* 保留你的多重陰影，增加字體立體感 */
+    text-shadow: 
+        0px 1px 2px rgba(0, 0, 0, 0.9),
+        0px 2px 4px rgba(0, 0, 0, 0.8);
+
+    /* 防止選取 */
     user-select: none;
     -webkit-user-select: none;
 }
