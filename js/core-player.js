@@ -188,22 +188,6 @@ function onStateChange(e) {
     }
 }
 
-function startSubtitleSync() {
-    subtitleTimer = setInterval(() => {
-        if (!player || !player.getVideoData) return;
-        const videoData = player.getVideoData();
-        const isAd = (videoData.video_id !== MY_VIDEO_ID) || 
-                     (player.getAdState && player.getAdState() !== -1) ||
-                     (videoData.author === "YouTube" || videoData.author === "");
-
-        if (isAd) { subtitleEl.innerHTML = ""; return; }
-
-        const t = player.getCurrentTime();
-        const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
-        subtitleEl.innerHTML = activeSubs.length ? activeSubs.map(s => s.text).join("<br>") : "";
-    }, 200);
-}
-
 function startAutoSave() {
     if (saveTimer) clearInterval(saveTimer);
     saveTimer = setInterval(() => {
