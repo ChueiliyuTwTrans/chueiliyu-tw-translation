@@ -123,6 +123,25 @@ function startSubtitleSync() {
     }, 200);
 }
 
+// 字幕選單
+function toggleSubtitleMenu() {
+    const menu = document.getElementById('subtitle-controls');
+    const btn = document.getElementById('subtitle-menu-btn');
+
+    // 檢查目前是否隱藏
+    if (menu.style.display === 'none' || menu.style.display === '') {
+        // 顯示選單
+        menu.style.display = 'flex';
+        // 加入變色類別
+        btn.classList.add('active');
+    } else {
+        // 隱藏選單
+        menu.style.display = 'none';
+        // 移除變色類別
+        btn.classList.remove('active');
+    }
+}
+
 // --- 核心功能：YouTube API 邏輯 ---
 function onYouTubeIframeAPIReady() {
     if (typeof MY_VIDEO_ID === 'undefined' || !MY_VIDEO_ID) {
