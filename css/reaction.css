@@ -78,24 +78,31 @@ html, body {
 /* 針對內部 span 進行精緻化包裝 */
 #subtitle span {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 4px;
-    /* 核心：半透明深色背景，能壓住底下的原始白字 */
-    background-color: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
-    font-weight: 700;
+    padding: 0.2em 0.6em !important; 
+    border-radius: 6px !important;
+    /* 核心：半透明深色背景 */
+    background-color: rgba(15, 15, 15, 0.75) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 500 !important;
     font-size: 24px;
+    letter-spacing: 0.05em;
     line-height: 1.4;
     word-break: break-word;
     white-space: pre-wrap;
     letter-spacing: 0.03em;
     
-    /* 保留你的多重陰影，增加字體立體感 */
-    text-shadow: 0px 0px 1px rgba(255, 255, 255, 0.1);
+    /* 文字陰影，增加字體立體感 */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 
-    /* 防止選取 */
+    /* 防止背景溢出與自動換行 */
+    word-break: break-word;
+    white-space: pre-wrap;
     user-select: none;
     -webkit-user-select: none;
+    pointer-events: none;
+    
+    /* 讓字幕出現時平滑一點 */
+    transition: background-color 0.3s ease;
 }
 
 /* 針對全螢幕時的優化：讓文字稍微大一點更清楚 */
@@ -104,6 +111,14 @@ html, body {
 .pseudo-fullscreen #subtitle {
     font-size: min(5.5vw, 32px) !important;
     bottom: calc(8% + env(safe-area-inset-bottom)) !important;
+}
+
+/* 全螢幕下的樣式優化，讓背景在暗處更融合 */
+:fullscreen #subtitle span,
+:-webkit-full-screen #subtitle span,
+.pseudo-fullscreen #subtitle span {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    padding: 0.3em 0.8em !important;
 }
 
 /* 當 wrapper 被加上 pseudo-fullscreen class 時 */
