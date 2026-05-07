@@ -44,6 +44,14 @@ html, body {
     transform: translateY(0px) scale(0.95);
 }
 
+/* 字幕選單開啟時的按鈕顏色（黃色） */
+#subtitle-menu-btn.active {
+    background: #f1c40f !important; /* 明亮的黃色 */
+    color: #000 !important;        /* 文字改為黑色，對比更清晰 */
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    border-color: #f1c40f !important;
+}
+
 /* 影片容器 */
 #video-wrapper {
     position: relative;
