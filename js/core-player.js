@@ -50,14 +50,72 @@ function parseSRT(data) {
     }).filter(Boolean);
 }
 
+// --- 全域變數擴充 ---
+let subtitleBottom = 15; // 預設距離底部 15%
+
+// 安全讀取歷史設定
+try {
+    const savedScale = localStorage.getItem("subtitle-scale");
+    if (savedScale) subtitleScale = parseFloat(savedScale);
+    
+    const savedBottom = localStorage.getItem("subtitle-bottom");
+    if (savedBottom) subtitleBottom = parseInt(savedBottom);
+} catch (e) {}
+
+// 初始化位置與大小
+if (subtitleEl) {
+    subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
+    subtitleEl.style.setProperty("--subtitle-bottom", subtitleBottom + "%");
+}
+
+/**
+ * 調整字體大小：將最小值從 0.6 調降至 0.4，讓字體可以更小
+ */
 function coreChangeSubtitleSize(delta) {
-    subtitleScale = Math.min(2, Math.max(0.6, subtitleScale + delta));
-    // 安全寫入 subtitle-scale
+    // 最小值改為 0.4，最大值 2.0
+    subtitleScale = Math.min(2, Math.max(0.4, subtitleScale + delta));
     try {
         localStorage.setItem("subtitle-scale", subtitleScale);
     } catch (e) {}
-    
     if (subtitleEl) subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
+}
+
+/**
+ * 新增功能：調整字幕上下位置
+ * @param {number} delta - 增加或減少百分比
+ */
+function coreChangeSubtitlePosition(delta) {
+    // 限制在 5% 到 60% 之間，避免飛出螢幕或擋住中間視線
+    subtitleBottom = Math.min(60, Math.max(5, subtitleBottom + delta));
+    try {
+        localStorage.setItem("subtitle-bottom", subtitleBottom);
+    } catch (e) {}
+    if (subtitleEl) {
+        subtitleEl.style.setProperty("--subtitle-bottom", subtitleBottom + "%");
+    }
+}
+
+// 修改渲染邏輯：為了讓黑底只包裹文字，我們在外層加一個 <span>
+function startSubtitleSync() {
+    subtitleTimer = setInterval(() => {
+        if (!player || !player.getVideoData) return;
+        const videoData = player.getVideoData();
+        const isAd = (videoData.video_id !== MY_VIDEO_ID) || 
+                     (player.getAdState && player.getAdState() !== -1);
+
+        if (isAd) { subtitleEl.innerHTML = ""; return; }
+
+        const t = player.getCurrentTime();
+        const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
+        
+        if (activeSubs.length) {
+            // 用 span 包裹文字，CSS 的黑底才會精確跟隨文字長度
+            const textContent = activeSubs.map(s => s.text).join("<br>");
+            subtitleEl.innerHTML = `<span>${textContent}</span>`;
+        } else {
+            subtitleEl.innerHTML = "";
+        }
+    }, 200);
 }
 
 // --- 核心功能：YouTube API 邏輯 ---
