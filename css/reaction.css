@@ -78,15 +78,24 @@ html, body {
 
     /* 2. 關鍵：多重柔和陰影 (解決干擾且美觀) */
     text-shadow: 
-        2px 2px 4px rgba(0, 0, 0, 1),
-        -2px 2px 4px rgba(0, 0, 0, 1),
-        2px -2px 4px rgba(0, 0, 0, 1),
-        -2px -2px 4px rgba(0, 0, 0, 1);
-
+        0px 1px 2px rgba(0, 0, 0, 0.9),  /* 內層輕微描邊 */
+        0px 2px 4px rgba(0, 0, 0, 0.8),  /* 中層加深 */
+        0px 4px 8px rgba(0, 0, 0, 0.5);  /* 外層柔和投影 */
+    
+    /* 3. 極淡的背景襯托
+    background: rgba(0, 0, 0, 0.2); 
+    padding: 4px 12px;
+    border-radius: 4px;
+    
     z-index: 100;
     pointer-events: none;
     box-sizing: border-box;
     word-break: break-word;     /* 避免長單字超出範圍 */
+    white-space: pre-wrap;
+
+    /* 防止選取文字干擾觀看 */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* 針對全螢幕時的優化：讓文字稍微大一點更清楚 */
