@@ -74,35 +74,37 @@ html, body {
     bottom: max(calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)), 60px);
     left: 50%;
     transform: translateX(-50%);
-    transform-origin: center bottom;
     width: min(92vw, 1200px);
-    max-height: 40vh;
-    overflow: visible;
+
     z-index: 100;
     pointer-events: none;
     text-align: center;
-    transition: bottom 0.2s ease;
+
+    overflow: visible;
 }
 
 #subtitle span {
     display: inline-block;
     max-width: 100%;
-    max-height: 38vh;
-    overflow-y: auto;
+
+    padding: 0.2em 0.6em;
     box-sizing: border-box;
-    padding: 0.2em 0.6em !important;
-    border-radius: 6px !important;
-    background-color: rgba(15, 15, 15, 0.75) !important;
-    color: rgba(255,255,255,0.95) !important;
-    font-weight: 500 !important;
-    font-size: min( calc(32px * var(--subtitle-scale, 1)), 6vw);
-    line-height: 1.4;
-    overflow-wrap: break-word;
-    word-break: keep-all;
+
+    background: rgba(15,15,15,.75);
+    border-radius: 6px;
+
+    color: rgba(255,255,255,.95);
+
+    font-size: clamp(16px, calc(2.2vw * var(--subtitle-scale, 1)), 32px);
+
+    line-height: 1.45;
+
     white-space: pre-wrap;
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
-    user-select: none;
-    -webkit-user-select: none;
+    overflow-wrap: anywhere;
+
+    word-break: normal;
+
+    text-shadow: 0 2px 4px rgba(0,0,0,.5);
 }
 
 /* 針對全螢幕時的優化：讓文字稍微大一點更清楚 */
@@ -440,11 +442,16 @@ body #emoji-trigger-btn.force-hide {
 /* 針對全螢幕與橫向的補強 */
 :fullscreen #emoji-trigger-btn.force-hide,
 :-webkit-full-screen #emoji-trigger-btn.force-hide,
-.pseudo-fullscreen #emoji-trigger-btn.force-hide,
-@media screen and (orientation: landscape) { 
-    #emoji-trigger-btn.force-hide { display: none !important; } 
+.pseudo-fullscreen #emoji-trigger-btn.force-hide {
+    display: none !important;
 }
 
+/* 橫向模式補強 */
+@media screen and (orientation: landscape) {
+    #emoji-trigger-btn.force-hide {
+        display: none !important;
+    }
+}
 
 /* --- 1. 退出按鈕 (右上角 - 這是對稱的基準點) --- */
 #exit-fs-btn {
