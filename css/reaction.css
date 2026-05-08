@@ -66,19 +66,25 @@ html, body {
     bottom: max(calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)), 60px);
     left: 50%;
     transform: translateX(-50%);
-    width: 95%;
-    max-width: 1800px;
+    width: 88%;
+    max-width: 1400px;
 
     z-index: 100;
     pointer-events: none;
     text-align: center;
     overflow: visible;
+    /* 確保在所有手機上都尊重安全區域 */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 }
 
 #subtitle span {
     display: inline-block;
     width: fit-content;
-    max-width: min(98vw, 1600px);
+    max-width: 100%;
 
     padding: 0.2em 0.6em;
     box-sizing: border-box;
@@ -86,7 +92,7 @@ html, body {
     border-radius: 6px;
     color: rgba(255,255,255,.95);
 
-    font-size: calc(clamp(16px, 1.8vw, 24px) * var(--subtitle-scale, 1)) !important;
+    font-size: calc(clamp(16px, 2vw, 26px) * var(--subtitle-scale, 1)) !important;
     line-height: 1.45;
 
     white-space: pre-wrap;
@@ -110,7 +116,7 @@ html, body {
     font-size: calc(clamp(20px, 3.5vw, 28px) * var(--subtitle-scale, 1)) !important;
     background-color: rgba(0, 0, 0, 0.7) !important;
     padding: 0.3em 0.8em !important;
-    max-width: 95% !important;
+    max-width: 90% !important;
 }
 
 /* 當 wrapper 被加上 pseudo-fullscreen class 時 */
@@ -177,6 +183,16 @@ body.is-in-fullscreen {
     #exit-fs-btn {
         top: 10px;
         right: 30px; /* 橫向時離邊緣遠一點，閃開圓角螢幕 */
+    }
+    #subtitle {
+        /* 橫向時寬度可以稍微加寬，但 padding 依然保護著邊緣 */
+        width: 90%; 
+        bottom: calc(var(--subtitle-bottom, 6%) + env(safe-area-inset-bottom)) !important;
+    }
+
+    #subtitle span {
+        /* 橫向時字體太大會遮住影片，建議稍微壓低一點點 */
+        font-size: calc(clamp(16px, 4.5dvh, 22px) * var(--subtitle-scale, 1)) !important;
     }
 }
 
