@@ -186,7 +186,7 @@ body.is-in-fullscreen {
     }
     #subtitle {
         /* 橫向時寬度可以稍微加寬，但 padding 依然保護著邊緣 */
-        width: 90%; 
+        width: 88%; 
         bottom: calc(var(--subtitle-bottom, 6%) + env(safe-area-inset-bottom)) !important;
     }
 
