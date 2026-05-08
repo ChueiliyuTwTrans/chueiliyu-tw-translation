@@ -111,6 +111,80 @@ header p {
     transform: translateY(-2px);
 }
 
+/* --- 關於本站彈窗專屬樣式 --- */
+.about-content {
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-body {
+    overflow-y: auto;
+    padding: 20px;
+    text-align: left;
+}
+
+.about-section {
+    margin-bottom: 30px;
+}
+
+.about-section h4 {
+    color: #8c7851; /* 亞麻棕標題 */
+    border-bottom: 2px solid #efeee9;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.letter-content p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #4a5568;
+    margin-bottom: 12px;
+}
+
+.qa-item {
+    background: rgba(140, 120, 81, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.qa-item strong {
+    display: block;
+    color: #2d3748;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.qa-item p {
+    font-size: 13px;
+    color: #4a5568;
+    margin: 0;
+}
+
+.guide-list {
+    padding-left: 18px;
+    font-size: 13px;
+    color: #4a5568;
+    line-height: 1.8;
+}
+
+.guide-list li {
+    margin-bottom: 8px;
+}
+
+.about-body::-webkit-scrollbar {
+    width: 6px;
+}
+.about-body::-webkit-scrollbar-thumb {
+    background: #dcdad5;
+    border-radius: 10px;
+}
+
 /* ===== Search ===== */
 .search-box {
     position: absolute;
@@ -800,6 +874,8 @@ body.theme-light header h1 { color: #1f2937; text-shadow: none; }
 body.theme-light header p { color: #4b5563; }
 body.theme-light .about-btn { background: #faf9f6; color: #5a5a5a; border: 1px solid #dcdad5; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03); }
 body.theme-light .about-btn:hover { background: #ffffff; border-color: #c2c0ba; color: #2d3748; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); }
+body.theme-light .about-content { background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+body.theme-light .qa-item { background: #faf9f6; border-left: 3px solid #dcdad5; }
 
 body.theme-light .search-input-wrap input { background: #ffffff; color: #1f2937; border: 1px solid #cbd5e1; }
 body.theme-light .search-input-wrap input::placeholder { color: #94a3b8; }
@@ -1133,6 +1209,56 @@ body.theme-dark .sns-divider { color: #334155; }
         <path d="M18 15l-6-6-6 6"/>
     </svg>
 </button>
+
+<!-- 關於本站彈跳視窗 -->
+<div id="aboutModal" class="month-modal">
+    <div class="modal-content about-content">
+        <div class="modal-header">
+            <h3 style="margin:0;">✨ 關於本站</h3>
+            <button class="close-modal" onclick="closeAbout()">&times;</button>
+        </div>
+        
+        <div class="modal-body about-body">
+            <!-- 區塊一：站長的話 -->
+            <section class="about-section">
+                <h4>✉️ 站長的話</h4>
+                <div class="letter-content">
+                    <p>大家好，這裡是<strong>崔立于台灣翻譯站</strong>。</p>
+                    <p>立于的台灣翻譯站創立於 2025/12/23。最初是因為看到立于的活動日益增多，但資訊分散且缺乏中文翻譯，因此決定徒手設計這個網站，希望能像<strong>「網路圖書館」</strong>一樣，完整保護立于的資訊不被消失。</p>
+                    <p>目前除了我（西卡）以外，還有幾位成員一同利用閒暇時間完成作業。我們始終秉持<strong>不商用、不獲取金錢</strong>的原則，為愛發電至今。希望這裡能成為讓 Lobudan 們感到安心且快樂的精神時光屋。</p>
+                    <p>感謝各位一直支持著翻譯站，每次都能給予很實質的建議。我深知目前的網站還不能讓所有人都獲得滿意的使用體驗，且光靠我一個人不可能短時間就將網站打造成如同大家慣用的影音平台般方便使用。</p>
+                    <p>但未來我還是會持續精進自己，雖然翻譯站無法以最快的速度更新，但我會盡可能完整的存放立于的資訊，讓各位在了解立于的資訊道路上減少阻礙。</p>
+                    <p>西卡上</p>
+                </div>
+            </section>
+
+            <!-- 區塊二：常見問題 -->
+            <section class="about-section">
+                <h4>❓ 常見問題 Q&A</h4>
+                <div class="qa-item">
+                    <strong>Q：能將影片全部放在 YouTube 上嗎？</strong>
+                    <p>為了規避版權風險，目前僅會上傳 IG 直播等非官方節目的內容，敬請見諒。</p>
+                </div>
+                <div class="qa-item">
+                    <strong>Q：能開放留言嗎？</strong>
+                    <p>目前網站由站長一人管理，暫無餘力回覆，故不開放留言。若有網站問題請私訊 IG/Threads 帳號。</p>
+                </div>
+            </section>
+
+            <!-- 區塊三：使用說明 -->
+            <section class="about-section">
+                <h4>💻 網站與翻譯頁面說明</h4>
+                <ul class="guide-list">
+                    <li><strong>搜尋與版面：</strong>左上角可搜尋關鍵字/月份，右上角可切換三種版面主題。</li>
+                    <li><strong>收藏功能：</strong>點擊卡片右下角「❤️」可儲存至「收藏」欄位（無痕模式無法保存）。</li>
+                    <li><strong>文字/IG 作品：</strong>為尊重版權不轉載官方照片，請先前往官網再搭配本站翻譯閱讀。</li>
+                    <li><strong>影片字幕：</strong>觀看 YouTube 時，請務必點擊<strong>「進入全螢幕」</strong>按鈕以顯示中文字幕。</li>
+                    <li><strong>互動支持：</strong>若喜歡作品，歡迎點擊下方的即時表情按鈕表達支持！</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
 
 <script>
 /* =========================================
@@ -1603,6 +1729,34 @@ window.onload = function() {
     initBackToTop();
 };
 
+/**
+ * 關於本站 Modal 控制
+ */
+function openAbout() {
+    const modal = document.getElementById('aboutModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // 鎖定底層捲動
+    }
+}
+
+function closeAbout() {
+    const modal = document.getElementById('aboutModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // 恢復捲動
+    }
+}
+
+// 點擊彈窗外部關閉
+window.addEventListener('click', function(event) {
+    const aboutModal = document.getElementById('aboutModal');
+    // 如果點擊的是背景（modal本身）而非內容區
+    if (event.target === aboutModal) {
+        closeAbout();
+    }
+});
+
 function createCardHTML(item) {
     const badge = item.isNew ? '<span class="new-badge">NEW</span>' : '';
     const credit = item.credit ? `<div class="card-credit">${item.credit}</div>` : '';
@@ -1992,6 +2146,24 @@ function initBackToTop() {
         });
     });
 }
+
+/* =========================================
+   ⭐ 5. 全域點擊偵測 (處理彈窗外部關閉)
+   ========================================= */
+window.addEventListener('click', function(event) {
+    const aboutModal = document.getElementById('aboutModal');
+    const monthModal = document.getElementById('monthModal');
+
+    // 如果點擊的是「關於本站」的背景層
+    if (event.target === aboutModal) {
+        closeAbout();
+    }
+
+    // 如果點擊的是「月份搜尋」的背景層
+    if (event.target === monthModal) {
+        toggleMonthModal(false);
+    }
+});
 </script>
     
 <script type="module">
