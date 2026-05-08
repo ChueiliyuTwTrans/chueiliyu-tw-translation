@@ -67,7 +67,7 @@ html, body {
     left: 50%;
     transform: translateX(-50%);
     width: 88%;
-    max-width: 1400px;
+    max-width: 1800px;
 
     z-index: 100;
     pointer-events: none;
