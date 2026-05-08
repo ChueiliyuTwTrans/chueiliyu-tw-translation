@@ -30,35 +30,8 @@ html, body {
 <body>
 <div id="controls">
     <div class="control-row">
-        <!-- 導覽組 -->
-        <button id="home-btn" onclick="window.location.href='/'">首頁</button>
-
-        <!-- 表情控制抽屜按鈕 -->
         <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
 
-        <!-- 字幕控制抽屜按鈕 -->
-        <button id="subtitle-menu-btn" onclick="toggleSubtitleMenu()">字幕設定</button>
-
-        <!-- 全螢幕按鈕 -->
-        <button id="fs-btn">進入全螢幕</button>
-    </div>
-
-    <!-- 字幕控制抽屜：預設隱藏 -->
-    <div id="subtitle-controls" class="control-row secondary-menu" style="display: none;">
-        <div class="control-group">
-            <button class="sub-btn" onclick="coreChangeSubtitleSize(-0.1)">A−</button>
-            <span>大小</span>
-            <button class="sub-btn" onclick="coreChangeSubtitleSize(0.1)">A＋</button>
-        </div>
-        <div class="control-group">
-            <button class="sub-btn" onclick="changeSubtitlePosition(-2)">↓</button>
-            <span>高低</span>
-            <button class="sub-btn" onclick="changeSubtitlePosition(2)">↑</button>
-        </div>
-    </div>
-    
-    <!-- 表情控制抽屜按鈕 -->
-    <div class="control-row">
         <div class="control-group barrage-control">
             <span>大小</span>
             <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
@@ -74,6 +47,14 @@ html, body {
             <span>速度</span>
             <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
         </div>
+
+        <div class="control-group">
+            <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
+            <span>字幕</span>
+            <button class="sub-btn" onclick="changeSubtitleSize(0.1)">A＋</button>
+        </div>
+        <button id="home-btn" onclick="window.location.href='/'">首頁</button>
+        <button id="fs-btn">進入全螢幕</button>
     </div>
 </div>
 
