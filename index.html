@@ -87,6 +87,29 @@ header p {
     color: #f3f4f6;
     opacity: 0.9;
 }
+/* --- 關於本站按鈕基礎樣式 --- */
+.about-wrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center; /* 居中對齊 */
+}
+
+.about-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.about-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
 
 /* ===== Search ===== */
 .search-box {
@@ -772,12 +795,11 @@ body.theme-fancy .news-item:hover {
 body.theme-light { background: #f8f7f4; color: #374151; }
 
 body.theme-light header { background-image: none; background-color: #efede8; }
-body.theme-light .header-text {
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255,255,255,0.8);
-}
+body.theme-light .header-text { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255,255,255,0.8); }
 body.theme-light header h1 { color: #1f2937; text-shadow: none; }
 body.theme-light header p { color: #4b5563; }
+body.theme-light .about-btn { background: #faf9f6; color: #5a5a5a; border: 1px solid #dcdad5; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03); }
+body.theme-light .about-btn:hover { background: #ffffff; border-color: #c2c0ba; color: #2d3748; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); }
 
 body.theme-light .search-input-wrap input { background: #ffffff; color: #1f2937; border: 1px solid #cbd5e1; }
 body.theme-light .search-input-wrap input::placeholder { color: #94a3b8; }
@@ -896,6 +918,12 @@ body.theme-dark .sns-divider { color: #334155; }
     }
     
     header h1 { font-size: 24px; }
+
+    .about-btn {
+        width: 100%; /* 手機版撐滿 header-text 寬度 */
+        font-size: 13px;
+        padding: 10px;
+    }
     
     .container { flex-direction: column; }
     
@@ -990,6 +1018,11 @@ body.theme-dark .sns-divider { color: #334155; }
     <div class="header-text">
         <h1>崔立于台灣翻譯站</h1>
         <p>非官方｜粉絲翻譯整理｜僅作學習與推廣使用</p>
+        <div class="about-wrapper">
+            <button class="about-btn" onclick="openAbout()">
+                ✨ 關於本站 / Q&A / 站長的話
+            </button>
+        </div>
     </div>
 </header>
 
