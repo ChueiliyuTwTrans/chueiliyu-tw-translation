@@ -72,8 +72,8 @@ if (subtitleEl) {
  * 調整字體大小
  */
 function coreChangeSubtitleSize(delta) {
-    // 最小值改為 0.4，最大值 2.0
-    subtitleScale = Math.min(2, Math.max(0.4, subtitleScale + delta));
+    // 最小值改為 0.4，最大值 3.5
+    subtitleScale = Math.min(3.5, Math.max(0.4, subtitleScale + delta));
     try {
         localStorage.setItem("subtitle-scale", subtitleScale);
     } catch (e) {}
