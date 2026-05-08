@@ -168,19 +168,28 @@ header p {
 /* 月份搜尋 */
 /* 月份摺疊按鈕樣式 */
 .month-toggle-wrapper {
-    margin-top: 10px;
+    margin-top: 8px;
+    width: var(--header-box-width); /* 與搜尋框同寬 */
+    max-width: 100%;
 }
 .month-expand-btn {
+    width: 100%; /* 填滿容器 */
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 6px 16px;
+    padding: 8px 16px;
     border-radius: 999px;
     font-size: 13px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s;
+    text-align: left; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+/* 滑鼠移入效果 */
 .month-expand-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
@@ -736,6 +745,9 @@ body.theme-light .search-input-wrap input {
 }
 body.theme-light .search-input-wrap input::placeholder { color: #94a3b8; }
 
+body.theme-light .month-expand-btn { background: #ffffff; color: #1f2937; border: 1px solid #cbd5e1; box-shadow: var(--shadow-sm); }
+body.theme-light .month-expand-btn:hover { background: #f8fafc; border-color: var(--primary-color); }
+
 body.theme-light .content { background-color: #f1f5f9; background-image: none; }
 body.theme-light .sidebar {
     background-color: #ffffff; background-image: none; border-right: 1px solid #e2e8f0;
@@ -830,10 +842,12 @@ body.theme-dark .sns-divider { color: #334155; }
     }
     
     .search-box {
-        position: relative; top: 0; left: 0; flex: 1; width: auto; max-width: none; order: 1;
+        position: relative; top: 0; left: 0; flex: 1; width: auto; max-width: none; order: 1; flex-direction: column;
     }
-    .search-input-wrap { width: 100%; }
+    .search-input-wrap, .month-toggle-wrapper { width: 100%; }
     .search-input-wrap input { font-size: 13px; padding: 8px 32px 8px 12px; }
+
+    .month-expand-btn { font-size: 14px; padding: 10px 16px; }
 
     .header-theme {
         position: relative; top: 0; right: 0; order: 2; width: auto; display: flex; justify-content: flex-end; gap: 5px;
