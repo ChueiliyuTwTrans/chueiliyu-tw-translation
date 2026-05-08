@@ -95,8 +95,7 @@ html, body {
 
     color: rgba(255,255,255,.95);
 
-    font-size: clamp(16px, calc(2.2vw * var(--subtitle-scale, 1)), 32px);
-
+    font-size: calc(clamp(16px, 4.5vw, 28px) * var(--subtitle-scale, 1)) !important;
     line-height: 1.45;
 
     white-space: pre-wrap;
@@ -118,7 +117,7 @@ html, body {
 :fullscreen #subtitle span,
 :-webkit-full-screen #subtitle span,
 .pseudo-fullscreen #subtitle span {
-    font-size: min( calc(28px * var(--subtitle-scale, 1)), 7vw) !important;
+    font-size: calc(clamp(20px, 6vw, 36px) * var(--subtitle-scale, 1)) !important;
     background-color: rgba(0, 0, 0, 0.7) !important;
     padding: 0.3em 0.8em !important;
 }
