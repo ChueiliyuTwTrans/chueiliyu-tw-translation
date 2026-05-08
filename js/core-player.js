@@ -80,26 +80,6 @@ function coreChangeSubtitleSize(delta) {
     if (subtitleEl) subtitleEl.style.setProperty("--subtitle-scale", subtitleScale);
 }
 
-/**
- * 調整字幕上下位置
- * @param {number} delta - 增加或減少百分比
- */
-function changeSubtitlePosition(delta) {
-    // 限制範圍在 2% 到 80% 之間，避免跑出畫面
-    subtitleBottom = Math.min(80, Math.max(2, subtitleBottom + delta));
-    
-    // 儲存設定
-    try {
-        localStorage.setItem("subtitle-bottom", subtitleBottom);
-    } catch (e) {}
-
-    // 即時套用 CSS 變數
-    const subtitleEl = document.getElementById('subtitle');
-    if (subtitleEl) {
-        subtitleEl.style.setProperty("--subtitle-bottom", subtitleBottom + "%");
-    }
-}
-
 // 修改渲染邏輯：為了讓黑底只包裹文字，我們在外層加一個 <span>
 function startSubtitleSync() {
     subtitleTimer = setInterval(() => {
