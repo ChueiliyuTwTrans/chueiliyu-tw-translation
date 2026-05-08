@@ -74,18 +74,19 @@ html, body {
     bottom: max(calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)), 60px);
     left: 50%;
     transform: translateX(-50%);
-    width: min(92vw, 1200px);
+    width: 100%;
+    padding: 0 24px;
 
     z-index: 100;
     pointer-events: none;
     text-align: center;
-
     overflow: visible;
 }
 
 #subtitle span {
     display: inline-block;
-    max-width: 100%;
+    width: fit-content;
+    max-width: min(90vw, 900px);
 
     padding: 0.2em 0.6em;
     box-sizing: border-box;
@@ -95,13 +96,12 @@ html, body {
 
     color: rgba(255,255,255,.95);
 
-    font-size: calc(clamp(16px, 4.5vw, 28px) * var(--subtitle-scale, 1)) !important;
+    font-size: calc(clamp(16px, 2.2vw, 30px) * var(--subtitle-scale, 1)) !important;
     line-height: 1.45;
 
     white-space: pre-wrap;
-    overflow-wrap: anywhere;
-
-    word-break: normal;
+    overflow-wrap: break-word;
+    word-break: keep-all;
 
     text-shadow: 0 2px 4px rgba(0,0,0,.5);
 }
