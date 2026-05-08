@@ -754,7 +754,7 @@ body.theme-light .sidebar {
     background-color: #f1efeb; background-image: none; border-right: 1px solid #e5e3de;
 }
 body.theme-light .sidebar button { background: transparent; color: #64748b; box-shadow: none; }
-body.theme-light .sidebar button:hover { background: #f1f5f9; color: #334155; }
+body.theme-light .sidebar button:hover { background: #ffffff; color: var(--primary-color); }
 body.theme-light .sidebar button.active { background: #eff6ff; color: #2563eb; }
 
 body.theme-light .card {
@@ -763,11 +763,12 @@ body.theme-light .card {
 body.theme-light .card:hover {
     transform: translateY(-4px); background: #ffffff; box-shadow: var(--shadow-lg); border-color: #bfdbfe;
 }
-body.theme-light .card-credit { border-top-color: #f1efeb; }
+body.theme-light .card-credit { border-top-color: #f1efeb; color: #94a3b8;}
 body.theme-light .search-highlight { box-shadow: 0 0 0 4px var(--primary-color); }
 /* 白色模式公告欄 */
-body.theme-light .news-board { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
-
+body.theme-light .news-board { background: #f1efeb; border-bottom: 1px solid #e5e3de; }
+body.theme-light .news-item { background: #ffffff; border: 1px solid #e5e3de; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); color: #374151; }
+body.theme-light .news-item:hover { background: #fafafa; border-color: var(--primary-color); }
 
 /* 3. 🌙 高級深色模式 (Dark) */
 body.theme-dark { background: #0f172a; color: #f1f5f9; }
@@ -833,15 +834,13 @@ body.theme-dark .sns-divider { color: #334155; }
 @media (max-width: 768px) {
     header {
         height: auto;
-        min-height: 160px;
-        padding: 16px 16px 18px; 
-        display: block;
-        flex-direction: row; 
-        flex-wrap: wrap; 
-        align-items: center; 
-        justify-content: space-between; 
-        gap: 10px; 
-        background-position: center -50px;
+        min-height: 180px;
+        padding: 80px 16px 20px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
     }
     
     .search-box {
@@ -858,7 +857,7 @@ body.theme-dark .sns-divider { color: #334155; }
     .header-theme button { flex: 0 0 auto; font-size: 12px; padding: 6px 10px; margin: 0; }
 
     .header-text {
-        order: 3; width: 100%; box-sizing: border-box; margin-top: 20px; padding: 16px;
+        order: 3; width: 100%; box-sizing: border-box; margin-top: 0; padding: 16px;
         background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(3px); border: 1px solid rgba(255,255,255,0.15);
     }
     
