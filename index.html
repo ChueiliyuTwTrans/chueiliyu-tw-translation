@@ -223,6 +223,18 @@ header p {
     border-radius: 8px; /* 圓角增加親和感 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); /* 極輕微的陰影，營造漂浮感 */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none; /* 移除超連結底線 */
+    color: #333;           /* 強制指定文字顏色，避免變成藍色 */
+    cursor: pointer;       /* 滑鼠移上去變手指 */
+    width: 100%;           /* 確保寬度填滿容器 */
+    box-sizing: border-box; /* 防止 padding 撐破寬度 */
+}
+
+.news-item:hover {
+    transform: translateY(-2px); /* 輕微上浮 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* 陰影加深 */
+    background-color: #fafafa; /* 背景稍微變灰一點，增加點擊感 */
+    color: var(--primary-color); /* 如果想要文字變色，可以連動主色調 */
 }
 
 .news-tag {
@@ -235,6 +247,7 @@ header p {
     /* 預設顏色，可用 style 覆蓋 */
     background: #e5e7eb; 
     color: #333;
+    flex-shrink: 0; /* 確保標籤不會因為標題太長而被擠壓 */
 }
 
 /* 不同類型的標籤顏色 */
