@@ -82,21 +82,55 @@ function coreChangeSubtitleSize(delta) {
 
 // 修改渲染邏輯：為了讓黑底只包裹文字，我們在外層加一個 <span>
 function startSubtitleSync() {
-    subtitleTimer = setInterval(() => {
-        if (!player || !player.getVideoData) return;
-        const videoData = player.getVideoData();
-        const isAd = (videoData.video_id !== MY_VIDEO_ID) || 
-                     (player.getAdState && player.getAdState() !== -1);
 
-        if (isAd) { subtitleEl.innerHTML = ""; return; }
+    let wasAdPlaying = false;
+
+    subtitleTimer = setInterval(() => {
+
+        if (!player || !player.getVideoData) return;
+
+        const videoData = player.getVideoData();
+
+        // 更強的廣告偵測
+        const isAd =
+            !videoData ||
+            !videoData.video_id ||
+            videoData.video_id !== MY_VIDEO_ID ||
+            (player.getAdState && player.getAdState() !== -1);
+
+        // ===== 廣告期間 =====
+        if (isAd) {
+
+            // 只在第一次進入廣告時執行
+            if (!wasAdPlaying) {
+                wasAdPlaying = true;
+                // 清空字幕
+                subtitleEl.innerHTML = "";
+                // 直接隱藏整個字幕層
+                subtitleEl.style.display = "none";
+            }
+
+            return;
+        }
+
+        // ===== 廣告結束 =====
+        if (wasAdPlaying) {
+            wasAdPlaying = false;
+            // 恢復字幕層
+            subtitleEl.style.display = "block";
+        }
 
         const t = player.getCurrentTime();
-        const activeSubs = subtitles.filter(x => t >= x.start && t <= x.end);
-        
+        const activeSubs = subtitles.filter(
+            x => t >= x.start && t <= x.end
+        );
+
         if (activeSubs.length) {
-            // 用 span 包裹文字，CSS 的黑底才會精確跟隨文字長度
-            const textContent = activeSubs.map(s => s.text).join("<br>");
+            const textContent = activeSubs
+                .map(s => s.text)
+                .join("<br>");
             subtitleEl.innerHTML = `<span>${textContent}</span>`;
+
         } else {
             subtitleEl.innerHTML = "";
         }
