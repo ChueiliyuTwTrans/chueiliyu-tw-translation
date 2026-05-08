@@ -169,16 +169,17 @@ header p {
 /* 月份摺疊按鈕樣式 */
 .month-toggle-wrapper {
     margin-top: 8px;
-    width: var(--header-box-width); /* 與搜尋框同寬 */
-    max-width: 100%;
+    width: fit-content;
+    min-width: 100px;
 }
 .month-expand-btn {
-    width: 100%; /* 填滿容器 */
+    width: fit-content; /* 寬度隨字數縮小 */
+    white-space: nowrap; /* 避免換行 */
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 999px;
     font-size: 13px;
     cursor: pointer;
@@ -850,7 +851,7 @@ body.theme-dark .sns-divider { color: #334155; }
     .month-expand-btn { font-size: 14px; padding: 10px 16px; }
 
     .header-theme {
-        position: relative; top: 0; right: 0; order: 2; width: auto; display: flex; justify-content: flex-end; gap: 5px;
+        position: absolute; top: 14px; right: 0; order: 2; width: auto; display: flex; justify-content: flex-end; gap: 5px;
     }
     .header-theme button { flex: 0 0 auto; font-size: 12px; padding: 6px 10px; margin: 0; }
 
