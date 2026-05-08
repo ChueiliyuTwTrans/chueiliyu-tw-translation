@@ -757,17 +757,13 @@ body.theme-light .sidebar button { background: transparent; color: #64748b; box-
 body.theme-light .sidebar button:hover { background: #ffffff; color: var(--primary-color); }
 body.theme-light .sidebar button.active { background: #eff6ff; color: #2563eb; }
 
-body.theme-light .card {
-    background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #eeece8;
-}
-body.theme-light .card:hover {
-    transform: translateY(-4px); background: #ffffff; box-shadow: var(--shadow-lg); border-color: #bfdbfe;
-}
+body.theme-light .card { background: #faf9f6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); border: 1px solid #e2e0d9;}
+body.theme-light .card:hover { background: #ffffff; border-color: var(--primary-color); }
 body.theme-light .card-credit { border-top-color: #f1efeb; color: #94a3b8;}
 body.theme-light .search-highlight { box-shadow: 0 0 0 4px var(--primary-color); }
 /* 白色模式公告欄 */
 body.theme-light .news-board { background: #f1efeb; border-bottom: 1px solid #e5e3de; }
-body.theme-light .news-item { background: #ffffff; border: 1px solid #e5e3de; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); color: #374151; }
+body.theme-light .news-item { background: #faf9f6; border: 1px solid #e2e0d9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); color: #374151; }
 body.theme-light .news-item:hover { background: #fafafa; border-color: var(--primary-color); }
 
 /* 3. 🌙 高級深色模式 (Dark) */
@@ -834,8 +830,8 @@ body.theme-dark .sns-divider { color: #334155; }
 @media (max-width: 768px) {
     header {
         height: auto;
-        min-height: 180px;
-        padding: 80px 16px 20px; 
+        min-height: 200px;
+        padding: 120px 16px 20px; 
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -844,20 +840,20 @@ body.theme-dark .sns-divider { color: #334155; }
     }
     
     .search-box {
-        position: absolute; top: 14px; left: 0; flex: 1; width: auto; max-width: 40%; order: 1; flex-direction: column;
+        position: absolute; top: 14px; left: 14px; flex: 1; width: auto; max-width: 40%; order: 1; flex-direction: column;
     }
     .search-input-wrap, .month-toggle-wrapper { width: 100%; }
     .search-input-wrap input { font-size: 13px; padding: 8px 32px 8px 12px; }
 
-    .month-expand-btn { font-size: 14px; padding: 10px 16px; }
+    .month-expand-btn { font-size: 13px; padding: 6px 12px; width: fit-content; }
 
     .header-theme {
-        position: absolute; top: 14px; right: 0; order: 2; width: auto; display: flex; justify-content: flex-end; gap: 5px;
+        position: absolute; top: 14px; right: 14px; order: 2; width: auto; display: flex; justify-content: flex-end; gap: 5px;
     }
     .header-theme button { flex: 0 0 auto; font-size: 12px; padding: 6px 10px; margin: 0; }
 
     .header-text {
-        order: 3; width: 100%; box-sizing: border-box; margin-top: 0; padding: 16px;
+        order: 3; width: 100%; box-sizing: border-box; margin-top: 15px; padding: 16px;
         background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(3px); border: 1px solid rgba(255,255,255,0.15);
     }
     
