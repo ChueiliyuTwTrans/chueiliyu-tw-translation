@@ -44,7 +44,7 @@ body {
 /* ===== Header ===== */
 header {
     position: relative;
-    height: 220px;
+    height: 200px;
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
@@ -113,17 +113,47 @@ header p {
 
 /* --- 關於本站彈窗專屬樣式 --- */
 .about-content {
+    position: relative; /* 為了讓內部的 X 按鈕能相對於此定位 */
     max-width: 600px;
     width: 90%;
     max-height: 85vh;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+    background: #fff; /* 確保有背景色 */
+}
+
+.modal-header {
+    padding: 20px 50px 15px 25px; /* 右側 padding 加大到 50px */
+    border-bottom: 1px solid #eee;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;  /* 設定寬高讓點擊範圍更大 */
+    height: 40px;
+    font-size: 28px; /* 放大 X 符號 */
+    line-height: 40px;
+    color: #999;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.2s;
+    z-index: 10;
+}
+
+.close-modal:hover {
+    color: #333;
 }
 
 .about-body {
     overflow-y: auto;
-    padding: 20px;
+    padding: 25px;
     text-align: left;
 }
 
@@ -140,10 +170,10 @@ header p {
 }
 
 .letter-content p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.8;
     color: #4a5568;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .qa-item {
@@ -156,25 +186,33 @@ header p {
 .qa-item strong {
     display: block;
     color: #2d3748;
-    margin-bottom: 5px;
-    font-size: 14px;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
 
 .qa-item p {
-    font-size: 13px;
+    font-size: 15px;
     color: #4a5568;
     margin: 0;
 }
 
 .guide-list {
-    padding-left: 18px;
-    font-size: 13px;
+    padding-left: 20px;
+    font-size: 15px;
     color: #4a5568;
     line-height: 1.8;
 }
 
 .guide-list li {
     margin-bottom: 8px;
+}
+
+.about-section h4 {
+    color: #8c7851;
+    border-bottom: 2px solid #efeee9;
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    font-size: 1.2rem; /* 稍微放大標題 */
 }
 
 .about-body::-webkit-scrollbar {
