@@ -119,8 +119,8 @@ html, body {
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle,
 .pseudo-fullscreen #subtitle {
-    font-size: min(5.5vw, 32px) !important;
-    bottom: calc(8% + env(safe-area-inset-bottom)) !important;
+    font-size: calc(min(4vw, 28px) * var(--subtitle-scale, 1)) !important;
+    bottom: calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)) !important;
 }
 
 /* 全螢幕下的樣式優化，讓背景在暗處更融合 */
