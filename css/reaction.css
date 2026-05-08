@@ -71,63 +71,52 @@ html, body {
 /* ===== 字幕 (精緻多重陰影版) ===== */
 #subtitle {
     position: absolute;
-    /* 改用變數控制位置，預設為 8% */
-    bottom: var(--subtitle-bottom, 8%); 
+    bottom: max(calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)), 60px);
     left: 50%;
     transform: translateX(-50%);
     transform-origin: center bottom;
-    width: 85%;
-    max-width: 1200px;
+    width: min(92vw, 1200px);
+    max-height: 40vh;
+    overflow: visible;
     z-index: 100;
     pointer-events: none;
     text-align: center;
-    transition: bottom 0.2s ease; /* 讓移動位置時有平滑感 */
+    transition: bottom 0.2s ease;
 }
 
-/* 針對內部 span 進行精緻化包裝 */
 #subtitle span {
     display: inline-block;
-    padding: 0.2em 0.6em !important; 
-    border-radius: 6px !important;
-    /* 核心：半透明深色背景 */
-    background-color: rgba(15, 15, 15, 0.75) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    font-weight: 500 !important;
-    font-size: calc(24px * var(--subtitle-scale, 1)) !important;
-    letter-spacing: 0.05em;
-    line-height: 1.4;
-    word-break: break-all;
-    white-space: normal;
-    letter-spacing: 0.03em;
-    
-    /* 文字陰影，增加字體立體感 */
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-
-    /* 防止背景溢出與自動換行 */
-    word-break: break-word;
-    white-space: pre-wrap;
     max-width: 100%;
+    max-height: 38vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 0.2em 0.6em !important;
+    border-radius: 6px !important;
+    background-color: rgba(15, 15, 15, 0.75) !important;
+    color: rgba(255,255,255,0.95) !important;
+    font-weight: 500 !important;
+    font-size: min( calc(32px * var(--subtitle-scale, 1)), 6vw);
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-break: keep-all;
+    white-space: pre-wrap;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
     user-select: none;
     -webkit-user-select: none;
-    pointer-events: none;
-    
-    /* 讓字幕出現時平滑一點 */
-    transition: background-color 0.3s ease;
 }
 
 /* 針對全螢幕時的優化：讓文字稍微大一點更清楚 */
 :fullscreen #subtitle,
 :-webkit-full-screen #subtitle,
 .pseudo-fullscreen #subtitle {
-    font-size: calc(min(4vw, 28px) * var(--subtitle-scale, 1)) !important;
-    bottom: calc(var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom)) !important;
+    bottom: calc( var(--subtitle-bottom, 8%) + env(safe-area-inset-bottom) + 12px) !important;
 }
 
 /* 全螢幕下的樣式優化，讓背景在暗處更融合 */
 :fullscreen #subtitle span,
 :-webkit-full-screen #subtitle span,
 .pseudo-fullscreen #subtitle span {
-    font-size: calc(28px * var(--subtitle-scale, 1)) !important;
+    font-size: min( calc(28px * var(--subtitle-scale, 1)), 7vw) !important;
     background-color: rgba(0, 0, 0, 0.7) !important;
     padding: 0.3em 0.8em !important;
 }
