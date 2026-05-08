@@ -203,6 +203,8 @@ header p {
     display: flex;
     justify-content: center;
     align-items: center;
+    white-space: normal;
+    word-break: break-all;
     flex-wrap: wrap; 
     padding: 8px 16px;
     box-sizing: border-box;
@@ -227,6 +229,8 @@ header p {
     color: #333;           /* 強制指定文字顏色，避免變成藍色 */
     cursor: pointer;       /* 滑鼠移上去變手指 */
     box-sizing: border-box; /* 防止 padding 撐破寬度 */
+    font-size: clamp(14px, 1.2vw, 16px);
+    line-height: 1.5;
 }
 
 .news-item:hover {
@@ -815,7 +819,8 @@ body.theme-dark .sns-divider { color: #334155; }
     }
     .news-item {
         width: 100%; /* 手機版一行一個 */
-        font-size: 12px;
+        font-size: 14px;
+        white-space: normal;
     }
 }
 </style>
