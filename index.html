@@ -346,7 +346,6 @@ body.theme-dark .month-grid .time-btn {
 .tag-live { background: #ef4444; color: #fff; }
 .tag-note { background: #f59e0b; color: #fff; }
 
-
 /* ===== Layout ===== */
 .container {
     display: flex;
@@ -451,6 +450,7 @@ body.theme-dark .month-grid .time-btn {
     position: relative;
     display: block;
     border: none;
+    position: relative;
 }
 
 .card-img-wrap {
@@ -490,6 +490,44 @@ body.theme-dark .month-grid .time-btn {
     color: #9ca3af; 
     padding-top: 12px;
     border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* 收藏按鈕 */
+.fav-btn {
+    position: absolute;
+    bottom: 10px; /* 放在右下角 */
+    right: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 5;
+    font-size: 16px;
+    color: #ccc; /* 預設灰色 */
+}
+
+/* 收藏後的狀態 */
+.fav-btn.active {
+    color: #e63946; /* 愛心變紅 */
+}
+
+.fav-btn:hover {
+    transform: scale(1.1);
+    background: #ffffff;
+}
+
+/* 收藏頁面標題樣式 */
+.section-title {
+    color: #4b5563;
+    font-size: 1.1rem;
+    padding: 10px 0;
 }
 
 .new-badge {
@@ -971,21 +1009,12 @@ body.theme-dark .sns-divider { color: #334155; }
 
 <div class="container">
     <nav class="sidebar">
-        <button class="active" onclick="switchTab('live', this)">
-            📺 直播
-        </button>
-        <button onclick="switchTab('program', this)">
-            🎬 節目
-        </button>
-        <button onclick="switchTab('radio', this)">
-            📻 電台
-        </button>
-        <button onclick="switchTab('media', this)">
-            🎤 媒體
-        </button>
-        <button onclick="switchTab('stage', this)">
-            🎶 舞台
-        </button>
+        <button class="active" onclick="switchTab('live', this)">📺 直播</button>
+        <button onclick="switchTab('program', this)">🎬 節目</button>
+        <button onclick="switchTab('radio', this)">📻 電台</button>
+        <button onclick="switchTab('media', this)">🎤 媒體</button>
+        <button onclick="switchTab('stage', this)">🎶 舞台</button>
+        <button onclick="switchTab('favorites', this)" id="fav-nav-btn">❤️ 收藏</button>
     </nav>
 
     <main class="content">
@@ -1012,6 +1041,15 @@ body.theme-dark .sns-divider { color: #334155; }
         <div id="stage" class="section">
             <div id="stage-filters" class="filter-bar"></div>
             <div class="card-grid" id="stage-grid"></div>
+        </div>
+
+        <div id="favorites" class="section">
+            <div class="filter-bar">
+                <h3 class="section-title">我的收藏清單</h3>
+            </div>
+            <div class="card-grid" id="favorites-grid">
+                <!-- 收藏的卡片會渲染在這裡 -->
+            </div>
         </div>
     </main>
 </div>
@@ -1535,9 +1573,20 @@ window.onload = function() {
 function createCardHTML(item) {
     const badge = item.isNew ? '<span class="new-badge">NEW</span>' : '';
     const credit = item.credit ? `<div class="card-credit">${item.credit}</div>` : '';
+
+    // 檢查此 ID 是否在收藏清單中
+    const favoriteIds = JSON.parse(localStorage.getItem('ly_favorites')) || [];
+    const isFav = favoriteIds.includes(item.id);
     
     return `
     <article class="card" data-id="${item.id}" data-title="${item.title}">
+        <!-- 愛心收藏按鈕 (獨立於 <a> 標籤外，避免觸發跳轉) -->
+        <button class="fav-btn ${isFav ? 'active' : ''}" 
+                data-id="${item.id}" 
+                onclick="toggleFavorite('${item.id}', event)">
+            ${isFav ? '❤️' : '🤍'}
+        </button>
+        
         <a href="${item.link}" target="_blank" style="text-decoration:none; color:inherit; display:block;">
             <div class="card-img-wrap">
                 <img src="${item.img}" alt="${item.title.replace(/<br>/g, ' ')}" loading="lazy">
@@ -1724,11 +1773,18 @@ function switchTab(tabId, btn) {
     document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.sidebar button').forEach(el => el.classList.remove('active'));
     
-    document.getElementById(tabId).classList.add('active');
+    const targetSection = document.getElementById(tabId);
+    if (targetSection) targetSection.classList.add('active');
     btn.classList.add('active');
 
-    // 切換分頁時，重置捲動位置，避免卡在中間
+    // --- 如果切換到收藏頁，執行渲染 ---
+    if (tabId === 'favorites') {
+        renderFavorites();
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 側邊欄自動把選中的按鈕捲動到中間
+    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
 }
 
 const searchInput = document.getElementById('searchInput');
@@ -1815,6 +1871,65 @@ function setTheme(theme) {
     document.body.classList.remove(...themes);
     document.body.classList.add(theme);
     localStorage.setItem('site-theme', theme);
+}
+
+/* =========================================
+   收藏功能
+   ========================================= */
+function toggleFavorite(id, event) {
+    event.preventDefault();
+    event.stopPropagation(); // 防止點擊愛心時觸發卡片的 <a> 連結
+
+    let favoriteIds = JSON.parse(localStorage.getItem('ly_favorites')) || [];
+    const index = favoriteIds.indexOf(id);
+
+    if (index > -1) {
+        favoriteIds.splice(index, 1); // 移除
+    } else {
+        favoriteIds.push(id); // 新增
+    }
+
+    localStorage.setItem('ly_favorites', JSON.stringify(favoriteIds));
+
+    // 同步更新畫面上所有相同 ID 的愛心圖示 (包含各分類與收藏頁)
+    const allFavBtns = document.querySelectorAll(`.fav-btn[data-id="${id}"]`);
+    const isNowFav = favoriteIds.includes(id);
+    
+    allFavBtns.forEach(btn => {
+        btn.classList.toggle('active', isNowFav);
+        btn.innerText = isNowFav ? '❤️' : '🤍';
+    });
+
+    // 如果目前正好在「收藏頁面」，移除收藏時要即時讓卡片消失
+    const currentActiveSection = document.querySelector('.section.active');
+    if (currentActiveSection && currentActiveSection.id === 'favorites') {
+        renderFavorites(); 
+    }
+}
+
+// 渲染收藏頁面
+function renderFavorites() {
+    const favGrid = document.getElementById('favorites-grid');
+    if (!favGrid) return;
+
+    const favoriteIds = JSON.parse(localStorage.getItem('ly_favorites')) || [];
+    
+    // 從資料庫中篩選出有被收藏的項目
+    const favItems = videoData.filter(item => favoriteIds.includes(item.id));
+    
+    // 排序 (維持跟你其他分頁一樣的排序邏輯)
+    const sortedFavs = getSortedData(favItems);
+
+    if (sortedFavs.length === 0) {
+        favGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 60px 20px;">
+                <div style="font-size: 40px; margin-bottom: 10px;">❤️</div>
+                <p>目前還沒有收藏任何影片喔！<br>點擊卡片上的愛心來收藏吧。</p>
+            </div>`;
+        return;
+    }
+
+    favGrid.innerHTML = sortedFavs.map(createCardHTML).join('');
 }
 
 /* =========================================
