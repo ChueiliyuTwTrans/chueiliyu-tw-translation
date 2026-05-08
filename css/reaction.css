@@ -67,7 +67,7 @@ html, body {
     left: 50%;
     transform: translateX(-50%);
     width: 95%;
-    max-width: 1400px;
+    max-width: 1800px;
 
     z-index: 100;
     pointer-events: none;
@@ -78,7 +78,7 @@ html, body {
 #subtitle span {
     display: inline-block;
     width: fit-content;
-    max-width: min(95vw, 1200px);
+    max-width: min(98vw, 1600px);
 
     padding: 0.2em 0.6em;
     box-sizing: border-box;
@@ -86,7 +86,7 @@ html, body {
     border-radius: 6px;
     color: rgba(255,255,255,.95);
 
-    font-size: calc(clamp(16px, 2vw, 26px) * var(--subtitle-scale, 1)) !important;
+    font-size: calc(clamp(16px, 1.8vw, 24px) * var(--subtitle-scale, 1)) !important;
     line-height: 1.45;
 
     white-space: pre-wrap;
@@ -107,7 +107,7 @@ html, body {
 :fullscreen #subtitle span,
 :-webkit-full-screen #subtitle span,
 .pseudo-fullscreen #subtitle span {
-    font-size: calc(clamp(20px, 4vw, 30px) * var(--subtitle-scale, 1)) !important;
+    font-size: calc(clamp(20px, 3.5vw, 28px) * var(--subtitle-scale, 1)) !important;
     background-color: rgba(0, 0, 0, 0.7) !important;
     padding: 0.3em 0.8em !important;
     max-width: 95% !important;
