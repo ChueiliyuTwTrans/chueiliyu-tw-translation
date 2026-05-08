@@ -165,6 +165,31 @@ header p {
 .search-input-wrap input:focus ~ #clearSearch { color: #666; }
 #clearSearch.visible { display: block; }
 
+/* 月份搜尋 */
+.time-filter {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto; /* 手機版自動變成橫向捲動 */
+    padding-bottom: 5px;
+    scrollbar-width: none; /* 隱藏捲軸 */
+}
+.time-filter::-webkit-scrollbar { display: none; }
+
+.time-btn {
+    flex-shrink: 0; /* 防止按鈕被擠壓 */
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 12px;
+    cursor: pointer;
+}
+.time-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
 
 /* ===== Header Theme Buttons ===== */
 .header-theme {
@@ -835,6 +860,16 @@ body.theme-dark .sns-divider { color: #334155; }
             <button id="clearSearch">✕</button>
         </div>
         <div id="searchResults" class="search-results"></div>
+        <div class="time-filter" id="timeFilter">
+            <button class="time-btn active" data-time="all">全部時間</button>
+            <button class="time-btn" data-time="2026-04">2026 04月</button>
+            <button class="time-btn" data-time="2026-03">2026 03月</button>
+            <button class="time-btn" data-time="2026-02">2026 02月</button>
+            <button class="time-btn" data-time="2026-01">2026 01月</button>
+            <button class="time-btn" data-time="2025-12">2025 12月</button>
+            <button class="time-btn" data-time="2025-11">2025 11月</button>
+            <button class="time-btn" data-time="2025-10">2025 10月</button>
+        </div>
     </div>
     
     <div class="header-theme">
@@ -966,6 +1001,7 @@ const videoData = [
     {
         id: 'l1',
         category: 'live',
+        date: '2025-12',
         title: '20251224和立于一起度過聖誕夜',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/',
         img: 'images/20251224_CHRISTMAS_NIGHT_with_LIYU.webp',
@@ -977,6 +1013,7 @@ const videoData = [
     {
         id: 'l2',
         category: 'live',
+        date: '2026-01',
         title: '20260103和大家一起度過的第一個生日♥',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BIRTHDAY_LIVE/',
         img: 'images/20260103_Liyu_Birthday_Live.webp',
@@ -988,6 +1025,7 @@ const videoData = [
     {
         id: 'l3',
         category: 'live',
+        date: '2025-12',
         title: '《Show! 音樂中心》MC CUT 岡旻(VERIVERY) X 崔立于(CHUEI LI YU)',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251213MBC_Show!MusicCore_MC_cut/',
         img: 'images/20251213_MBC_Show!MusicCore_MC_cut.webp',
@@ -999,6 +1037,7 @@ const videoData = [
     {
         id: 'l4',
         category: 'live',
+        date: '2026-01',
         title: '20260130立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260130Instagram_Live/',
         img: 'images/20260130_Instagram_Live2.webp',
@@ -1010,6 +1049,7 @@ const videoData = [
     {
         id: 'l5',
         category: 'live',
+        date: '2025-12',
         title: 'AIreport VOL.4 | Radio’n Us : 2025年末派對',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251208AIreportVOL.4_Radio’nUs_2025Year-end_party_Part.2/',
         img: 'images/20251208_AIreport VOL.4_Radio’n Us_2025 Year-end party Part.2.webp',
@@ -1021,6 +1061,7 @@ const videoData = [
     {
         id: 'l6',
         category: 'live',
+        date: '2026-03',
         title: '20260306立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260306Instagram_Live/',
         img: 'images/20260306_55.jpg',
@@ -1032,6 +1073,7 @@ const videoData = [
     {
         id: 'l7',
         category: 'live',
+        date: '2026-03',
         title: '20260312🎉DEBUT 100 Days LIVE 🎉',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260312DEBUT_100_Days_LIVE/',
         img: 'images/20260312_DEBUT_100_Days_LIVE.webp',
@@ -1043,6 +1085,7 @@ const videoData = [
     {
         id: 'l8',
         category: 'live',
+        date: '2026-03',
         title: '20260320立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260320Instagram_Live/',
         img: 'images/20260320_11.webp',
@@ -1054,6 +1097,7 @@ const videoData = [
 　　 {
         id: 'l9',
         category: 'live',
+        date: '2026-03',
         title: '20260324 MIIM IG直播 立于x玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260324MIIM_Instagram_Live/',
         img: 'images/20260324MIIM.webp',
@@ -1067,6 +1111,7 @@ const videoData = [
     {
         id: 'p1',
         category: 'program',
+        date: '2025-12',
         title: '硬撐詩安 EP#9',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/',
         img: 'images/20251220_kkang-sian_ep9.webp',
@@ -1078,6 +1123,7 @@ const videoData = [
     {
         id: 'p2',
         category: 'program',
+        date: '2025-12',
         title: '練習室的Bada老師 ep.41',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/',
         img: 'images/20251218_BadaLee_ep41.webp',
@@ -1089,6 +1135,7 @@ const videoData = [
     {
         id: 'p3',
         category: 'program',
+        date: '2025-12',
         title: '德飯店 EP.5 崔立于 CHUEI LI YU',
         link: 'Program/20251216deok_rice_restaurant_ep5/',
         img: 'images/20251216_deok_rice_restaurant.webp',
@@ -1100,6 +1147,7 @@ const videoData = [
     {
         id: 'p4',
         category: 'program',
+        date: '2025-11',
         title: '洪錫天的寶石盒第四季 EP.23',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon\'s_Jewel_Box/',
         img: 'images/20251125_HongSeokCheon\'s_Jewel_Box_ep.23.webp',
@@ -1111,6 +1159,7 @@ const videoData = [
     {
         id: 'p5',
         category: 'program',
+        date: ['2025-11', '2025-12', '2026-01'],
         title: '炸雞王座系列',
         link: 'Program/king-of-chicken/',
         img: 'images/20260102_bhc.webp',
@@ -1122,6 +1171,7 @@ const videoData = [
     {
         id: 'p6',
         category: 'program',
+        date: '2025-10',
         title: '鄰家K明星系列',
         link: 'Program/KStarNextDoor_Show/',
         img: 'images/20251014_KStarNextDoor_Show_ep24.webp',
@@ -1133,6 +1183,7 @@ const videoData = [
     {
         id: 'p7',
         category: 'program',
+        date: '2026-01',
         title: '出差！RISABAE X 崔立于 Drawing簽售會',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260129On-the-Go_Risabae/',
         img: 'images/20260129_On-the-Go_Risabae.webp',
@@ -1144,6 +1195,7 @@ const videoData = [
     {
         id: 'p8',
         category: 'program',
+        date: '2026-04',
         title: '尋找潛伏在新人偶像中的臥底 | TXT 杋圭&休寧凱 | THE qUEST',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260415THE_qUEST/',
         img: 'images/20260415_THE_qUEST.webp',
@@ -1157,6 +1209,7 @@ const videoData = [
     {
         id: 'r1',
         category: 'radio',
+        date: '2025-12',
         title: '朴素賢的 Love Game | 251221',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/',
         img: 'images/20251221_love_game.webp',
@@ -1168,6 +1221,7 @@ const videoData = [
     {
         id: 'r2',
         category: 'radio',
+        date: '2025-12',
         title: '[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/',
         img: 'images/20251211_kiss_the_radio.webp',
@@ -1179,6 +1233,7 @@ const videoData = [
     {
         id: 'r3',
         category: 'radio',
+        date: '2025-12',
         title: 'Holiday in 親密朋友',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251205bfever/',
         img: 'images/20251205_bfever.webp',
@@ -1190,6 +1245,7 @@ const videoData = [
     {
         id: 'r4',
         category: 'radio',
+        date: ['2025-11', '2025-12', '2026-02'],
         title: 'IDOL RADIO系列',
         link: 'Radio/IDOL_RADIO/',
         img: 'images/20260218_IDOL_RADIO_ep199.webp',
@@ -1201,6 +1257,7 @@ const videoData = [
     {
         id: 'r5',
         category: 'radio',
+        date: ['2026-01', '2026-02'],
         title: '偶像韓語系列',
         link: 'Radio/IDOL_KOREAN/',
         img: 'images/20260117_IDOL_KOREAN_ep.726.webp',
@@ -1214,6 +1271,7 @@ const videoData = [
     {
         id: 'm1',
         category: 'media',
+        date: '2025-11',
         title: 'Marie Claire Korea 特輯<br>MARIE畫畫日記',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20251107MARIE_Drawing_Diary/',
         img: 'images/20251107_MARIE_Drawing_Diary.webp',
@@ -1225,6 +1283,7 @@ const videoData = [
     {
         id: 'm2',
         category: 'media',
+        date: '2026-01',
         title: 'Ktown4u 特輯<br>撲通撲通立于time💗崔立于的可愛合集🐰.zip',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/',
         img: 'images/20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU.webp',
@@ -1236,6 +1295,7 @@ const videoData = [
     {
         id: 'm3',  
         category: 'media', 
+        date: '2026-02',
         title: 'Y MAGAZINE 特輯<br>製作杜拜巧克力Q餅',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260205Y_MAGAZINE/', 
         img: 'images/20260205_Y_magazine.webp',
@@ -1247,6 +1307,7 @@ const videoData = [
     {
         id: 'm4',  
         category: 'media', 
+        date: '2026-02',
         title: '貝力熊節目企劃<br>如果在咖啡廳遇見超帥工讀生的話？',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260227Bellygom/', 
         img: 'images/20260227_Bellygom.webp',
@@ -1258,6 +1319,7 @@ const videoData = [
     {
         id: 'm5',  
         category: 'media', 
+        date: '2026-02',
         title: 'IDOL RADIO UNIVERSE節目企劃<br>下班Possible',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260226IDOL_RADIO_UNIVERSE/', 
         img: 'images/20260226_IDOL_RADIO_UNIVERSE.webp',
@@ -1269,6 +1331,7 @@ const videoData = [
     {
         id: 'm6',  
         category: 'media', 
+        date: '2026-03',
         title: '合作企劃<br>Esquire Korea x 舒特膚(Cetaphil)',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260303cetaphil/', 
         img: 'images/20260302_cetaphil.webp',
@@ -1280,6 +1343,7 @@ const videoData = [
     {
         id: 'm7',  
         category: 'media', 
+        date: '2026-03',
         title: 'KITZ節目企劃<br>ARTIST PORTRAIT & BEYOND THE STAGE',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260309KITZ/', 
         img: 'images/20260309KITZ_BEYOND THE STAGE.webp',
@@ -1291,6 +1355,7 @@ const videoData = [
     {
         id: 'm8',  
         category: 'media', 
+        date: '2026-04',
         title: 'MIIM節目企劃<br>立于X玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260420MIIM/', 
         img: 'images/20260403MIIM2.webp',
@@ -1302,6 +1367,7 @@ const videoData = [
     {
         id: 'm9',  
         category: 'media', 
+        date: '2026-04',
         title: 'DAZED KOREA 2026 Summer Edition 畫報幕後花絮',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260423DAZED_KOREA_2026_Summer_Edition_BEHIND/', 
         img: 'images/20260423_DAZED_KOREA_2026_Summer_Edition_BEHIND.webp',
@@ -1313,6 +1379,7 @@ const videoData = [
     {
         id: 'm10',  
         category: 'media', 
+        date: '2026-04',
         title: 'Esquire Korea 幕後花絮 立于x玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260426ESQUIRE/', 
         img: 'images/20260426ESQUIRE1.webp',
@@ -1324,6 +1391,7 @@ const videoData = [
     {
         id: 's1',  
         category: 'stage', 
+        date: '2025-12',
         title: '20251205 Music Bank 舞台合輯',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251205Music_Bank/', 
         img: 'images/20251205Music_Bank.webp',
@@ -1335,6 +1403,7 @@ const videoData = [
     {
         id: 's2',  
         category: 'stage', 
+        date: '2025-12',
         title: '20251206-1213 音樂中心 舞台合輯',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251206Show!Music_Core/', 
         img: 'images/20251206Show!_Music_Core.webp',
@@ -1346,6 +1415,7 @@ const videoData = [
     {
         id: 's3',  
         category: 'stage', 
+        date: '2025-12',
         title: '20251207 Inkigayo 舞台合輯',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/20251207Inkigayo/', 
         img: 'images/20251207Inkigayo.webp',
@@ -1357,6 +1427,7 @@ const videoData = [
     {
         id: 's4',  
         category: 'stage', 
+        date: '2025-12',
         title: '2025年12月份 其他舞台合輯',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Stage/202512Other_Stage/', 
         img: 'images/20251210its_Live.webp',
