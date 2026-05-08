@@ -158,7 +158,11 @@ header p {
 }
 
 .about-section {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+.about-section:first-child h4 {
+    margin-top: 5px;
 }
 
 .about-section h4 {
@@ -167,6 +171,13 @@ header p {
     padding-bottom: 8px;
     margin-bottom: 15px;
     font-size: 1.1rem;
+}
+
+.signature {
+    text-align: right;
+    display: block;
+    margin-top: 10px;
+    font-weight: 500;
 }
 
 .letter-content p {
@@ -941,6 +952,11 @@ body.theme-dark { background: #0f172a; color: #f1f5f9; }
 
 body.theme-dark header { background-image: none; background-color: #1e293b; }
 body.theme-dark .header-text { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.1); }
+body.theme-dark .about-content { background: #1e293b; color: #f1f5f9; }
+body.theme-dark .letter-content p, body.theme-dark .qa-item p, body.theme-dark .guide-list { color: #cbd5e1; }
+body.theme-dark .qa-item strong { color: #f8fafc; }
+body.theme-dark .qa-item { background: rgba(255, 255, 255, 0.05); }
+body.theme-dark .about-section h4 { color: #fbbf24; border-bottom-color: rgba(255, 255, 255, 0.1); }
 
 body.theme-dark .sidebar { background-color: #0f172a; background-image: none; border-right: 1px solid #334155; }
 body.theme-dark .content { background-color: #0f172a; background-image: none; }
@@ -1266,7 +1282,7 @@ body.theme-dark .sns-divider { color: #334155; }
                     <p>目前除了我（西卡）以外，還有幾位成員一同利用閒暇時間完成作業。我們始終秉持<strong>不商用、不獲取金錢</strong>的原則，為愛發電至今。希望這裡能成為讓 Lobudan 們感到安心且快樂的精神時光屋。</p>
                     <p>感謝各位一直支持著翻譯站，每次都能給予很實質的建議。我深知目前的網站還不能讓所有人都獲得滿意的使用體驗，且光靠我一個人不可能短時間就將網站打造成如同大家慣用的影音平台般方便使用。</p>
                     <p>但未來我還是會持續精進自己，雖然翻譯站無法以最快的速度更新，但我會盡可能完整的存放立于的資訊，讓各位在了解立于的資訊道路上減少阻礙。</p>
-                    <p>西卡上</p>
+                    <p class="signature">西卡上</p>
                 </div>
             </section>
 
