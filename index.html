@@ -731,9 +731,9 @@ body.theme-fancy .news-item:hover {
 }
     
 /* 2. 🤍 高級白色模式 (Light) */
-body.theme-light { background: #ffffff; color: #1f2937; }
+body.theme-light { background: #f8f7f4; color: #374151; }
 
-body.theme-light header { background-image: none; background-color: #f1f5f9; }
+body.theme-light header { background-image: none; background-color: #efede8; }
 body.theme-light .header-text {
     background: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(255,255,255,0.8);
@@ -749,21 +749,21 @@ body.theme-light .search-input-wrap input::placeholder { color: #94a3b8; }
 body.theme-light .month-expand-btn { background: #ffffff; color: #1f2937; border: 1px solid #cbd5e1; box-shadow: var(--shadow-sm); }
 body.theme-light .month-expand-btn:hover { background: #f8fafc; border-color: var(--primary-color); }
 
-body.theme-light .content { background-color: #f1f5f9; background-image: none; }
+body.theme-light .content { background-color: #f8f7f4; background-image: none; }
 body.theme-light .sidebar {
-    background-color: #ffffff; background-image: none; border-right: 1px solid #e2e8f0;
+    background-color: #f1efeb; background-image: none; border-right: 1px solid #e5e3de;
 }
 body.theme-light .sidebar button { background: transparent; color: #64748b; box-shadow: none; }
 body.theme-light .sidebar button:hover { background: #f1f5f9; color: #334155; }
 body.theme-light .sidebar button.active { background: #eff6ff; color: #2563eb; }
 
 body.theme-light .card {
-    background: #f8fafc; box-shadow: var(--shadow-sm); border: 1px solid transparent;
+    background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #eeece8;
 }
 body.theme-light .card:hover {
     transform: translateY(-4px); background: #ffffff; box-shadow: var(--shadow-lg); border-color: #bfdbfe;
 }
-body.theme-light .card-credit { border-top-color: #e2e8f0; }
+body.theme-light .card-credit { border-top-color: #f1efeb; }
 body.theme-light .search-highlight { box-shadow: 0 0 0 4px var(--primary-color); }
 /* 白色模式公告欄 */
 body.theme-light .news-board { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
@@ -833,7 +833,9 @@ body.theme-dark .sns-divider { color: #334155; }
 @media (max-width: 768px) {
     header {
         height: auto;
+        min-height: 160px;
         padding: 16px 16px 18px; 
+        display: block;
         flex-direction: row; 
         flex-wrap: wrap; 
         align-items: center; 
