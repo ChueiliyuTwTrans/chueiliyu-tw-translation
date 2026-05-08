@@ -305,7 +305,7 @@ header p {
     z-index: 100000;
 }
 .month-modal-overlay.active {
-    display: flex;
+    display: flex !important;
 }
 
 /* 彈出視窗內容 */
@@ -1211,7 +1211,7 @@ body.theme-dark .sns-divider { color: #334155; }
 </button>
 
 <!-- 關於本站彈跳視窗 -->
-<div id="aboutModal" class="month-modal">
+<div id="aboutModal" class="month-modal-overlay">
     <div class="modal-content about-content">
         <div class="modal-header">
             <h3 style="margin:0;">✨ 關於本站</h3>
