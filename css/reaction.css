@@ -74,9 +74,10 @@ html, body {
     /* 改用變數控制位置，預設為 8% */
     bottom: var(--subtitle-bottom, 8%); 
     left: 50%;
-    transform: translateX(-50%) scale(var(--subtitle-scale, 1));
+    transform: translateX(-50%);
     transform-origin: center bottom;
-    width: 90%;
+    width: 85%;
+    max-width: 1200px;
     z-index: 100;
     pointer-events: none;
     text-align: center;
@@ -92,11 +93,11 @@ html, body {
     background-color: rgba(15, 15, 15, 0.75) !important;
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 500 !important;
-    font-size: 24px;
+    font-size: calc(24px * var(--subtitle-scale, 1)) !important;
     letter-spacing: 0.05em;
     line-height: 1.4;
-    word-break: break-word;
-    white-space: pre-wrap;
+    word-break: break-all;
+    white-space: normal;
     letter-spacing: 0.03em;
     
     /* 文字陰影，增加字體立體感 */
@@ -105,6 +106,7 @@ html, body {
     /* 防止背景溢出與自動換行 */
     word-break: break-word;
     white-space: pre-wrap;
+    max-width: 100%;
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
@@ -125,6 +127,7 @@ html, body {
 :fullscreen #subtitle span,
 :-webkit-full-screen #subtitle span,
 .pseudo-fullscreen #subtitle span {
+    font-size: calc(28px * var(--subtitle-scale, 1)) !important;
     background-color: rgba(0, 0, 0, 0.7) !important;
     padding: 0.3em 0.8em !important;
 }
