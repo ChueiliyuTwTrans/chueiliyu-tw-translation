@@ -166,29 +166,82 @@ header p {
 #clearSearch.visible { display: block; }
 
 /* 月份搜尋 */
-.time-filter {
-    display: flex;
-    gap: 8px;
+/* 月份摺疊按鈕樣式 */
+.month-toggle-wrapper {
     margin-top: 10px;
-    overflow-x: auto; /* 手機版自動變成橫向捲動 */
-    padding-bottom: 5px;
-    scrollbar-width: none; /* 隱藏捲軸 */
 }
-.time-filter::-webkit-scrollbar { display: none; }
-
-.time-btn {
-    flex-shrink: 0; /* 防止按鈕被擠壓 */
-    padding: 4px 12px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.2);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.3);
-    font-size: 12px;
+.month-expand-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
     cursor: pointer;
+    transition: 0.3s;
 }
-.time-btn.active {
+.month-expand-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 彈出視窗遮罩層 */
+.month-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none; /* 預設隱藏 */
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+}
+.month-modal-overlay.active {
+    display: flex;
+}
+
+/* 彈出視窗內容 */
+.month-modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+body.theme-dark .month-modal-content {
+    background: #1e293b;
+    color: #fff;
+}
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+.month-grid .time-btn {
+    padding: 10px;
+    background: #f1f5f9;
+    color: #333;
+    border: none;
+}
+body.theme-dark .month-grid .time-btn {
+    background: #334155;
+    color: #eee;
+}
+.month-grid .time-btn.active {
     background: var(--primary-color);
-    border-color: var(--primary-color);
+    color: white;
+}
+.month-close-btn {
+    margin-top: 10px;
+    border: none;
+    background: none;
+    color: #999;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 /* ===== Header Theme Buttons ===== */
@@ -860,15 +913,25 @@ body.theme-dark .sns-divider { color: #334155; }
             <button id="clearSearch">✕</button>
         </div>
         <div id="searchResults" class="search-results"></div>
-        <div class="time-filter" id="timeFilter">
-            <button class="time-btn active" data-time="all">全部時間</button>
-            <button class="time-btn" data-time="2026-04">2026 04月</button>
-            <button class="time-btn" data-time="2026-03">2026 03月</button>
-            <button class="time-btn" data-time="2026-02">2026 02月</button>
-            <button class="time-btn" data-time="2026-01">2026 01月</button>
-            <button class="time-btn" data-time="2025-12">2025 12月</button>
-            <button class="time-btn" data-time="2025-11">2025 11月</button>
-            <button class="time-btn" data-time="2025-10">2025 10月</button>
+        <div class="month-toggle-wrapper">
+            <button class="month-expand-btn" onclick="toggleMonthModal(true)">📅 按月份搜尋</button>
+        </div>
+    </div>
+
+    <div class="month-modal-overlay" id="monthModal">
+        <div class="month-modal-content">
+            <h3>選擇播出月份</h3>
+            <div class="month-grid">
+                <button class="time-btn active" data-time="all" onclick="selectMonth('all')">全部時間</button>
+                <button class="time-btn" data-time="2026-04" onclick="selectMonth('2026-04')">2026 04月</button>
+                <button class="time-btn" data-time="2026-03" onclick="selectMonth('2026-03')">2026 03月</button>
+                <button class="time-btn" data-time="2026-02" onclick="selectMonth('2026-02')">2026 02月</button>
+                <button class="time-btn" data-time="2026-01" onclick="selectMonth('2026-01')">2026 01月</button>
+                <button class="time-btn" data-time="2025-12" onclick="selectMonth('2025-12')">2025 12月</button>
+                <button class="time-btn" data-time="2025-11" onclick="selectMonth('2025-11')">2025 11月</button>
+                <button class="time-btn" data-time="2025-10" onclick="selectMonth('2025-10')">2025 10月</button>
+            </div>
+            <button class="month-close-btn" onclick="toggleMonthModal(false)">關閉</button>
         </div>
     </div>
     
@@ -1441,6 +1504,8 @@ const videoData = [
 /* =========================================
    ⭐ 2. 核心渲染功能
    ========================================= */
+let currentMonth = 'all'; // 預設顯示全部月份
+    
 window.onload = function() {
     // 1. 渲染卡片
     if (typeof videoData !== 'undefined') {
@@ -1490,32 +1555,38 @@ function getSortedData(data) {
 }
 
 function renderAllCards(data) {
-    // 1. 在這裡執行排序：根據 ID 中的數字進行降序 (大的在前)
-    // 使用 [...data] 建立一個副本，避免改動到原始陣列
-    const sortedData = [...data].sort((a, b) => {
-        const numA = parseInt(a.id.match(/\d+/)[0]);
-        const numB = parseInt(b.id.match(/\d+/)[0]);
-        return numB - numA; // 降序排列：由大到小
+    // 1. 先呼叫 getSortedData 取得排序後的資料副本
+    const sortedData = getSortedData(data);
+
+    // 2. 執行月份過濾 (整合 currentMonth)
+    const monthFilteredData = sortedData.filter(i => {
+        if (currentMonth === 'all') return true;
+        // 判斷日期是否匹配 (支援字串或陣列格式)
+        return Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth;
     });
 
-    const liveContainer = document.getElementById('live-grid');
-    const programContainer = document.getElementById('program-grid');
-    const radioContainer = document.getElementById('radio-grid');
-    const mediaContainer = document.getElementById('media-grid');
-    const stageContainer = document.getElementById('stage-grid');
+    // 3. 取得各分類的容器
+    const containers = {
+        'live': document.getElementById('live-grid'),
+        'program': document.getElementById('program-grid'),
+        'radio': document.getElementById('radio-grid'),
+        'media': document.getElementById('media-grid'),
+        'stage': document.getElementById('stage-grid')
+    };
 
-    // 2. 使用排序後的 sortedData 來渲染
-    liveContainer.innerHTML = sortedData.filter(i => i.category === 'live').map(createCardHTML).join('');
-    programContainer.innerHTML = sortedData.filter(i => i.category === 'program').map(createCardHTML).join('');
-    radioContainer.innerHTML = sortedData.filter(i => i.category === 'radio').map(createCardHTML).join('');
-
-    if(mediaContainer) {
-        mediaContainer.innerHTML = sortedData.filter(i => i.category === 'media').map(createCardHTML).join('');
-    }
-
-    if(stageContainer) {
-        stageContainer.innerHTML = sortedData.filter(i => i.category === 'stage').map(createCardHTML).join('');
-    }
+    // 4. 根據過濾後的資料進行各分類渲染
+    Object.keys(containers).forEach(cat => {
+        const grid = containers[cat];
+        if (grid) {
+            const catData = monthFilteredData.filter(i => i.category === cat);
+            grid.innerHTML = catData.map(createCardHTML).join('');
+            
+            // 如果該月份沒有資料，可以選擇顯示提示文字 (選用)
+            if (catData.length === 0 && currentMonth !== 'all') {
+                // grid.innerHTML = '<div class="no-data">此月份暫無內容</div>';
+            }
+        }
+    });
 }
 
 /* =========================================
@@ -1577,16 +1648,65 @@ function filterCategory(category, cast, btnElement) {
     // 篩選邏輯
     const gridId = category + '-grid';
     const grid = document.getElementById(gridId);
-    const cards = grid.getElementsByClassName('card');
 
-    // 從 videoData 重新過濾並渲染
-    const targetData = videoData.filter(i => i.category === category);
+    // 同時過濾「分類」與「月份」
+    const targetData = videoData.filter(i => {
+        const isCategory = i.category === category;
+        const isMonth = (currentMonth === 'all') ? true : 
+                        (Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth);
+        return isCategory && isMonth;
+    });
+
+    // 再根據「演出者」過濾
     const filtered = (cast === 'all') 
         ? targetData 
         : targetData.filter(item => item.cast.includes(cast));
-     const finalSortedData = getSortedData(filtered);
-        
+
+    // 排序並渲染
+    const finalSortedData = getSortedData(filtered);
     grid.innerHTML = finalSortedData.map(createCardHTML).join('');
+}
+
+// 控制 Modal 開關
+function toggleMonthModal(show) {
+    const modal = document.getElementById('monthModal');
+    if (show) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // 防止底層捲動
+    } else {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// 選擇月份後執行的動作
+function selectMonth(month) {
+    currentMonth = month;
+    
+    // 更新 Modal 內的按鈕樣式
+    document.querySelectorAll('.month-grid .time-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time') === month);
+    });
+
+    // 重點：選擇月份後，要讓「所有分頁」都依照新月份重新渲染一次
+    renderAllCards(videoData);
+    
+    // 如果你有目前的分類 (currentTab)，也要確保該分類的演出者篩選器回到「全部」
+    // 或者簡單做法：直接重新跑一遍初始化篩選器
+    ['live', 'program', 'radio', 'media', 'stage'].forEach(cat => {
+        const allBtn = document.querySelector(`#${cat}-filters button:first-child`);
+        if(allBtn) {
+            allBtn.classList.add('active'); // 視覺上重置為全部
+            // 移除其他按鈕的 active
+            const siblings = allBtn.parentNode.querySelectorAll('.filter-btn');
+            siblings.forEach(s => { if(s !== allBtn) s.classList.remove('active'); });
+        }
+    });
+
+    // 關閉視窗與更新按鈕文字
+    const expandBtn = document.querySelector('.month-expand-btn');
+    expandBtn.innerText = month === 'all' ? '📅 按月份搜尋' : `📅 已選：${month}`;
+    toggleMonthModal(false);
 }
 
 /* =========================================
