@@ -269,11 +269,12 @@ header p {
     gap: 8px; /* 字體大小與收回按鈕之間的間距 */
 }
 
-/* 字體大小按鈕與收回按鈕 樣式統一 */
+/* 1. 右上角按鈕組 */
 .font-toggle-btn, .close-modal-btn {
-    padding: 6px 12px !important;
-    font-size: 13px;
-    border-radius: 6px;
+    padding: 8px 16px !important;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
     border: 1px solid #ddd;
     background: #fff;
     cursor: pointer;
@@ -281,9 +282,20 @@ header p {
     color: #666;
 }
 
-.font-toggle-btn:hover, .close-modal-btn:hover {
-    background: #f8f9fa;
+/* 2. 字體大小按鈕 */
+.font-toggle-btn {
+    background: #f0f0f0;
     border-color: #bbb;
+    color: #333;
+}
+
+/* 3. 收回按鈕 */
+.close-modal-btn {
+    background: #fff;
+    color: #666;
+}
+.close-modal-btn:hover {
+    background: #f8f9fa;
     color: #333;
 }
 
@@ -295,9 +307,9 @@ header p {
 }
 
 .random-btn {
-    padding: 10px 24px;
-    font-size: 15px;
-    background: var(--primary-color, #60a5fa);
+    padding: 12px 28px;
+    font-size: 16px;
+    background: #3b82f6;
     color: white;
     border: none;
     border-radius: 999px; /* 膠囊狀按鈕 */
@@ -306,7 +318,7 @@ header p {
 }
 
 .random-btn:hover {
-    transform: translateY(-1px);
+    background: #2563eb;
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
