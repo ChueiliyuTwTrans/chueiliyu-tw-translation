@@ -87,6 +87,7 @@ header p {
     color: #f3f4f6;
     opacity: 0.9;
 }
+    
 /* --- 關於本站按鈕基礎樣式 --- */
 .about-wrapper {
     margin-top: 15px;
@@ -234,51 +235,91 @@ header p {
     border-radius: 10px;
 }
 
-/* --- 修正留言牆專屬按鈕樣式 --- */
+/* --- 留言牆專屬按鈕樣式 --- */
 
-/* 針對收回按鈕進行覆蓋 */
-#close-gb.close-modal {
-    position: static;    /* 取消絕對定位，讓它回到原本的位置 */
-    width: auto;         /* 寬度隨文字 */
-    height: auto;        /* 高度隨文字 */
-    font-size: 14px;     /* 調小字體（原本 28px 太大了） */
-    line-height: normal;
-    padding: 8px 16px;   /* 增加一點點擊範圍 */
-    background: #f3f4f6; /* 給個背景色區分 */
-    border-radius: 8px;
+/* 留言牆彈窗主體 */
+.gb-modal-content {
+    position: relative;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+}
+
+/* 頂部 Header 佈局 */
+.gb-modal-header {
+    display: flex;
+    justify-content: space-between; /* 讓標題在左，按鈕組在右 */
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.gb-modal-title {
+    font-weight: bold;
+    color: #a89080;
+    font-size: 1.2rem;
+}
+
+/* 右上角按鈕組 */
+.header-controls {
+    display: flex;
+    gap: 8px; /* 字體大小與收回按鈕之間的間距 */
+}
+
+/* 字體大小按鈕與收回按鈕 樣式統一 */
+.font-toggle-btn, .close-modal-btn {
+    padding: 6px 12px !important;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
     color: #666;
 }
 
-#close-gb.close-modal:hover {
-    background: #e5e7eb;
+.font-toggle-btn:hover, .close-modal-btn:hover {
+    background: #f8f9fa;
+    border-color: #bbb;
     color: #333;
 }
 
-/* 確保留言牆的 action-bar 佈局正常 */
+/* 下方再次隨機按鈕區 */
 .modal-action-bar {
+    margin-top: 20px;
     display: flex;
-    gap: 10px;
     justify-content: center;
-    margin-bottom: 15px;
-    padding: 0 10px;
 }
 
-/* 再次抽選按鈕樣式（順便美化一下以對應收回按鈕） */
 .random-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 15px;
     background: var(--primary-color, #60a5fa);
     color: white;
     border: none;
+    border-radius: 999px; /* 膠囊狀按鈕 */
     cursor: pointer;
-    transition: opacity 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .random-btn:hover {
-    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
+/* 前往全部留言的連結 */
+.view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+    color: #999;
+    text-decoration: none;
+}
+    
 /* ===== Search ===== */
 .search-box {
     position: absolute;
@@ -865,45 +906,16 @@ body.modal-open {
    ========================================= */
 
 /* 1. 🌸 花俏模式 (Fancy) */
-body.theme-fancy .sidebar {
-    background-image: url("images/content5.webp");
-    border-right: 1px solid rgba(255,255,255,0.4);
-}
-body.theme-fancy .content {
-    background-image: url("images/content6.webp");
-}
-body.theme-fancy .sidebar button {
-    background: rgba(255,255,255,0.6);
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-body.theme-fancy .sidebar button:hover {
-    background: #fff;
-    transform: translateX(4px);
-}
-body.theme-fancy .sidebar button.active {
-    background: rgba(255, 255, 255, 0.85); 
-    backdrop-filter: blur(4px);
-    color: var(--premium-yellow); 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-body.theme-fancy .filter-btn {
-    background: rgba(255, 255, 255, 0.55);
-    color: #333;
-}
-body.theme-fancy .filter-btn.active {
-    background: var(--premium-yellow); 
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
-}
+body.theme-fancy .sidebar { background-image: url("images/content5.webp"); border-right: 1px solid rgba(255,255,255,0.4); }
+body.theme-fancy .content { background-image: url("images/content6.webp"); }
+body.theme-fancy .sidebar button { background: rgba(255,255,255,0.6); color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+body.theme-fancy .sidebar button:hover { background: #fff; transform: translateX(4px); }
+body.theme-fancy .sidebar button.active { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(4px); color: var(--premium-yellow); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+body.theme-fancy .filter-btn { background: rgba(255, 255, 255, 0.55); color: #333; }
+body.theme-fancy .filter-btn.active { background: var(--premium-yellow); color: #fff; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
 body.theme-fancy .card { box-shadow: var(--shadow-md); }
-body.theme-fancy .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-body.theme-fancy .search-highlight {
-    box-shadow: 0 0 0 4px var(--gold-highlight);
-}
+body.theme-fancy .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+body.theme-fancy .search-highlight { box-shadow: 0 0 0 4px var(--gold-highlight); }
 /* 花俏模式公告欄 */
 body.theme-fancy .news-board {
     /* 將透明度從 0.9 調降至 0.75，讓顏色看起來更淡、更通透 */
@@ -922,7 +934,7 @@ body.theme-fancy .news-board {
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* ⭐ 花俏模式下的標籤調整為低調半透明，讓深灰底更協調 */
+/* 花俏模式下的標籤調整為低調半透明，讓深灰底更協調 */
 body.theme-fancy .news-tag {
     background: rgba(255, 255, 255, 0.2);
     color: #f3f4f6;
@@ -946,7 +958,7 @@ body.theme-fancy .tag-note {
     border: none !important;
 }
 
-/* ⭐ 花俏模式下的公告小卡片 */
+/* 花俏模式下的公告小卡片 */
 body.theme-fancy .news-item {
     /* 使用極低透明度的白色，營造玻璃質感 */
     background: rgba(255, 255, 255, 0.1); 
@@ -961,7 +973,6 @@ body.theme-fancy .news-item:hover {
     
 /* 2. 🤍 高級白色模式 (Light) */
 body.theme-light { background: #f8f7f4; color: #374151; }
-
 body.theme-light header { background-image: none; background-color: #efede8; }
 body.theme-light .header-text { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255,255,255,0.8); }
 body.theme-light header h1 { color: #1f2937; text-shadow: none; }
@@ -1021,9 +1032,8 @@ body.theme-dark .filter-btn.active { background: #3b82f6; border-color: #3b82f6;
 body.theme-dark .search-highlight { box-shadow: 0 0 0 4px var(--primary-color); }
 /* 深色模式公告欄 */
 body.theme-dark .news-board { background: #1e293b; color: #cbd5e1; border-bottom: 1px solid #334155; }
-/* ⭐ 深色模式下的公告小卡片 */
+/* 深色模式下的公告小卡片 */
 body.theme-dark .news-item {
-    /* 比底色 #1e293b 稍微淺一點的藍灰色 */
     background: #334155; 
     border: 1px solid #475569;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -1032,7 +1042,6 @@ body.theme-dark .news-item {
 
 body.theme-dark .news-item:hover { background: #3e4c5f; }
 
-/* 深色模式下的預設標籤顏色微調，避免太暗 */
 body.theme-dark .news-tag { background: #475569; color: #f1f5f9; }
 
 body.theme-dark .tag-new { 
@@ -1111,7 +1120,7 @@ body.theme-dark .sns-divider { color: #334155; }
     
     .sidebar button { flex: 0 0 auto; width: auto; margin-bottom: 0; margin-right: 8px; padding: 8px 16px; font-size: 14px; justify-content: center; }
 
-    /* 隱藏醜醜的捲動條 (Chrome/Safari/Webkit) */
+    /* 隱藏捲動條 (Chrome/Safari/Webkit) */
     .sidebar::-webkit-scrollbar { display: none; }
     /* 隱藏捲動條 (Firefox) */
     .sidebar { scrollbar-width: none; }
@@ -1285,23 +1294,31 @@ body.theme-dark .sns-divider { color: #334155; }
 
 <div class="gb-modal" id="guestbook-modal">
     <div class="gb-modal-content">
+        <!-- 頂部區塊 -->
         <div class="gb-modal-header">
-            <div class="gb-modal-title" style="font-weight: bold; color: #a89080; font-size: 1.2rem;">隨機抽選留言</div>
-            <button class="font-toggle-btn" style="padding: 5px 12px !important; font-size: 12px;" onclick="cycleFontSize()">字體大小</button>
+            <!-- 左上角：標題 -->
+            <div class="gb-modal-title">隨機抽選留言</div>
+            
+            <!-- 右上角：控制按鈕組 -->
+            <div class="header-controls">
+                <button class="font-toggle-btn" onclick="cycleFontSize()">字體大小</button>
+                <button class="close-modal-btn" id="close-gb" onclick="closeGuestbook()">收回</button>
+            </div>
         </div>
-       
-        <div class="modal-action-bar">
-            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
-            <button class="close-modal" id="close-gb">收回</button>
-        </div>
-
+        
+        <!-- 中間：留言內容區 -->
         <div id="random-container" class="gb-grid-layout">
             <p>載入中...</p>
         </div>
 
+        <!-- 下方：動作按鈕區 -->
+        <div class="modal-action-bar">
+            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+        </div>
+
         <a href="Guestbook" class="view-all-link">點擊前往觀看全部留言</a>
     </div>
-</div>    
+</div>  
     
 <button id="backToTop" title="回到頂端">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
