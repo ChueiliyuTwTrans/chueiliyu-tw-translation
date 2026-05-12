@@ -234,6 +234,51 @@ header p {
     border-radius: 10px;
 }
 
+/* --- 修正留言牆專屬按鈕樣式 --- */
+
+/* 針對收回按鈕進行覆蓋 */
+#close-gb.close-modal {
+    position: static;    /* 取消絕對定位，讓它回到原本的位置 */
+    width: auto;         /* 寬度隨文字 */
+    height: auto;        /* 高度隨文字 */
+    font-size: 14px;     /* 調小字體（原本 28px 太大了） */
+    line-height: normal;
+    padding: 8px 16px;   /* 增加一點點擊範圍 */
+    background: #f3f4f6; /* 給個背景色區分 */
+    border-radius: 8px;
+    color: #666;
+}
+
+#close-gb.close-modal:hover {
+    background: #e5e7eb;
+    color: #333;
+}
+
+/* 確保留言牆的 action-bar 佈局正常 */
+.modal-action-bar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+    padding: 0 10px;
+}
+
+/* 再次抽選按鈕樣式（順便美化一下以對應收回按鈕） */
+.random-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    background: var(--primary-color, #60a5fa);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.random-btn:hover {
+    opacity: 0.9;
+}
+
 /* ===== Search ===== */
 .search-box {
     position: absolute;
@@ -750,7 +795,7 @@ footer {
     margin-bottom: 10px;
 }
 
-/* ===== NEW: 回到頂端按鈕 (Back to Top) ===== */
+/* ===== 回到頂端按鈕 (Back to Top) ===== */
 #backToTop {
     position: fixed;
     bottom: calc(24px + env(safe-area-inset-bottom));
@@ -1166,7 +1211,7 @@ body.theme-dark .sns-divider { color: #334155; }
     </a>
 
     <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Guestbook/" class="news-item">
-        <span class="news-tag tag-note">公告</span> 20260508網站更新日誌請至社群平台觀看
+        <span class="news-tag tag-note">公告</span> 設置留言牆及網站改版升級
     </a>
 </div>
 
@@ -1290,12 +1335,16 @@ body.theme-dark .sns-divider { color: #334155; }
             <section class="about-section">
                 <h4>❓ 常見問題 Q&A</h4>
                 <div class="qa-item">
-                    <strong>Q：能將影片全部放在 YouTube 上嗎？</strong>
+                    <strong>Q：能將翻譯影片全部放在翻譯站的 YouTube 頻道上嗎？</strong>
                     <p>為了規避版權風險，目前僅會上傳 IG 直播等非官方節目的內容，敬請見諒。</p>
                 </div>
                 <div class="qa-item">
                     <strong>Q：能開放留言嗎？</strong>
-                    <p>目前網站由站長一人管理，暫無餘力回覆，故不開放留言。若有網站問題請私訊 IG/Threads 帳號。</p>
+                    <p>目前網站由站長一人管理，暫無餘力回覆與管理，故不開放留言。若有網站問題請私訊 IG/Threads 帳號。</p>
+                </div>
+                <div class="qa-item">
+                    <strong>Q：能依照對話人物改變字幕顏色，以及依照特效字卡改變字幕顯示位置嗎？</strong>
+                    <p>如果要達成以上需求，一部影片需要耗費極大心力才能完成，目前翻譯站還沒有餘力執行，敬請見諒。</p>
                 </div>
             </section>
 
@@ -1306,8 +1355,7 @@ body.theme-dark .sns-divider { color: #334155; }
                     <li><strong>搜尋與版面：</strong>左上角可搜尋關鍵字/月份，右上角可切換三種版面主題。</li>
                     <li><strong>收藏功能：</strong>點擊卡片右下角「❤️」可儲存至「收藏」欄位（無痕模式無法保存）。</li>
                     <li><strong>文字/IG 作品：</strong>為尊重版權不轉載官方照片，請先前往官網再搭配本站翻譯閱讀。</li>
-                    <li><strong>影片字幕：</strong>觀看 YouTube 時，請務必點擊<strong>「進入全螢幕」</strong>按鈕以顯示中文字幕。</li>
-                    <li><strong>互動支持：</strong>若喜歡作品，歡迎點擊下方的即時表情按鈕表達支持！</li>
+                    <li><strong>互動支持：</strong>若喜歡作品，歡迎點擊下方的表情按鈕表達支持！</li>
                 </ul>
             </section>
         </div>
