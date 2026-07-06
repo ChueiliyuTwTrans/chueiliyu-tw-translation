@@ -41,6 +41,23 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
+@media (min-width: 768px) {
+    body {
+        background-color: rgb(253, 248, 231);
+    }
+
+    header {
+        max-width: 800px;  
+        margin: 0 auto;    
+
+        background-size: cover; 
+        background-position: 30% 35%;
+        
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+}
+
 /* ===== Header ===== */
 header {
     position: relative;
@@ -55,13 +72,6 @@ header {
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 10;
     transition: background 0.3s ease;
-}
-
-@media (min-width: 768px) {
-    header {
-        max-width: 600px;  /* 關鍵：限制電腦版最大寬度（可依畫面視覺自行調整數值，如 600px~900px） */
-        margin: 0 auto;    /* 關鍵：讓圖片在電腦螢幕上水平置中 */
-    }
 }
 
 .header-text {
