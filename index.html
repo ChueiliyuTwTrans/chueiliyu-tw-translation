@@ -339,177 +339,45 @@ body.theme-fancy .news-item { background: rgba(255, 255, 255, 0.1); border: 1px 
 body.theme-fancy .news-item:hover { background: rgba(255, 255, 255, 0.2); }
     
 /* 2. 🤍 白色模式 (Light) */
-body.theme-light { 
-    background: #ffffff; /* 大背景改為極致純白 */
-    color: rgb(44, 49, 56); /* 字體全部換成你指定的俐落墨黑 */
-}
-
-body.theme-light header { 
-    max-width: 100% !important; 
-    width: 100%;
-    margin: 0;
-    background-image: none; 
-    background-color: #fcfcfc; 
-    border-bottom: 1px solid rgba(44, 49, 56, 0.15); /* 🛠️ 改為 1px 細線與微透明度，讓交界處溫和自然 */
-    box-shadow: none; 
-    border-radius: 0 !important; 
-}
-
-body.theme-light .header-text { 
-    background: #ffffff; 
-    border: 2px solid rgb(44, 49, 56); /* 🛠️ 墨黑框線 */
-    border-radius: 0px; /* 改為直角，更具現代設計感 */
-    box-shadow: 4px 4px 0px rgba(44, 49, 56, 0.15); /* 經典的波普/極簡黑影 */
-}
-
-body.theme-light header h1 { 
-    color: rgb(44, 49, 56); 
-    font-weight: 700; /* 加粗字體，讓黑白對比更強烈 */
-    text-shadow: none; 
-}
-
-body.theme-light header p { 
-    color: rgba(44, 49, 56, 0.8); 
-}
+body.theme-light { background: #ffffff; color: rgb(44, 49, 56); }
+body.theme-light header { max-width: 100% !important; width: 100%; margin: 0; background-image: none; background-color: #fcfcfc; border-bottom: 1px solid rgba(44, 49, 56, 0.15); box-shadow: none; }
+body.theme-light .header-text { background: #ffffff; border: 1px solid rgb(44, 49, 56); box-shadow: 0 8px 24px rgba(44, 49, 56, 0.06); }
+body.theme-light header h1 { color: rgb(44, 49, 56); font-weight: 700; text-shadow: none; }
+body.theme-light header p { color: rgba(44, 49, 56, 0.8); }
 
 /* 關於本站按鈕 */
-body.theme-light .about-btn { 
-    background: #ffffff; 
-    color: rgb(44, 49, 56); 
-    border: 1px solid rgb(44, 49, 56); 
-    border-radius: 0px;
-    font-weight: 500;
-}
+body.theme-light .about-btn { background: #ffffff; color: rgb(44, 49, 56); border: 1px solid rgb(44, 49, 56); font-weight: 500; }
+body.theme-light .about-btn:hover { background: rgb(44, 49, 56); color: #ffffff; }
 
-body.theme-light .about-btn:hover { 
-    background: rgb(44, 49, 56); /* 🛠️ 懸停時反白：變成黑底白字 */
-    color: #ffffff;
-}
-
-/* 搜尋框與月份按鈕：俐落線條化 */
-body.theme-light .search-input-wrap input { 
-    background: rgba(255, 255, 255, 0.7); 
-    color: rgb(44, 49, 56); 
-    border: 1px solid rgba(44, 49, 56, 0.25); /* 改為細緻的淡黑線 */
-    border-radius: 30px;                       /* 恢復圓潤弧度 */
-    backdrop-filter: blur(10px);               /* 溫柔毛玻璃效果 */
-    -webkit-backdrop-filter: blur(10px);
-}
-
-body.theme-light .search-input-wrap input::placeholder { 
-    color: rgba(44, 49, 56, 0.45); 
-}
-
-body.theme-light .month-expand-btn { 
-    background: rgba(255, 255, 255, 0.7); 
-    color: rgb(44, 49, 56); 
-    border: 1px solid rgba(44, 49, 56, 0.25); 
-    border-radius: 30px;                       /* 恢復圓潤弧度 */
-    backdrop-filter: blur(10px);               /* 溫柔毛玻璃效果 */
-    -webkit-backdrop-filter: blur(10px);
-}
-
-body.theme-light .month-expand-btn:hover { 
-    background: rgb(44, 49, 56);
-    color: #ffffff; 
-    border-color: rgb(44, 49, 56);
-}
+/* 搜尋框與月份按鈕 */
+body.theme-light .search-input-wrap input { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+body.theme-light .search-input-wrap input::placeholder { color: rgba(44, 49, 56, 0.45); }
+body.theme-light .month-expand-btn { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+body.theme-light .month-expand-btn:hover { background: rgb(44, 49, 56); color: #ffffff; border-color: rgb(44, 49, 56); }
+/* 月份彈窗 */
+body.theme-light .month-modal-content { background: #ffffff; border: 2px solid rgb(44, 49, 56); }
+body.theme-light .month-grid .time-btn { background: #ffffff; color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.3); }
+body.theme-light .month-grid .time-btn.active { background: rgb(44, 49, 56); color: #ffffff !important; }
 
 /* 主內容與側邊欄 */
-body.theme-light .content { 
-    background-color: #ffffff; 
-}
+body.theme-light .content { background-color: #ffffff; }
+body.theme-light .sidebar { background-color: #fafafa; border-right: 1px solid rgba(44, 49, 56, 0.2); }
+body.theme-light .sidebar button { color: rgba(44, 49, 56, 0.6); font-weight: 500; }
+body.theme-light .sidebar button.active { background: rgb(44, 49, 56); color: #ffffff; font-weight: 600; box-shadow: none; }
 
-body.theme-light .sidebar { 
-    background-color: #fafafa; 
-    border-right: 1px solid rgba(44, 49, 56, 0.2); 
-}
+/* 卡片設計 */
+body.theme-light .card { background: #ffffff; border: 1px solid rgba(44, 49, 56, 0.15); box-shadow: none; transition: all 0.2s ease-in-out; }
+body.theme-light .card:hover { border-color: rgb(44, 49, 56); box-shadow: 0 6px 20px rgba(44, 49, 56, 0.08); transform: translateY(-2px); }
+body.theme-light .card-credit { border-top: 1px solid rgba(44, 49, 56, 0.1); color: rgba(44, 49, 56, 0.5); }
 
-body.theme-light .sidebar button { 
-    color: rgba(44, 49, 56, 0.6); 
-    font-weight: 500;
-}
+/* 公告欄 */
+body.theme-light .news-board { background: #f5f5f5; border-bottom: 1px solid rgb(44, 49, 56); }
+body.theme-light .news-item { background: #ffffff; border: 1px solid rgba(44, 49, 56, 0.2); color: rgb(44, 49, 56); }
+body.theme-light .news-item:hover { background: #ffffff; border-color: rgb(44, 49, 56); }
 
-/* 側邊欄激活：選中時變成扎實的黑底白字卡 */
-body.theme-light .sidebar button.active { 
-    background: rgb(44, 49, 56); 
-    color: #ffffff; 
-    font-weight: 600; 
-    border-radius: 0px;
-    box-shadow: none;
-}
-
-/* 卡片設計：極簡白瓷卡片 */
-body.theme-light .card { 
-    background: #ffffff; 
-    border: 1px solid rgba(44, 49, 56, 0.15); /* 淡黑線框 */
-    border-radius: 0px; /* 直角設計更有時尚雜誌感 */
-    box-shadow: none;
-    transition: all 0.2s ease-in-out;
-}
-
-body.theme-light .card:hover { 
-    border-color: rgb(44, 49, 56); /* 懸停時邊框變深黑色 */
-    box-shadow: 0 6px 20px rgba(44, 49, 56, 0.08); 
-    transform: translateY(-2px);
-}
-
-body.theme-light .card-credit { 
-    border-top: 1px solid rgba(44, 49, 56, 0.1); 
-    color: rgba(44, 49, 56, 0.5);
-}
-
-/* 公告欄：洗鍊的灰白與黑線 */
-body.theme-light .news-board { 
-    background: #f5f5f5; 
-    border-bottom: 1px solid rgb(44, 49, 56); 
-}
-
-body.theme-light .news-item { 
-    background: #ffffff; 
-    border: 1px solid rgba(44, 49, 56, 0.2); 
-    border-radius: 0px;
-    color: rgb(44, 49, 56); 
-}
-
-body.theme-light .news-item:hover { 
-    background: #ffffff; 
-    border-color: rgb(44, 49, 56); 
-}
-
-/* 月份搜尋彈窗美化 */
-body.theme-light .month-modal-content {
-    background: #ffffff;
-    border: 2px solid rgb(44, 49, 56);
-    border-radius: 0px;
-}
-body.theme-light .month-grid .time-btn {
-    background: #ffffff;
-    color: rgb(44, 49, 56);
-    border: 1px solid rgba(44, 49, 56, 0.3);
-    border-radius: 0px;
-}
-body.theme-light .month-grid .time-btn.active {
-    background: rgb(44, 49, 56);
-    color: #ffffff !important;
-}
-
-/* 3. 調整篩選器 (Filter) 人員按鈕顏色 */
-body.theme-light .filter-btn { 
-    background: rgba(255, 255, 255, 0.8); 
-    color: rgb(44, 49, 56); 
-    border: 1px solid rgba(44, 49, 56, 0.2);
-    border-radius: 20px; /* 保持精緻的小圓角 */
-    font-weight: 500;
-}
-
-/* 篩選器按鈕選中 (Active) 狀態：從藍色完美蛻變為經典墨黑 */
-body.theme-light .filter-btn.active { 
-    background: rgb(44, 49, 56) !important; /* 🛠️ 全面換上你指定的墨黑色 */
-    color: #ffffff !important; 
-    border-color: rgb(44, 49, 56) !important;
-    box-shadow: 0 4px 10px rgba(44, 49, 56, 0.15); 
-}
+/* 篩選人員按鈕 */
+body.theme-light .filter-btn { background: rgba(255, 255, 255, 0.8); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.2); font-weight: 500; }
+body.theme-light .filter-btn.active { background: rgb(44, 49, 56) !important; color: #ffffff !important; border-color: rgb(44, 49, 56) !important; box-shadow: 0 4px 10px rgba(44, 49, 56, 0.15); }
 
 /* 3. 🌙 深色模式 (Dark) */
 body.theme-dark { background: #0f172a; color: #f1f5f9; }
