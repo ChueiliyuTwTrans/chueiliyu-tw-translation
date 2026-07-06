@@ -44,9 +44,10 @@ body {
 /* ===== Header ===== */
 header {
     position: relative;
-    height: 200px;
-    object-fit: cover;
-    object-position: center top;
+    height: auto;          /* 保持原本的圖片比例 */
+    max-height: 200px;     /* 關鍵：限制在電腦螢幕上最高只顯示 500px，防止臉部被放大過頭 */
+    object-fit: contain;   /* 確保整張圖片都能完整顯示，不被裁切 */
+    background-color: #f5f5f5; /* 可選：如果圖片兩旁有留白，可以用舒服的底色襯托 */
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
