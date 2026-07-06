@@ -52,7 +52,7 @@ body {
 /* ===== Header ===== */
 header {
     position: relative;
-    height: 320px;
+    height: 400px;
     background-image: url("images/content33.webp");
     background-size: cover;
     background-position: 30% 35%;
@@ -94,6 +94,27 @@ header p {
     line-height: 1.6;
     color: #f3f4f6;
     opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+    body { 
+        background-color: rgb(255, 253, 247); 
+    }
+
+    header {
+        max-width: 1000px;  
+        margin: 0 auto;    
+        height: 350px; 
+
+        background-size: cover; 
+        background-position: 30% 35%;
+        
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        align-items: flex-end; 
+        padding-bottom: 25px;  
+    }
 }
     
 /* --- 關於本站按鈕基礎樣式 --- */
