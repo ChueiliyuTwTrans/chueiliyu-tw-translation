@@ -380,203 +380,67 @@ body.theme-light .filter-btn { background: rgba(255, 255, 255, 0.8); color: rgb(
 body.theme-light .filter-btn.active { background: rgb(64, 71, 80) !important; color: #ffffff !important; border-color: rgb(44, 49, 56) !important; box-shadow: 0 4px 10px rgba(44, 49, 56, 0.15); }
 
 /* 3. 🌙 深色模式 (Dark) */
-body.theme-dark { 
-    background: #181a1d;    
-    color: #e3e5e8;         
-}
-body.theme-dark header { 
-    max-width: 100% !important; 
-    width: 100%;
-    margin: 0;
-    background-image: none; 
-    background-color: #1f2226; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    box-shadow: none; 
-    border-radius: 0 !important; 
-}
-body.theme-dark .header-text { 
-    background: rgba(68, 75, 84, 0.25); 
-    border: 1px solid rgb(68, 75, 84);  
-    border-radius: 20px;                 
-    backdrop-filter: blur(12px);         
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-body.theme-dark header h1 { 
-    color: #ffffff; 
-    text-shadow: none; 
-}
-body.theme-dark header p { 
-    color: #b0b5bc; 
-}
+body.theme-dark { background: #141619; color: #e6e8eb; }
+body.theme-dark header { max-width: 100% !important; width: 100%; margin: 0; background-image: none; background-color: #1b1e22; border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: none; border-radius: 0 !important; }
+body.theme-dark .header-text {  background: rgba(68, 75, 84, 0.25); border: 1px solid rgb(68, 75, 84); border-radius: 20px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+body.theme-dark header h1 { color: #ffffff; text-shadow: none; }
+body.theme-dark header p { color: #b8bcc2; }
 
 /* 關於本站按鈕 */
-body.theme-dark .about-btn { 
-    background: transparent; 
-    color: #ffffff; 
-    border: 1px solid rgb(68, 75, 84); 
-    border-radius: 30px; 
-}
-body.theme-dark .about-btn:hover { 
-    background: rgb(68, 75, 84); 
-    color: #ffffff; 
-}
-body.theme-dark .about-content { 
-    background: #1f2226; 
-    color: #e3e5e8; 
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
+body.theme-dark .about-btn { background: transparent; color: #ffffff; border: 1px solid rgb(68, 75, 84); border-radius: 30px; }
+body.theme-dark .about-btn:hover { background: rgb(68, 75, 84); color: #ffffff; }
+body.theme-dark .about-content { background: #1f2226; color: #e3e5e8; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); }
 body.theme-dark .letter-content p, 
 body.theme-dark .qa-item p, 
 body.theme-dark .guide-list { 
-    color: #b0b5bc; 
+    color: #b8bcc2; 
 }
-body.theme-dark .qa-item strong { 
-    color: #ffffff; 
-}
-body.theme-dark .qa-item { 
-    background: rgba(255, 255, 255, 0.03); 
-    border-left: 3px solid rgb(68, 75, 84);
-    border-radius: 0 8px 8px 0;
-}
-body.theme-dark .about-section h4 { 
-    color: #ffffff; 
-    border-bottom-color: rgba(255, 255, 255, 0.1); 
-}
+body.theme-dark .qa-item strong { color: #ffffff; }
+body.theme-dark .qa-item { background: rgba(255, 255, 255, 0.03); border-left: 3px solid rgb(68, 75, 84); border-radius: 0 8px 8px 0; }
+body.theme-dark .about-section h4 { color: #ffffff; border-bottom-color: rgba(255, 255, 255, 0.1); }
 
 /* 月份搜尋彈窗 */
-body.theme-dark .month-modal-content { 
-    background: #1f2226; 
-    color: #ffffff; 
-    border: 1px solid rgb(68, 75, 84);
-    border-radius: 20px;
-}
-body.theme-dark .month-grid .time-btn { 
-    background: #282c32; 
-    color: #b0b5bc; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-}
-body.theme-dark .month-grid .time-btn.active { 
-    background: rgb(68, 75, 84) !important; 
-    color: #ffffff !important; 
-}
+body.theme-dark .month-modal-content { background: #1f2226; color: #ffffff; border: 1px solid rgb(68, 75, 84); border-radius: 20px; }
+body.theme-dark .month-grid .time-btn { background: #2b2f35; color: #b0b5bc; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 10px; }
+body.theme-dark .month-grid .time-btn.active { background: rgb(68, 75, 84) !important; color: #ffffff !important; }
 
 /* 主內容與側邊欄 */
-body.theme-dark .content { 
-    background-color: #181a1d; 
-}
-body.theme-dark .sidebar { 
-    background-color: #141619; 
-    border-right: 1px solid rgba(255, 255, 255, 0.05); 
-}
+body.theme-dark .content { background-color: #141619; }
+body.theme-dark .sidebar { background-color: #1a1d21; border-right: 1px solid rgba(255, 255, 255, 0.05); }
 
 /* 側邊欄分類 */
-body.theme-dark .sidebar button { 
-    color: #a0a5ad; 
-    font-weight: 500;
-}
-body.theme-dark .sidebar button:hover { 
-    background: rgba(255, 255, 255, 0.03); 
-    color: #ffffff; 
-}
-body.theme-dark .sidebar button.active { 
-    background: rgb(68, 75, 84) !important; 
-    color: #ffffff !important; 
-    font-weight: 600; 
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-}
+body.theme-dark .sidebar button { color: #a6abb3; font-weight: 500; }
+body.theme-dark .sidebar button:hover { background: rgba(255, 255, 255, 0.03); color: #ffffff; }
+body.theme-dark .sidebar button.active { background: rgb(68, 75, 84) !important; color: #ffffff !important; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
 
 /* 卡片 */
-body.theme-dark .card { 
-    background: #1f2226; 
-    border: 1px solid rgba(255, 255, 255, 0.06); 
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    transition: all 0.3s ease;
-}
-body.theme-dark .card:hover { 
-    background: #25292e;
-    border-color: rgb(68, 75, 84); 
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-}
-body.theme-dark .card-desc { 
-    color: #9da2a9; 
-}
-body.theme-dark .card-credit { 
-    color: #727881; 
-    border-top: 1px dashed rgba(255, 255, 255, 0.08); 
-}
+body.theme-dark .card { background: #1f2226; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); transition: all 0.3s ease; }
+body.theme-dark .card:hover { background: #262a2f; border-color: rgb(68, 75, 84); transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); }
+body.theme-dark .card-desc { color: #a2a7ae; }
+body.theme-dark .card-credit { color: #79808a; border-top: 1px dashed rgba(255, 255, 255, 0.08); }
 
 /* 人員篩選器 (Filter)  */
-body.theme-dark .filter-btn { 
-    background: #1f2226; 
-    color: #cbd5e1; 
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    border-radius: 20px;
-}
-body.theme-dark .filter-btn:hover { 
-    background: #282c32; 
-    color: #ffffff;
-}
-body.theme-dark .filter-btn.active { 
-    background: rgb(64, 71, 80) !important; /* 🛠️ 切齊柔和炭煙燻色，跟白色模式交相呼應 */
-    border-color: rgb(64, 71, 80) !important; 
-    color: #ffffff !important; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-body.theme-dark .search-highlight { 
-    box-shadow: 0 0 0 4px rgba(68, 75, 84, 0.5); 
-}
+body.theme-dark .filter-btn { background: #1f2226; color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; }
+body.theme-dark .filter-btn:hover { background: #262a2f; color: #ffffff; }
+body.theme-dark .filter-btn.active { background: rgb(64, 71, 80) !important; border-color: rgb(64, 71, 80) !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+body.theme-dark .search-highlight { box-shadow: 0 0 0 4px rgba(68, 75, 84, 0.5); }
 
 /* 公告欄 */
-body.theme-dark .news-board { 
-    background: #1f2226; 
-    color: #cbd5e1; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-}
-body.theme-dark .news-item { 
-    background: #25292e; 
-    border: 1px solid rgba(255, 255, 255, 0.05); 
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
-    color: #cbd5e1; 
-}
-body.theme-dark .news-item:hover { 
-    background: #2b3037;
-    border-color: rgb(68, 75, 84);
-}
-body.theme-dark .news-tag { 
-    background: rgb(68, 75, 84); 
-    color: #f1f5f9; 
-    border-radius: 6px;
-}
+body.theme-dark .news-board { background: #1a1d21; color: #cbd5e1; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+body.theme-dark .news-item { background: #23272c; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); color: #cbd5e1; }
+body.theme-dark .news-item:hover { background: #292e34; border-color: rgb(68, 75, 84); }
+body.theme-dark .news-tag { background: rgb(68, 75, 84); color: #f1f5f9; border-radius: 6px; }
 
 /* 搜尋功能 */
 body.theme-dark .search-input-wrap input {
-    background: rgba(255, 255, 255, 0.06) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 30px !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.06) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 30px !important;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
 body.theme-dark .month-expand-btn {
-    background: rgba(255, 255, 255, 0.06) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 30px !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.06) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 30px !important;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
-body.theme-dark .month-expand-btn:hover {
-    background: rgb(68, 75, 84) !important;
-    border-color: rgb(68, 75, 84) !important;
-}
+body.theme-dark .month-expand-btn:hover { background: rgb(68, 75, 84) !important; border-color: rgb(68, 75, 84) !important; }
 
 /* 標籤公告專屬 */
 body.theme-dark .tag-new { background: rgb(68, 75, 84) !important; color: #fff !important; border: none !important; }
@@ -584,34 +448,14 @@ body.theme-dark .tag-live { background: #d94242 !important; color: #fff !importa
 body.theme-dark .tag-note { background: #e09107 !important; color: #fff !important; border: none !important; }
 
 /* 回到頂端 */
-body.theme-dark #backToTop { 
-    background: rgba(31, 34, 38, 0.85); 
-    color: #fff; 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    backdrop-filter: blur(4px);
-}
-body.theme-dark #backToTop:hover { 
-    background: rgb(68, 75, 84); 
-}
+body.theme-dark #backToTop { background: rgba(27, 30, 34, 0.85); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); }
+body.theme-dark #backToTop:hover { background: rgb(68, 75, 84); }
 
 /* 社群連結按鈕 */
-body.theme-dark .sns-btn.text-link { 
-    background: rgba(255, 255, 255, 0.03); 
-    border-color: rgba(255, 255, 255, 0.08); 
-    color: #b0b5bc; 
-    border-radius: 20px;
-}
-body.theme-dark .sns-btn.text-link:hover { 
-    background: rgb(68, 75, 84); 
-    color: #fff; 
-    border-color: rgb(68, 75, 84);
-}
-body.theme-dark .sns-btn.text-link::after { 
-    background-color: #ffffff; 
-}
-body.theme-dark .sns-divider { 
-    color: rgba(255, 255, 255, 0.1); 
-}
+body.theme-dark .sns-btn.text-link { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.08); color: #b0b5bc; border-radius: 20px; }
+body.theme-dark .sns-btn.text-link:hover { background: rgb(68, 75, 84); color: #fff; border-color: rgb(68, 75, 84); }
+body.theme-dark .sns-btn.text-link::after { background-color: #ffffff; }
+body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 
 /* 手機 */
 @media (max-width: 768px) {
