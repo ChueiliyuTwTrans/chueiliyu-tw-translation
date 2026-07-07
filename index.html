@@ -301,39 +301,33 @@ body.theme-fancy .sidebar { background-image: url("images/content5.webp"); borde
 body.theme-fancy .content { background-image: url("images/content6.webp"); }
 body.theme-fancy .sidebar button { background: rgba(255,255,255,0.85); color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 body.theme-fancy .sidebar button:hover { background: #fff; transform: translateX(4px); }
-body.theme-fancy .sidebar button.active { 
-    background: rgba(255, 255, 255, 0.98); 
-    backdrop-filter: blur(4px); 
-    color: rgb(182, 132, 103) !important; 
-    box-shadow: 0 4px 12px rgba(182, 132, 103, 0.15); 
-}
-body.theme-fancy .filter-btn { 
-    border: 1px solid rgba(171, 156, 143, 0.2) !important;
-    background: rgba(255, 255, 255, 0.55); 
-    color: rgb(110, 100, 90); 
-}
-body.theme-fancy .filter-btn:hover {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(171, 156, 143, 0.5) !important;
-}
-body.theme-fancy .filter-btn.active { 
-    background: rgb(182, 132, 103) !important; 
-    border-color: rgb(182, 132, 103) !important;
-    color: #fff; 
-    box-shadow: 0 4px 10px rgba(182, 132, 103, 0.3); 
-}
+body.theme-fancy .sidebar button.active { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(4px); color: rgb(182, 132, 103) !important; box-shadow: 0 4px 12px rgba(182, 132, 103, 0.15); }
+body.theme-fancy .filter-btn { border: 1px solid rgba(171, 156, 143, 0.2) !important; background: rgba(255, 255, 255, 0.55); color: rgb(110, 100, 90); }
+body.theme-fancy .filter-btn:hover { background: rgba(255, 255, 255, 0.85); border-color: rgba(171, 156, 143, 0.5) !important; }
+body.theme-fancy .filter-btn.active { background: rgb(182, 132, 103) !important; border-color: rgb(182, 132, 103) !important; color: #fff; box-shadow: 0 4px 10px rgba(182, 132, 103, 0.3); }
 body.theme-fancy .card { box-shadow: var(--shadow-md); }
 body.theme-fancy .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 /* 搜尋 */
 body.theme-fancy #searchInput { background: rgba(255, 255, 255, 0.65);  border: 2px solid rgba(255, 255, 255, 0.9); color: #222; font-weight: 500; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); backdrop-filter: blur(4px); }
 body.theme-fancy #searchInput::placeholder { color: #666; }
 body.theme-fancy .search-highlight { box-shadow: 0 0 0 4px rgba(182, 132, 103, 0.5) !important; }
+body.theme-fancy .search-results button {
+    background: #ffffff !important;
+    color: rgb(172, 157, 144) !important;
+    border: 1px solid rgba(172, 157, 144, 0.3) !important;
+    box-shadow: 0 2px 4px rgba(172, 157, 144, 0.1);
+}
+body.theme-fancy .search-results button:hover {
+    background: rgb(172, 157, 144) !important;
+    color: #ffffff !important;
+    border-color: rgb(172, 157, 144) !important;
+}
 /* 月份搜尋 */
 body.theme-fancy .month-expand-btn { background: rgba(255, 255, 255, 0.65); color: #333; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: all 0.2s ease; }
 body.theme-fancy .month-expand-btn:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); }
 /* 月份彈出視窗 */
 body.theme-fancy .month-modal-overlay { background: rgba(45, 38, 34, 0.4); backdrop-filter: blur(4px); }
-body.theme-fancy .month-modal-content { background: linear-gradient(135deg, rgb(253, 248, 231), rgb(255, 253, 247)); border: 1px solid rgb(220, 203, 185); box-shadow: 0 10px 30px rgba(122, 105, 92, 0.25); border-radius: 20px; }
+body.theme-fancy .month-modal-content { background: linear-gradient(135deg, rgb(253, 251, 246), rgb(255, 255, 255)) !important; border: 1px solid rgb(220, 203, 185); box-shadow: 0 10px 30px rgba(122, 105, 92, 0.25); border-radius: 20px; }
 body.theme-fancy .month-modal-content h3 { color: rgb(100, 82, 70); font-weight: 600; }
 body.theme-fancy .month-grid .time-btn { background: rgba(255, 255, 255, 0.7); color: rgb(110, 95, 83); border: 1px solid rgb(228, 215, 201); border-radius: 10px; font-weight: 500; transition: all 0.2s ease; }
 body.theme-fancy .month-grid .time-btn:hover { background: #ffffff; color: rgb(75, 60, 50); border-color: rgb(200, 180, 160); transform: translateY(-1px); }
@@ -380,9 +374,26 @@ body.theme-light .about-btn:hover { background: rgb(44, 49, 56); color: #ffffff;
 body.theme-light .close-modal { background: transparent; color: rgb(68, 75, 84); }
 body.theme-light .close-modal:hover { background: transparent; color: rgb(110, 118, 128); }
 
-/* 搜尋框與月份按鈕 */
+/* 搜尋框 */
 body.theme-light .search-input-wrap input { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 body.theme-light .search-input-wrap input::placeholder { color: rgba(44, 49, 56, 0.45); }
+body.theme-light .search-results button { 
+    font-size: 12px; 
+    padding: 6px 12px; 
+    border-radius: 999px; 
+    border: 1px solid rgba(68, 75, 84, 0.15); 
+    cursor: pointer; 
+    background: rgb(68, 75, 84) !important; 
+    color: #ffffff !important; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    font-weight: 500; 
+    transition: all 0.2s ease;
+}
+body.theme-light .search-results button:hover { 
+    background: rgba(68, 75, 84, 0.85) !important; 
+    color: #ffffff !important; 
+}
+/* 月份按鈕 */
 body.theme-light .month-expand-btn { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 body.theme-light .month-expand-btn:hover { background: rgb(44, 49, 56); color: #ffffff; border-color: rgb(44, 49, 56); }
 /* 月份彈窗 */
