@@ -188,9 +188,9 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .news-tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; margin-right: 6px; background: #e5e7eb; color: #333; flex-shrink: 0; }
 
 /* 不同類型的標籤顏色 */
-.tag-new { background: var(--primary-color); color: #fff; }
-.tag-live { background: #ef4444; color: #fff; }
-.tag-note { background: #f59e0b; color: #fff; }
+.tag-new { background: rgba(70, 110, 155, 0.85) !important; color: #ffffff !important; border: none !important; }
+.tag-live { background: rgba(215, 95, 95, 0.85) !important; color: #ffffff !important; border: none !important; }
+.tag-note { background: rgba(235, 160, 50, 0.9) !important; color: #ffffff !important; border: none !important; }
 
 /* ===== Layout ===== */
 .container { display: flex; min-height: calc(100vh - 260px); }
@@ -328,11 +328,6 @@ body.theme-fancy .news-board {
     color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 body.theme-fancy .news-tag { background: rgba(255, 255, 255, 0.2); color: #f3f4f6; border: 1px solid rgba(255,255,255,0.25); }
-    
-/* 標籤顏色 */
-body.theme-fancy .tag-new { background: var(--primary-color) !important; color: #fff !important; border: none !important; }
-body.theme-fancy .tag-live { background: #ef4444 !important; color: #fff !important; border: none !important; }
-body.theme-fancy .tag-note { background: #f59e0b !important; color: #fff !important; border: none !important; }
 
 /* 公告小卡片 */
 body.theme-fancy .news-item { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); color: #ffffff; }
@@ -441,11 +436,6 @@ body.theme-dark .month-expand-btn {
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
 body.theme-dark .month-expand-btn:hover { background: rgb(68, 75, 84) !important; border-color: rgb(68, 75, 84) !important; }
-
-/* 標籤公告專屬 */
-body.theme-dark .tag-new { background: rgb(68, 75, 84) !important; color: #fff !important; border: none !important; }
-body.theme-dark .tag-live { background: #d94242 !important; color: #fff !important; border: none !important; }
-body.theme-dark .tag-note { background: #e09107 !important; color: #fff !important; border: none !important; }
 
 /* 回到頂端 */
 body.theme-dark #backToTop { background: rgba(27, 30, 34, 0.85); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); }
