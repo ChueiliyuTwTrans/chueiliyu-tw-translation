@@ -44,9 +44,23 @@ header h1 { margin: 0; font-size: 32px; font-weight: 400; letter-spacing: 2px; l
 header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1px; line-height: 1.6; color: #f3f4f6; opacity: 0.9; }
 
 @media (min-width: 768px) {
-    body { background-color: rgb(255, 253, 247); }
+    body { 
+        /* 🔑 核心修正：讓大螢幕的背景直接幫忙做左右兩側的圓滑過渡 */
+        /* [調整密技]：請將下方的 rgb(215, 205, 195) 換成你 header 圖片最左與最右邊緣的主色調 */
+        background: linear-gradient(
+            to right,
+            rgb(255, 253, 247) 0%,              /* 最左邊：網格原背景色 */
+            rgb(215, 205, 195) calc(50% - 500px), /* 剛好黏到 1000px 圖片左邊緣的過渡色 */
+            rgb(255, 253, 247) calc(50% - 480px), /* 向內圓滑過渡 20px */
+            rgb(255, 253, 247) calc(50% + 480px), /* 中間保持純色 */
+            rgb(215, 205, 195) calc(50% + 500px), /* 剛好黏到 1000px 圖片右邊緣的過渡色 */
+            rgb(255, 253, 247) 100%             /* 最右邊：網格原背景色 */
+        );
+        background-attachment: fixed; /* 讓背景固定，滾動時不會斷層 */
+    }
     header { max-width: 1000px; margin: 0 auto; background-size: cover; background-position: 30% 35%; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
-           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 10px 60px rgba(182, 165, 150, 0.18) !important;}
+           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+    }
 }
     
 /* --- 關於本站按鈕 --- */
