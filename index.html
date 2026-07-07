@@ -381,17 +381,17 @@ body.theme-light .search-results button {
     font-size: 12px; 
     padding: 6px 12px; 
     border-radius: 999px; 
-    border: 1px solid rgba(68, 75, 84, 0.15); 
-    cursor: pointer; 
-    background: rgb(68, 75, 84) !important; 
-    color: #ffffff !important; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    background: #ffffff !important; 
+    color: rgb(68, 75, 84) !important; 
+    border: 1px solid rgb(68, 75, 84) !important; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
     font-weight: 500; 
     transition: all 0.2s ease;
 }
 body.theme-light .search-results button:hover { 
-    background: rgba(68, 75, 84, 0.85) !important; 
+    background: rgb(68, 75, 84) !important; 
     color: #ffffff !important; 
+    border-color: rgb(68, 75, 84) !important;
 }
 /* 月份按鈕 */
 body.theme-light .month-expand-btn { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -441,6 +441,26 @@ body.theme-dark .qa-item { background: rgba(255, 255, 255, 0.03); border-left: 3
 body.theme-dark .about-section h4 { color: #ffffff; border-bottom-color: rgba(255, 255, 255, 0.1); }
 body.theme-dark .close-modal { background: transparent; color: #f1f5f9; }
 body.theme-dark .close-modal:hover { background: transparent; color: #ffffff; }
+
+/* 搜尋結果 */
+body.theme-dark .search-results button { 
+    font-size: 12px; 
+    padding: 6px 12px; 
+    border-radius: 999px; 
+    background: rgb(42, 47, 53) !important; 
+    color: rgba(255, 255, 255, 0.9) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.12) !important; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2); 
+    font-weight: 500; 
+    transition: all 0.2s ease;
+}
+
+body.theme-dark .search-results button:hover { 
+    background: rgb(68, 75, 84) !important; 
+    color: #ffffff !important; 
+    border-color: rgb(68, 75, 84) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
 
 /* 月份搜尋彈窗 */
 body.theme-dark .month-modal-content { background: #1f2226; color: #ffffff; border: 1px solid rgb(68, 75, 84); border-radius: 20px; }
