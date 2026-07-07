@@ -62,13 +62,14 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
         
         background-repeat: no-repeat, no-repeat;
         
-        background-image: url("images/content33.webp"), url("images/content33.webp");
-        background-position: left top, right top;
-        
-        background-size: calc(50% - 500px) 380px, calc(50% - 500px) 380px; 
+        background-position: calc(50% - 500px) top, calc(50% + 500px) top;
 
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
-        mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+        background-size: 500px 380px, 500px 380px; 
+        
+        background-origin: padding-box;
+        
+        -webkit-mask-image: none !important;
+        mask-image: none !important;
     }
     
     header { 
