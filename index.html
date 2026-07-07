@@ -47,45 +47,17 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     body { background-color: rgb(255, 253, 247); position: relative; }
     
     body::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 380px; 
-        opacity: 0.25; 
-        z-index: -1; 
-        pointer-events: none; 
-        
-        background-image: url("images/content33.webp"), url("images/content33.webp");
-        background-repeat: round repeat;
-        
-        background-position: calc(50% - 750px) top, calc(50% + 750px) top;
-
-        background-size: 500px 380px, 500px 380px; 
-        
-        background-origin: padding-box;
-        -webkit-mask-image: none !important;
-        mask-image: none !important;
+        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 380px; opacity: 0.25; z-index: -1; pointer-events: none;  
+        background-image: url("images/content33.webp"), url("images/content33.webp"); background-repeat: no-repeat, no-repeat; 
+        background-position: calc(50% - 750px) top, calc(50% + 750px) top; background-size: 500px 380px, 500px 380px;  
+        background-origin: padding-box; -webkit-mask-image: none !important; mask-image: none !important;
     }
     
     header { 
-        max-width: 1000px !important; 
-        width: 100% !important;
-        margin: 0 auto !important; 
-        
-        background-image: url("images/content33.webp");
-        background-size: cover; 
-        background-position: 30% 35%; 
-        
-        border-bottom-left-radius: 8px; 
-        border-bottom-right-radius: 8px;
-        align-items: flex-end; 
-        padding-bottom: 40px;  
-        
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05) !important;
-        position: relative;
-        z-index: 10; 
+        max-width: 1000px !important; width: 100% !important; margin: 0 auto !important; 
+        background-image: url("images/content33.webp"); background-size: cover; background-position: 30% 35%; 
+        border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; align-items: flex-end; padding-bottom: 40px;  
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05) !important; position: relative; z-index: 10; 
     }
 }
     
