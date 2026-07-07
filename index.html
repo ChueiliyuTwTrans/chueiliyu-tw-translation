@@ -44,10 +44,7 @@ header h1 { margin: 0; font-size: 32px; font-weight: 400; letter-spacing: 2px; l
 header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1px; line-height: 1.6; color: #f3f4f6; opacity: 0.9; }
 
 @media (min-width: 768px) {
-    body { 
-        background-color: rgb(255, 253, 247); 
-        position: relative;
-    }
+    body { background-color: rgb(255, 253, 247); position: relative; }
     
     body::before {
         content: "";
@@ -56,12 +53,12 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
         left: 0;
         width: 100%;
         height: 380px; 
-        opacity: 0.25; /* 25% 的淡淡微光 */
+        opacity: 0.25; 
         z-index: -1; 
         pointer-events: none; 
         
         background-image: url("images/content33.webp"), url("images/content33.webp");
-        background-repeat: no-repeat, no-repeat;
+        background-repeat: round repeat;
         
         background-position: calc(50% - 750px) top, calc(50% + 750px) top;
 
