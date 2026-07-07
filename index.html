@@ -46,14 +46,33 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 @media (min-width: 768px) {
     body { 
         background-color: rgb(255, 253, 247); 
+        position: relative;
+    }
+    
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         
+        /* 💡 這裡可以自由調整兩側圖片的高度，我幫你放大到 380px，看起來更大氣 */
+        height: 380px; 
+        
+        /* 🔑 核心修正：在這裡設定透明度（0.25 代表 25% 的淡淡微光，可根據喜好調整 0.1 ~ 0.9） */
+        opacity: 0.25; 
+        
+        /* 藏在所有網頁內容（包括 header）的後面 */
+        z-index: -1; 
+        pointer-events: none; /* 確保完全不影響滑鼠點擊與選取 */
+        
+        /* 帶入兩側鏡像圖片 */
         background-image: url("images/content33.webp"), url("images/content33.webp");
-        
-        background-repeat: round repeat; 
-        
+        background-repeat: round repeat;
         background-position: calc(50% - 500px) top, calc(50% + 500px) top;
         
-        background-size: auto 250px;
+        /* 💡 這裡的高度設定（380px）必須跟上方的 height 一致，寬度 auto 保持不拉伸變形 */
+        background-size: auto 380px; 
     }
     
     header { 
@@ -70,9 +89,10 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
         align-items: flex-end; 
         padding-bottom: 40px;  
         
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
+        /* 稍微調強一點點陰影，讓不透明的中央 header 更有層次地浮在淡化背景上 */
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05) !important;
         position: relative;
-        z-index: 10;
+        z-index: 10; /* 確保 header 的 z-index 大於 body::before 的 -1，所以它會是 100% 純色不透明 */
     }
 }
     
