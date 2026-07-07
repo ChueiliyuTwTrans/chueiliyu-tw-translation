@@ -518,9 +518,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
         border-bottom: 1px solid rgba(0,0,0,0.1); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
     }
     .sidebar button { flex: 0 0 auto; width: auto; margin: 0; padding: 6px 10px; font-size: 13px; justify-content: center; }
-    /* 隱藏捲動條 (Chrome/Safari/Webkit) */
-    .sidebar::-webkit-scrollbar { display: none; }
-    .sidebar button { flex: 0 0 auto; width: auto; margin: 0; padding: 6px 10px; font-size: 13px; justify-content: center; }
+    .sidebar::-webkit-scrollbar { display: none; } /* 隱藏捲動條 (Chrome/Safari/Webkit) */
     
     .content { padding: 20px; }
     .card-grid { grid-template-columns: 1fr; }
@@ -530,6 +528,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     .news-board { padding: 8px 12px; gap: 8px; justify-content: flex-start; position: relative; z-index: 5; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .news-item { width: 100%;  font-size: 14px; white-space: normal; }
 
+    body.theme-fancy .content { background-image: url("images/content6.webp"); background-attachment: scroll; background-size: 100% auto; background-position: center 0px; background-repeat: repeat-y; background-origin: padding-box; }
     body.theme-fancy .news-board { border-bottom: 1px solid rgba(255, 255, 255, 0.35); }
     body.theme-fancy .sidebar button.active { 
         margin: 0 !important; padding: 6px 10px !important; flex: 0 0 auto !important; display: inline-flex !important; justify-content: center !important;
