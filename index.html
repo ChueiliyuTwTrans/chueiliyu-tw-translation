@@ -573,6 +573,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
             <h3>選擇播出月份</h3>
             <div class="month-grid">
                 <button class="time-btn active" data-time="all" onclick="selectMonth('all')">全部時間</button>
+                <button class="time-btn" data-time="2026-06" onclick="selectMonth('2026-06')">2026 06月</button>
                 <button class="time-btn" data-time="2026-04" onclick="selectMonth('2026-04')">2026 04月</button>
                 <button class="time-btn" data-time="2026-03" onclick="selectMonth('2026-03')">2026 03月</button>
                 <button class="time-btn" data-time="2026-02" onclick="selectMonth('2026-02')">2026 02月</button>
@@ -603,8 +604,8 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 </header>
 
 <div class="news-board">
-    <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/mbc_chinchinbang/" class="news-item">
-        <span class="news-tag tag-new">更新</span> 05/08 [電台]20260302親密朋友廣播部 已上傳
+    <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation//Media/20260601_2026BLOSSOM/" class="news-item">
+        <span class="news-tag tag-new">更新</span> 07/07 [媒體]2026 BLOSSOM 青少年音樂節 已上傳
     </a>
     
     <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Guestbook/" class="news-item">
@@ -1176,8 +1177,20 @@ const videoData = [
         img: 'images/20260426ESQUIRE1.webp',
         desc: '幕後花絮｜中文翻譯',
         credit: '翻譯：Lepus、西卡<br>字幕製作：西卡',
-        isNew: true,
+        isNew: false,
         cast: ['玗進']
+    },
+    {
+        id: 'm11',  
+        category: 'media', 
+        date: '2026-06',
+        title: '2026 BLOSSOM 青少年音樂節應援影片',
+        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation//Media/20260601_2026BLOSSOM/', 
+        img: 'images/20260601_2026BLOSSOM.webp',
+        desc: '應援影片｜中文翻譯',
+        credit: '翻譯：西卡<br>字幕製作：西卡',
+        isNew: true,
+        cast: []
     },
     {
         id: 's1',  
