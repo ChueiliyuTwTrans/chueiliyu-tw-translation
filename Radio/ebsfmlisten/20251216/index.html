@@ -87,7 +87,7 @@ html, body {
 
 <h2>20251216傾聽電台</h2>
 <div class="time-jump-group">
-        <button class="time-btn" onclick="jumpToTime(3736)">跳轉一</button>
+        <button class="time-btn" onclick="jumpToTime(3732)">跳轉一</button>
         <button class="time-btn" onclick="jumpToTime(3967)">跳轉二</button>
         <button class="time-btn" onclick="jumpToTime(5420)">跳轉三</button>
         <button class="time-btn" onclick="jumpToTime(6500)">跳轉四</button>
@@ -121,16 +121,8 @@ html, body {
 const MY_VIDEO_ID = "M143wrX_WHQ"; 
 const MY_SRT_FILE = "20251216_ebsfmlisten.srt";
 
-/* 設定立于出場時間：1小時2分16秒 = 3736秒 */
-const MY_VIDEO_START_BTN = 3736;
-
-/* 點擊按鈕跳轉功能 */
-function jumpToLiyu() {
-    if (window.player && window.player.seekTo) {
-        window.player.seekTo(MY_VIDEO_START_BTN, true);
-        window.player.playVideo(); // 跳轉後自動播放
-    }
-}
+/* 設定立于出場時間：1小時2分12秒 = 3732秒 */
+const MY_VIDEO_START = 3732; 
 
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
