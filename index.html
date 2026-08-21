@@ -197,8 +197,54 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .tag-live { background: rgba(215, 95, 95, 0.85) !important; color: #ffffff !important; border: none !important; }
 .tag-note { background: rgba(235, 160, 50, 0.9) !important; color: #ffffff !important; border: none !important; }
 
+/* ===== 排序 ===== */
+.sort-dropdown-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.sort-btn {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.sort-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 100;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+}
+
+.sort-menu.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.sort-item {
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+    
 /* ===== Layout ===== */
-.container { display: flex; width: 100%; min-height: calc(100vh - 260px); }
+.container { display: flex; min-height: calc(100vh - 260px); }
 
 .sidebar {
     width: 260px; padding: 24px; background-size: cover; background-position: center; box-sizing: border-box; position: relative; z-index: 2;
@@ -210,59 +256,8 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 }
 .sidebar button:hover { background: rgba(0,0,0,0.05); }
 .sidebar button.active { font-weight: 700; }
-/*==============================================================================================================*/
-/* Sidebar 下方排序容器 */
-.sort-wrapper{
-    margin-bottom:12px;
-    padding:14px;
-    border-radius:16px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    background:rgba(255,255,255,.75);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(171,155,142,.25);
-}
 
-.sort-label{
-    font-size:.95rem;
-    font-weight:700;
-    letter-spacing:.5px;
-}
-
-.select-box{
-    position:relative;
-    width:100%;
-}
-
-.select-box select{
-    width:100%;
-    padding:10px 14px;
-    font-size:.9rem;
-    font-weight:600;
-    border-radius:12px;
-    outline:none;
-    cursor:pointer;
-    appearance:none;
-    -webkit-appearance:none;
-    transition:.3s;
-}
-
-.select-box::after{
-    content:"▾";
-    position:absolute;
-    right:14px;
-    top:50%;
-    transform:translateY(-50%);
-    pointer-events:none;
-    font-size:1rem;
-}
-.sort-mobile-btn{
-    display:none;
-}
-
-/*=====================================================================================*/
-.content { flex: 1; width: 0; padding: 32px; background-size: cover; background-position: center; }
+.content { flex: 1; padding: 32px; background-size: cover; background-position: center; }
 
 .section { display: none; }
 .section.active { display: block; animation: fadeIn 0.3s ease; }
@@ -272,7 +267,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     to { opacity: 1; transform: translateY(0); }
 }
 
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; width: 100%; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
 
 /* ===== Filter Bar ===== */
 .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.06); min-height: 38px; }
@@ -294,11 +289,12 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .card:hover img { transform: scale(1.05); }
 .card-body { padding: 16px; }
 .card-title { 
-    font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; overflow: hidden; display: -webkit-box;
-    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; display: overflow: hidden;
+    -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
 .card-desc { font-size: 13px; opacity: 0.7; margin-bottom: 12px; }
 .card-credit { font-size: 12px; color: #9ca3af; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
+/* 表情計算 */
 .reaction-badge {
     position: absolute; top: 10px; left: 10px; z-index: 5; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px;
     background: rgba(252, 250, 246, 0.92); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(171, 155, 142, 0.4);
@@ -364,6 +360,22 @@ body.theme-fancy .content { background-image: linear-gradient(rgba(255, 253, 247
 body.theme-fancy .sidebar button { background: rgba(255,255,255,0.85); color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 body.theme-fancy .sidebar button:hover { background: #fff; transform: translateX(4px); }
 body.theme-fancy .sidebar button.active { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(4px); color: rgb(182, 132, 103) !important; box-shadow: 0 4px 12px rgba(182, 132, 103, 0.15); }
+/* 排序 */
+body.theme-fancy .sort-btn {
+    background: rgba(255, 255, 255, 0.85);
+    color: #333;
+    border: 1.5px solid rgb(182, 132, 103); /* 外框線 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+body.theme-fancy .sort-btn:hover { background: #ffffff; }
+body.theme-fancy .sort-menu {
+    background: rgba(255, 253, 247, 0.95);
+    border: 1px solid rgba(182, 132, 103, 0.4);
+}
+body.theme-fancy .sort-item { color: #4A403A; }
+body.theme-fancy .sort-item:hover,
+body.theme-fancy .sort-item.active { background: rgba(182, 132, 103, 0.15); color: rgb(182, 132, 103); font-weight: 700; }
+    
 body.theme-fancy .filter-btn { border: 1px solid rgba(171, 156, 143, 0.2) !important; background: rgba(255, 255, 255, 0.55); color: rgb(110, 100, 90); }
 body.theme-fancy .filter-btn:hover { background: rgba(255, 255, 255, 0.85); border-color: rgba(171, 156, 143, 0.5) !important; }
 body.theme-fancy .filter-btn.active { background: rgb(182, 132, 103) !important; border-color: rgb(182, 132, 103) !important; color: #fff; box-shadow: 0 4px 10px rgba(182, 132, 103, 0.3); }
@@ -444,29 +456,26 @@ body.theme-light .month-modal-content { background: #ffffff; border: 2px solid r
 body.theme-light .month-grid .time-btn { background: #ffffff; color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.3); border-radius: 10px; }
 body.theme-light .month-grid .time-btn.active { background: rgb(44, 49, 56); color: #ffffff !important; }
 
+/* 排序 */
+body.theme-light .sort-btn {
+    background: #ffffff;
+    color: rgb(85, 93, 102);
+    border: 1.5px solid rgb(68, 75, 84); 
+}
+body.theme-light .sort-btn:hover { background: #f0f0f0; }
+body.theme-light .sort-menu {
+    background: #ffffff;
+    border: 1px solid rgba(68, 75, 84, 0.2);
+}
+body.theme-light .sort-item { color: rgb(68, 75, 84); }
+body.theme-light .sort-item:hover,
+body.theme-light .sort-item.active { background: rgb(68, 75, 84); color: #ffffff; }
+    
 /* 主內容與側邊欄 */
 body.theme-light .content { background-color: #ffffff; }
 body.theme-light .sidebar { background-color: #fafafa; border-right: 1px solid rgba(44, 49, 56, 0.15) !important; }
 body.theme-light .sidebar button { color: rgb(85, 93, 102); font-weight: 500; }
 body.theme-light .sidebar button.active { background: rgb(68, 75, 84) !important; color: #ffffff !important; font-weight: 600; box-shadow: none; }
-body.theme-light .sort-wrapper{
-    background:rgba(255,255,255,.78);
-    border-color:rgb(68,75,84);
-}
-
-body.theme-light .sort-label{
-    color:rgb(68,75,84);
-}
-
-body.theme-light .select-box select{
-    color:rgb(68,75,84);
-    border:1.5px solid rgb(68,75,84);
-    background:#fff;
-}
-
-body.theme-light .select-box::after{
-    color:rgb(68,75,84);
-}
 
 /* 卡片設計 */
 body.theme-light .card { background: #ffffff; border: 1px solid rgba(44, 49, 56, 0.15); box-shadow: none; transition: all 0.2s ease-in-out; }
@@ -518,6 +527,21 @@ body.theme-dark .month-modal-content { background: #1f2226; color: #ffffff; bord
 body.theme-dark .month-grid .time-btn { background: #2b2f35; color: #b0b5bc; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 10px; }
 body.theme-dark .month-grid .time-btn.active { background: rgb(68, 75, 84) !important; color: #ffffff !important; }
 
+/* 排序 */
+body.theme-dark .sort-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1.5px solid rgba(255, 255, 255, 0.3); /* 外框線 */
+}
+body.theme-dark .sort-btn:hover { background: rgba(255, 255, 255, 0.1); }
+body.theme-dark .sort-menu {
+    background: #1e242c;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+body.theme-dark .sort-item { color: #a6abb3; }
+body.theme-dark .sort-item:hover,
+body.theme-dark .sort-item.active { background: rgb(68, 75, 84); color: #ffffff; }
+    
 /* 主內容與側邊欄 */
 body.theme-dark .content { background-color: #141619; }
 body.theme-dark .sidebar { background-color: #1a1d21; border-right: 1px solid rgba(255, 255, 255, 0.05); }
@@ -526,25 +550,7 @@ body.theme-dark .sidebar { background-color: #1a1d21; border-right: 1px solid rg
 body.theme-dark .sidebar button { color: #a6abb3; font-weight: 500; }
 body.theme-dark .sidebar button:hover { background: rgba(255, 255, 255, 0.03); color: #ffffff; }
 body.theme-dark .sidebar button.active { background: rgb(68, 75, 84) !important; color: #ffffff !important; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-body.theme-dark .sort-wrapper{
-    background:rgb(68,75,84);
-    border-color:rgba(255,255,255,.2);
-}
 
-body.theme-dark .sort-label{
-    color:#fff;
-}
-
-body.theme-dark .select-box select{
-    color:#fff;
-    background:rgb(68,75,84);
-    border:1.5px solid rgba(255,255,255,.25);
-}
-
-body.theme-dark .select-box::after{
-    color:#fff;
-}
-    
 /* 卡片 */
 body.theme-dark .card { background: #1f2226; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); transition: all 0.3s ease; }
 body.theme-dark .card:hover { background: #262a2f; border-color: rgb(68, 75, 84); transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); }
@@ -606,53 +612,12 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     
     .container { flex-direction: column; }
     
-    .sidebar{
-        display:flex;
-        flex-wrap:wrap;
-        justify-content:flex-start;
-        gap:8px;
+    .sidebar { 
+        width: 100%; padding: 10px 8px; flex-direction: row; border-right: none; gap: 6px;
+        border-bottom: 1px solid rgba(0,0,0,0.1); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
     }
-
-    .sidebar button{
-        flex:0 0 auto;
-    }
+    .sidebar button { flex: 0 0 auto; width: auto; margin: 0; padding: 6px 10px; font-size: 13px; justify-content: center; }
     .sidebar::-webkit-scrollbar { display: none; } /* 隱藏捲動條 (Chrome/Safari/Webkit) */
-    .sort-wrapper{
-        order:-1;
-        width:auto;
-        margin:0;
-        padding:0;
-        background:transparent;
-        border:none;
-        backdrop-filter:none;
-    }
-
-    .sort-label{
-        display:none;
-    }
-
-    .sort-mobile-btn{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:10px 14px;
-        border-radius:999px;
-        font-weight:700;
-        cursor:pointer;
-        border:1.5px solid currentColor;
-        background:inherit;
-    }
-    .select-box{
-        display:none;
-        position:absolute;
-        margin-top:10px;
-        width:220px;
-        z-index:999;
-    }
-
-    .select-box.show{
-        display:block;
-    }
     
     .content { padding: 20px; }
     .card-grid { grid-template-columns: 1fr; }
@@ -678,15 +643,6 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     body.theme-light .header-theme { position: absolute; top: 14px; right: 16px !important; max-width: 55%; }
     body.theme-light .header-text { background: #ffffff !important; border: 1px solid rgb(44, 49, 56) !important;  }
     body.theme-light .sidebar { border-bottom: 1px solid #e5e7eb; }
-    body.theme-light .sort-mobile-btn{
-        color:rgb(68,75,84);
-        background:rgba(255,255,255,.85);
-    }
-
-    body.theme-dark .sort-mobile-btn{
-        color:#fff;
-        background:rgb(68,75,84);
-    }
 
     body.theme-dark { max-width: 100vw !important; overflow-x: hidden !important; }
     body.theme-dark header { max-width: 100% !important; width: 100% !important; box-sizing: border-box !important; padding: 115px 16px 15px !important; margin: 0 !important; }
@@ -762,29 +718,26 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 
 <div class="container">
     <nav class="sidebar">
+        <!-- 排序按鈕與選單容器 -->
+        <div class="sort-dropdown-container">
+            <button type="button" class="sort-btn" onclick="toggleSortMenu(event)">
+                <span>🔃 排序</span>
+                <span class="arrow">▾</span>
+            </button>
+            <div class="sort-menu" id="sort-menu">
+                <div class="sort-item active" onclick="selectSort('popular', '🔥 熱門排序（高至低）', this)">🔥 熱門排序（高至低）</div>
+                <div class="sort-item" onclick="selectSort('updated_desc', '✨ 翻譯更新（新至舊）', this)">✨ 翻譯更新（新至舊）</div>
+                <div class="sort-item" onclick="selectSort('pub_desc', '📅 影片發布（新至舊）', this)">📅 影片發布（新至舊）</div>
+                <div class="sort-item" onclick="selectSort('pub_asc', '⏳ 影片發布（舊至新）', this)">⏳ 影片發布（舊至新）</div>
+            </div>
+        </div>
+        <!-- 作品分類按鈕 -->
         <button class="active" onclick="switchTab('live', this)">📺 直播</button>
         <button onclick="switchTab('program', this)">🎬 節目</button>
         <button onclick="switchTab('radio', this)">📻 電台</button>
         <button onclick="switchTab('media', this)">🎤 媒體</button>
         <button onclick="switchTab('stage', this)">🎶 舞台</button>
         <button onclick="switchTab('favorites', this)" id="fav-nav-btn">❤️ 收藏</button>
-
-        <div class="sort-wrapper">
-            <label for="sort-select" class="sort-label">排序方式</label>
-
-            <button class="sort-mobile-btn" onclick="toggleSortMenu()">
-                ⇅ 排序
-            </button>
-
-            <div class="select-box" id="sort-box">
-                <select id="sort-select" onchange="handleSortChange(this.value)">
-                    <option value="popular">🔥 熱門排序（高至低）</option>
-                    <option value="updated_desc" selected>✨ 翻譯更新（新至舊）</option>
-                    <option value="pub_desc">📅 影片發布（新至舊）</option>
-                    <option value="pub_asc">⏳ 影片發布（舊至新）</option>
-                </select>
-            </div>
-        </div>
     </nav>
 
     <main class="content">
@@ -1569,7 +1522,7 @@ function getSortedData(data) {
 
 function renderAllCards(data) {
     // 1. 先呼叫 getSortedData 取得排序後的資料副本
-    const sortedData = [...data];
+    const sortedData = getSortedData(data);
 
     // 2. 執行月份過濾 (整合 currentMonth)
     const monthFilteredData = sortedData.filter(i => {
@@ -1923,17 +1876,23 @@ function applySortingAndRender() {
 // 4. 初始化連線與表情數同步
 function initReactionsCount() {
     console.log("initReactionsCount 被呼叫");
-    
+
     if (!window.db || !window.fb_ref) {
         setTimeout(initReactionsCount, 200);
         return;
     }
 
-    console.log("Firebase 已就緒");
+    console.log("Firebase 已就緒，開始監聽資料...");
 
     const reactionsRef = window.fb_ref(window.db, 'video_reactions');
     window.fb_onValue(reactionsRef, (snapshot) => {
         const reactionsData = snapshot.val() || {};
+
+        // Console 除錯紀錄：印出 Firebase 的真實格式
+        console.log("【Firebase 抓到的原始資料】:", reactionsData);
+        if (typeof videoData !== 'undefined' && videoData.length > 0) {
+            console.log("【videoData 中的第一個影片 ID】:", videoData[0].id, "對應的 dbId:", videoData[0].dbId);
+        }
 
         videoData.forEach(video => {
             video.totalReactions = calcTotalReactions(video, reactionsData);
@@ -1943,10 +1902,61 @@ function initReactionsCount() {
     });
 }
 
-function toggleSortMenu() {
-    const box = document.getElementById("sort-box");
-    box.classList.toggle("show");
+function calcTotalReactions(video, reactionsData) {
+    // 優先匹配 dbIds，若無則降級匹配 dbId 或 id
+    let targetKeys = [];
+    if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
+        targetKeys = video.dbIds;
+    } else if (video.dbId) {
+        targetKeys = [video.dbId];
+    } else if (video.id) {
+        targetKeys = [video.id];
+    }
+
+    let sum = 0;
+
+    targetKeys.forEach(key => {
+        const itemReactions = reactionsData[key];
+        if (!itemReactions) return;
+
+        // 相容性累加（適用數值 { like: 5 } 或 物件點讚帳號 { like: { uid1: true } }）
+        Object.values(itemReactions).forEach(val => {
+            if (typeof val === 'number') {
+                sum += val;
+            } else if (typeof val === 'object' && val !== null) {
+                sum += Object.keys(val).length;
+            }
+        });
+    });
+
+    return sum;
 }
+
+// 開啟 / 關閉選單
+function toggleSortMenu(event) {
+    event.stopPropagation();
+    const menu = document.getElementById("sort-menu");
+    menu.classList.toggle("show");
+}
+
+// 點擊選項後的處理
+function selectSort(sortType, labelText, element) {
+    // 1. 更新選項目 UI 高亮
+    document.querySelectorAll('.sort-item').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+
+    // 2. 關閉選單
+    document.getElementById("sort-menu").classList.remove("show");
+
+    // 3. 呼叫排序與渲染邏輯
+    handleSortChange(sortType);
+}
+
+// 點擊頁面其他空白處時自動收起選單
+document.addEventListener('click', function() {
+    const menu = document.getElementById("sort-menu");
+    if (menu) menu.classList.remove("show");
+});
 
 /* =========================================
    收藏功能
