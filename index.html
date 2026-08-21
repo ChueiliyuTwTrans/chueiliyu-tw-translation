@@ -1404,6 +1404,7 @@ let currentMonth = 'all'; // 預設顯示全部月份
 window.onload = function() {
     // 1. 渲染卡片
     if (typeof videoData !== 'undefined') {
+        initReactionsCount();
         renderAllCards(videoData);
         // 初始化篩選器
         ['live', 'program', 'radio', 'media'].forEach(cat => {
@@ -1467,7 +1468,7 @@ function createCardHTML(item) {
         <a href="${item.link}" target="_blank" style="text-decoration:none; color:inherit; display:block;">
             <div class="card-img-wrap">
                 <div class="reaction-badge" title="表情互動總數">
-                    ☺️ ${totalReactions}
+                    ☺️ ${item.totalReactions || 0}
                 </div>
                 <img src="${item.img}" alt="${item.title.replace(/<br>/g, ' ')}" loading="lazy">
                 ${badge}
@@ -1493,7 +1494,7 @@ function getSortedData(data) {
 
 function renderAllCards(data) {
     // 1. 先呼叫 getSortedData 取得排序後的資料副本
-    const sortedData = getSortedData(data);
+    const sortedData = [...data];
 
     // 2. 執行月份過濾 (整合 currentMonth)
     const monthFilteredData = sortedData.filter(i => {
@@ -1841,7 +1842,7 @@ function applySortingAndRender() {
         }
     });
 
-    renderAllGrids();
+    renderAllCards(videoData);
 }
 
 // 4. 初始化連線與表情數同步
@@ -1862,10 +1863,6 @@ function initReactionsCount() {
         applySortingAndRender();
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    initReactionsCount();
-});
 
 /* =========================================
    收藏功能
