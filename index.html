@@ -202,7 +202,8 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     position: relative;
     width: 100%;
     margin-bottom: 4px;
-    z-index: 20;
+    z-index: 101;
+    overflow: visible !important;
 }
 
 .sort-btn {
@@ -226,7 +227,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
-    z-index: 999;
+    z-index: 9999 !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(8px);
 }
@@ -1857,7 +1858,7 @@ function applySortingAndRender() {
     renderAllCards(videoData);
 }
 
-// 4. 初始化連線與表情數同步
+// 初始化連線與表情數同步
 function initReactionsCount() {
     console.log("initReactionsCount 被呼叫");
 
@@ -1872,24 +1873,23 @@ function initReactionsCount() {
     window.fb_onValue(reactionsRef, (snapshot) => {
         const reactionsData = snapshot.val() || {};
 
-        console.log("【1. Firebase video_reactions 原始資料】:", reactionsData);
+        console.log("【Firebase video_reactions Data】:", reactionsData);
+
         if (typeof videoData !== 'undefined' && videoData.length > 0) {
-            console.log("【2. 第一支影片的 ID 設定】:", {
-                id: videoData[0].id,
-                dbId: videoData[0].dbId,
-                dbIds: videoData[0].dbIds
+            // 計算並更新每一個影片的 totalReactions 欄位
+            videoData.forEach(video => {
+                video.totalReactions = calcTotalReactions(video, reactionsData);
             });
+
+            // 資料計算完畢後，重新進行排序與卡片渲染
+            applySortingAndRender();
         }
-
-        videoData.forEach(video => {
-            video.totalReactions = calcTotalReactions(video, reactionsData);
-        });
-
-        applySortingAndRender();
     });
 }
 
 function calcTotalReactions(video, reactionsData) {
+    if (!reactionsData) return 0;
+
     let targetKeys = [];
     if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
         targetKeys = video.dbIds;
@@ -1904,10 +1904,13 @@ function calcTotalReactions(video, reactionsData) {
         const itemReactions = reactionsData[key];
         if (!itemReactions) return;
 
+        // console.log(`比對成功: ${key}`, itemReactions);
+
         Object.values(itemReactions).forEach(val => {
             if (typeof val === 'number') {
                 sum += val;
             } else if (typeof val === 'object' && val !== null) {
+                // 如果是按讚的使用者清單結構 { uid1: true, uid2: true }
                 sum += Object.keys(val).length;
             }
         });
