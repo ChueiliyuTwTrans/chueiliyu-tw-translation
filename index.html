@@ -198,7 +198,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .tag-note { background: rgba(235, 160, 50, 0.9) !important; color: #ffffff !important; border: none !important; }
 
 /* ===== Layout ===== */
-.container { display: flex; min-height: calc(100vh - 260px); }
+.container { display: flex; width: 100%; min-height: calc(100vh - 260px); }
 
 .sidebar {
     width: 260px; padding: 24px; background-size: cover; background-position: center; box-sizing: border-box; position: relative; z-index: 2;
@@ -213,9 +213,9 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 ==============================================================================================================
 /* Sidebar 下方排序容器 */
 .sort-wrapper {
-    margin-top: auto; /* 將排序欄自動推至 Sidebar 最下方 */
-    padding: 16px 12px 8px 12px;
-    border-top: 1px solid rgba(171, 155, 142, 0.25);
+    margin-bottom: 12px; 
+    padding: 0 0 12px 0; 
+    border-bottom: 1px solid rgba(171, 155, 142, 0.25); 
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -279,7 +279,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     padding: 10px;
 }
 =====================================================================================
-.content { flex: 1; padding: 32px; background-size: cover; background-position: center; }
+.content { flex: 1; width: 0; padding: 32px; background-size: cover; background-position: center; }
 
 .section { display: none; }
 .section.active { display: block; animation: fadeIn 0.3s ease; }
@@ -289,7 +289,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     to { opacity: 1; transform: translateY(0); }
 }
 
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; width: 100%; }
 
 /* ===== Filter Bar ===== */
 .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.06); min-height: 38px; }
@@ -311,8 +311,8 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .card:hover img { transform: scale(1.05); }
 .card-body { padding: 16px; }
 .card-title { 
-    font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; display: overflow: hidden;
-    -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
 .card-desc { font-size: 13px; opacity: 0.7; margin-bottom: 12px; }
 .card-credit { font-size: 12px; color: #9ca3af; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
@@ -1403,9 +1403,9 @@ let currentMonth = 'all'; // 預設顯示全部月份
     
 window.onload = function() {
     // 1. 渲染卡片
-    if (typeof videoData !== 'undefined') {
-        initReactionsCount();
+    if (typeof videoData !== 'undefined') {   
         renderAllCards(videoData);
+        initReactionsCount();
         // 初始化篩選器
         ['live', 'program', 'radio', 'media'].forEach(cat => {
             generateFilters(cat);
@@ -1855,6 +1855,8 @@ function initReactionsCount() {
     const reactionsRef = window.fb_ref(window.db, 'video_reactions');
     window.fb_onValue(reactionsRef, (snapshot) => {
         const reactionsData = snapshot.val() || {};
+
+        console.log("從 Firebase 抓到的表情原始資料：", reactionsData); // <--- 除錯用
 
         videoData.forEach(video => {
             video.totalReactions = calcTotalReactions(video, reactionsData);
