@@ -1523,13 +1523,13 @@ function getSortedData(data) {
 
 function renderAllCards(data) {
     // 1. 執行月份過濾
-    const monthFilteredData = sortedData.filter(i => {
+    const monthFilteredData = data.filter(i => {
         if (currentMonth === 'all') return true;
-        // 判斷日期是否匹配 (支援字串或陣列格式)
+        // 判斷日期是否匹配 
         return Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth;
     });
 
-    // 3. 取得各分類的容器
+    // 2. 取得各分類的容器
     const containers = {
         'live': document.getElementById('live-grid'),
         'program': document.getElementById('program-grid'),
@@ -1538,17 +1538,12 @@ function renderAllCards(data) {
         'stage': document.getElementById('stage-grid')
     };
 
-    // 4. 根據過濾後的資料進行各分類渲染
+    // 3. 根據過濾後的資料進行各分類渲染
     Object.keys(containers).forEach(cat => {
         const grid = containers[cat];
         if (grid) {
             const catData = monthFilteredData.filter(i => i.category === cat);
             grid.innerHTML = catData.map(createCardHTML).join('');
-            
-            // 如果該月份沒有資料，可以選擇顯示提示文字 (選用)
-            if (catData.length === 0 && currentMonth !== 'all') {
-                // grid.innerHTML = '<div class="no-data">此月份暫無內容</div>';
-            }
         }
     });
 }
