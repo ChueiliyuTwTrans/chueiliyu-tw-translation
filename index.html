@@ -202,6 +202,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     position: relative;
     width: 100%;
     margin-bottom: 4px;
+    z-index: 20;
 }
 
 .sort-btn {
@@ -225,7 +226,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
-    z-index: 100;
+    z-index: 999;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(8px);
 }
@@ -247,7 +248,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .container { display: flex; min-height: calc(100vh - 260px); }
 
 .sidebar {
-    width: 260px; padding: 24px; background-size: cover; background-position: center; box-sizing: border-box; position: relative; z-index: 2;
+    width: 260px; padding: 24px; background-size: cover; background-position: center; box-sizing: border-box; position: relative; z-index: 10;
     border-right: none; display: flex; flex-direction: column;gap: 8px;
 }
 .sidebar button {
@@ -257,7 +258,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .sidebar button:hover { background: rgba(0,0,0,0.05); }
 .sidebar button.active { font-weight: 700; }
 
-.content { flex: 1; padding: 32px; background-size: cover; background-position: center; }
+.content { flex: 1; padding: 32px; background-size: cover; background-position: center; z-index: 1; }
 
 .section { display: none; }
 .section.active { display: block; animation: fadeIn 0.3s ease; }
@@ -1521,10 +1522,7 @@ function getSortedData(data) {
 }
 
 function renderAllCards(data) {
-    // 1. 先呼叫 getSortedData 取得排序後的資料副本
-    const sortedData = getSortedData(data);
-
-    // 2. 執行月份過濾 (整合 currentMonth)
+    // 1. 執行月份過濾
     const monthFilteredData = sortedData.filter(i => {
         if (currentMonth === 'all') return true;
         // 判斷日期是否匹配 (支援字串或陣列格式)
@@ -1783,7 +1781,7 @@ function setTheme(theme) {
 }
 
 /* =========================================
-   排序功能
+   ⭐ 5. 排序功能
    ========================================= */
 // 1. 資料庫變數與當前狀態
 let currentSortMode = 'updated_desc';
@@ -1806,23 +1804,6 @@ function switchTab(tabId, btnElement) {
             sortWrapper.style.display = 'flex';
         }
     }
-}
-
-// 3. 排序邏輯與計算
-function calcTotalReactions(video, reactionsData) {
-    if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
-        return video.dbIds.reduce((sum, id) => {
-            const itemReactions = reactionsData[id] || {};
-            const count = Object.values(itemReactions).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
-            return sum + count;
-        }, 0);
-    }
-
-    const key = video.dbId || video.id;
-    const itemReactions = reactionsData[key] || {};
-    return Object.values(itemReactions).reduce((sum, count) => {
-        return sum + (typeof count === 'number' ? count : 0);
-    }, 0);
 }
 
 function handleSortChange(sortType) {
@@ -1854,17 +1835,25 @@ function fetchReactionsAndSort() {
     }, { onlyOnce: true });
 }
 
+// 修正排序套用邏輯 (確定能針對不同 Mode 正確排序)
 function applySortingAndRender() {
     videoData.sort((a, b) => {
         switch (currentSortMode) {
             case 'popular':
                 return (b.totalReactions || 0) - (a.totalReactions || 0);
             case 'updated_desc':
-                return new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date);
+                // 優先比對 updatedAt，沒有的話比對 date
+                const dateA1 = new Date(a.updatedAt || a.date).getTime() || 0;
+                const dateB1 = new Date(b.updatedAt || b.date).getTime() || 0;
+                return dateB1 - dateA1;
             case 'pub_desc':
-                return new Date(b.date) - new Date(a.date);
+                const dateA2 = new Date(a.date).getTime() || 0;
+                const dateB2 = new Date(b.date).getTime() || 0;
+                return dateB2 - dateA2;
             case 'pub_asc':
-                return new Date(a.date) - new Date(b.date);
+                const dateA3 = new Date(a.date).getTime() || 0;
+                const dateB3 = new Date(b.date).getTime() || 0;
+                return dateA3 - dateB3;
             default:
                 return 0;
         }
@@ -1888,10 +1877,13 @@ function initReactionsCount() {
     window.fb_onValue(reactionsRef, (snapshot) => {
         const reactionsData = snapshot.val() || {};
 
-        // Console 除錯紀錄：印出 Firebase 的真實格式
-        console.log("【Firebase 抓到的原始資料】:", reactionsData);
+        console.log("【1. Firebase video_reactions 原始資料】:", reactionsData);
         if (typeof videoData !== 'undefined' && videoData.length > 0) {
-            console.log("【videoData 中的第一個影片 ID】:", videoData[0].id, "對應的 dbId:", videoData[0].dbId);
+            console.log("【2. 第一支影片的 ID 設定】:", {
+                id: videoData[0].id,
+                dbId: videoData[0].dbId,
+                dbIds: videoData[0].dbIds
+            });
         }
 
         videoData.forEach(video => {
@@ -1903,7 +1895,6 @@ function initReactionsCount() {
 }
 
 function calcTotalReactions(video, reactionsData) {
-    // 優先匹配 dbIds，若無則降級匹配 dbId 或 id
     let targetKeys = [];
     if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
         targetKeys = video.dbIds;
@@ -1914,12 +1905,10 @@ function calcTotalReactions(video, reactionsData) {
     }
 
     let sum = 0;
-
     targetKeys.forEach(key => {
         const itemReactions = reactionsData[key];
         if (!itemReactions) return;
 
-        // 相容性累加（適用數值 { like: 5 } 或 物件點讚帳號 { like: { uid1: true } }）
         Object.values(itemReactions).forEach(val => {
             if (typeof val === 'number') {
                 sum += val;
@@ -1959,7 +1948,7 @@ document.addEventListener('click', function() {
 });
 
 /* =========================================
-   收藏功能
+   ⭐ 6. 收藏功能
    ========================================= */
 function toggleFavorite(id, event) {
     event.preventDefault();
@@ -2018,7 +2007,7 @@ function renderFavorites() {
 }
 
 /* =========================================
-   ⭐ 回到頂端功能 (Back to Top Logic)
+   ⭐ 7. 回到頂端功能 (Back to Top Logic)
    ========================================= */
 function initBackToTop() {
     const backToTopBtn = document.getElementById('backToTop');
@@ -2046,7 +2035,7 @@ function initBackToTop() {
 }
 
 /* =========================================
-   ⭐ 5. 全域點擊偵測 (處理彈窗外部關閉)
+   ⭐ 8. 全域點擊偵測 (處理彈窗外部關閉)
    ========================================= */
 window.addEventListener('click', function(event) {
     const aboutModal = document.getElementById('aboutModal');
