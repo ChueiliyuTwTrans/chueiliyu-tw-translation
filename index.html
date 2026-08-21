@@ -210,7 +210,75 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 }
 .sidebar button:hover { background: rgba(0,0,0,0.05); }
 .sidebar button.active { font-weight: 700; }
+==============================================================================================================
+/* Sidebar 下方排序容器 */
+.sort-wrapper {
+    margin-top: auto; /* 將排序欄自動推至 Sidebar 最下方 */
+    padding: 16px 12px 8px 12px;
+    border-top: 1px solid rgba(171, 155, 142, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
+.sort-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgb(171, 155, 142);
+    letter-spacing: 0.5px;
+}
+
+.select-box {
+    position: relative;
+    width: 100%;
+}
+
+.select-box select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #4A403A;
+    background-color: rgb(252, 250, 246);
+    border: 1.5px solid rgb(171, 155, 142);
+    border-radius: 12px;
+    outline: none;
+    cursor: pointer;
+    appearance: none; 
+    -webkit-appearance: none;
+    box-shadow: 0 2px 8px rgba(171, 155, 142, 0.12);
+    transition: all 0.3s ease;
+}
+
+.select-box::after {
+    content: "▾";
+    font-size: 1.1rem;
+    color: rgb(171, 155, 142);
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: transform 0.3s ease;
+}
+
+.select-box select:hover {
+    border-color: #8C786A;
+    box-shadow: 0 4px 12px rgba(171, 155, 142, 0.22);
+    background-color: #FFFFFF;
+}
+
+.select-box select:focus {
+    border-color: #726053;
+    box-shadow: 0 0 0 3px rgba(171, 155, 142, 0.25);
+}
+
+.select-box select option {
+    background-color: rgb(252, 250, 246);
+    color: #4A403A;
+    padding: 10px;
+}
+=====================================================================================
 .content { flex: 1; padding: 32px; background-size: cover; background-position: center; }
 
 .section { display: none; }
@@ -248,6 +316,12 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 }
 .card-desc { font-size: 13px; opacity: 0.7; margin-bottom: 12px; }
 .card-credit { font-size: 12px; color: #9ca3af; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); }
+.reaction-badge {
+    position: absolute; top: 10px; left: 10px; z-index: 5; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px;
+    background: rgba(252, 250, 246, 0.92); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(171, 155, 142, 0.4);
+    color: #5A4C43; font-size: 0.78rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); pointer-events: none; transition: transform 0.2s ease;
+}
+.card:hover .reaction-badge { transform: scale(1.05); }
 
 /* 收藏按鈕 */
 .fav-btn {
@@ -625,6 +699,18 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
         <button onclick="switchTab('media', this)">🎤 媒體</button>
         <button onclick="switchTab('stage', this)">🎶 舞台</button>
         <button onclick="switchTab('favorites', this)" id="fav-nav-btn">❤️ 收藏</button>
+
+        <div class="sort-wrapper">
+            <label for="sort-select" class="sort-label">排序方式</label>
+            <div class="select-box">
+                <select id="sort-select" onchange="handleSortChange(this.value)">
+                    <option value="popular">🔥 熱門排序（高至低）</option>
+                    <option value="updated_desc" selected>✨ 翻譯更新（新至舊）</option>
+                    <option value="pub_desc">📅 影片發布（新至舊）</option>
+                    <option value="pub_asc">⏳ 影片發布（舊至新）</option>
+                </select>
+            </div>
+        </div>
     </nav>
 
     <main class="content">
@@ -780,8 +866,10 @@ const videoData = [
     // --- LIVE ---    
     {
         id: 'l1',
+        dbId: 'U3Xcyjgw7qU',
         category: 'live',
-        date: '2025-12',
+        date: '2025-12-25',
+        updatedAt: '2025-12-25',
         title: '20251224和立于一起度過聖誕夜',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251224LIYU_CHRISTMAS_NIGHT/',
         img: 'images/20251224_CHRISTMAS_NIGHT_with_LIYU.webp',
@@ -792,8 +880,10 @@ const videoData = [
     },
     {
         id: 'l2',
+        dbId: '8X2dyJw1XGQ',
         category: 'live',
-        date: '2026-01',
+        date: '2026-01-02',
+        updatedAt: '2026-01-03',
         title: '20260103和大家一起度過的第一個生日♥',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260102LIYU_BIRTHDAY_LIVE/',
         img: 'images/20260103_Liyu_Birthday_Live.webp',
@@ -804,8 +894,10 @@ const videoData = [
     },
     {
         id: 'l3',
+        dbId: 'fcnK2vEo5bk',
         category: 'live',
-        date: '2025-12',
+        date: '2025-12-13',
+        updatedAt: '2026-01-11',
         title: '《Show! 音樂中心》MC CUT 岡旻(VERIVERY) X 崔立于(CHUEI LI YU)',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251213MBC_Show!MusicCore_MC_cut/',
         img: 'images/20251213_MBC_Show!MusicCore_MC_cut.webp',
@@ -816,8 +908,10 @@ const videoData = [
     },
     {
         id: 'l4',
+        dbId: 'Hl8vDQt2Au0',
         category: 'live',
-        date: '2026-01',
+        date: '2026-01-30',
+        updatedAt: '2026-01-31',
         title: '20260130立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260130Instagram_Live/',
         img: 'images/20260130_Instagram_Live2.webp',
@@ -828,8 +922,10 @@ const videoData = [
     },
     {
         id: 'l5',
+        dbId: 'k8u4jWvzczQ',
         category: 'live',
-        date: '2025-12',
+        date: '2025-12-08',
+        updatedAt: '2026-02-24',
         title: 'AIreport VOL.4 | Radio’n Us : 2025年末派對',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20251208AIreportVOL.4_Radio’nUs_2025Year-end_party_Part.2/',
         img: 'images/20251208_AIreport VOL.4_Radio’n Us_2025 Year-end party Part.2.webp',
@@ -840,8 +936,10 @@ const videoData = [
     },
     {
         id: 'l6',
+        dbId: 'uiYtd59XbVk',
         category: 'live',
-        date: '2026-03',
+        date: '2026-03-06',
+        updatedAt: '2026-03-06',
         title: '20260306立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260306Instagram_Live/',
         img: 'images/20260306_55.jpg',
@@ -852,8 +950,10 @@ const videoData = [
     },
     {
         id: 'l7',
+        dbId: 'skM6fH9Vk_Q',
         category: 'live',
-        date: '2026-03',
+        date: '2026-03-12',
+        updatedAt: '2026-03-12',
         title: '20260312🎉DEBUT 100 Days LIVE 🎉',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260312DEBUT_100_Days_LIVE/',
         img: 'images/20260312_DEBUT_100_Days_LIVE.webp',
@@ -864,8 +964,10 @@ const videoData = [
     },
     {
         id: 'l8',
+        dbId: 'ukQz7a5Mm44',
         category: 'live',
-        date: '2026-03',
+        date: '2026-03-20',
+        updatedAt: '2026-03-25',
         title: '20260320立于IG直播',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260320Instagram_Live/',
         img: 'images/20260320_11.webp',
@@ -876,8 +978,10 @@ const videoData = [
     },
 　　 {
         id: 'l9',
+        dbId: '5527NL-fRfM',
         category: 'live',
-        date: '2026-03',
+        date: '2026-03-24',
+        updatedAt: '2026-03-27',
         title: '20260324 MIIM IG直播 立于x玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Live/20260324MIIM_Instagram_Live/',
         img: 'images/20260324MIIM.webp',
@@ -890,8 +994,10 @@ const videoData = [
     // --- PROGRAM --- 
     {
         id: 'p1',
+        dbId: 'BYeGrGsor_4',
         category: 'program',
-        date: '2025-12',
+        date: '2025-12-20',
+        updatedAt: '2025-12-24',
         title: '硬撐詩安 EP#9',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251220kkang-sian_ep9/',
         img: 'images/20251220_kkang-sian_ep9.webp',
@@ -902,8 +1008,10 @@ const videoData = [
     },   
     {
         id: 'p2',
+        dbId: 'stw1z7tCz9Y',
         category: 'program',
-        date: '2025-12',
+        date: '2025-12-18',
+        updatedAt: '2026-01-01',
         title: '練習室的Bada老師 ep.41',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251218BadaLee_ep41/',
         img: 'images/20251218_BadaLee_ep41.webp',
@@ -914,8 +1022,10 @@ const videoData = [
     },
     {
         id: 'p3',
+        dbId: 'sN-cLYIy7po',
         category: 'program',
-        date: '2025-12',
+        date: '2025-12-16',
+        updatedAt: '2026-01-11',
         title: '德飯店 EP.5 崔立于 CHUEI LI YU',
         link: 'Program/20251216deok_rice_restaurant_ep5/',
         img: 'images/20251216_deok_rice_restaurant.webp',
@@ -926,8 +1036,10 @@ const videoData = [
     },
     {
         id: 'p4',
+        dbId: 'ijupUJ_Nmho',
         category: 'program',
-        date: '2025-11',
+        date: '2025-11-25',
+        updatedAt: '2025-12-29',
         title: '洪錫天的寶石盒第四季 EP.23',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20251125HongSeokCheon\'s_Jewel_Box/',
         img: 'images/20251125_HongSeokCheon\'s_Jewel_Box_ep.23.webp',
@@ -938,8 +1050,10 @@ const videoData = [
     },
     {
         id: 'p5',
+        dbIds: ['YWLmNo5HvxU', 'ZORwm5Zx3z8', 'Z9FZ-plrfVY', 'R2WUP3Ge0CY'],
         category: 'program',
-        date: ['2025-11', '2025-12', '2026-01'],
+        date: ['2025-11-21', '2025-12-05', '2025-12-19', '2026-01-02'],
+        updatedAt: '2026-01-20',
         title: '炸雞王座系列',
         link: 'Program/king-of-chicken/',
         img: 'images/20260102_bhc.webp',
@@ -950,8 +1064,10 @@ const videoData = [
     },
     {
         id: 'p6',
+        dbIds: ['fkMq9YkJHkw', 'xvwemqYia1Q'],
         category: 'program',
-        date: '2025-10',
+        date: ['2025-10-07', '2025-10-14'],
+        updatedAt: '2026-02-05',
         title: '鄰家K明星系列',
         link: 'Program/KStarNextDoor_Show/',
         img: 'images/20251014_KStarNextDoor_Show_ep24.webp',
@@ -962,8 +1078,10 @@ const videoData = [
     },
     {
         id: 'p7',
+        dbId: '86J3HHg4KnI',
         category: 'program',
-        date: '2026-01',
+        date: '2026-01-29',
+        updatedAt: '2026-02-12',
         title: '出差！RISABAE X 崔立于 Drawing簽售會',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260129On-the-Go_Risabae/',
         img: 'images/20260129_On-the-Go_Risabae.webp',
@@ -974,8 +1092,10 @@ const videoData = [
     },
     {
         id: 'p8',
+        dbId: 'pc1eQYxqNow',
         category: 'program',
-        date: '2026-04',
+        date: '2026-04-15',
+        updatedAt: '2026-04-18',
         title: '尋找潛伏在新人偶像中的臥底 | TXT 杋圭&休寧凱 | THE qUEST',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Program/20260415THE_qUEST/',
         img: 'images/20260415_THE_qUEST.webp',
@@ -988,8 +1108,10 @@ const videoData = [
     // --- RADIO ---
     {
         id: 'r1',
+        dbId: 'RQqKjbt7j9g',
         category: 'radio',
-        date: '2025-12',
+        date: '2025-12-21',
+        updatedAt: '2025-12-24',
         title: '朴素賢的 Love Game | 251221',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251221lovegame/',
         img: 'images/20251221_love_game.webp',
@@ -1000,8 +1122,10 @@ const videoData = [
     },
     {
         id: 'r2',
+        dbId: 'X6h0MCEnDEw',
         category: 'radio',
-        date: '2025-12',
+        date: '2025-12-11',
+        updatedAt: '2026-01-23',
         title: '[韓海的Kiss the Radio] 驚喜招待會 with. 張瀚音 & 崔立于',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251211kiss_the_radio/',
         img: 'images/20251211_kiss_the_radio.webp',
@@ -1012,8 +1136,10 @@ const videoData = [
     },    
     {
         id: 'r3',
+        dbId: 'cIzXj7NbBQ4',
         category: 'radio',
-        date: '2025-12',
+        date: '2025-12-05',
+        updatedAt: '2026-03-10',
         title: 'Holiday in 親密朋友',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/20251205bfever/',
         img: 'images/20251205_bfever.webp',
@@ -1024,8 +1150,10 @@ const videoData = [
     },
     {
         id: 'r4',
+        dbId: ['v5Hm4T8zSsw','_oV9Tz2eSHw', 'lpMIuk_NoAA', 'J6n3Kw-S1OM'],
         category: 'radio',
-        date: ['2025-11', '2025-12', '2026-02'],
+        date: ['2025-11-12', '2025-11-23', '2025-12-10', '2026-02-18'],
+        updatedAt: '2026-04-09',
         title: 'IDOL RADIO系列',
         link: 'Radio/IDOL_RADIO/',
         img: 'images/20260218_IDOL_RADIO_ep199.webp',
@@ -1036,8 +1164,10 @@ const videoData = [
     },
     {
         id: 'r5',
+        dbId: ['iZnZwooQ6Lk', '6NV8GgBfTWY'],
         category: 'radio',
-        date: ['2026-01', '2026-02'],
+        date: ['2026-01-17', '2026-02-23'],
+        updatedAt: '2026-04-20',
         title: '偶像韓語系列',
         link: 'Radio/IDOL_KOREAN/',
         img: 'images/20260117_IDOL_KOREAN_ep.726.webp',
@@ -1048,8 +1178,10 @@ const videoData = [
     },
     {
         id: 'r6',
+        dbId: ['plvNmGSrUqU', 'q-QlfrEj6EA'],
         category: 'radio',
-        date: '2026-03',
+        date: ['2026-03-02', '2026-03-06'],
+        updatedAt: '2026-05-08',
         title: '親密朋友廣播部系列',
         link: 'Radio/mbc_chinchinbang/',
         img: 'images/20260302_mbc_chinchinbang.webp',
@@ -1060,8 +1192,10 @@ const videoData = [
     },
     {
         id: 'r7',
+        dbId: 'M143wrX_WHQ',
         category: 'radio',
-        date: '2025-12',
+        date: '2025-12-16',
+        updatedAt: '2026-07-14',
         title: '20251216 傾聽電台',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation//Radio/ebsfmlisten/20251216/',
         img: 'images/20251216_ebsfmlisten.webp',
@@ -1074,8 +1208,10 @@ const videoData = [
     // --- MEDIA ---
     {
         id: 'm1',
+        dbId: 'OqzZmTh0IRU',
         category: 'media',
-        date: '2025-11',
+        date: '2025-11-07',
+        updatedAt: '2025-12-24',
         title: 'Marie Claire Korea 特輯<br>MARIE畫畫日記',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20251107MARIE_Drawing_Diary/',
         img: 'images/20251107_MARIE_Drawing_Diary.webp',
@@ -1086,8 +1222,10 @@ const videoData = [
     },
     {
         id: 'm2',
+        dbId: 'hcd8cVi4mLE',
         category: 'media',
-        date: '2026-01',
+        date: '2026-01-06',
+        updatedAt: '2026-01-06',
         title: 'Ktown4u 特輯<br>撲通撲通立于time💗崔立于的可愛合集🐰.zip',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260106fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU/',
         img: 'images/20260106_fredr1ck._choi_ARCHIVE_BY_CHUEI_LI_YU.webp',
@@ -1097,9 +1235,11 @@ const videoData = [
         cast: []
     },
     {
-        id: 'm3',  
+        id: 'm3', 
+        dbId: 'kV5sNS1Z-VU',
         category: 'media', 
-        date: '2026-02',
+        date: '2026-02-05',
+        updatedAt: '2026-02-07',
         title: 'Y MAGAZINE 特輯<br>製作杜拜巧克力Q餅',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260205Y_MAGAZINE/', 
         img: 'images/20260205_Y_magazine.webp',
@@ -1110,8 +1250,10 @@ const videoData = [
     },
     {
         id: 'm4',  
+        dbId: 'l9RMyNlOE3Q',
         category: 'media', 
-        date: '2026-02',
+        date: '2026-02-27',
+        updatedAt: '2026-02-28',
         title: '貝力熊節目企劃<br>如果在咖啡廳遇見超帥工讀生的話？',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260227Bellygom/', 
         img: 'images/20260227_Bellygom.webp',
@@ -1122,8 +1264,10 @@ const videoData = [
     },
     {
         id: 'm5',  
+        dbId: 'H85oGLlNBbc',
         category: 'media', 
-        date: '2026-02',
+        date: '2026-02-26',
+        updatedAt: '2026-03-01',
         title: 'IDOL RADIO UNIVERSE節目企劃<br>下班Possible',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260226IDOL_RADIO_UNIVERSE/', 
         img: 'images/20260226_IDOL_RADIO_UNIVERSE.webp',
@@ -1134,8 +1278,10 @@ const videoData = [
     },
     {
         id: 'm6',  
+        dbId: 'cetaphil_20260303_combined',
         category: 'media', 
-        date: '2026-03',
+        date: '2026-03-03',
+        updatedAt: '2026-03-05',
         title: '合作企劃<br>Esquire Korea x 舒特膚(Cetaphil)',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260303cetaphil/', 
         img: 'images/20260302_cetaphil.webp',
@@ -1146,8 +1292,10 @@ const videoData = [
     },
     {
         id: 'm7',  
+        dbId: 'FCNA38gTTi4',
         category: 'media', 
-        date: '2026-03',
+        date: '2026-03-09',
+        updatedAt: '2026-03-11',
         title: 'KITZ節目企劃<br>ARTIST PORTRAIT & BEYOND THE STAGE',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260309KITZ/', 
         img: 'images/20260309KITZ_BEYOND THE STAGE.webp',
@@ -1158,8 +1306,10 @@ const videoData = [
     },
     {
         id: 'm8',  
+        dbId: '20260420MIIM_combined',
         category: 'media', 
-        date: '2026-04',
+        date: '2026-04-20',
+        updatedAt: '2026-04-24',
         title: 'MIIM節目企劃<br>立于X玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260420MIIM/', 
         img: 'images/20260403MIIM2.webp',
@@ -1170,8 +1320,10 @@ const videoData = [
     },
     {
         id: 'm9',  
+        dbId: 'e0hIsN3TFcI',
         category: 'media', 
-        date: '2026-04',
+        date: '2026-04-23',
+        updatedAt: '2026-04-27',
         title: 'DAZED KOREA 2026 Summer Edition 畫報幕後花絮',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260423DAZED_KOREA_2026_Summer_Edition_BEHIND/', 
         img: 'images/20260423_DAZED_KOREA_2026_Summer_Edition_BEHIND.webp',
@@ -1182,8 +1334,10 @@ const videoData = [
     },
     {
         id: 'm10',  
+        dbId: 'esquire_20260426_combined',
         category: 'media', 
-        date: '2026-04',
+        date: '2026-04-26',
+        updatedAt: '2026-04-30',
         title: 'Esquire Korea 幕後花絮 立于x玗進',
         link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Media/20260426ESQUIRE/', 
         img: 'images/20260426ESQUIRE1.webp',
@@ -1191,18 +1345,6 @@ const videoData = [
         credit: '翻譯：Lepus、西卡<br>字幕製作：西卡',
         isNew: false,
         cast: ['玗進']
-    },
-    {
-        id: 'm11',  
-        category: 'media', 
-        date: '2026-06',
-        title: '2026 BLOSSOM 青少年音樂節應援影片',
-        link: 'https://chueiliyutwtrans.github.io/chueiliyu-tw-translation//Media/20260601_2026BLOSSOM/', 
-        img: 'images/20260601_2026BLOSSOM.webp',
-        desc: '應援影片｜中文翻譯',
-        credit: '翻譯：西卡<br>字幕製作：西卡',
-        isNew: true,
-        cast: []
     },
     {
         id: 's1',  
@@ -1324,6 +1466,9 @@ function createCardHTML(item) {
         
         <a href="${item.link}" target="_blank" style="text-decoration:none; color:inherit; display:block;">
             <div class="card-img-wrap">
+                <div class="reaction-badge" title="表情互動總數">
+                    ☺️ ${totalReactions}
+                </div>
                 <img src="${item.img}" alt="${item.title.replace(/<br>/g, ' ')}" loading="lazy">
                 ${badge}
             </div>
@@ -1607,6 +1752,120 @@ function setTheme(theme) {
     document.body.classList.add(theme);
     localStorage.setItem('site-theme', theme);
 }
+
+/* =========================================
+   排序功能
+   ========================================= */
+// 1. 資料庫變數與當前狀態
+let currentSortMode = 'updated_desc';
+// 2. 頁面標籤切換（Sidebar）
+function switchTab(tabId, btnElement) {
+    // 切換按鈕與 Section 的 active 狀態
+    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    
+    if (btnElement) btnElement.classList.add('active');
+    const targetSection = document.getElementById(tabId);
+    if (targetSection) targetSection.classList.add('active');
+
+    // 舞台（stage）與收藏（favorites）隱藏排序選單，其餘顯示
+    const sortWrapper = document.querySelector('.sort-wrapper');
+    if (sortWrapper) {
+        if (tabId === 'stage' || tabId === 'favorites') {
+            sortWrapper.style.display = 'none';
+        } else {
+            sortWrapper.style.display = 'flex';
+        }
+    }
+}
+
+// 3. 排序邏輯與計算
+function calcTotalReactions(video, reactionsData) {
+    if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
+        return video.dbIds.reduce((sum, id) => {
+            const itemReactions = reactionsData[id] || {};
+            const count = Object.values(itemReactions).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
+            return sum + count;
+        }, 0);
+    }
+
+    const key = video.dbId || video.id;
+    const itemReactions = reactionsData[key] || {};
+    return Object.values(itemReactions).reduce((sum, count) => {
+        return sum + (typeof count === 'number' ? count : 0);
+    }, 0);
+}
+
+function handleSortChange(sortType) {
+    currentSortMode = sortType;
+    
+    if (sortType === 'popular') {
+        fetchReactionsAndSort();
+    } else {
+        applySortingAndRender();
+    }
+}
+
+function fetchReactionsAndSort() {
+    if (!window.db || !window.fb_ref) {
+        console.warn("Firebase 尚未就緒");
+        applySortingAndRender();
+        return;
+    }
+
+    const reactionsRef = window.fb_ref(window.db, 'video_reactions');
+    window.fb_onValue(reactionsRef, (snapshot) => {
+        const reactionsData = snapshot.val() || {};
+
+        videoData.forEach(video => {
+            video.totalReactions = calcTotalReactions(video, reactionsData);
+        });
+
+        applySortingAndRender();
+    }, { onlyOnce: true });
+}
+
+function applySortingAndRender() {
+    videoData.sort((a, b) => {
+        switch (currentSortMode) {
+            case 'popular':
+                return (b.totalReactions || 0) - (a.totalReactions || 0);
+            case 'updated_desc':
+                return new Date(b.updatedAt || b.date) - new Date(a.updatedAt || a.date);
+            case 'pub_desc':
+                return new Date(b.date) - new Date(a.date);
+            case 'pub_asc':
+                return new Date(a.date) - new Date(b.date);
+            default:
+                return 0;
+        }
+    });
+
+    renderAllGrids();
+}
+
+// 4. 初始化連線與表情數同步
+function initReactionsCount() {
+    if (!window.db || !window.fb_ref) {
+        setTimeout(initReactionsCount, 200);
+        return;
+    }
+
+    const reactionsRef = window.fb_ref(window.db, 'video_reactions');
+    window.fb_onValue(reactionsRef, (snapshot) => {
+        const reactionsData = snapshot.val() || {};
+
+        videoData.forEach(video => {
+            video.totalReactions = calcTotalReactions(video, reactionsData);
+        });
+
+        applySortingAndRender();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initReactionsCount();
+});
 
 /* =========================================
    收藏功能
