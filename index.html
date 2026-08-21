@@ -27,7 +27,9 @@ html, body {
     overflow-x: hidden;
 }
 
-.container {
+.container { 
+    display: flex; 
+    min-height: calc(100vh - 260px); 
     width: 100%;
     max-width: 100vw;
     box-sizing: border-box;
@@ -214,7 +216,6 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     width: 100%;
     margin-bottom: 4px;
     z-index: 101;
-    overflow: visible !important;
 }
 
 .sort-btn {
@@ -254,6 +255,9 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s ease;
+}
+#stage-grid .reaction-badge {
+    display: none !important;
 }
     
 /* ===== Layout ===== */
@@ -633,18 +637,21 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
         z-index: 1000;
     }
     .sort-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 6px);
-        left: 0;
-        width: 150px;
-        max-height: none !important; 
-        overflow: visible !important;
-        
-        background-color: #ffffff; 
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        z-index: 99999 !important; 
+        position: fixed !important;
+        top: 60px !important; 
+        left: 12px !important;
+        width: 160px !important;
+        background-color: #ffffff;
+        z-index: 999999 !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+    .sidebar button { 
+        flex: 0 0 auto; 
+        width: auto; 
+        margin: 0; 
+        padding: 6px 12px; 
+        font-size: 13px; 
+        justify-content: center; 
     }
     .sort-menu.show {
         display: block;
@@ -655,8 +662,20 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     }
     
     .sidebar { 
-        width: 100% !important; max-width: 100vw !important; padding: 10px 8px; display: flex !important; flex-direction: row !important; border-right: none; gap: 6px;
-        border-bottom: 1px solid rgba(0,0,0,0.1); overflow-x: auto !important; overflow-y: visible !important; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        width: 100% !important; 
+        max-width: 100vw !important; 
+        padding: 10px 12px; 
+        display: flex !important; 
+        flex-direction: row !important; 
+        align-items: center;
+        border-right: none; 
+        gap: 8px;
+        border-bottom: 1px solid rgba(0,0,0,0.1); 
+        overflow-x: auto !important; 
+        overflow-y: visible !important; 
+        white-space: nowrap; 
+        -webkit-overflow-scrolling: touch; 
+        scrollbar-width: none;
     }
     .sidebar button { flex: 0 0 auto; width: auto; margin: 0; padding: 6px 10px; font-size: 13px; justify-content: center; }
     .sidebar::-webkit-scrollbar { display: none; } /* 隱藏捲動條 (Chrome/Safari/Webkit) */
@@ -1965,6 +1984,18 @@ function calcTotalReactions(video, reactionsData) {
 function toggleSortMenu(event) {
     event.stopPropagation();
     const menu = document.getElementById("sort-menu");
+    const btn = event.currentTarget;
+
+    // 手機版動態計算按鈕位置（解決 fixed 定位偏差）
+    if (window.innerWidth <= 768) {
+        const rect = btn.getBoundingClientRect();
+        menu.style.top = `${rect.bottom + 6}px`;
+        menu.style.left = `${rect.left}px`;
+    } else {
+        menu.style.top = '';
+        menu.style.left = '';
+    }
+
     menu.classList.toggle("show");
 }
 
