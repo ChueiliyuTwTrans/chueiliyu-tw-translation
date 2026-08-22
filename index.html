@@ -834,6 +834,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
                 <h4>💻 網站與翻譯頁面說明</h4>
                 <ul class="guide-list">
                     <li><strong>搜尋與版面：</strong>左上角可搜尋關鍵字/月份，右上角可切換三種版面主題。</li>
+                    <li><strong>作品分類與排序：</strong>可投過排序按鈕依照個人喜好將影片作排序，共分成直播/節目/電台/媒體/舞台/收藏共六個類別。</li>
                     <li><strong>收藏功能：</strong>點擊卡片右下角「❤️」可儲存至「收藏」欄位（無痕模式無法保存）。</li>
                     <li><strong>文字/IG 作品：</strong>為尊重版權不轉載官方照片，請先前往官網再搭配本站翻譯閱讀。</li>
                     <li><strong>互動支持：</strong>若喜歡作品，歡迎點擊下方的表情按鈕表達支持！</li>
@@ -1910,11 +1911,21 @@ function selectSort(sortType, labelText, element) {
     handleSortChange(sortType);
 }
 
-// 點擊頁面其他空白處時自動收起選單
-document.addEventListener('click', function() {
+// 點擊頁面空白處、滑動頁面或滑動側邊欄時，自動收起選單
+function closeSortMenu() {
     const menu = document.getElementById("sort-menu");
     if (menu) menu.classList.remove("show");
-});
+}
+
+document.addEventListener('click', closeSortMenu);
+
+// 監聽手機頁面滾動與 sidebar 滾動，滑動時立刻收起下拉選單
+window.addEventListener('scroll', closeSortMenu, true);
+
+const sidebar = document.querySelector('.sidebar');
+if (sidebar) {
+    sidebar.addEventListener('scroll', closeSortMenu);
+}
 
 /* =========================================
    ⭐ 6. 收藏功能
