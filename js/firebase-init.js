@@ -23,19 +23,3 @@ window.db = getDatabase(app);
 window.fb_ref = ref;            
 window.fb_onValue = onValue;    
 window.fb_runTransaction = runTransaction; 
-
-// Anonymous Auth
-const auth = getAuth(app);
-window.fb_auth = auth;
-
-// 避免重複登入
-if (!auth.currentUser) {
-  signInAnonymously(auth).catch(console.error);
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.userUID = user.uid;
-    console.log("匿名登入成功：", user.uid);
-  }
-});
