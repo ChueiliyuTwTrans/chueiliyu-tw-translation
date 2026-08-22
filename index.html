@@ -2021,25 +2021,28 @@ window.addEventListener('click', function(event) {
     }
 });
 </script>
-<script type="module" src="/chueiliyu-tw-translation/js/firebase-init.js">
-    // 引用留言板功能
-    import { initGuestbook, toggleModal } from "./js/guestbook.js";
-    // 1. 初始化隨機留言邏輯
-      initGuestbook('random');
+<script type="module" src="/chueiliyu-tw-translation/js/firebase-init.js"></script>
+<script type="module">
+  // 引用留言板功能（請確認路徑是否正確）
+  import { initGuestbook, toggleModal } from "/chueiliyu-tw-translation/js/guestbook.js";
 
-      // 2. 綁定彈窗控制事件
-      const openBtn = document.getElementById('open-gb');
-      const closeBtn = document.getElementById('close-gb');
-      const modal = document.getElementById('guestbook-modal');
+  // 1. 初始化隨機留言邏輯
+  initGuestbook('random');
 
-      if (openBtn) openBtn.onclick = () => toggleModal(true);
-      if (closeBtn) closeBtn.onclick = () => toggleModal(false);
-  
-      // 點擊彈窗外部背景可關閉
-      if (modal) {
-        modal.onclick = (e) => {
-          if(e.target.id === 'guestbook-modal') toggleModal(false);
-        };
+  // 2. 綁定彈窗控制事件
+  const openBtn = document.getElementById('open-gb');
+  const closeBtn = document.getElementById('close-gb');
+  const modal = document.getElementById('guestbook-modal');
+
+  if (openBtn) openBtn.onclick = () => toggleModal(true);
+  if (closeBtn) closeBtn.onclick = () => toggleModal(false);
+
+  // 點擊彈窗外部背景可關閉
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target.id === 'guestbook-modal') toggleModal(false);
+    };
+  }
 </script>
 
 </body>
