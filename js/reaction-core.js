@@ -74,7 +74,7 @@ function syncWallCounts() {
         
         // 1. 監聽雲端數字變化
         const pathId = (typeof DATA_SOURCE_ID !== 'undefined') ? DATA_SOURCE_ID : MY_VIDEO_ID;
-        const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/${type}`);
+        const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/counts/${type}`);
         window.fb_onValue(countRef, (snapshot) => {
             const data = snapshot.val() || 0;
             const el = document.getElementById(`count-${type}`);
@@ -110,7 +110,7 @@ window.toggleReaction = function(type, event) {
     const btn = document.querySelector(`.reaction-wall button[data-type="${type}"]`);
     
     // 執行資料庫交易
-    const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/${type}`);
+    const countRef = window.fb_ref(window.db, `video_reactions/${pathId}/counts/${type}`);
     window.fb_runTransaction(countRef, (currentCount) => {
         let val = (currentCount === null) ? 0 : currentCount;
         if (isReacted) {
