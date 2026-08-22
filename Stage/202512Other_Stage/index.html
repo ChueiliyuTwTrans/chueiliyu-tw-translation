@@ -385,13 +385,7 @@
   <script async src="//www.instagram.com/embed.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    const firebaseConfig = { apiKey: "AIzaSyB8JlcBK_edVc2HkK9edJtYwNSYspreVyw", authDomain: "chueiliyu-tw-translation.firebaseapp.com", databaseURL: "https://chueiliyu-tw-translation-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "chueiliyu-tw-translation", storageBucket: "chueiliyu-tw-translation.appspot.com", messagingSenderId: "625769420546", appId: "1:625769420546:web:6d25889d1c66a091fe941b" };
-    const app = initializeApp(firebaseConfig);
-    window.db = getDatabase(app); window.fb_ref = ref; window.fb_onValue = onValue; window.fb_runTransaction = runTransaction; 
-  </script>
+  <script type="module" src="../../js/firebase-init.js"></script>
 
   <script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
 
