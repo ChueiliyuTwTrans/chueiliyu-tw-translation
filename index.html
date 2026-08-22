@@ -1858,16 +1858,18 @@ function calcTotalReactions(video, reactionsData) {
 
     let sum = 0;
     targetKeys.forEach(key => {
-        const itemReactions = reactionsData[key];
-        if (!itemReactions) return;
+        const itemData = reactionsData[key];
+        if (!itemData) return;
 
-        // console.log(`比對成功: ${key}`, itemReactions);
+        // 取得該影片裡面的 counts 物件
+        const counts = itemData.counts;
+        if (!counts) return;
 
-        Object.values(itemReactions).forEach(val => {
+        // 加總 counts 底下的所有表情數量
+        Object.values(counts).forEach(val => {
             if (typeof val === 'number') {
                 sum += val;
             } else if (typeof val === 'object' && val !== null) {
-                // 如果是按讚的使用者清單結構 { uid1: true, uid2: true }
                 sum += Object.keys(val).length;
             }
         });
