@@ -151,8 +151,9 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .watched-checkbox { width: 20px; height: 20px; accent-color: #c29d91; cursor: pointer; flex-shrink: 0; }
 
 /* 9. 作品標題 */
-.watched-item-title { font-size: 14.5px; color: #4a4a4a; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
-.watched-item-date { font-size: 12px; color: #b5a8a0; margin-left: 6px; }
+.watched-item-title { font-size: 14.5px; color: #4a4a4a; font-weight: 500; cursor: pointer; white-space: normal !important; word-break: break-word !important;
+    display: inline-block; line-height: 1.4; }
+.watched-item-date { font-size: 12px; color: #b5a8a0; margin-left: 6px; white-space: nowrap; }
 
 /* 10. 前往觀看連結 */
 .watched-item-link {
@@ -562,6 +563,7 @@ body.theme-dark .sort-item.active { background: rgb(68, 75, 84); color: #ffffff;
 body.theme-dark #watched-modal .watched-modal-content { background-color: rgb(27, 30, 34) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important; }
 body.theme-dark .floating-gb-btn, body.theme-dark #open-watched-modal { background-color: rgb(68, 75, 84) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important; }
 body.theme-dark .floating-gb-btn:hover, body.theme-dark #open-watched-modal:hover { background-color: rgb(88, 96, 107) !important; }
+body.theme-dark .gb-modal-title { color: #ffffff !important; }
 body.theme-dark #watched-modal .close-modal-btn {
     background-color: rgb(68, 75, 84) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.15) !important;
     padding: 8px 18px !important; border-radius: 8px !important;
