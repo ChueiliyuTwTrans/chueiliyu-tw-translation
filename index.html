@@ -560,6 +560,22 @@ body.theme-light #watched-modal .unwatched-filter-btn.active {
     border-color: rgb(68, 75, 84) !important;
     box-shadow: 0 4px 12px rgba(68, 75, 84, 0.2) !important;
 }
+body.theme-light #watched-modal .random-btn {
+    background-color: rgb(68, 75, 84) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+body.theme-light #watched-modal .random-btn:hover {
+    background-color: rgb(88, 96, 107) !important;
+}
     
 /* 主內容與側邊欄 */
 body.theme-light .content { background-color: #ffffff; }
@@ -718,6 +734,22 @@ body.theme-dark #watched-modal .unwatched-filter-btn.active {
     color: #ffffff !important;
     border-color: #2563eb !important;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+body.theme-dark #watched-modal .random-btn {
+    background-color: rgb(68, 75, 84) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+body.theme-dark #watched-modal .random-btn:hover {
+    background-color: rgb(88, 96, 107) !important;
 }
     
 /* 主內容與側邊欄 */
@@ -1725,7 +1757,7 @@ function getSortedData(data) {
 
 function renderAllCards(data) {
     // 0. 取得已觀看的影片 ID 集合
-    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+    const watchedIds = new Set( JSON.parse(localStorage.getItem('watched_videos') || '[]'));
 
     // 1. 未觀看過濾
     const watchedFilteredData = data.filter(i => {
@@ -1753,6 +1785,8 @@ function renderAllCards(data) {
         const grid = containers[cat];
         if (grid) {
             const catData = finalFilteredData.filter(i => i.category === cat);
+
+            grid.innerHTML = '';
             
             if (catData.length > 0) {
                 grid.innerHTML = catData.map(createCardHTML).join('');
@@ -2020,15 +2054,16 @@ function handleSortChange(sortType) {
     // 如果切換到其他排序，自動關閉「僅顯示未觀看」狀態
     if (sortType === 'unwatched') {
         showOnlyUnwatched = true;
-    } else {
-        showOnlyUnwatched = false;
-    }
+        renderAllCards(videoData);
+        return;
+    } 
+    showOnlyUnwatched = false;
     
     if (sortType === 'popular') {
         fetchReactionsAndSort();
-    } else {
-        applySortingAndRender();
-    }
+        return;
+    } 
+    applySortingAndRender();
 }
 
 function fetchReactionsAndSort() {
@@ -2415,9 +2450,7 @@ function saveWatchedVideos() {
     closeWatchedModal();
 
     // 重新渲染主頁面卡片
-    if (typeof applySortingAndRender === 'function') {
-        applySortingAndRender();
-    } else if (typeof renderAllCards === 'function') {
+    if (typeof videoData !== 'undefined') {
         renderAllCards(videoData);
     }
 
