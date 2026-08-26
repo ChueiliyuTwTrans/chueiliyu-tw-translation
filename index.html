@@ -1629,8 +1629,16 @@ function renderAllCards(data) {
             return !isAllWatched;
         } else {
             // 單集作品
-            const targetId = (Array.isArray(i.dbIds) && i.dbIds.length > 0) ? i.dbIds[0] : (i.dbId || i.id);
-            return !watchedIds.has(targetId);
+            const possibleIds = [];
+            
+            if (i.id) possibleIds.push(i.id);
+            if (i.dbId) possibleIds.push(i.dbId);
+            if (Array.isArray(i.dbIds) && i.dbIds.length > 0) {
+                possibleIds.push(i.dbIds[0]);
+            }
+
+            const isWatched = possibleIds.some(id => watchedIds.has(id));
+            return !isWatched; // 僅顯示未觀看時，排除已觀看的影片
         }
     });
     
