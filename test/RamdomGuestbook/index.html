@@ -1,0 +1,61 @@
+<style>
+/* --- 留言牆 --- */
+.gb-modal-content { position: relative; padding: 20px; background: #fff; border-radius: 15px; max-width: 500px; width: 90%; }
+
+/* Header */
+.gb-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.gb-modal-title { font-weight: bold; color: #a89080; font-size: 1.2rem; }
+.header-controls { display: flex; gap: 8px; }
+
+/* 右上角按鈕組 */
+.font-toggle-btn, .close-modal-btn { padding: 8px 16px !important; font-size: 16px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: none; }
+
+/* 1. 字體大小按鈕 */
+.font-toggle-btn { background: #c29d91 !important; color: #ffffff !important; }
+.font-toggle-btn:hover { background: #c29d91 !important; }
+
+/* 2. 收回按鈕 */
+.close-modal-btn { background: #f8f5f4; color: #a89d99; }
+.close-modal-btn:hover { background: #f0ebe8; color: #8c7851; }
+
+/* 3. 再次隨機抽選按鈕 */
+.random-btn {
+    padding: 12px 32px; font-size: 16px; font-weight: bold; border: none; border-radius: 999px; cursor: pointer; background: #a89080; 
+    color: white; box-shadow: 0 4px 15px rgba(168, 144, 128, 0.3); transition: all 0.3s ease;
+}
+.random-btn:hover { background: #967d6d; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(168, 144, 128, 0.4); }
+
+/* 前往全部留言的連結 */
+.view-all-link { display: block; text-align: center; margin-top: 18px; font-size: 16px; color: #a89080; text-decoration: underline; opacity: 0.8; }
+</style>
+
+// 位於footer下方
+<button class="floating-gb-btn" id="open-gb" title="查看隨機留言">✉️</button>
+
+<div class="gb-modal" id="guestbook-modal">
+    <div class="gb-modal-content">
+        <!-- 頂部區塊 -->
+        <div class="gb-modal-header">
+            <!-- 左上角：標題 -->
+            <div class="gb-modal-title">隨機抽選留言</div>
+            
+            <!-- 右上角：控制按鈕組 -->
+            <div class="header-controls">
+                <button class="font-toggle-btn" onclick="cycleFontSize()">字體大小</button>
+                <button class="close-modal-btn" id="close-gb" onclick="closeGuestbook()">收回</button>
+            </div>
+        </div>
+        
+        <!-- 中間：留言內容區 -->
+        <div id="random-container" class="gb-grid-layout">
+            <p>載入中...</p>
+        </div>
+
+        <!-- 下方：動作按鈕區 -->
+        <div class="modal-action-bar">
+            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+        </div>
+
+        <a href="Guestbook" class="view-all-link">點擊前往觀看全部留言</a>
+    </div>
+</div>  
