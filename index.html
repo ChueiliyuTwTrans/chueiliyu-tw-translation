@@ -337,19 +337,18 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 /* 底部 */
 footer { 
     text-align: center; font-size: 13px; color: #999; padding: 20px 20px 30px 20px; background: transparent;
-    display: flex; flex-direction: column; align-items: center; gap: 8px; 
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
 }
-.footer-sns { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 0px; font-weight: 500; letter-spacing: 0.5px; }
+.footer-sns { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 0px; font-weight: 500; letter-spacing: 0.5px; flex-wrap: wrap; }
+.footer-sns.footer-sub-row { margin-top: -2px; }
 
 .sns-btn.text-link {
     color: #666; text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 16px; border: 1px solid #e5e7eb; border-radius: 20px; 
     transition: all 0.2s ease; background: rgba(255, 255, 255, 0.5); margin: 0;
 }
 .sns-btn.text-link:hover { color: #fff; background: var(--primary-color, #444); border-color: var(--primary-color, #444); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-.sns-divider { display: none; }
 
 .footer-info { letter-spacing: 0.5px; opacity: 0.8; margin-top: 0; }
-.footer-sns { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
 
 /* ===== 回到頂端按鈕 (Back to Top) ===== */
 #backToTop {
@@ -776,7 +775,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     </a>
 
     <a href="https://flareu-tw-trans.github.io/" class="news-item">
-        <span class="news-tag tag-note">公告</span> ✨FLARE U 台灣翻譯站已開站✨
+        <span class="news-tag tag-note">公告</span> ✨排序 & 影片清單開發完成✨
     </a>
 </div>
 
@@ -855,8 +854,8 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
         <a href="https://youtube.com/channel/UC0dLVYvnFcF8d7XR8LYN_xQ?si=Vv1ANZNkdHG23kiC" target="_blank" class="sns-btn text-link" aria-label="Youtube">
             Youtube
         </a>
-        <div class="responsive-break"></div>
-        
+    </div>
+    <div class="footer-sns footer-sub-row">
         <a href="https://flareu-tw-trans.github.io/" target="_blank" class="sns-btn text-link FLARE-U-btn" aria-label="FLAREU">
             FLARE U 台灣翻譯站
         </a>
