@@ -380,7 +380,14 @@ body.theme-fancy .sort-menu { background: rgba(255, 253, 250, 0.95); border: 1px
 body.theme-fancy .sort-item { color: #4A403A; }
 body.theme-fancy .sort-item:hover,
 body.theme-fancy .sort-item.active { background: rgba(182, 132, 103, 0.15); color: rgb(182, 132, 103); font-weight: 700; }
-    
+/* 影片清單 & 批次觀看 */
+body.theme-fancy .watched-category-title { color: #8c7851 !important; border-bottom: 2px solid #e8dfd8 !important; }
+body.theme-fancy .watched-item { background-color: #fcfbf9 !important; border: 1px solid #f0ebe8 !important; }
+body.theme-fancy .watched-title-text { color: #5c4f48 !important; }
+body.theme-fancy .watched-item-date { color: #a89080 !important; }
+body.theme-fancy .watched-item-link { color: #a89080 !important; }
+body.theme-fancy .watched-item-link:hover { color: #8c7851 !important; }
+/* 過濾 & 卡片 */
 body.theme-fancy .filter-btn { border: 1px solid rgba(171, 156, 143, 0.2) !important; background: rgba(255, 255, 255, 0.55); color: rgb(110, 100, 90); }
 body.theme-fancy .filter-btn:hover { background: rgba(255, 255, 255, 0.85); border-color: rgba(171, 156, 143, 0.5) !important; }
 body.theme-fancy .filter-btn.active { background: rgb(182, 132, 103) !important; border-color: rgb(182, 132, 103) !important; color: #fff; box-shadow: 0 4px 10px rgba(182, 132, 103, 0.3); }
@@ -500,6 +507,13 @@ body.theme-light #watched-modal .watched-item:hover, body.theme-light #watched-m
 body.theme-light #watched-modal .watched-date, body.theme-light #watched-modal .video-date { color: #64748b !important; }
 body.theme-light #watched-modal .watch-link, body.theme-light #watched-modal a { color: #2563eb !important; }
 body.theme-light #watched-modal .watch-link:hover, body.theme-light #watched-modal a:hover { color: #1d4ed8 !important; }
+
+body.theme-light .watched-category-title { color: #1e293b !important; border-bottom: 2px solid #e2e8f0 !important; }
+body.theme-light .watched-item { background-color: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+body.theme-light .watched-title-text { color: #334155 !important; }
+body.theme-light .watched-item-date { color: #64748b !important; }
+body.theme-light .watched-item-link { color: #2563eb !important; }
+body.theme-light .watched-item-link:hover { color: #1d4ed8 !important; }
     
 /* 主內容與側邊欄 */
 body.theme-light .content { background-color: #ffffff; }
@@ -594,6 +608,13 @@ body.theme-dark #watched-modal .watched-item:hover, body.theme-dark #watched-mod
 body.theme-dark #watched-modal .watched-date, body.theme-dark #watched-modal .video-date { color: #94a3b8 !important; }
 body.theme-dark #watched-modal .watch-link, body.theme-dark #watched-modal a { color: #60a5fa !important; }
 body.theme-dark #watched-modal .watch-link:hover, body.theme-dark #watched-modal a:hover { color: #93c5fd !important; }
+
+body.theme-dark .watched-category-title { color: #f1f5f9 !important; border-bottom: 2px solid rgba(255, 255, 255, 0.12) !important; }
+body.theme-dark .watched-item { background-color: rgb(36, 40, 45) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; }
+body.theme-dark .watched-title-text { color: #e2e8f0 !important; }
+body.theme-dark .watched-item-date { color: #94a3b8 !important; }
+body.theme-dark .watched-item-link { color: #60a5fa !important; }
+body.theme-dark .watched-item-link:hover { color: #93c5fd !important; }
     
 /* 主內容與側邊欄 */
 body.theme-dark .content { background-color: #141619; }
@@ -2236,16 +2257,18 @@ function renderWatchedModalList() {
 
         videos.forEach(v => {
             const isChecked = watchedIds.has(v.id) ? 'checked' : '';
+            const displayDate = Array.isArray(v.date) ? v.date.join(', ') : v.date;
+            
             html += `
                 <div class="watched-item">
                     <div class="watched-item-left">
                         <input type="checkbox" class="watched-checkbox" id="chk-${v.id}" value="${v.id}" ${isChecked} onchange="updateSelectedCount()">
                         <label for="chk-${v.id}" class="watched-item-title" title="${v.title}">
-                            ${v.title}
-                            <span class="watched-item-date">(${v.date})</span>
+                            <span class="watched-title-text">${v.title}</span>
+                            <span class="watched-item-date">(${displayDate})</span>
                         </label>
                     </div>
-                    <a href="${v.link}" target="_blank" class="watched-item-link">前往觀看 ↗</a>
+                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">前往觀看 ↗</a>
                 </div>
             `;
         });
