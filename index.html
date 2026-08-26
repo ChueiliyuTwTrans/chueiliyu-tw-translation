@@ -100,7 +100,29 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .about-body::-webkit-scrollbar { width: 6px; }
 .about-body::-webkit-scrollbar-thumb { background: #dcdad5; border-radius: 10px; }
 
-/* --- 批次勾選已觀看影片 --- */
+/* ===== 批次勾選已觀看影片 ===== */
+/* 勾選已觀看影片按鈕 */
+.floating-gb-btn {
+    width: auto !important;
+    height: auto !important;
+    padding: 10px 18px !important;
+    border-radius: 12px !important; 
+    font-size: 14px !important;     
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    box-shadow: 0 4px 14px rgba(168, 144, 128, 0.35) !important;
+    background: #a89080 !important;
+    color: #ffffff !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.floating-gb-btn:hover {
+    background: #967d6d !important;
+    transform: translateY(-2px);
+}
+
 /* 調整彈窗寬度適應作品清單 */
 .watched-modal-content {
     max-width: 650px !important;
@@ -119,8 +141,8 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     border: none !important;
-    background: #f8f5f4 !important;
-    color: #a89d99 !important;
+    background: #e8dfd8 !important;
+    color: #5c4f48 !important;
     display: inline-block !important;
 }
 
@@ -210,10 +232,9 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     align-items: center;
     gap: 12px;
     flex: 1;
-    min-width: 0; /* 預防文字溢出 */
+    min-width: 0; 
 }
 
-/* 自訂 Checkbox 莫蘭迪粉色系 */
 .watched-checkbox {
     width: 20px;
     height: 20px;
@@ -483,8 +504,10 @@ body.modal-open { overflow: hidden; }
    ========================================= */
 
 /* 1. 🌸 花俏模式 (Fancy) */
-body.theme-fancy .sidebar { background-image: url("images/content5.webp") !important; border-right: 1px solid rgba(255,255,255,0.4); font-weight: 600; }
-body.theme-fancy .content { background-image: linear-gradient(rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.5)), url("images/content6.webp") !important; }
+body.theme-fancy .sidebar { background-image: url("images/content5.webp") !important; background-size: cover !important;
+    background-position: center !important; border-right: 1px solid rgba(255,255,255,0.4); font-weight: 600; }
+body.theme-fancy .content { background-image: linear-gradient(rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.5)), url("images/content6.webp") !important;
+    background-size: cover !important; background-position: center !important;}
 body.theme-fancy .sidebar button { background: rgba(255,255,255,0.85); color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 body.theme-fancy .sidebar button:hover { background: #fff; transform: translateX(4px); }
 body.theme-fancy .sidebar button.active { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(4px); color: rgb(182, 132, 103) !important; box-shadow: 0 4px 12px rgba(182, 132, 103, 0.15); }
@@ -1645,17 +1668,23 @@ function getSortedData(data) {
 }
 
 function renderAllCards(data) {
-    // 0. 取得已觀看的影片 ID 集合 (來自 LocalStorage)
+    // 0. 取得已觀看的影片 ID 集合
     const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+
+    // 1. 未觀看過濾
+    const watchedFilteredData = data.filter(i => {
+        if (!showOnlyUnwatched) return true;
+        return !watchedIds.has(i.id);
+    });
     
-    // 1. 執行月份過濾
+    // 2. 執行月份過濾
     const monthFilteredData = data.filter(i => {
         if (currentMonth === 'all') return true;
         // 判斷日期是否匹配 
         return Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth;
     });
 
-    // 2. 取得各分類的容器
+    // 3. 取得各分類的容器
     const containers = {
         'live': document.getElementById('live-grid'),
         'program': document.getElementById('program-grid'),
@@ -1664,16 +1693,7 @@ function renderAllCards(data) {
         'stage': document.getElementById('stage-grid')
     };
 
-    // 3. 根據過濾後的資料進行各分類渲染
-    Object.keys(containers).forEach(cat => {
-        const grid = containers[cat];
-        if (grid) {
-            const catData = monthFilteredData.filter(i => i.category === cat);
-            grid.innerHTML = catData.map(createCardHTML).join('');
-        }
-    });
-
-    // 4. 根據最終過濾後的資料進行各分類渲染（含無資料提示）
+    // 4. 根據過濾後的資料進行各分類渲染
     Object.keys(containers).forEach(cat => {
         const grid = containers[cat];
         if (grid) {
@@ -1682,7 +1702,7 @@ function renderAllCards(data) {
             if (catData.length > 0) {
                 grid.innerHTML = catData.map(createCardHTML).join('');
             } else {
-                grid.innerHTML = `<div class="no-data-msg" style="padding: 20px; text-align: center; color: #a89080; font-size: 15px;">尚無未觀看的翻譯作品 🎉</div>`;
+                grid.innerHTML = `<div class="no-data-msg" style="padding: 20px; text-align: center; color: #a89080; font-size: 14px;">尚無未觀看的翻譯作品 🎉</div>`;
             }
         }
     });
@@ -1943,18 +1963,18 @@ function switchTab(tabId, btnElement) {
 
 function handleSortChange(sortType) {
     currentSortMode = sortType;
-    
-    if (sortType === 'popular') {
-        fetchReactionsAndSort();
-    } else {
-        applySortingAndRender();
-    }
 
     // 如果切換到其他排序，自動關閉「僅顯示未觀看」狀態
     if (sortType === 'unwatched') {
         showOnlyUnwatched = true;
     } else {
         showOnlyUnwatched = false;
+    }
+    
+    if (sortType === 'popular') {
+        fetchReactionsAndSort();
+    } else {
+        applySortingAndRender();
     }
 }
 
