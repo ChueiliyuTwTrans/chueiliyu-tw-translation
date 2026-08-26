@@ -110,6 +110,25 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     flex-direction: column;
 }
 
+/* 收回按鈕 */
+#watched-modal .close-modal-btn {
+    padding: 6px 16px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    background: #f8f5f4 !important;
+    color: #a89d99 !important;
+    display: inline-block !important;
+}
+
+#watched-modal .close-modal-btn:hover {
+    background: #f0ebe8 !important;
+    color: #8c7851 !important;
+}
+
 /* 快捷操作列 */
 .watched-quick-actions {
     display: flex;
@@ -131,7 +150,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
     border: none;
     color: #a89080;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     padding: 2px 6px;
     transition: color 0.2s;
@@ -464,8 +483,8 @@ body.modal-open { overflow: hidden; }
    ========================================= */
 
 /* 1. 🌸 花俏模式 (Fancy) */
-body.theme-fancy .sidebar { background-image: url("images/content5.webp"); border-right: 1px solid rgba(255,255,255,0.4); font-weight: 600; }
-body.theme-fancy .content { background-image: linear-gradient(rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.5)), url("images/content6.webp"); }
+body.theme-fancy .sidebar { background-image: url("images/content5.webp") !important; border-right: 1px solid rgba(255,255,255,0.4); font-weight: 600; }
+body.theme-fancy .content { background-image: linear-gradient(rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.5)), url("images/content6.webp") !important; }
 body.theme-fancy .sidebar button { background: rgba(255,255,255,0.85); color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 body.theme-fancy .sidebar button:hover { background: #fff; transform: translateX(4px); }
 body.theme-fancy .sidebar button.active { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(4px); color: rgb(182, 132, 103) !important; box-shadow: 0 4px 12px rgba(182, 132, 103, 0.15); }
@@ -821,6 +840,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
                 <div class="sort-item active" onclick="selectSort('updated_desc', '✨ 翻譯更新（新至舊）', this)">✨ 翻譯更新（新至舊）</div>
                 <div class="sort-item" onclick="selectSort('pub_desc', '📅 影片發布（新至舊）', this)">📅 影片發布（新至舊）</div>
                 <div class="sort-item" onclick="selectSort('pub_asc', '⏳ 影片發布（舊至新）', this)">⏳ 影片發布（舊至新）</div>
+                <div class="sort-item" onclick="selectSort('unwatched', '📋 僅顯示未觀看影片', this)">📋 僅顯示未觀看影片</div>
             </div>
         </div>
         <!-- 作品分類按鈕 -->
@@ -894,11 +914,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 </footer>
 
 <!-- 打開批次勾選視窗 -->
-<button class="floating-gb-btn" id="open-watched-modal" onclick="openWatchedModal()" title="勾選已觀看影片">✅</button>
-<!-- 過濾按鈕  -->
-<button class="unwatched-filter-btn" id="unwatched-filter-btn" onclick="toggleUnwatchedFilter()">
-    僅顯示未觀看影片
-</button>
+<button class="floating-gb-btn" id="open-watched-modal" onclick="openWatchedModal()" title="勾選已觀看影片">勾選已觀看影片</button>
 
 <!-- 批次勾選已觀看影片 Modal -->
 <div class="gb-modal" id="watched-modal" style="display: none;">
@@ -1933,6 +1949,13 @@ function handleSortChange(sortType) {
     } else {
         applySortingAndRender();
     }
+
+    // 如果切換到其他排序，自動關閉「僅顯示未觀看」狀態
+    if (sortType === 'unwatched') {
+        showOnlyUnwatched = true;
+    } else {
+        showOnlyUnwatched = false;
+    }
 }
 
 function fetchReactionsAndSort() {
@@ -2070,8 +2093,15 @@ function selectSort(sortType, labelText, element) {
     document.querySelectorAll('.sort-item').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
 
-    // 2. 關閉選單
-    document.getElementById("sort-menu").classList.remove("show");
+    // 2. 更新排序按鈕上顯示的文字後關閉選單
+    const sortBtn = document.querySelector('.sort-btn span') || document.querySelector('.sort-btn');
+    if (sortBtn) {
+        // 如果 sort-btn 內有箭頭等圖示，建議只替換文字部分
+        sortBtn.childNodes[0].nodeValue = labelText + " ";
+    }
+
+    const menu = document.getElementById("sort-menu");
+    if (menu) menu.classList.remove("show");
 
     // 3. 呼叫排序與渲染邏輯
     handleSortChange(sortType);
