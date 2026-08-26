@@ -100,34 +100,168 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .about-body::-webkit-scrollbar { width: 6px; }
 .about-body::-webkit-scrollbar-thumb { background: #dcdad5; border-radius: 10px; }
 
-/* --- 留言牆 --- */
-.gb-modal-content { position: relative; padding: 20px; background: #fff; border-radius: 15px; max-width: 500px; width: 90%; }
-
-/* Header */
-.gb-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-.gb-modal-title { font-weight: bold; color: #a89080; font-size: 1.2rem; }
-.header-controls { display: flex; gap: 8px; }
-
-/* 右上角按鈕組 */
-.font-toggle-btn, .close-modal-btn { padding: 8px 16px !important; font-size: 16px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: none; }
-
-/* 1. 字體大小按鈕 */
-.font-toggle-btn { background: #c29d91 !important; color: #ffffff !important; }
-.font-toggle-btn:hover { background: #c29d91 !important; }
-
-/* 2. 收回按鈕 */
-.close-modal-btn { background: #f8f5f4; color: #a89d99; }
-.close-modal-btn:hover { background: #f0ebe8; color: #8c7851; }
-
-/* 3. 再次隨機抽選按鈕 */
-.random-btn {
-    padding: 12px 32px; font-size: 16px; font-weight: bold; border: none; border-radius: 999px; cursor: pointer; background: #a89080; 
-    color: white; box-shadow: 0 4px 15px rgba(168, 144, 128, 0.3); transition: all 0.3s ease;
+/* --- 批次勾選已觀看影片 --- */
+/* 調整彈窗寬度適應作品清單 */
+.watched-modal-content {
+    max-width: 650px !important;
+    width: 90%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
 }
-.random-btn:hover { background: #967d6d; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(168, 144, 128, 0.4); }
 
-/* 前往全部留言的連結 */
-.view-all-link { display: block; text-align: center; margin-top: 18px; font-size: 16px; color: #a89080; text-decoration: underline; opacity: 0.8; }
+/* 快捷操作列 */
+.watched-quick-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px 12px 4px;
+    border-bottom: 1px solid #f0ebe8;
+    font-size: 14px;
+    color: #8c7851;
+}
+
+.watched-count-info b {
+    color: #c29d91;
+    font-size: 16px;
+}
+
+.action-link-btn {
+    background: none;
+    border: none;
+    color: #a89080;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 6px;
+    transition: color 0.2s;
+}
+
+.action-link-btn:hover {
+    color: #8c7851;
+    text-decoration: underline;
+}
+
+.watched-quick-actions .divider {
+    color: #e0d8d3;
+}
+
+/* 列表捲動區域 */
+.watched-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 4px;
+    margin-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 分類標題樣式 */
+.watched-category-group {
+    margin-bottom: 20px;
+}
+
+.watched-category-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #a89080;
+    background: #fdfaf8;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border-left: 4px solid #c29d91;
+    margin-bottom: 10px;
+}
+
+/* 作品單項列 */
+.watched-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: background 0.2s;
+    gap: 12px;
+}
+
+.watched-item:hover {
+    background: #fbf8f6;
+}
+
+.watched-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0; /* 預防文字溢出 */
+}
+
+/* 自訂 Checkbox 莫蘭迪粉色系 */
+.watched-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #c29d91;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.watched-item-title {
+    font-size: 14.5px;
+    color: #4a4a4a;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.watched-item-date {
+    font-size: 12px;
+    color: #b5a8a0;
+    margin-left: 6px;
+}
+
+/* 連結按鈕 */
+.watched-item-link {
+    font-size: 13px;
+    color: #c29d91;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: #f8f3f1;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.watched-item-link:hover {
+    background: #c29d91;
+    color: #ffffff;
+}
+
+/* 僅顯示未觀看影片按鈕 */
+.unwatched-filter-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid #e5dcd8;
+    background: #ffffff;
+    color: #8c7851;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.unwatched-filter-btn:hover {
+    background: #fdfaf8;
+    border-color: #c29d91;
+}
+
+.unwatched-filter-btn.active {
+    background: #c29d91;
+    color: #ffffff;
+    border-color: #c29d91;
+    box-shadow: 0 4px 12px rgba(194, 157, 145, 0.3);
+}
     
 /* ===== Search ===== */
 .search-box { position: absolute; top: 14px; left: 16px; z-index: 3; }
@@ -759,35 +893,45 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     </div>
 </footer>
 
-<button class="floating-gb-btn" id="open-gb" title="查看隨機留言">✉️</button>
+<!-- 打開批次勾選視窗 -->
+<button class="floating-gb-btn" id="open-watched-modal" onclick="openWatchedModal()" title="勾選已觀看影片">✅</button>
+<!-- 過濾按鈕  -->
+<button class="unwatched-filter-btn" id="unwatched-filter-btn" onclick="toggleUnwatchedFilter()">
+    僅顯示未觀看影片
+</button>
 
-<div class="gb-modal" id="guestbook-modal">
-    <div class="gb-modal-content">
+<!-- 批次勾選已觀看影片 Modal -->
+<div class="gb-modal" id="watched-modal" style="display: none;">
+    <div class="gb-modal-content watched-modal-content">
         <!-- 頂部區塊 -->
         <div class="gb-modal-header">
-            <!-- 左上角：標題 -->
-            <div class="gb-modal-title">隨機抽選留言</div>
-            
-            <!-- 右上角：控制按鈕組 -->
+            <div class="gb-modal-title">紀錄已觀看的翻譯作品</div>
             <div class="header-controls">
-                <button class="font-toggle-btn" onclick="cycleFontSize()">字體大小</button>
-                <button class="close-modal-btn" id="close-gb" onclick="closeGuestbook()">收回</button>
+                <button class="close-modal-btn" onclick="closeWatchedModal()">收回</button>
             </div>
         </div>
         
-        <!-- 中間：留言內容區 -->
-        <div id="random-container" class="gb-grid-layout">
-            <p>載入中...</p>
+        <!-- 快捷操作列（全選 / 全部取消） -->
+        <div class="watched-quick-actions">
+            <span class="watched-count-info">已勾選 <b id="selected-count">0</b> / <span id="total-count">0</span> 部</span>
+            <div>
+                <button class="action-link-btn" onclick="toggleSelectAll(true)">全選</button>
+                <span class="divider">|</span>
+                <button class="action-link-btn" onclick="toggleSelectAll(false)">取消全選</button>
+            </div>
         </div>
 
-        <!-- 下方：動作按鈕區 -->
+        <!-- 中間：分類影視作品清單區 -->
+        <div id="watched-list-container" class="watched-list-container">
+            <!-- 由 JS 動態生成分類與清單 -->
+        </div>
+
+        <!-- 下方：保存按鈕 -->
         <div class="modal-action-bar">
-            <button class="random-btn" id="refresh-random">再次隨機抽選</button>
+            <button class="random-btn" onclick="saveWatchedVideos()">保存紀錄</button>
         </div>
-
-        <a href="Guestbook" class="view-all-link">點擊前往觀看全部留言</a>
     </div>
-</div>  
+</div>
     
 <button id="backToTop" title="回到頂端">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1485,6 +1629,9 @@ function getSortedData(data) {
 }
 
 function renderAllCards(data) {
+    // 0. 取得已觀看的影片 ID 集合 (來自 LocalStorage)
+    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+    
     // 1. 執行月份過濾
     const monthFilteredData = data.filter(i => {
         if (currentMonth === 'all') return true;
@@ -1507,6 +1654,20 @@ function renderAllCards(data) {
         if (grid) {
             const catData = monthFilteredData.filter(i => i.category === cat);
             grid.innerHTML = catData.map(createCardHTML).join('');
+        }
+    });
+
+    // 4. 根據最終過濾後的資料進行各分類渲染（含無資料提示）
+    Object.keys(containers).forEach(cat => {
+        const grid = containers[cat];
+        if (grid) {
+            const catData = finalFilteredData.filter(i => i.category === cat);
+            
+            if (catData.length > 0) {
+                grid.innerHTML = catData.map(createCardHTML).join('');
+            } else {
+                grid.innerHTML = `<div class="no-data-msg" style="padding: 20px; text-align: center; color: #a89080; font-size: 15px;">尚無未觀看的翻譯作品 🎉</div>`;
+            }
         }
     });
 }
@@ -2036,30 +2197,158 @@ window.addEventListener('click', function(event) {
         toggleMonthModal(false);
     }
 });
+
+/* =========================================
+   ⭐ 9. 批次勾選已觀看影片&過濾顯示未觀看影片功能
+   ========================================= */
+// --- 1. 全域變數定義 ---
+let showOnlyUnwatched = false; // 是否開啟「僅顯示未觀看」過濾
+const CATEGORY_NAMES = {
+    'live': '🔴 直播 (LIVE)',
+    'program': '📺 節目 (Program)',
+    'radio': '📻 電台 (Radio)',
+    'media': '🎬 媒體影音 (Media)',
+    'stage': '🎤 舞台 (Stage)'
+};
+
+// --- 2. 開啟與關閉 Modal ---
+function openWatchedModal() {
+    const modal = document.getElementById('watched-modal');
+    if (modal) {
+        renderWatchedModalList();
+        modal.style.display = 'flex';
+    }
+}
+
+function closeWatchedModal() {
+    const modal = document.getElementById('watched-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// --- 3. 渲染 Modal 內的影視作品分類與清單 ---
+function renderWatchedModalList() {
+    const container = document.getElementById('watched-list-container');
+    if (!container || typeof videoData === 'undefined') return;
+
+    // 取得已存放在 LocalStorage 的已觀看 ID 陣列
+    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+
+    // 依類別整理資料
+    const categorized = {};
+    videoData.forEach(video => {
+        const cat = video.category || 'other';
+        if (!categorized[cat]) categorized[cat] = [];
+        categorized[cat].push(video);
+    });
+
+    let html = '';
+    let totalCount = videoData.length;
+
+    // 依類別渲染
+    Object.keys(categorized).forEach(catKey => {
+        const catName = CATEGORY_NAMES[catKey] || catKey.toUpperCase();
+        const videos = categorized[catKey];
+
+        html += `
+            <div class="watched-category-group">
+                <div class="watched-category-title">${catName}</div>
+        `;
+
+        videos.forEach(v => {
+            const isChecked = watchedIds.has(v.id) ? 'checked' : '';
+            html += `
+                <div class="watched-item">
+                    <div class="watched-item-left">
+                        <input type="checkbox" class="watched-checkbox" id="chk-${v.id}" value="${v.id}" ${isChecked} onchange="updateSelectedCount()">
+                        <label for="chk-${v.id}" class="watched-item-title" title="${v.title}">
+                            ${v.title}
+                            <span class="watched-item-date">(${v.date})</span>
+                        </label>
+                    </div>
+                    <a href="${v.link}" target="_blank" class="watched-item-link">前往觀看 ↗</a>
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    
+    // 更新計數與總數
+    document.getElementById('total-count').innerText = totalCount;
+    updateSelectedCount();
+}
+
+// 動態更新當前勾選數量
+function updateSelectedCount() {
+    const checkedBoxes = document.querySelectorAll('.watched-checkbox:checked');
+    const countEl = document.getElementById('selected-count');
+    if (countEl) countEl.innerText = checkedBoxes.length;
+}
+
+// 全選與取消全選
+function toggleSelectAll(selectAll) {
+    const checkboxes = document.querySelectorAll('.watched-checkbox');
+    checkboxes.forEach(chk => {
+        chk.checked = selectAll;
+    });
+    updateSelectedCount();
+}
+
+// --- 4. 保存勾選紀錄至 LocalStorage ---
+function saveWatchedVideos() {
+    const checkedBoxes = document.querySelectorAll('.watched-checkbox:checked');
+    const watchedIds = Array.from(checkedBoxes).map(chk => chk.value);
+
+    // 儲存至 LocalStorage
+    localStorage.setItem('watched_videos', JSON.stringify(watchedIds));
+
+    // 關閉視窗
+    closeWatchedModal();
+
+    // 重新渲染主頁面卡片
+    if (typeof applySortingAndRender === 'function') {
+        applySortingAndRender();
+    } else if (typeof renderAllCards === 'function') {
+        renderAllCards(videoData);
+    }
+
+    alert('已成功保存您的觀看紀錄！');
+}
+
+// --- 5. 過濾按鈕切換邏輯 ---
+function toggleUnwatchedFilter() {
+    showOnlyUnwatched = !showOnlyUnwatched;
+    const btn = document.getElementById('unwatched-filter-btn');
+
+    if (btn) {
+        if (showOnlyUnwatched) {
+            btn.classList.add('active');
+            btn.innerHTML = '正在顯示：未觀看影片';
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '僅顯示未觀看影片';
+        }
+    }
+
+    // 重新渲染卡片
+    if (typeof applySortingAndRender === 'function') {
+        applySortingAndRender();
+    }
+}
+
+// --- 6. 整合進原有的卡片渲染邏輯 ---
+function getFilteredVideoData(data) {
+    if (!showOnlyUnwatched) return data;
+
+    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+    return data.filter(video => !watchedIds.has(video.id));
+}
 </script>
 <script type="module" src="/chueiliyu-tw-translation/js/firebase-init.js"></script>
-<script type="module">
-  // 引用留言板功能（請確認路徑是否正確）
-  import { initGuestbook, toggleModal } from "/chueiliyu-tw-translation/js/guestbook.js";
-
-  // 1. 初始化隨機留言邏輯
-  initGuestbook('random');
-
-  // 2. 綁定彈窗控制事件
-  const openBtn = document.getElementById('open-gb');
-  const closeBtn = document.getElementById('close-gb');
-  const modal = document.getElementById('guestbook-modal');
-
-  if (openBtn) openBtn.onclick = () => toggleModal(true);
-  if (closeBtn) closeBtn.onclick = () => toggleModal(false);
-
-  // 點擊彈窗外部背景可關閉
-  if (modal) {
-    modal.onclick = (e) => {
-      if (e.target.id === 'guestbook-modal') toggleModal(false);
-    };
-  }
-</script>
-
+    
 </body>
 </html>
