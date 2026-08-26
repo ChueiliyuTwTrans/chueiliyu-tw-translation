@@ -468,12 +468,7 @@ body.theme-light .sort-item:hover,
 body.theme-light .sort-item.active { background: rgb(68, 75, 84); color: #ffffff; }
 
 /* 影片清單 & 批次觀看 */
-body.theme-light #watched-modal .watched-modal-content {
-    background-color: #ffffff !important;
-    color: #2b2b2b !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
-}
+body.theme-light #watched-modal .watched-modal-content { background-color: #ffffff !important; color: #2b2b2b !important; border: 1px solid #e2e8f0 !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important; }
 body.theme-light .floating-gb-btn,
 body.theme-light #open-watched-modal {
     background-color: rgb(68, 75, 84) !important;
@@ -835,10 +830,10 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
     .sort-dropdown-container { width: auto !important; flex-shrink: 0; margin-bottom: 0; }
     .sort-btn { width: auto !important; padding: 6px 12px; font-size: 13px; }
     .sort-menu {
-        position: fixed !important; width: 170px !important; background-color: #ffffff; z-index: 999999 !important;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); border-radius: 12px;
+        position: fixed !important; width: 170px !important; max-width: calc(100vw - 20px) !important; background-color: #ffffff; z-index: 2147483647 !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); border-radius: 12px; overflow: hidden;
     }
-    .sort-menu.show { display: block; }
+    .sort-menu.show { display: block !important; }
     .sort-item { white-space: nowrap; padding: 12px 16px; }
     
     .content { padding: 20px; }
@@ -2182,18 +2177,108 @@ function toggleSortMenu(event) {
     const menu = document.getElementById("sort-menu");
     const btn = event.currentTarget;
 
-    // 手機版動態計算按鈕位置（解決 fixed 定位偏差）
-    if (window.innerWidth <= 768) {
-        const rect = btn.getBoundingClientRect();
-        menu.style.top = `${rect.bottom + 6}px`;
-        menu.style.left = `${rect.left}px`;
-    } else {
-        menu.style.top = '';
-        menu.style.left = '';
+    if (!menu || !sortBtn) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+
+        // 如果 menu 還在原本的 sidebar 裡
+        if (menu.parentElement !== document.body) {
+            document.body.appendChild(menu);
+        }
+
+        const rect = sortBtn.getBoundingClientRect();
+
+        // 先顯示，才能取得實際高度
+        menu.classList.add('show');
+
+        /* 排序選單預設出現在按鈕下方 */
+        let top = rect.bottom + 6;
+        let left = rect.left;
+
+        /* 避免選單超出右側螢幕 */
+        const menuWidth = 170;
+        const screenWidth = window.innerWidth;
+
+        if (left + menuWidth > screenWidth - 10) {
+            left = screenWidth - menuWidth - 10;
+        }
+
+        if (left < 10) {
+            left = 10;
+        }
+
+        /* 避免選單超出螢幕下方 */
+        const menuHeight = menu.offsetHeight;
+        const screenHeight = window.innerHeight;
+
+        if (top + menuHeight > screenHeight - 10) {
+
+            // 如果下面放不下，就改成出現在按鈕上方
+            top = rect.top - menuHeight - 6;
+
+        }
+
+        if (top < 10) {
+            top = 10;
+        }
+
+        menu.style.position = 'fixed';
+        menu.style.top = `${top}px`;
+        menu.style.left = `${left}px`;
+        menu.style.width = `${menuWidth}px`;
+        menu.style.zIndex = '2147483647';
+
+        return;
     }
 
     menu.classList.toggle("show");
 }
+
+// 視窗旋轉/滑動後重新定位
+window.addEventListener('resize', function () {
+
+    const menu = document.getElementById('sort-menu');
+    const sortBtn = document.querySelector('.sort-btn');
+
+    if (!menu || !sortBtn) return;
+
+    if (
+        window.innerWidth <= 768 &&
+        menu.classList.contains('show') &&
+        menu.parentElement === document.body
+    ) {
+
+        const rect = sortBtn.getBoundingClientRect();
+
+        let top = rect.bottom + 6;
+        let left = rect.left;
+
+        const menuWidth = 170;
+
+        if (left + menuWidth > window.innerWidth - 10) {
+            left = window.innerWidth - menuWidth - 10;
+        }
+
+        if (left < 10) {
+            left = 10;
+        }
+
+        const menuHeight = menu.offsetHeight;
+
+        if (top + menuHeight > window.innerHeight - 10) {
+            top = rect.top - menuHeight - 6;
+        }
+
+        if (top < 10) {
+            top = 10;
+        }
+
+        menu.style.top = `${top}px`;
+        menu.style.left = `${left}px`;
+    }
+});
 
 // 點擊選項後的處理
 function selectSort(sortType, labelText, element) {
@@ -2407,7 +2492,7 @@ function renderWatchedModalList() {
                             <span class="watched-item-date">(${displayDate})</span>
                         </label>
                     </div>
-                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">前往觀看 ↗</a>
+                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結 ↗</a>
                 </div>
             `;
         });
