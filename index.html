@@ -157,7 +157,7 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 
 /* 10. 前往觀看連結 */
 .watched-item-link {
-    font-size: 13px; color: #c29d91; text-decoration: none; font-weight: bold; padding: 4px 10px; border-radius: 6px;
+    font-size: 14px; color: #c29d91; text-decoration: none; font-weight: bold; padding: 4px 10px; border-radius: 6px;
     background: #f8f3f1; white-space: nowrap; flex-shrink: 0; transition: all 0.2s;
 }
 .watched-item-link:hover { background: #c29d91; color: #ffffff; }
@@ -169,6 +169,17 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 }
 .unwatched-filter-btn:hover { background: #fdfaf8; border-color: #c29d91; }
 .unwatched-filter-btn.active { background: #c29d91; color: #ffffff; border-color: #c29d91; box-shadow: 0 4px 12px rgba(194, 157, 145, 0.3); }
+
+/* 12. 保存紀錄 */
+.modal-action-bar { display: flex !important; justify-content: center !important; padding-top: 14px !important; border-top: 1px solid rgba(170, 175, 195, 0.2) !important; margin-top: 8px !important; }
+.modal-action-bar .random-btn {
+    width: 100% !important; max-width: 240px !important; height: 42px !important; background: #a89080 !important; color: #ffffff !important;
+    border: none !important; border-radius: 12px !important; font-size: 15px !important; font-weight: 600 !important; cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(120, 136, 189, 0.35) !important; transition: all 0.2s ease !important; display: inline-flex !important;
+    align-items: center !important; justify-content: center !important;
+}
+.modal-action-bar .random-btn:hover { background: #967d6d !important; transform: translateY(-2px) !important; box-shadow: 0 6px 16px rgba(120, 136, 189, 0.45) !important; }
+.modal-action-bar .random-btn:active { transform: translateY(0) !important; }
     
 /* ===== Search ===== */
 .search-box { position: absolute; top: 14px; left: 16px; z-index: 3; }
@@ -2368,7 +2379,7 @@ function renderWatchedModalList() {
                             <span class="watched-item-date">(${displayDate})</span>
                         </label>
                     </div>
-                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結 ↗</a>
+                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結</a>
                 </div>
             `;
         });
