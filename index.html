@@ -2630,79 +2630,74 @@ function renderWatchedModalList(items) {
 
             } else {
 
-                // 單集一定使用 dbId
-                const videoId = item.dbId;
+                const videoIds = getVideoIds(item);
+    const videoId = videoIds[0] || '';
 
-                const singleDate =
-                    Array.isArray(item.date)
-                        ? item.date[0]
-                        : item.date;
+    const singleDate =
+        Array.isArray(item.date)
+            ? item.date[0]
+            : item.date;
 
+    const singleLink =
+        Array.isArray(item.link)
+            ? item.link[0]
+            : item.link;
 
-                const singleLink =
-                    Array.isArray(item.link)
-                        ? item.link[0]
-                        : item.link;
+    const isChecked =
+        videoId &&
+        watchedSet.has(videoId)
+            ? 'checked'
+            : '';
 
+    categoryGroupHtml += `
+        <div class="watched-item">
 
-                const isChecked =
-                    videoId &&
-                    watchedSet.has(videoId)
-                        ? 'checked'
-                        : '';
+            <div class="watched-item-left">
 
+                <input
+                    type="checkbox"
+                    class="watched-checkbox single-checkbox"
+                    id="chk-${videoId}"
+                    value="${videoId}"
+                    ${isChecked}
+                    onchange="updateSelectedCount()"
+                >
 
-                categoryGroupHtml += `
-                    <div class="watched-item">
+                <label
+                    for="chk-${videoId}"
+                    class="watched-item-title"
+                >
 
-                        <div class="watched-item-left">
+                    <span class="watched-title-text">
+                        ${item.title}
+                    </span>
 
-                            <input
-                                type="checkbox"
-                                class="watched-checkbox single-checkbox"
-                                id="chk-${videoId}"
-                                value="${videoId || ''}"
-                                ${isChecked}
-                                onchange="updateSelectedCount()"
-                            >
+                    <span class="watched-item-date">
+                        (${singleDate})
+                    </span>
 
-                            <label
-                                for="chk-${videoId}"
-                                class="watched-item-title"
-                            >
+                </label>
 
-                                <span class="watched-title-text">
-                                    ${item.title}
-                                </span>
+            </div>
 
-                                <span class="watched-item-date">
-                                    (${singleDate})
-                                </span>
-
-                            </label>
-
-                        </div>
-
-
-                        ${
-                            singleLink
-                                ? `
-                                    <a
-                                        href="${singleLink}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="watched-item-link"
-                                    >
-                                        連結
-                                    </a>
-                                  `
-                                : ''
-                        }
-
-                    </div>
-                `;
+            ${
+                singleLink
+                    ? `
+                        <a
+                            href="${singleLink}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="watched-item-link"
+                        >
+                            連結
+                        </a>
+                      `
+                    : ''
             }
 
+        </div>
+    `;
+}
         });
 
 
