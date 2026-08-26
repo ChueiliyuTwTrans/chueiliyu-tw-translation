@@ -2313,6 +2313,7 @@ window.addEventListener('click', function(event) {
    ========================================= */
 // --- 1. 全域變數定義 ---
 let showOnlyUnwatched = false; // 是否開啟「僅顯示未觀看」過濾
+    
 const CATEGORY_NAMES = {
     'live': '🔴 直播 (LIVE)',
     'program': '📺 節目 (Program)',
@@ -2321,11 +2322,24 @@ const CATEGORY_NAMES = {
     'stage': '🎤 舞台 (Stage)'
 };
 
+// 系列影片的子集標題對照字典
+const SERIES_EPISODE_TITLES = {
+    // 炸雞王座系列 (id: 'p5')
+    'p5': ['炸雞王座 EP.1', '炸雞王座 EP.2', '炸雞王座 EP.3', '炸雞王座 EP.4未公開'],
+    'p6': ['鄰家K明星 EP.23', '鄰家K明星 EP.24'],
+    'r4': ['IDOL RADIO EP.173', 'IDOL RADIO EP.173 BEHIND', 'IDOL RADIO EP.182', 'IDOL RADIO EP.199'],
+    'r5': ['偶像韓語 EP.726', '偶像韓語 EP.756'],
+    'r6': ['20260302 親密朋友廣播部 (嘉賓：李長埈)']
+};
+
 // --- 2. 開啟與關閉 Modal ---
 function openWatchedModal() {
     const modal = document.getElementById('watched-modal');
     if (modal) {
-        renderWatchedModalList();
+        // 傳入全域的 videoData 資料進行渲染
+        if (typeof videoData !== 'undefined') {
+            renderWatchedModalList(videoData);
+        }
         modal.style.display = 'flex';
     }
 }
@@ -2337,233 +2351,136 @@ function closeWatchedModal() {
     }
 }
 
-// --- 3. 渲染 Modal 內的影視作品分類與清單 ---
-function renderWatchedModalList() {
+// --- 3. 輔助函式：取得本地已儲存紀錄 ---
+function getWatchedVideoIds() {
+    const saved = localStorage.getItem('watched_videos');
+    return saved ? JSON.parse(saved) : [];
+}
+
+// --- 4. 渲染 Modal 內的影視作品分類與清單 ---
+function renderWatchedModalList(items) {
     const container = document.getElementById('watched-list-container');
-    if (!container || typeof videoData === 'undefined') return;
+    if (!container || !items) return;
+
+    container.innerHTML = '';
 
     // 取得已存放在 LocalStorage 的已觀看 ID 陣列
-    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
+    const watchedSet = new Set(getWatchedVideoIds());
 
     // 依類別整理資料
     const categorized = {};
-    videoData.forEach(video => {
+    let totalCount = 0;
+
+    items.forEach(video => {
         const cat = video.category || 'other';
         if (!categorized[cat]) categorized[cat] = [];
         categorized[cat].push(video);
-    });
 
-    let html = '';
-    let totalCount = videoData.length;
+        // 計算實際影片總數量（包含系列裡面的子影片）
+        if (Array.isArray(video.dbIds) && video.dbIds.length > 1) {
+            totalCount += video.dbIds.length;
+        } else {
+            totalCount += 1;
+        }
+    });
 
     // 依類別渲染
     Object.keys(categorized).forEach(catKey => {
         const catName = CATEGORY_NAMES[catKey] || catKey.toUpperCase();
         const videos = categorized[catKey];
 
-        html += `
+        let categoryGroupHtml = `
             <div class="watched-category-group">
                 <div class="watched-category-title">${catName}</div>
         `;
 
-        videos.forEach(v => {
-            const isChecked = watchedIds.has(v.id) ? 'checked' : '';
-            const displayDate = Array.isArray(v.date) ? v.date.join(', ') : v.date;
-            
-            html += `
-                <div class="watched-item">
-                    <div class="watched-item-left">
-                        <input type="checkbox" class="watched-checkbox" id="chk-${v.id}" value="${v.id}" ${isChecked} onchange="updateSelectedCount()">
-                        <label for="chk-${v.id}" class="watched-item-title" title="${v.title}">
-                            <span class="watched-title-text">${v.title}</span>
-                            <span class="watched-item-date">(${displayDate})</span>
-                        </label>
-                    </div>
-                    <a href="${v.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結</a>
-                </div>
-            `;
-        });
+        videos.forEach(item => {
+            const isSeries = Array.isArray(item.dbIds) && item.dbIds.length > 1;
 
-        html += `</div>`;
-    });
+            if (isSeries) {
+                // ================= 情況 A：多集系列作品 =================
+                const allSubWatched = item.dbIds.every(id => watchedSet.has(id));
 
-    container.innerHTML = html;
-    
-    // 更新計數與總數
-    document.getElementById('total-count').innerText = totalCount;
-    updateSelectedCount();
-}
+                let subItemsHtml = '';
+                item.dbIds.forEach((subId, index) => {
+                    const subDate = Array.isArray(item.date) ? item.date[index] : item.date;
+                    const customTitles = SERIES_EPISODE_TITLES[item.id] || [];
+                    const epTitle = customTitles[index] || `第 ${index + 1} 集`;
+                    const isSubChecked = watchedSet.has(subId) ? 'checked' : '';
 
-// 動態更新當前勾選數量
-function updateSelectedCount() {
-    const checkedBoxes = document.querySelectorAll('.watched-checkbox:checked');
-    const countEl = document.getElementById('selected-count');
-    if (countEl) countEl.innerText = checkedBoxes.length;
-}
-
-// 全選與取消全選
-function toggleSelectAll(selectAll) {
-    const checkboxes = document.querySelectorAll('.watched-checkbox');
-    checkboxes.forEach(chk => {
-        chk.checked = selectAll;
-    });
-    updateSelectedCount();
-}
-
-// --- 4. 保存勾選紀錄至 LocalStorage ---
-function saveWatchedVideos() {
-    const checkedBoxes = document.querySelectorAll('.watched-checkbox:checked');
-    const watchedIds = Array.from(checkedBoxes).map(chk => chk.value);
-
-    // 儲存至 LocalStorage
-    localStorage.setItem('watched_videos', JSON.stringify(watchedIds));
-
-    // 關閉視窗
-    closeWatchedModal();
-
-    // 重新渲染主頁面卡片
-    if (typeof videoData !== 'undefined') {
-        renderAllCards(videoData);
-    }
-
-    alert('已成功保存您的觀看紀錄！');
-}
-
-// --- 5. 過濾按鈕切換邏輯 ---
-function toggleUnwatchedFilter() {
-    showOnlyUnwatched = !showOnlyUnwatched;
-    const btn = document.getElementById('unwatched-filter-btn');
-
-    if (btn) {
-        if (showOnlyUnwatched) {
-            btn.classList.add('active');
-            btn.innerHTML = '正在顯示：未觀看影片';
-        } else {
-            btn.classList.remove('active');
-            btn.innerHTML = '僅顯示未觀看影片';
-        }
-    }
-
-    // 重新渲染卡片
-    if (typeof applySortingAndRender === 'function') {
-        applySortingAndRender();
-    }
-}
-
-// --- 6. 整合進原有的卡片渲染邏輯 ---
-function getFilteredVideoData(data) {
-    if (!showOnlyUnwatched) return data;
-
-    const watchedIds = new Set(JSON.parse(localStorage.getItem('watched_videos') || '[]'));
-    return data.filter(video => !watchedIds.has(video.id));
-}
-
-// --- 7. 系列影片的子集標題對照字典 ---
-const SERIES_EPISODE_TITLES = {
-    // 炸雞王座系列 (id: 'p5')
-    'p5': ['炸雞王座 EP.1', '炸雞王座 EP.2', '炸雞王座 EP.3', '炸雞王座 EP.4未公開'],
-    'p6': ['鄰家K明星 EP.23', '鄰家K明星 EP.24'],
-    'r4': ['IDOL RADIO EP.173', 'IDOL RADIO EP.173 BEHIND', 'IDOL RADIO EP.182', 'IDOL RADIO EP.199'],
-    'r5': ['偶像韓語 EP.726', '偶像韓語 EP.756'],
-    'r6': ['20260302 親密朋友廣播部 (嘉賓：李長埈)']
-};
-
-// --- 8. 渲染 Modal 內的作品清單 ---
-function renderWatchedModalList(items) {
-    const container = document.getElementById('watched-list-container');
-    container.innerHTML = '';
-
-    // 取得已儲存的觀看紀錄影片 ID 清單
-    const watchedSet = new Set(getWatchedVideoIds()); 
-
-    items.forEach(item => {
-        // 判斷是否為多集系列作品（dbIds 為陣列且長度 > 1）
-        const isSeries = Array.isArray(item.dbIds) && item.dbIds.length > 1;
-
-        if (isSeries) {
-            // ================= 情況 A：多集系列作品 =================
-            const allSubWatched = item.dbIds.every(id => watchedSet.has(id));
-
-            let subItemsHtml = '';
-            
-            item.dbIds.forEach((subId, index) => {
-                // 1. 取得日期
-                const subDate = Array.isArray(item.date) ? item.date[index] : item.date;
-                
-                // 2. 從字典尋找自訂標題，若沒有設定則使用預設標題
-                const customTitles = SERIES_EPISODE_TITLES[item.id] || [];
-                const epTitle = customTitles[index] || `第 ${index + 1} 集`;
-                
-                // 3. 檢查是否已勾選
-                const isSubChecked = watchedSet.has(subId) ? 'checked' : '';
-
-                subItemsHtml += `
-                    <div class="watched-sub-item">
-                        <label class="watched-item-left">
-                            <input type="checkbox" 
-                                   class="watched-checkbox sub-checkbox" 
-                                   data-parent-id="${item.id}" 
-                                   value="${subId}" 
-                                   ${isSubChecked}
-                                   onchange="onSubCheckboxChange('${item.id}')">
-                            <span class="watched-item-title">${epTitle}</span>
-                            <span class="watched-item-date">${subDate}</span>
-                        </label>
-                    </div>
-                `;
-            });
-
-            const seriesHtml = `
-                <div class="watched-series-group" id="series-group-${item.id}">
-                    <!-- 系列主標題列 -->
-                    <div class="watched-item series-header">
-                        <div class="watched-item-left">
-                            <button type="button" class="toggle-series-btn" onclick="toggleSeries('${item.id}')">+</button>
-                            
-                            <input type="checkbox" 
-                                   class="watched-checkbox parent-checkbox" 
-                                   id="parent-check-${item.id}"
-                                   ${allSubWatched ? 'checked' : ''}
-                                   onchange="onParentCheckboxChange(this, '${item.id}')">
-                            
-                            <label for="parent-check-${item.id}" class="watched-item-title">
-                                ${item.title} <span class="series-count">(${item.dbIds.length}部)</span>
+                    subItemsHtml += `
+                        <div class="watched-sub-item">
+                            <label class="watched-item-left">
+                                <input type="checkbox" 
+                                       class="watched-checkbox sub-checkbox" 
+                                       data-parent-id="${item.id}" 
+                                       value="${subId}" 
+                                       ${isSubChecked}
+                                       onchange="onSubCheckboxChange('${item.id}')">
+                                <span class="watched-item-title">${epTitle}</span>
+                                <span class="watched-item-date">(${subDate})</span>
                             </label>
                         </div>
+                    `;
+                });
+
+                categoryGroupHtml += `
+                    <div class="watched-series-group" id="series-group-${item.id}">
+                        <div class="watched-item series-header">
+                            <div class="watched-item-left">
+                                <button type="button" class="toggle-series-btn" onclick="toggleSeries('${item.id}')">+</button>
+                                <input type="checkbox" 
+                                       class="watched-checkbox parent-checkbox" 
+                                       id="parent-check-${item.id}"
+                                       ${allSubWatched ? 'checked' : ''}
+                                       onchange="onParentCheckboxChange(this, '${item.id}')">
+                                <label for="parent-check-${item.id}" class="watched-item-title">
+                                    ${item.title} <span class="series-count">(${item.dbIds.length}部)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="watched-sub-list" id="sub-list-${item.id}" style="display: none;">
+                            ${subItemsHtml}
+                        </div>
                     </div>
+                `;
 
-                    <!-- 下拉式子影片清單 -->
-                    <div class="watched-sub-list" id="sub-list-${item.id}" style="display: none;">
-                        ${subItemsHtml}
+            } else {
+                // ================= 情況 B：單集作品 =================
+                const videoId = Array.isArray(item.dbIds) ? item.dbIds[0] : (item.dbIds || item.id);
+                const singleDate = Array.isArray(item.date) ? item.date[0] : item.date;
+                const isChecked = watchedSet.has(videoId) ? 'checked' : '';
+
+                categoryGroupHtml += `
+                    <div class="watched-item">
+                        <label class="watched-item-left">
+                            <input type="checkbox" 
+                                   class="watched-checkbox single-checkbox" 
+                                   id="chk-${videoId}" 
+                                   value="${videoId}" 
+                                   ${isChecked}
+                                   onchange="updateSelectedCount()">
+                            <span class="watched-item-title">${item.title}</span>
+                            <span class="watched-item-date">(${singleDate})</span>
+                        </label>
+                        ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結</a>` : ''}
                     </div>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', seriesHtml);
+                `;
+            }
+        });
 
-        } else {
-            // ================= 情況 B：單集作品 =================
-            const videoId = Array.isArray(item.dbIds) ? item.dbIds[0] : item.dbIds;
-            const singleDate = Array.isArray(item.date) ? item.date[0] : item.date;
-            const isChecked = watchedSet.has(videoId) ? 'checked' : '';
-
-            const singleHtml = `
-                <div class="watched-item">
-                    <label class="watched-item-left">
-                        <input type="checkbox" 
-                               class="watched-checkbox single-checkbox" 
-                               value="${videoId}" 
-                               ${isChecked}>
-                        <span class="watched-item-title">${item.title}</span>
-                        <span class="watched-item-date">${singleDate}</span>
-                    </label>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', singleHtml);
-        }
+        categoryGroupHtml += `</div>`;
+        container.insertAdjacentHTML('beforeend', categoryGroupHtml);
     });
-}
 
-// --- 9. 互動邏輯（切換展開、全選連動、搜集結果） ---
+    // 更新總數與目前勾選數
+    const totalEl = document.getElementById('total-count');
+    if (totalEl) totalEl.innerText = totalCount;
+    updateSelectedCount();
+}
+    
+// --- 5. 互動邏輯（展開/折疊、連動勾選、計算選取數） ---
+
 // 切換展開 / 折疊 (+/-)
 function toggleSeries(itemId) {
     const subList = document.getElementById(`sub-list-${itemId}`);
@@ -2586,6 +2503,7 @@ function onParentCheckboxChange(parentCb, itemId) {
     subCheckboxes.forEach(cb => {
         cb.checked = parentCb.checked;
     });
+    updateSelectedCount();
 }
 
 // 勾選子層 -> 自動連動父層狀態
@@ -2593,29 +2511,95 @@ function onSubCheckboxChange(itemId) {
     const parentCb = document.getElementById(`parent-check-${itemId}`);
     const subCheckboxes = Array.from(document.querySelectorAll(`#sub-list-${itemId} .sub-checkbox`));
     
-    const allChecked = subCheckboxes.every(cb => cb.checked);
-    parentCb.checked = allChecked;
+    if (parentCb) {
+        const allChecked = subCheckboxes.every(cb => cb.checked);
+        parentCb.checked = allChecked;
+    }
+    updateSelectedCount();
 }
 
-// 取得目前所有被勾選的具體影片 ID (點擊「保存紀錄」時呼叫)
-function getSelectedWatchedIds() {
+// 動態更新當前勾選數量（過濾父層，僅計算實際影片數量）
+function updateSelectedCount() {
     const checkedBoxes = document.querySelectorAll('#watched-list-container .watched-checkbox:checked');
-    const selectedIds = new Set();
-    
+    let count = 0;
+    checkedBoxes.forEach(cb => {
+        if (!cb.classList.contains('parent-checkbox')) {
+            count++;
+        }
+    });
+    const countEl = document.getElementById('selected-count');
+    if (countEl) countEl.innerText = count;
+}
+
+// 全選與取消全選
+function toggleSelectAll(selectAll) {
+    const checkboxes = document.querySelectorAll('.watched-checkbox');
+    checkboxes.forEach(chk => {
+        chk.checked = selectAll;
+    });
+    updateSelectedCount();
+}
+
+// --- 6. 保存勾選紀錄至 LocalStorage ---
+function saveWatchedVideos() {
+    const checkedBoxes = document.querySelectorAll('#watched-list-container .watched-checkbox:checked');
+    const watchedIds = new Set();
+
     checkedBoxes.forEach(cb => {
         // 只搜集具體的影片 ID，過濾掉父層標頭 Checkbox
         if (!cb.classList.contains('parent-checkbox') && cb.value) {
-            selectedIds.add(cb.value);
+            watchedIds.add(cb.value);
         }
     });
-    
-    return Array.from(selectedIds);
+
+    // 儲存至 LocalStorage
+    localStorage.setItem('watched_videos', JSON.stringify(Array.from(watchedIds)));
+
+    // 關閉視窗
+    closeWatchedModal();
+
+    // 重新渲染主頁面卡片
+    if (typeof applySortingAndRender === 'function') {
+        applySortingAndRender();
+    } else if (typeof renderAllCards === 'function' && typeof videoData !== 'undefined') {
+        renderAllCards(videoData);
+    }
+
+    alert('已成功保存您的觀看紀錄！');
 }
 
-// 輔助函式：取得本地已儲存的紀錄 (請依據你的專案實際儲存邏輯替換)
-function getWatchedVideoIds() {
-    const saved = localStorage.getItem('watched_videos');
-    return saved ? JSON.parse(saved) : [];
+
+// --- 7. 主頁面過濾與卡片整合邏輯 ---
+function toggleUnwatchedFilter() {
+    showOnlyUnwatched = !showOnlyUnwatched;
+    const btn = document.getElementById('unwatched-filter-btn');
+
+    if (btn) {
+        if (showOnlyUnwatched) {
+            btn.classList.add('active');
+            btn.innerHTML = '正在顯示：未觀看影片';
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '僅顯示未觀看影片';
+        }
+    }
+
+    if (typeof applySortingAndRender === 'function') {
+        applySortingAndRender();
+    }
+}
+
+function getFilteredVideoData(data) {
+    if (!showOnlyUnwatched) return data;
+
+    const watchedIds = new Set(getWatchedVideoIds());
+    return data.filter(video => {
+        // 若為多集系列，必須所有集數都看過才視為已觀看（過濾掉）
+        if (Array.isArray(video.dbIds) && video.dbIds.length > 0) {
+            return !video.dbIds.every(id => watchedIds.has(id));
+        }
+        return !watchedIds.has(video.id);
+    });
 }
 </script>
 <script type="module" src="/chueiliyu-tw-translation/js/firebase-init.js"></script>
