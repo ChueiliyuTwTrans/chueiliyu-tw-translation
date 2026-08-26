@@ -1678,9 +1678,8 @@ function renderAllCards(data) {
     });
     
     // 2. 執行月份過濾
-    const monthFilteredData = data.filter(i => {
+    const finalFilteredData = watchedFilteredData.filter(i => {
         if (currentMonth === 'all') return true;
-        // 判斷日期是否匹配 
         return Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth;
     });
 
