@@ -2326,12 +2326,10 @@ const CATEGORY_NAMES = {
 
 // 系列影片的子集標題對照字典
 const SERIES_EPISODE_TITLES = {
-    // 炸雞王座系列 (id: 'p5')
     'p5': ['炸雞王座 EP.1', '炸雞王座 EP.2', '炸雞王座 EP.3', '炸雞王座 EP.4未公開'],
     'p6': ['鄰家K明星 EP.23', '鄰家K明星 EP.24'],
     'r4': ['IDOL RADIO EP.173', 'IDOL RADIO EP.173 BEHIND', 'IDOL RADIO EP.182', 'IDOL RADIO EP.199'],
-    'r5': ['偶像韓語 EP.726', '偶像韓語 EP.756'],
-    'r6': ['20260302 親密朋友廣播部 (嘉賓：李長埈)']
+    'r5': ['偶像韓語 EP.726', '偶像韓語 EP.756']
 };
 
 // --- 2. 開啟與關閉 Modal ---
@@ -2403,20 +2401,16 @@ function renderWatchedModalList(items) {
                 // ================= 情況 A：多集系列作品 =================
                 const allSubWatched = item.dbIds.every(id => watchedSet.has(id));
 
+                // 1. 取得系列主連結（若是陣列則取第 0 個，若為字串則直接使用）
+                const mainLink = Array.isArray(item.link) ? item.link[0] : item.link;
+
+                // 2. 渲染子集清單（僅保留勾選框與標題，不含連結）
                 let subItemsHtml = '';
                 item.dbIds.forEach((subId, index) => {
                     const subDate = Array.isArray(item.date) ? item.date[index] : item.date;
                     const customTitles = SERIES_EPISODE_TITLES[item.id] || [];
                     const epTitle = customTitles[index] || `第 ${index + 1} 集`;
                     const isSubChecked = watchedSet.has(subId) ? 'checked' : '';
-
-                    // 處理多集連結：如果 item.link 是陣列則取對應 index，否則直接取 item.link
-                    let subLink = '';
-                    if (Array.isArray(item.link)) {
-                        subLink = item.link[index] || '';
-                    } else if (typeof item.link === 'string') {
-                        subLink = item.link;
-                    }
 
                     subItemsHtml += `
                         <div class="watched-sub-item">
@@ -2433,12 +2427,11 @@ function renderWatchedModalList(items) {
                                     <span class="watched-item-date">(${subDate})</span>
                                 </label>
                             </div>
-                            ${subLink ? `<a href="${subLink}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結</a>` : ''}
                         </div>
                     `;
                 });
 
-                // 注意：+號/按鈕 已移至 parent-checkbox 的右邊
+                // 3. 在最外層 series-header 加上 mainLink 連結
                 categoryGroupHtml += `
                     <div class="watched-series-group" id="series-group-${item.id}">
                         <div class="watched-item series-header">
@@ -2453,6 +2446,7 @@ function renderWatchedModalList(items) {
                                     ${item.title} <span class="series-count">(${item.dbIds.length}部)</span>
                                 </label>
                             </div>
+                            ${mainLink ? `<a href="${mainLink}" target="_blank" rel="noopener noreferrer" class="watched-item-link">連結</a>` : ''}
                         </div>
                         <div class="watched-sub-list" id="sub-list-${item.id}" style="display: none;">
                             ${subItemsHtml}
