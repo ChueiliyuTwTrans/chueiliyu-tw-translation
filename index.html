@@ -101,207 +101,69 @@ header p { margin-top: 8px; font-size: 14px; font-weight: 400; letter-spacing: 1
 .about-body::-webkit-scrollbar-thumb { background: #dcdad5; border-radius: 10px; }
 
 /* ===== 批次勾選已觀看影片 ===== */
+    
 /* 勾選已觀看影片按鈕 */
 .floating-gb-btn {
-    width: auto !important;
-    height: auto !important;
-    padding: 10px 18px !important;
-    border-radius: 12px !important; 
-    font-size: 14px !important;     
-    font-weight: 600 !important;
-    white-space: nowrap !important;
-    box-shadow: 0 4px 14px rgba(168, 144, 128, 0.35) !important;
-    background: #a89080 !important;
-    color: #ffffff !important;
-    border: none !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
+    width: auto !important; height: auto !important; padding: 10px 18px !important; border-radius: 12px !important; font-size: 14px !important;     
+    font-weight: 600 !important; white-space: nowrap !important; box-shadow: 0 4px 14px rgba(168, 144, 128, 0.35) !important;
+    background: #a89080 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; transition: all 0.2s ease !important;
 }
-
-.floating-gb-btn:hover {
-    background: #967d6d !important;
-    transform: translateY(-2px);
-}
-
-/* 調整彈窗寬度適應作品清單 */
-.watched-modal-content {
-    max-width: 650px !important;
-    width: 90%;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-}
+.floating-gb-btn:hover { background: #967d6d !important; transform: translateY(-2px); }
+    
+/* modal */
+.watched-modal-content { max-width: 650px !important; width: 90%; max-height: 85vh; display: flex; flex-direction: column; }
 
 /* 收回按鈕 */
 #watched-modal .close-modal-btn {
-    padding: 6px 16px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    border-radius: 8px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    border: none !important;
-    background: #e8dfd8 !important;
-    color: #5c4f48 !important;
-    display: inline-block !important;
+    padding: 6px 16px !important; font-size: 14px !important; font-weight: 600 !important; border-radius: 8px !important; cursor: pointer !important; margin-bottom:10px;
+    transition: all 0.2s ease !important; border: none !important; background: #e8dfd8 !important; color: #5c4f48 !important; display: inline-block !important;
 }
-
-#watched-modal .close-modal-btn:hover {
-    background: #f0ebe8 !important;
-    color: #8c7851 !important;
-}
+#watched-modal .close-modal-btn:hover { background: #f0ebe8 !important; color: #8c7851 !important; }
 
 /* 快捷操作列 */
 .watched-quick-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4px 12px 4px;
-    border-bottom: 1px solid #f0ebe8;
-    font-size: 14px;
-    color: #8c7851;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 4px 12px 4px; border-bottom: 1px solid #f0ebe8;
+    font-size: 14px; color: #8c7851;
 }
 
-.watched-count-info b {
-    color: #c29d91;
-    font-size: 16px;
-}
+.watched-count-info b {color: #c29d91; font-size: 16px; }
 
-.action-link-btn {
-    background: none;
-    border: none;
-    color: #a89080;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 2px 6px;
-    transition: color 0.2s;
-}
+.action-link-btn { background: none; border: none; color: #a89080; cursor: pointer; font-size: 14px; font-weight: 600; padding: 2px 6px; transition: color 0.2s; }
+.action-link-btn:hover { color: #8c7851; text-decoration: underline; }
 
-.action-link-btn:hover {
-    color: #8c7851;
-    text-decoration: underline;
-}
-
-.watched-quick-actions .divider {
-    color: #e0d8d3;
-}
+.watched-quick-actions .divider { color: #e0d8d3; }
 
 /* 列表捲動區域 */
-.watched-list-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px 4px;
-    margin-bottom: 15px;
-    -webkit-overflow-scrolling: touch;
-}
+.watched-list-container { flex: 1; overflow-y: auto; padding: 10px 4px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
 
 /* 分類標題樣式 */
-.watched-category-group {
-    margin-bottom: 20px;
-}
-
-.watched-category-title {
-    font-size: 15px;
-    font-weight: bold;
-    color: #a89080;
-    background: #fdfaf8;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border-left: 4px solid #c29d91;
-    margin-bottom: 10px;
+.watched-category-group { margin-bottom: 20px; }
+.watched-category-title { 
+    font-size: 15px; font-weight: bold; color: #a89080; background: #fdfaf8; padding: 6px 12px; border-radius: 8px; border-left: 4px solid #c29d91; margin-bottom: 10px;
 }
 
 /* 作品單項列 */
-.watched-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    border-radius: 10px;
-    transition: background 0.2s;
-    gap: 12px;
-}
-
-.watched-item:hover {
-    background: #fbf8f6;
-}
-
-.watched-item-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0; 
-}
-
-.watched-checkbox {
-    width: 20px;
-    height: 20px;
-    accent-color: #c29d91;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.watched-item-title {
-    font-size: 14.5px;
-    color: #4a4a4a;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-}
-
-.watched-item-date {
-    font-size: 12px;
-    color: #b5a8a0;
-    margin-left: 6px;
-}
+.watched-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; transition: background 0.2s; gap: 12px; }
+.watched-item:hover { background: #fbf8f6; }
+.watched-item-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.watched-checkbox { width: 20px; height: 20px; accent-color: #c29d91; cursor: pointer; flex-shrink: 0; }
+.watched-item-title { font-size: 14.5px; color: #4a4a4a; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.watched-item-date { font-size: 12px; color: #b5a8a0; margin-left: 6px; }
 
 /* 連結按鈕 */
 .watched-item-link {
-    font-size: 13px;
-    color: #c29d91;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: #f8f3f1;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: all 0.2s;
+    font-size: 13px; color: #c29d91; text-decoration: none; font-weight: bold; padding: 4px 10px; border-radius: 6px;
+    background: #f8f3f1; white-space: nowrap; flex-shrink: 0; transition: all 0.2s;
 }
-
-.watched-item-link:hover {
-    background: #c29d91;
-    color: #ffffff;
-}
+.watched-item-link:hover { background: #c29d91; color: #ffffff; }
 
 /* 僅顯示未觀看影片按鈕 */
 .unwatched-filter-btn {
-    padding: 8px 16px;
-    border-radius: 10px;
-    border: 1px solid #e5dcd8;
-    background: #ffffff;
-    color: #8c7851;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 8px 16px; border-radius: 10px; border: 1px solid #e5dcd8; background: #ffffff; color: #8c7851; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s; 
 }
-
-.unwatched-filter-btn:hover {
-    background: #fdfaf8;
-    border-color: #c29d91;
-}
-
-.unwatched-filter-btn.active {
-    background: #c29d91;
-    color: #ffffff;
-    border-color: #c29d91;
-    box-shadow: 0 4px 12px rgba(194, 157, 145, 0.3);
-}
+.unwatched-filter-btn:hover { background: #fdfaf8; border-color: #c29d91; }
+.unwatched-filter-btn.active { background: #c29d91; color: #ffffff; border-color: #c29d91; box-shadow: 0 4px 12px rgba(194, 157, 145, 0.3); }
     
 /* ===== Search ===== */
 .search-box { position: absolute; top: 14px; left: 16px; z-index: 3; }
@@ -584,6 +446,7 @@ body.theme-light .search-results button {
 }
 body.theme-light .search-results button:hover { background: rgb(68, 75, 84) !important; color: #ffffff !important; border-color: rgb(68, 75, 84) !important; }
 body.theme-light .search-highlight { box-shadow: 0 0 0 4px rgba(68, 75, 84, 0.8) !important; transition: box-shadow 0.3s ease; }
+
 /* 月份按鈕 */
 body.theme-light .month-expand-btn { background: rgba(255, 255, 255, 0.7); color: rgb(44, 49, 56); border: 1px solid rgba(44, 49, 56, 0.25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 body.theme-light .month-expand-btn:hover { background: rgb(44, 49, 56); color: #ffffff; border-color: rgb(44, 49, 56); }
@@ -599,6 +462,19 @@ body.theme-light .sort-menu { background: #ffffff; border: 1px solid rgba(68, 75
 body.theme-light .sort-item { color: rgb(68, 75, 84); }
 body.theme-light .sort-item:hover,
 body.theme-light .sort-item.active { background: rgb(68, 75, 84); color: #ffffff; }
+
+/* 批次觀看 */
+body.theme-light #watched-modal .modal-content,
+body.theme-light #watched-modal .modal-box { background-color: #ffffff !important; color: #333333 !important; }
+body.theme-light #watched-modal .close-modal-btn,
+body.theme-light #watched-modal .select-all-btn,
+body.theme-light #watched-modal .save-btn {
+    background-color: rgb(68, 75, 84) !important; color: #ffffff !important; border: none !important; padding: 8px 18px !important;
+    border-radius: 8px !important; font-size: 14px !important; font-weight: 600 !important; cursor: pointer !important; transition: background-color 0.2s ease !important;
+}
+body.theme-light #watched-modal .close-modal-btn:hover,
+body.theme-light #watched-modal .select-all-btn:hover,
+body.theme-light #watched-modal .save-btn:hover { background-color: rgb(88, 96, 107) !important; }
     
 /* 主內容與側邊欄 */
 body.theme-light .content { background-color: #ffffff; }
@@ -663,6 +539,20 @@ body.theme-dark .sort-menu { background: #1e242c; border: 1px solid rgba(255, 25
 body.theme-dark .sort-item { color: #a6abb3; }
 body.theme-dark .sort-item:hover,
 body.theme-dark .sort-item.active { background: rgb(68, 75, 84); color: #ffffff; }
+
+/* 批次觀看 */
+body.theme-dark #watched-modal .modal-content,
+body.theme-dark #watched-modal .modal-box {
+    background-color: rgb(27, 30, 34) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
+body.theme-dark #watched-modal .close-modal-btn,
+body.theme-dark #watched-modal .select-all-btn,
+body.theme-dark #watched-modal .save-btn {
+    background-color: rgb(68, 75, 84) !important; color: #ffffff !important; border: none !important; padding: 8px 18px !important;
+    border-radius: 8px !important; font-size: 14px !important; font-weight: 600 !important; cursor: pointer !important; transition: background-color 0.2s ease !important;
+}
+body.theme-dark #watched-modal .close-modal-btn:hover,
+body.theme-dark #watched-modal .select-all-btn:hover,
+body.theme-dark #watched-modal .save-btn:hover { background-color: rgb(88, 96, 107) !important; }
     
 /* 主內容與側邊欄 */
 body.theme-dark .content { background-color: #141619; }
@@ -863,7 +753,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
                 <div class="sort-item active" onclick="selectSort('updated_desc', '✨ 翻譯更新（新至舊）', this)">✨ 翻譯更新（新至舊）</div>
                 <div class="sort-item" onclick="selectSort('pub_desc', '📅 影片發布（新至舊）', this)">📅 影片發布（新至舊）</div>
                 <div class="sort-item" onclick="selectSort('pub_asc', '⏳ 影片發布（舊至新）', this)">⏳ 影片發布（舊至新）</div>
-                <div class="sort-item" onclick="selectSort('unwatched', '📋 僅顯示未觀看影片', this)">📋 僅顯示未觀看影片</div>
+                <div class="sort-item" onclick="selectSort('unwatched', '📋 僅顯示未觀看影片', this)">▶️ 僅顯示未觀看影片</div>
             </div>
         </div>
         <!-- 作品分類按鈕 -->
@@ -937,7 +827,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 </footer>
 
 <!-- 打開批次勾選視窗 -->
-<button class="floating-gb-btn" id="open-watched-modal" onclick="openWatchedModal()" title="勾選已觀看影片">勾選已觀看影片</button>
+<button class="floating-gb-btn" id="open-watched-modal" onclick="openWatchedModal()" title="勾選已觀看影片">📋影片清單</button>
 
 <!-- 批次勾選已觀看影片 Modal -->
 <div class="gb-modal" id="watched-modal" style="display: none;">
@@ -946,7 +836,7 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
         <div class="gb-modal-header">
             <div class="gb-modal-title">紀錄已觀看的翻譯作品</div>
             <div class="header-controls">
-                <button class="close-modal-btn" onclick="closeWatchedModal()">收回</button>
+                <button class="close-modal-btn" onclick="closeWatchedModal()">關閉</button>
             </div>
         </div>
         
