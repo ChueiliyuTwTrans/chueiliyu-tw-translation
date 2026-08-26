@@ -2375,6 +2375,11 @@ function getVideoIds(item) {
         return [item.dbId];
     }
 
+    // 沒有 dbId / dbIds 的作品
+     if (item.id) {
+        return [item.id];
+    }
+
     // 沒有有效影片 ID
     return [];
 }
@@ -2947,9 +2952,12 @@ function getFilteredVideoData(data) {
             return true;
         }
 
-        // 全部看完 → 隱藏
-        // 還有任何一集沒看 → 保留
-        return !isVideoWatched(video, watchedSet);
+        const allWatched =
+            videoIds.every(id =>
+                watchedSet.has(id)
+            );
+
+        return !allWatched;
     });
 }
 </script>
