@@ -1619,7 +1619,19 @@ function renderAllCards(data) {
     // 1. 未觀看過濾
     const watchedFilteredData = data.filter(i => {
         if (!showOnlyUnwatched) return true;
-        return !watchedIds.has(i.id);
+
+        // 判斷是否為多集系列作品
+        const isSeries = Array.isArray(i.dbIds) && i.dbIds.length > 1;
+
+        if (isSeries) {
+            // 多集系列
+            const isAllWatched = i.dbIds.every(id => watchedIds.has(id));
+            return !isAllWatched;
+        } else {
+            // 單集作品
+            const targetId = (Array.isArray(i.dbIds) && i.dbIds.length > 0) ? i.dbIds[0] : (i.dbId || i.id);
+            return !watchedIds.has(targetId);
+        }
     });
     
     // 2. 執行月份過濾
