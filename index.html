@@ -781,8 +781,8 @@ body.theme-dark .sns-divider { color: rgba(255, 255, 255, 0.1); }
 </header>
 
 <div class="news-board">
-    <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation//Radio/ebsfmlisten/20251216/" class="news-item">
-        <span class="news-tag tag-new">更新</span> 07/14 [電台]20251216 傾聽電台 已完成
+    <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Radio/IDOL_KOREAN/ep728/" class="news-item">
+        <span class="news-tag tag-new">更新</span> 09/08 [電台]20260108 偶像韓語 已完成
     </a>
     
     <a href="https://chueiliyutwtrans.github.io/chueiliyu-tw-translation/Guestbook/" class="news-item">
@@ -1283,16 +1283,16 @@ const videoData = [
     },
     {
         id: 'r5',
-        dbIds: ['iZnZwooQ6Lk', '6NV8GgBfTWY'],
+        dbIds: ['p130HAyiaaI', 'iZnZwooQ6Lk', '6NV8GgBfTWY'],
         category: 'radio',
-        date: ['2026-01-17', '2026-02-23'],
-        updatedAt: '2026-04-20',
+        date: ['2026-01-08','2026-01-17', '2026-02-23'],
+        updatedAt: '2026-09-08',
         title: '偶像韓語系列',
         link: 'Radio/IDOL_KOREAN/',
-        img: 'images/20260117_IDOL_KOREAN_ep.726.webp',
+        img: 'images/20260108_IDOL_KOREAN_ep.728.webp',
         desc: '完整電台｜中文翻譯',
         credit: '',
-        isNew: false,
+        isNew: true,
         cast: ['玗進']
     },
     {
@@ -1320,7 +1320,7 @@ const videoData = [
         img: 'images/20251216_ebsfmlisten.webp',
         desc: '電台片段｜中文翻譯',
         credit: '翻譯：西卡<br>字幕製作：西卡',
-        isNew: true,
+        isNew: false,
         cast: []
     },
    
@@ -1831,8 +1831,7 @@ function jumpToCategory(catId, keyword) {
 
     clearHighlight();
 
-    // 這裡需要注意：如果使用者之前篩選過，這裡可能需要重置篩選才能找到被隱藏的卡片
-    // 簡單解法：先自動觸發 "全部" 按鈕
+    // 如果使用者之前篩選過，需要重置篩選才能找到被隱藏的卡片，先自動觸發 "全部" 按鈕
     const allBtn = document.querySelector(`#${catId}-filters button:first-child`);
     if(allBtn) allBtn.click(); 
 
@@ -2323,7 +2322,7 @@ const SERIES_EPISODE_TITLES = {
     'p5': ['炸雞王座 EP.1', '炸雞王座 EP.2', '炸雞王座 EP.3', '炸雞王座 EP.4未公開'],
     'p6': ['鄰家K明星 EP.23', '鄰家K明星 EP.24'],
     'r4': ['IDOL RADIO EP.173', 'IDOL RADIO EP.173 BEHIND', 'IDOL RADIO EP.182', 'IDOL RADIO EP.199'],
-    'r5': ['偶像韓語 EP.726', '偶像韓語 EP.756']
+    'r5': ['偶像韓語 EP.726','偶像韓語 EP.728', '偶像韓語 EP.756']
 };
 
 // --- 2. 開啟與關閉 Modal ---
