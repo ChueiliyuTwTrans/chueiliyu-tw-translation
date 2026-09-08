@@ -23,6 +23,43 @@ html, body {
     margin: 0;
 }
 
+/* 跳轉時間按鈕 */
+.title-container {
+    display: flex;
+    flex-direction: column; /* 改為縱向排列，讓標題在上下排 */
+    justify-content: center; /* 水平置中 */
+    align-items: center;   /* 垂直置中 */
+    gap: 0px;          
+}
+
+.title-container h2 {
+    margin: 0;         
+}
+
+.time-jump-group {
+    display: flex;
+    flex-wrap: wrap;    /* 按鈕太長時也支援自動換行 */
+    gap: 10px;           
+}
+
+.time-btn {
+    background-color: #f5f5f5; 
+    color: #555;              
+    border: 1px solid #e0e0e0; 
+    padding: 6px 14px;
+    border-radius: 6px;       
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease-in-out; 
+}
+
+.time-btn:hover {
+    background-color: #e2e2e2; 
+    color: #222;              
+    border-color: #d0d0d0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); 
+}
 </style>
 <link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
 </head>
@@ -59,6 +96,12 @@ html, body {
 </div>
 
 <h2>偶像韓語 EP#728</h2>
+<div class="time-jump-group">
+    <button class="time-btn" onclick="jumpToTime(241)">跳轉一</button>
+    <button class="time-btn" onclick="jumpToTime(988)">跳轉二</button>
+    <button class="time-btn" onclick="jumpToTime(1997)">跳轉三</button>
+    <button class="time-btn" onclick="jumpToTime(2675)">跳轉四</button>
+</div>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -91,6 +134,19 @@ const MY_SRT_FILE = "20260108_IDOL_KOREAN_ep.728.srt";
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
         if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* 跳轉時間 */
+function jumpToTime(seconds) {
+    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
+    if (typeof player !== 'undefined' && player.seekTo) {
+        player.seekTo(seconds, true);
+        
+        // 跳轉後自動播放影片
+        player.playVideo(); 
+    } else {
+        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
+    }
 }
 </script>
     
