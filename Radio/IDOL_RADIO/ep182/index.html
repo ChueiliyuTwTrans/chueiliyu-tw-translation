@@ -55,14 +55,12 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">全螢幕</button>
-        <button onclick="jumpToLiyu1()">立于出場1</button>
-        <button onclick="jumpToLiyu2()">立于出場2</button>
+        <button class="time-btn" onclick="jumpToTime(240)">出場時間</button>
+        <button class="time-btn" onclick="jumpToTime(3200)">中場模糊畫面跳轉</button>
     </div>
 </div>
 
 <h2>IDOL RADIO EP#182</h2>
-<a>若載入網頁時沒有自動跳到立于出場時間，請點擊立于出場1按鈕</a><br>
-<a>欲跳過中場模糊畫面請點擊立于出場2按鈕</a>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -92,27 +90,22 @@ html, body {
 const MY_VIDEO_ID = "lpMIuk_NoAA"; 
 const MY_SRT_FILE = "20251210IDOL RADIO EP182.srt";
 
-/* 設定立于出場時間：1分38秒 = 98秒 */
-const MY_VIDEO_START = 98;
-
-/* 點擊按鈕跳轉功能 */
-function jumpToLiyu1() {
-    if (window.player && window.player.seekTo) {
-        window.player.seekTo(240, true);
-        window.player.playVideo(); // 跳轉後自動播放
-    }
-}
-
-function jumpToLiyu2() {
-    if (window.player && window.player.seekTo) {
-        window.player.seekTo(3200, true);
-        window.player.playVideo(); // 跳轉後自動播放
-    }
-}
-
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
         if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* 跳轉時間 */
+function jumpToTime(seconds) {
+    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
+    if (typeof player !== 'undefined' && player.seekTo) {
+        player.seekTo(seconds, true);
+        
+        // 跳轉後自動播放影片
+        player.playVideo(); 
+    } else {
+        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
+    }
 }
 </script>
     
