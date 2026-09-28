@@ -22,7 +22,34 @@ html, body {
     width: 100%;
     margin: 0;
 }
+/* 章節按鈕容器 */
+.chapter-row { display: flex; align-items: center; gap: 8px; margin: 12px 0 18px 0; overflow-x: auto; padding: 6px 4px; scrollbar-width: thin; justify-content: safe center; }
+.chapter-row::-webkit-scrollbar { height: 4px; }
+.chapter-row::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
 
+/* 按鈕基本樣式 */
+.chapter-btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-main, #fff);
+    font-size: 1.00rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0;
+}
+
+/* 時間標籤 */
+.chapter-time {
+    background: rgba(255, 255, 255, 0.12); padding: 2px 6px; border-radius: 10px; font-size: 0.85rem; font-family: monospace;
+    opacity: 0.9; letter-spacing: 0.5px;
+}
+
+/* 章節標題 */
+.chapter-title {
+    max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; opacity: 0.85;
+}
+.chapter-btn:hover {
+    background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.35); box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15); transform: translateY(-1px);
+}
+.chapter-btn:hover .chapter-title { max-width: 250px; opacity: 1; }
+.chapter-btn:active { transform: translateY(0) scale(0.97); }
 </style>
 <link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
 </head>
@@ -55,11 +82,60 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">進入全螢幕</button>
-        <button class="time-btn" onclick="jumpToTime(30)">出場時間</button>
     </div>
 </div>
 
 <h2>20260303 親密朋友廣播部 (嘉賓：AtHeart)</h2>
+<div class="chapter-row">
+    <button class="chapter-btn" onclick="seekToTime(30)">
+        <span class="chapter-time">00:30</span>
+        <span class="chapter-title">出場時間</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(269)">
+        <span class="chapter-time">04:29</span>
+        <span class="chapter-title">part1</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(692)">
+        <span class="chapter-time">11:32</span>
+        <span class="chapter-title">part2</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(1046)">
+        <span class="chapter-time">17:26</span>
+        <span class="chapter-title">part3</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(1860)">
+        <span class="chapter-time">31:00</span>
+        <span class="chapter-title">part4:AtHeart開場</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(3041)">
+        <span class="chapter-time">50:41</span>
+        <span class="chapter-title">part5</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(3660)">
+        <span class="chapter-time">1:01:00</span>
+        <span class="chapter-title">part6</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(4361)">
+        <span class="chapter-time">1:12:41</span>
+        <span class="chapter-title">part7</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(5467)">
+        <span class="chapter-time">1:31:07</span>
+        <span class="chapter-title">part8</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(5774)">
+        <span class="chapter-time">1:36:14</span>
+        <span class="chapter-title">part9</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(6345)">
+        <span class="chapter-time">1:45:45</span>
+        <span class="chapter-title">part10</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(6621)">
+        <span class="chapter-time">1:50:21</span>
+        <span class="chapter-title">part11</span>
+    </button>
+</div>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -95,15 +171,12 @@ function changeSubtitleSize(delta) {
 }
 
 /* 跳轉時間 */
-function jumpToTime(seconds) {
-    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
-    if (typeof player !== 'undefined' && player.seekTo) {
-        player.seekTo(seconds, true);
-        
-        // 跳轉後自動播放影片
-        player.playVideo(); 
+function seekToTime(seconds) {
+    if (window.player && typeof window.player.seekTo === 'function') {
+        window.player.seekTo(seconds, true);
+        window.player.playVideo(); 
     } else {
-        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
+        console.warn("YouTube Player 尚未準備就緒");
     }
 }
 </script>
