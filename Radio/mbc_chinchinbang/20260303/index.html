@@ -55,7 +55,7 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">進入全螢幕</button>
-        <button onclick="jumpToLiyu()">立于出場時間</button>
+        <button class="time-btn" onclick="jumpToTime(30)">出場時間</button>
     </div>
 </div>
 
@@ -89,12 +89,22 @@ html, body {
 const MY_VIDEO_ID = "LHgKsUEFVuk"; 
 const MY_SRT_FILE = "20260303mbc_chinchinbang.srt";
 
-/* 設定立于出場時間：00分30秒 = 30秒 */
-const MY_VIDEO_START = 30;
-
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
         if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* 跳轉時間 */
+function jumpToTime(seconds) {
+    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
+    if (typeof player !== 'undefined' && player.seekTo) {
+        player.seekTo(seconds, true);
+        
+        // 跳轉後自動播放影片
+        player.playVideo(); 
+    } else {
+        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
+    }
 }
 </script>
     
