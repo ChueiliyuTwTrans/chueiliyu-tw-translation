@@ -55,12 +55,12 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">進入全螢幕</button>
-        <button onclick="jumpToLiyu()">立于出場時間</button>
+        <button class="time-btn" onclick="jumpToTime(824)">出場時間</button>
     </div>
 </div>
 
 <h2>20251205《Holiday in 親密朋友》</h2>
-<a>可以點擊立于出場時間按鈕自動跳到指定時間，翻譯只翻到1:05:30立于退場前</a>
+<a>翻譯只翻到1:05:30立于退場前</a>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -90,14 +90,16 @@ html, body {
 const MY_VIDEO_ID = "cIzXj7NbBQ4"; 
 const MY_SRT_FILE = "20251205bfever.srt";
 
-/* 設定立于出場時間：13分44秒 = 824秒 */
-const MY_VIDEO_START_BTN = 824;
-
-/* 點擊按鈕跳轉功能 */
-function jumpToLiyu() {
-    if (window.player && window.player.seekTo) {
-        window.player.seekTo(MY_VIDEO_START_BTN, true);
-        window.player.playVideo(); // 跳轉後自動播放
+/* 跳轉時間 */
+function jumpToTime(seconds) {
+    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
+    if (typeof player !== 'undefined' && player.seekTo) {
+        player.seekTo(seconds, true);
+        
+        // 跳轉後自動播放影片
+        player.playVideo(); 
+    } else {
+        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
     }
 }
 
