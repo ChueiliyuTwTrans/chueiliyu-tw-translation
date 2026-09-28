@@ -55,12 +55,11 @@ html, body {
         </div>
         <button id="home-btn" onclick="window.location.href='/'">首頁</button>
         <button id="fs-btn">進入全螢幕</button>
-        <button onclick="jumpToLiyu()">立于出場時間</button>
+        <button class="time-btn" onclick="jumpToTime(18)">出場時間</button>
     </div>
 </div>
 
 <h2>偶像韓語 EP#756</h2>
-<a>若載入網頁時沒有自動跳到立于出場時間，請點擊立于出場時間按鈕</a>
 
 <div id="video-wrapper">
     <div id="player"></div>
@@ -84,18 +83,28 @@ html, body {
     <div class="reaction-wall"></div>
     <br>
 </div>
-    
+
 <script>
 /* 影片ID和SRT文件 */
 const MY_VIDEO_ID = "6NV8GgBfTWY"; 
 const MY_SRT_FILE = "20260223_IDOL_KOREAN_ep.756.srt";
 
-/* 設定立于出場時間：00分18秒 = 18秒 */
-const MY_VIDEO_START = 18;
-
 /* ===== 字幕大小設定 ===== */
 function changeSubtitleSize(delta) {
         if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* 跳轉時間 */
+function jumpToTime(seconds) {
+    // 檢查 player 物件是否存在，且是否有 seekTo 這個方法
+    if (typeof player !== 'undefined' && player.seekTo) {
+        player.seekTo(seconds, true);
+        
+        // 跳轉後自動播放影片
+        player.playVideo(); 
+    } else {
+        console.error("YouTube 播放器尚未準備就緒或未正確定義。");
+    }
 }
 </script>
     
