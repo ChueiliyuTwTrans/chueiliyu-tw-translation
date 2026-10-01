@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link rel="icon" href="https://chueiliyutwtrans.github.io/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="https://chueiliyutwtrans.github.io/favicon.png">
+<title>20260305 親密朋友廣播部</title>
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+    color: #fff;
+    font-family: Arial, "Noto Sans TC", sans-serif;
+    text-align: center;
+}
+
+html, body {
+    background: #000 !important; /* 強制全黑 */
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+/* 章節按鈕容器 */
+.chapter-row { display: flex; align-items: center; gap: 8px; margin: 12px 0 18px 0; overflow-x: auto; padding: 6px 4px; scrollbar-width: thin; justify-content: safe center; }
+.chapter-row::-webkit-scrollbar { height: 4px; }
+.chapter-row::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+
+/* 按鈕基本樣式 */
+.chapter-btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-main, #fff);
+    font-size: 1.00rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0;
+}
+
+/* 時間標籤 */
+.chapter-time {
+    background: rgba(255, 255, 255, 0.12); padding: 2px 6px; border-radius: 10px; font-size: 0.85rem; font-family: monospace;
+    opacity: 0.9; letter-spacing: 0.5px;
+}
+
+/* 章節標題 */
+.chapter-title {
+    max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; opacity: 0.85;
+}
+.chapter-btn:hover {
+    background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.35); box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15); transform: translateY(-1px);
+}
+.chapter-btn:hover .chapter-title { max-width: 250px; opacity: 1; }
+.chapter-btn:active { transform: translateY(0) scale(0.97); }
+</style>
+<link rel="stylesheet" href="/chueiliyu-tw-translation/css/reaction.css">
+</head>
+
+<body>
+<div id="controls">
+    <div class="control-row">
+        <button onclick="toggleBarrageDisplay()" id="barrage-toggle-btn">即時表情：開</button>
+
+        <div class="control-group barrage-control">
+            <span>大小</span>
+            <input type="range" id="barrage-size-slider" min="16" max="60" value="24" oninput="updateBarrageSize(this.value)">
+        </div>
+
+        <div class="control-group barrage-control">
+            <span>範圍</span>
+            <input type="range" id="barrage-height-slider" min="10" max="100" value="40" oninput="updateBarrageHeight(this.value)">
+            <span id="height-val">40%</span>
+        </div>
+
+        <div class="control-group barrage-control">
+            <span>速度</span>
+            <input type="range" id="barrage-speed-slider" min="3" max="10" step="1" value="5" oninput="updateBarrageSpeed(this.value)">
+        </div>
+
+        <div class="control-group">
+            <button class="sub-btn" onclick="changeSubtitleSize(-0.1)">A−</button>
+            <span>字幕</span>
+            <button class="sub-btn" onclick="changeSubtitleSize(0.1)">A＋</button>
+        </div>
+        <button id="home-btn" onclick="window.location.href='/'">首頁</button>
+        <button id="fs-btn">進入全螢幕</button>
+    </div>
+</div>
+
+<h2>20260305 親密朋友廣播部</h2>
+<div class="chapter-row">
+    <button class="chapter-btn" onclick="seekToTime(53)">
+        <span class="chapter-time">00:53</span>
+        <span class="chapter-title">part1</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(325)">
+        <span class="chapter-time">05:25</span>
+        <span class="chapter-title">part2</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(941)">
+        <span class="chapter-time">15:41</span>
+        <span class="chapter-title">part3</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(1315)">
+        <span class="chapter-time">21:55</span>
+        <span class="chapter-title">part4</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(1894)">
+        <span class="chapter-time">31:34</span>
+        <span class="chapter-title">part5</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(2576)">
+        <span class="chapter-time">42:56</span>
+        <span class="chapter-title">part6</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(2933)">
+        <span class="chapter-time">48:53</span>
+        <span class="chapter-title">part7</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(3698)">
+        <span class="chapter-time">1:01:38</span>
+        <span class="chapter-title">part8</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(4235)">
+        <span class="chapter-time">1:10:35</span>
+        <span class="chapter-title">part9</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(4785)">
+        <span class="chapter-time">1:19:45</span>
+        <span class="chapter-title">part10</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(5493)">
+        <span class="chapter-time">1:31:33</span>
+        <span class="chapter-title">part11</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(5800)">
+        <span class="chapter-time">1:36:40</span>
+        <span class="chapter-title">part12</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(6393)">
+        <span class="chapter-time">1:46:33</span>
+        <span class="chapter-title">part13</span>
+    </button>
+    <button class="chapter-btn" onclick="seekToTime(6741)">
+        <span class="chapter-time">1:52:21</span>
+        <span class="chapter-title">part14</span>
+    </button>
+</div>
+
+<div id="video-wrapper">
+    <div id="player"></div>
+    <div id="subtitle">字幕載入中...</div>
+    <div id="barrage-container"></div>
+
+    <button id="emoji-trigger-btn" onclick="toggleEmojiDrawer(event)">😊</button>
+
+    <div id="emoji-drawer"></div>
+    
+    <button id="exit-fs-btn" title="退出全螢幕" style="display: none; opacity: 0;">
+        <svg viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<div class="reaction-section">
+    <p id="reaction-title">覺得這部翻譯影片如何？點個表情吧！</p>
+    <div class="reaction-wall"></div>
+    <br>
+</div>
+    
+<script>
+/* 影片ID和SRT文件 */
+const MY_VIDEO_ID = "Dg83YBMlbvck"; 
+const MY_SRT_FILE = "20260305_mbc_chinchinbang.srt";
+
+/* ===== 字幕大小設定 ===== */
+function changeSubtitleSize(delta) {
+        if (typeof coreChangeSubtitleSize === "function") coreChangeSubtitleSize(delta);
+}
+
+/* 跳轉時間 */
+function seekToTime(seconds) {
+    if (window.player && typeof window.player.seekTo === 'function') {
+        window.player.seekTo(seconds, true);
+        window.player.playVideo(); 
+    } else {
+        console.warn("YouTube Player 尚未準備就緒");
+    }
+}
+</script>
+    
+<script type="module" src="../../../js/firebase-init.js"></script>
+
+<script src="/chueiliyu-tw-translation/js/core-player.js"></script>
+<script src="/chueiliyu-tw-translation/js/reaction-core.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
