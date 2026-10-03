@@ -1612,14 +1612,26 @@ function getSortedData(data) {
     });
 }
 
+function matchesCurrentMonth(item) {
+    if (currentMonth === 'all') return true;
+
+    const dates = Array.isArray(item.date) ? item.date : [item.date];
+
+    return dates.some(date => {
+        if (!date) return false;
+
+        // 將完整日期篩選成月份
+        return String(date).slice(0, 7) === currentMonth;
+    });
+}
+
 function renderAllCards(data) {
     // 1. 觀看過濾
    const watchedFilteredData = getFilteredVideoData(data);
     
-    // 2. 執行月份過濾
-    const finalFilteredData = watchedFilteredData.filter(i => {
-        if (currentMonth === 'all') return true;
-        return Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth;
+    // 2. 月份過濾
+    const finalFilteredData = watchedFilteredData.filter(item => {
+        return matchesCurrentMonth(item);
     });
 
     // 3. 取得各分類的容器
@@ -1631,17 +1643,20 @@ function renderAllCards(data) {
         'stage': document.getElementById('stage-grid')
     };
 
-    // 4. 根據過濾後的資料進行各分類渲染
+    // 4. 根據月份 + 分類重新渲染
     Object.keys(containers).forEach(cat => {
         const grid = containers[cat];
+
         if (grid) {
-            const catData = finalFilteredData.filter(i => i.category === cat);
+            const catData = finalFilteredData.filter(item => {
+                return item.category === cat;
+            });
 
             grid.innerHTML = '';
-            
+
             if (catData.length > 0) {
                 grid.innerHTML = catData.map(createCardHTML).join('');
-            } 
+            }
         }
     });
 }
@@ -1702,21 +1717,20 @@ function filterCategory(category, cast, btnElement) {
     Array.from(buttons).forEach(btn => btn.classList.remove('active'));
     btnElement.classList.add('active');
 
-    // 篩選邏輯
+    // 篩選分類 + 月份
     const gridId = category + '-grid';
     const grid = document.getElementById(gridId);
 
-    // 同時過濾「分類」與「月份」
-    const targetData = videoData.filter(i => {
-        const isCategory = i.category === category;
-        const isMonth = (currentMonth === 'all') ? true : 
-                        (Array.isArray(i.date) ? i.date.includes(currentMonth) : i.date === currentMonth);
+    const targetData = videoData.filter(item => {
+        const isCategory = item.category === category;
+        const isMonth = matchesCurrentMonth(item);
+
         return isCategory && isMonth;
     });
 
-    // 再根據「演出者」過濾
-    const filtered = (cast === 'all') 
-        ? targetData 
+    // 再根據演出者篩選
+    const filtered = (cast === 'all')
+        ? targetData
         : targetData.filter(item => item.cast.includes(cast));
 
     // 排序並渲染
@@ -1727,12 +1741,26 @@ function filterCategory(category, cast, btnElement) {
 // 控制 Modal 開關
 function toggleMonthModal(show) {
     const modal = document.getElementById('monthModal');
+    const header = document.querySelector('header');
+
+    if (!modal) return;
+
     if (show) {
         modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // 防止底層捲動
+        document.body.style.overflow = 'hidden';
+
+        // 讓包含 Modal 的 header 高於手機版 sidebar
+        if (header) {
+            header.style.zIndex = '100001';
+        }
     } else {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+
+        // 關閉 Modal 後恢復 header 原本層級
+        if (header) {
+            header.style.zIndex = '';
+        }
     }
 }
 
