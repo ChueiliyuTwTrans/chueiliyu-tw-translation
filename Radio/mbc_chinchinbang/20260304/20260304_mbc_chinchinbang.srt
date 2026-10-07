@@ -1019,7 +1019,7 @@ Nizz：你好～我是Nizz，呃...因為我是短髮，所以會記得我吧？
 
 252
 00:32:57,619 --> 00:33:04,966
-Nove：你好，我是X:IN的Su*13 Supernova
+Nove：你好，我是X:IN的Su*13，Supernova
 
 253
 00:33:08,298 --> 00:33:10,298
@@ -1574,7 +1574,7 @@ E.sha：♪ Walking, just walking 視線向我鎖定 ♪
 
 383
 00:41:22,908 --> 00:41:26,858
-Aria：♪ What’s that？ What happen？ I didn’t do anything ♪
+Aria：♪ What’s that? What happen? I didn’t do anything ♪
 
 384
 00:41:26,858 --> 00:41:30,886
@@ -1582,7 +1582,7 @@ Nizz：♪ I’m scared, I’m so scared 無論何處我都要去 ♪
 
 385
 00:41:30,886 --> 00:41:34,740
-Nova：♪ Why me？ You know me？ I didn’t do anything ♪
+Nova：♪ Why me? You know me? I didn’t do anything ♪
 
 386
 00:41:34,740 --> 00:41:36,740
@@ -1696,7 +1696,7 @@ Arin：♪ Walking, just walking 視線向我鎖定 ♪
 
 413
 00:42:45,008 --> 00:42:48,740
-Nizz：♪ What’s that？ What happen？ I didn’t do anything ♪
+Nizz：♪ What’s that? What happen? I didn’t do anything ♪
 
 414
 00:42:48,740 --> 00:42:50,679
@@ -1772,7 +1772,7 @@ Aria：♪ It’s pheromone ♪
 
 432
 00:43:31,299 --> 00:43:32,483
-Nova：♪ You know what it is？ ♪
+Nova：♪ You know what it is? ♪
 
 433
 00:43:32,483 --> 00:43:34,483
@@ -1792,7 +1792,7 @@ E.sha：♪ It’s pheromone ♪
 
 437
 00:43:39,259 --> 00:43:40,600
-Hannah：♪ You know what it is？ ♪
+Hannah：♪ You know what it is? ♪
 
 438
 00:43:40,600 --> 00:43:42,620
@@ -2074,7 +2074,7 @@ Nova：時髦的
 
 504
 00:46:22,172 --> 00:46:22,180
-[웃음]
+Nova：時髦的
 
 505
 00:46:22,180 --> 00:46:24,025
@@ -2181,6 +2181,7 @@ Hannah：born to be cool
 529
 00:47:16,650 --> 00:47:17,700
 Nova：不愧是
+立于：做得好
 
 530
 00:47:18,900 --> 00:47:20,819
